@@ -1,9 +1,12 @@
 <script lang="ts">
+import config from "../../config";
+
 export default {
     name: 'Footer',
     data() {
         return {
-            text: 'the cake is a lie'
+            hover: false,
+            text: config.serverVersion
         }
     },
     mounted() {
@@ -14,8 +17,9 @@ export default {
 </script>
 
 <template>
-    <div class="footer">
-        <span>{{ text }}</span>
+    <div class="footer" @mouseover="hover=true" @mouseleave="hover=false">
+        <span v-if="hover">the cake is a lie</span>
+        <span v-else="hover">v{{ text }}</span>
     </div>
 </template>
 

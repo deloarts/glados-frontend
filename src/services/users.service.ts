@@ -38,7 +38,7 @@ export class UsersService {
   //         const cachedUsersMe = this.cache.get(cacheKeyMe);
   //         console.log("Using cache values before time check:", cachedUsersMe);
 
-  //         if ((Date.now() - cachedUsersMe.date.getTime()) < config.fetchBoughtItemsAfter) {
+  //         if ((Date.now() - cachedUsersMe.date.getTime()) < constants.fetchBoughtItemsAfter) {
   //             console.log("Using cache values:", cachedUsersMe.usersMe);
   //             return Promise.resolve(cachedUsersMe.usersMe);
   //         }

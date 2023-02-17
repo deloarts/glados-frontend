@@ -6,7 +6,7 @@ export default {
     data() {
         return {
             hover: false,
-            text: `v${constants.version} @ v${constants.serverVersion}`
+            text: `v${constants.version} (v${constants.serverVersion})`
         }
     },
     mounted() {

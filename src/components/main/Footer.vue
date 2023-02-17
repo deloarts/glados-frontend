@@ -1,12 +1,12 @@
 <script lang="ts">
-import config from "../../config";
+import constants from "@/constants";
 
 export default {
     name: 'Footer',
     data() {
         return {
             hover: false,
-            text: config.serverVersion
+            text: constants.serverVersion
         }
     },
     mounted() {

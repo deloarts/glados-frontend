@@ -1,8 +1,9 @@
 <script lang="ts">
 import IconWarning from "../icons/IconWarning.vue";
-import { request, requestConfig } from "../../requests/index";
-import config from "../../config";
-import router from "../../router/index";
+import { request, requestConfig } from "@/requests/index";
+import constants from "@/constants";
+import config from "@/config";
+import router from "@/router/index";
 
 export default {
   name: 'Connection',
@@ -16,9 +17,9 @@ export default {
   },
   methods: {
     watchServerConnection() {
-      request.get(config.apiGetHostVersion, requestConfig(null)).then(response => {
+      request.get(constants.apiGetHostVersion, requestConfig(null)).then(response => {
         if (response.status === 200) {
-          if (response.data.version != config.serverVersion) {
+          if (response.data.version != constants.serverVersion) {
             console.error("Server version is not supported.");
             this.text = "Server version not supported.";
             this.showBox = true;
@@ -37,14 +38,14 @@ export default {
             router.push({ name: "Login" });
           }
         }
-        setTimeout(this.watchServerConnection.bind(this), config.watchServerConnInterval);
+        setTimeout(this.watchServerConnection.bind(this), constants.watchServerConnInterval);
       }).catch(error => {
         if (error.status == undefined) {
           console.error("Lost server connection.");
           this.text = "No server connection.";
           this.showBox = true;
         }
-        setTimeout(this.watchServerConnection.bind(this), config.watchServerConnInterval);
+        setTimeout(this.watchServerConnection.bind(this), constants.watchServerConnInterval);
       })
     }
   },

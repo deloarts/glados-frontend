@@ -4,9 +4,7 @@ import { ref, inject } from 'vue';
 import moment from "moment";
 import Datepicker from 'vue3-datepicker';
 
-import { currentUserKey } from "@/symbols/users";
-
-import config from "@/config";
+import constants from "@/constants";
 import { usersService } from "@/services/users.service";
 import { boughtItemsService } from "@/services/items.service";
 import { getFilterParams } from "@/requests/params";
@@ -135,7 +133,7 @@ export default {
         const params = getFilterParams(this.filter);
         boughtItemsService.getItems(params).then(response => {
           this.boughtItems = response.data;
-          setTimeout(this.autoFetchBoughtItems.bind(this), config.fetchBoughtItemsAfter);
+          setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
         });
       }
     },

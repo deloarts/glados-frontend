@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "../router/index";
 import config from "../config";
+import constants from "@/constants";
 
 export function requestConfig(urlSearchParams: any) {
   const tokenType = localStorage.getItem("gladosTokenType");
@@ -47,7 +48,7 @@ export function requestConfigXlsxDownload(urlSearchParams: any) {
 
 export class Request {
   login(username: string, password: string) {
-    const url = config.server + config.apiAccessToken;
+    const url = config.server + constants.apiAccessToken;
     const params = new URLSearchParams();
     params.append("username", username);
     params.append("password", password);

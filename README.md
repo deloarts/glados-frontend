@@ -4,6 +4,7 @@ Frontend for the glados project.
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
 ![version](https://img.shields.io/badge/Version-0.1.0-orange.svg?style=for-the-badge)
+![backend](https://img.shields.io/badge/Backend-0.1.0-orange.svg?style=for-the-badge)
 
 ![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
 ![vue](https://img.shields.io/badge/vue%2Fcli-v4.5-blue.svg?style=for-the-badge)
@@ -277,8 +278,11 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 1. Update the **version** in
    - [package.json](package.json)
    - [README.md](README.md)
-2. Check **lint** output: `npm run lint`
-3. Lock **dependencies**: `npm install --package-lock-only`
+2. Update the **backend version** in
+   - [constants.ts](/src/constants.ts)
+   - [README.md](README.md)
+3. Check **lint** output: `npm run lint`
+4. Lock **dependencies**: `npm install --package-lock-only`
 
 ## 4 license
 

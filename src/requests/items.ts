@@ -1,7 +1,3 @@
-import axios from "axios";
-import moment from "moment";
-
-import config from "../config";
 import { request, requestConfig, requestConfigXlsxDownload, requestConfigFileUpload } from "./index";
 
 

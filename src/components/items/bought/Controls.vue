@@ -1,10 +1,8 @@
 <script lang="ts">
 import { boughtItemsFilter, boughtItemsFilterPresetAllOpen, boughtItemsFilterPresetAllRequested, boughtItemsFilterPresetAllActive, boughtItemsFilterPresetAllOrdered, boughtItemsFilterPresetAllPrioritized } from "@/presets/boughtItemsFilter";
-import { boughtItemsService } from "@/services/items.service";
 import { boughtItemsRequest } from "@/requests/items";
 import { getFilterParams } from "@/requests/params";
 import router from "@/router/index";
-import config from "@/config";
 
 import ExcelImport from "./ExcelImport.vue";
 import Prompt from "../../Prompt.vue";

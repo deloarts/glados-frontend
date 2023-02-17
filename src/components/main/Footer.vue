@@ -6,7 +6,7 @@ export default {
     data() {
         return {
             hover: false,
-            text: constants.serverVersion
+            text: `v${constants.version} @ v${constants.serverVersion}`
         }
     },
     mounted() {
@@ -19,7 +19,7 @@ export default {
 <template>
     <div class="footer" @mouseover="hover=true" @mouseleave="hover=false">
         <span v-if="hover">the cake is a lie</span>
-        <span v-else="hover">v{{ text }}</span>
+        <span v-else="hover">{{ text }}</span>
     </div>
 </template>
 

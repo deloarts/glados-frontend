@@ -1,6 +1,7 @@
 <script lang="ts">
 import IconWarning from "@/components/icons/IconWarning.vue";
 import config from "@/config";
+import constants from "@/constants";
 
 export default {
   name: "Resolution",
@@ -13,7 +14,7 @@ export default {
   },
   methods: {
     onResize() {
-      if (window.innerWidth < config.minWidth && !config.debug) { this.showBox = true; }
+      if (window.innerWidth < constants.minWidth && !config.debug) { this.showBox = true; }
       else { this.showBox = false; }
     }
   },

@@ -3,7 +3,8 @@
 Frontend for the glados project.
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
-![version](https://img.shields.io/badge/Version-0.1.0-orange.svg?style=for-the-badge)
+![version](https://img.shields.io/badge/Version-0.1.1-orange.svg?style=for-the-badge)
+![backend](https://img.shields.io/badge/Backend-0.1.1-orange.svg?style=for-the-badge)
 
 ![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
 ![vue](https://img.shields.io/badge/vue%2Fcli-v4.5-blue.svg?style=for-the-badge)
@@ -123,7 +124,7 @@ cd glados-frontend
 git checkout {TAG_NAME}
 ```
 
-Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.1.0`.
+Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.1.1`.
 
 > ✏️ You can use this command to update the app as well. Just modify the tag name.
 >
@@ -172,7 +173,7 @@ git fetch --all --tags
 git checkout {TAG_NAME}
 ```
 
-Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.1.0`.
+Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.1.1`.
 
 ### 2.2 update the config file
 
@@ -275,10 +276,15 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 ### 3.5 new revision checklist
 
 1. Update the **version** in
+   - [constants.ts](/src/constants.ts)
    - [package.json](package.json)
    - [README.md](README.md)
-2. Check **lint** output: `npm run lint`
-3. Lock **dependencies**: `npm install --package-lock-only`
+2. Update the **backend version** in
+   - [constants.ts](/src/constants.ts)
+   - [README.md](README.md)
+3. Check **lint** output: `npm run lint`
+4. Check if app can be built: `npm run build`
+5. Lock **dependencies**: `npm install --package-lock-only`
 
 ## 4 license
 
@@ -286,6 +292,7 @@ No license.
 
 ## 5 changelog
 
+**v0.1.1**: Minor improvements.  
 **v0.1.0**: Initial commit.
 
 ## 6 to do

@@ -1,9 +1,12 @@
 <script lang="ts">
+import constants from "@/constants";
+
 export default {
     name: 'Footer',
     data() {
         return {
-            text: 'the cake is a lie'
+            hover: false,
+            text: `v${constants.version} (v${constants.serverVersion})`
         }
     },
     mounted() {
@@ -14,8 +17,9 @@ export default {
 </script>
 
 <template>
-    <div class="footer">
-        <span>{{ text }}</span>
+    <div class="footer" @mouseover="hover=true" @mouseleave="hover=false">
+        <span v-if="hover">the cake is a lie</span>
+        <span v-else="hover">{{ text }}</span>
     </div>
 </template>
 

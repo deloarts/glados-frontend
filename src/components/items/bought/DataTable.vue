@@ -4,9 +4,7 @@ import { ref, inject } from 'vue';
 import moment from "moment";
 import Datepicker from 'vue3-datepicker';
 
-import { currentUserKey } from "@/symbols/users";
-
-import config from "@/config";
+import constants from "@/constants";
 import { usersService } from "@/services/users.service";
 import { boughtItemsService } from "@/services/items.service";
 import { getFilterParams } from "@/requests/params";
@@ -126,16 +124,18 @@ export default {
     },
 
     autoFetchBoughtItems() {
+      boughtItemsService.clearCache();
       if (this.$route.path != '/items/bought') {
         console.info('Stopped updating routine for bought items: User leaved site.');
       } else if (this.autoFetchIsPaused) {
-        console.info('Stopped updating routine for bought items: Paused.');
+        console.info('Paused updating routine for bought items.');
+        setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
       } else {
         console.log("Automatically fetching bought items...");
         const params = getFilterParams(this.filter);
         boughtItemsService.getItems(params).then(response => {
           this.boughtItems = response.data;
-          setTimeout(this.autoFetchBoughtItems.bind(this), config.fetchBoughtItemsAfter);
+          setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
         });
       }
     },
@@ -524,12 +524,12 @@ export default {
       }
     },
 
-    autoFetchIsPaused() {
-      if (!this.autoFetchIsPaused) {
-        boughtItemsService.clearCache();
-        this.autoFetchBoughtItems();
-      }
-    },
+    // autoFetchIsPaused() {
+    //   if (!this.autoFetchIsPaused) {
+    //     boughtItemsService.clearCache();
+    //     this.autoFetchBoughtItems();
+    //   }
+    // },
 
     filter: {
       handler: function (newVal) {
@@ -560,7 +560,7 @@ export default {
     this.boughtItems = [];
 
     this.fetchUserById();
-    this.fetchBoughtItems();
+    // this.fetchBoughtItems();
     this.autoFetchBoughtItems();
   },
 }

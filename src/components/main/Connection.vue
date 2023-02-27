@@ -1,8 +1,9 @@
 <script lang="ts">
 import IconWarning from "../icons/IconWarning.vue";
-import { request, requestConfig } from "../../requests/index";
-import config from "../../config";
-import router from "../../router/index";
+import { request, requestConfig } from "@/requests/index";
+import constants from "@/constants";
+import config from "@/config";
+import router from "@/router/index";
 
 export default {
   name: 'Connection',
@@ -16,35 +17,32 @@ export default {
   },
   methods: {
     watchServerConnection() {
-      request.get(config.apiGetHostVersion, requestConfig(null)).then(response => {
+      request.get(constants.apiGetHostVersion, requestConfig(null)).then(response => {
         if (response.status === 200) {
-          if (response.data.version != config.serverVersion) {
+          if (response.data.version != constants.serverVersion) {
             console.error("Server version is not supported.");
-            this.text = "Server version not supported.";
+            this.text = "Server version not supported.<br>Try reloading the page.";
             this.showBox = true;
-          } else {
+          } else if (this.showBox) {
             this.showBox = false;
-          }
-        }
-        else if (this.showBox) {
-          this.showBox = false;
-          // @ts-ignore
-          this.notificationInfo = "Reconnected to the server.";
+            // @ts-ignore
+            this.notificationInfo = "Reconnected to the server.";
 
-          if (!config.debug) {
-            localStorage.setItem("gladosTokenValue", "");
-            localStorage.setItem("gladosTokenType", "");
-            router.push({ name: "Login" });
+            if (!config.debug) {
+              localStorage.setItem("gladosTokenValue", "");
+              localStorage.setItem("gladosTokenType", "");
+              router.push({ name: "Login" });
+            }
           }
         }
-        setTimeout(this.watchServerConnection.bind(this), config.watchServerConnInterval);
+        setTimeout(this.watchServerConnection.bind(this), constants.watchServerConnInterval);
       }).catch(error => {
         if (error.status == undefined) {
           console.error("Lost server connection.");
           this.text = "No server connection.";
           this.showBox = true;
         }
-        setTimeout(this.watchServerConnection.bind(this), config.watchServerConnInterval);
+        setTimeout(this.watchServerConnection.bind(this), 1000);
       })
     }
   },
@@ -71,7 +69,7 @@ export default {
           <IconWarning></IconWarning>
         </div>
         <div id="text">
-          {{ text }}
+          <span v-html="text"></span>
         </div>
       </div>
     </div>
@@ -99,8 +97,8 @@ export default {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 300px;
-  height: 150px;
+  width: 360px;
+  height: 170px;
   transform: translate(-50%, -50%);
 
   font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

@@ -1,5 +1,4 @@
-import axios from "axios";
-import config from "../config.js";
+import constants from "@/constants";
 import { boughtItemsRequest } from "../requests/items"
 
 const cacheKeyBoughtItems = "gladosBoughtItems";
@@ -17,7 +16,7 @@ export class BoughtItemsService {
             const cachedItems = this.cache.get(cacheKeyBoughtItems);
             console.log("Using cache values before time check:", cachedItems);
 
-            if ((Date.now() - cachedItems.date.getTime()) < config.fetchBoughtItemsAfter) {
+            if ((Date.now() - cachedItems.date.getTime()) < constants.fetchBoughtItemsAfter) {
                 console.log("Using cache values:", cachedItems.items);
                 return Promise.resolve(cachedItems.items);
             }

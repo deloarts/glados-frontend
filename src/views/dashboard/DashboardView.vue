@@ -1,6 +1,7 @@
 <script lang="ts">
 import moment from "moment";
 
+import constants from "@/constants";
 import { getFilterParams } from "@/requests/params";
 import { boughtItemsRequest } from "@/requests/items";
 import { boughtItemsFilter } from "@/presets/boughtItemsFilter";
@@ -141,10 +142,9 @@ export default {
               "Lost": boughtItems.lost
             }
           } else {
-            // @ts-ignore
-            this.notificationWarning = "Failed to fetch data."
+            console.error("Failed to fetch data for dahboard.");
           }
-          setTimeout(this.autoFetchBoughtItems.bind(this), 5000);
+          setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
         })
       }
     },

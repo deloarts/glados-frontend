@@ -124,10 +124,12 @@ export default {
     },
 
     autoFetchBoughtItems() {
+      boughtItemsService.clearCache();
       if (this.$route.path != '/items/bought') {
         console.info('Stopped updating routine for bought items: User leaved site.');
       } else if (this.autoFetchIsPaused) {
-        console.info('Stopped updating routine for bought items: Paused.');
+        console.info('Paused updating routine for bought items.');
+        setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
       } else {
         console.log("Automatically fetching bought items...");
         const params = getFilterParams(this.filter);
@@ -522,12 +524,12 @@ export default {
       }
     },
 
-    autoFetchIsPaused() {
-      if (!this.autoFetchIsPaused) {
-        boughtItemsService.clearCache();
-        this.autoFetchBoughtItems();
-      }
-    },
+    // autoFetchIsPaused() {
+    //   if (!this.autoFetchIsPaused) {
+    //     boughtItemsService.clearCache();
+    //     this.autoFetchBoughtItems();
+    //   }
+    // },
 
     filter: {
       handler: function (newVal) {
@@ -558,7 +560,7 @@ export default {
     this.boughtItems = [];
 
     this.fetchUserById();
-    this.fetchBoughtItems();
+    // this.fetchBoughtItems();
     this.autoFetchBoughtItems();
   },
 }

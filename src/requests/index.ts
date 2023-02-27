@@ -67,8 +67,8 @@ export class Request {
   get(api: string, params: any) {
     const url = config.server + api;
 
-    console.log(`Sending get request to ${url} with params ${params}`)
-    return axios.get(url, params //requestConfig(params)
+    console.log(`Sending get request to ${url} with params`, params);
+    return axios.get(url, params
     ).then(response => {
       console.log(`Response from get request to ${url}`, response);
       return response;
@@ -105,7 +105,7 @@ export class Request {
   post(api: string, params: any, data: any) {
     const url = config.server + api;
 
-    console.log(`Sending post request to ${url} with params ${params} and data${data}`)
+    console.log(`Sending post request to ${url} with params ${String(params)} and data${data}`)
     return axios.post(url, data, params // requestConfig(params)
     ).then(response => {
       console.log(`Response from post request to ${url}`, response);
@@ -123,7 +123,7 @@ export class Request {
   put(api: string, params: any, data: any) {
     const url = config.server + api;
 
-    console.log(`Sending put request to ${url} with params ${params} and data${data}`)
+    console.log(`Sending put request to ${url} with params ${String(params)} and data${data}`)
     return axios.put(url, data, params //requestConfig(params)
     ).then(response => {
       console.log(`Response from put request to ${url}`, response);
@@ -141,7 +141,7 @@ export class Request {
   delete(api: string, params: any) {
     const url = config.server + api;
 
-    console.log(`Sending delete request to ${url} with params ${params}`)
+    console.log(`Sending delete request to ${url} with params ${String(params)}`)
     return axios.delete(url, params //requestConfig(params)
     ).then(response => {
       console.log(`Response from delete request to ${url}`, response);

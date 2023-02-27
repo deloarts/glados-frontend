@@ -283,7 +283,8 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
    - [constants.ts](/src/constants.ts)
    - [README.md](README.md)
 3. Check **lint** output: `npm run lint`
-4. Lock **dependencies**: `npm install --package-lock-only`
+4. Check if app can be built: `npm run build`
+5. Lock **dependencies**: `npm install --package-lock-only`
 
 ## 4 license
 

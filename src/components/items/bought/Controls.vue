@@ -299,7 +299,7 @@ export default {
           <SelectControls v-model:selection="filter.sortBy" :options="availableOptionsOrderBy"></SelectControls>
         </div>
         <div id="sort-by-text" class="grid-item-left">
-          Sort by
+          Order by
         </div>
         <div id="preset-filters" class="grid-item-center">
           <SelectControls v-model:selection="selectedOptionFilterPreset" :options="availableOptionsFilterPresets">

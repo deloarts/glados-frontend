@@ -81,6 +81,7 @@ export default {
         { text: "All", value: "" },
       ],
       availableOptionsOrderBy: [
+        { text: "ID", value: "id" },
         { text: "Created", value: "created" },
         { text: "Project", value: "project" },
         { text: "Machine", value: "machine" },

@@ -6,7 +6,7 @@ export const boughtItemsFilter = {
   highPriority: null,
   createdDate: "",
   changedDateFrom: "",
-  sortBy: "created",
+  sortBy: "id",
   id: "",
   status: "",
   group1: "",

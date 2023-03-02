@@ -4,7 +4,7 @@ Frontend for the glados project.
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
 ![version](https://img.shields.io/badge/Version-0.1.3-orange.svg?style=for-the-badge)
-![backend](https://img.shields.io/badge/Backend-0.1.2-orange.svg?style=for-the-badge)
+![backend](https://img.shields.io/badge/Backend-0.1.3-orange.svg?style=for-the-badge)
 
 ![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
 ![vue](https://img.shields.io/badge/vue%2Fcli-v4.5-blue.svg?style=for-the-badge)
@@ -292,6 +292,7 @@ No license.
 
 ## 5 changelog
 
+**v0.1.3**: Update backend version.  
 **v0.1.2**: Add order by ID.  
 **v0.1.1**: Minor improvements.  
 **v0.1.0**: Initial commit.

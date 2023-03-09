@@ -1,11 +1,14 @@
 <script lang="ts">
+import { hostRequest } from "@/requests/host";
+
 export default {
   name: 'SelectLimit',
-  props: ["selection", "options"],
+  props: ["selection"],
   emits: ["update:selection"],
   data() {
     return {
-      value: this.selection
+      value: this.selection,
+      options: []
     }
   },
   methods: {
@@ -19,6 +22,20 @@ export default {
     }
   },
   mounted() {
+    hostRequest.getConfigItemsBoughtUnits().then(response => {
+      if (response.status === 200) {
+        this.options = response.data.values;
+        if (this.selection == null) {
+          this.$emit("update:selection", this.options[0]);
+        }
+      }
+      else {
+        // @ts-ignore
+        this.notificationWarning = "Failed to fetch available units.";
+      }
+    }).catch(error => {
+
+    });
   }
 };
 </script>
@@ -26,8 +43,8 @@ export default {
 <template>
   <div class="box">
     <select v-model="value" @change="onChange">
-      <option v-for="option in options" :value="option.value">
-        {{ option.text }}
+      <option v-for="option in options" :value="option">
+        {{ option }}
       </option>
     </select>
   </div>

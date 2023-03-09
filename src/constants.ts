@@ -1,5 +1,5 @@
 export default {
-  version: "0.1.3",
+  version: "0.1.4",
   serverVersion: "0.2.0",
 
   // Media

@@ -48,14 +48,7 @@ export default {
         { text: "Normal", value: "normal" },
         { text: "High", value: "high" }
       ],
-      availableUnits: [
-        { text: "STK", value: "STK" },
-        { text: "VPE", value: "VPE" },
-        { text: "LFM", value: "LFM" },
-        { text: "M2", value: "M2" },
-        { text: "M3", value: "M3" },
-        { text: "L", value: "L" }
-      ],
+      availableUnits: [],
     };
   },
   methods: {
@@ -128,7 +121,7 @@ export default {
           <input class="text-input" v-model="formData.quantity" type="number" placeholder="Quantity *">
         </div>
         <div id="unit" class="grid-item-center">
-          <SelectNewUpdate v-model:selection="formData.unit" v-model:options="availableUnits" />
+          <SelectNewUpdate v-model:selection="formData.unit" />
         </div>
         <div id="name" class="grid-item-center">
           <input class="text-input" v-model="name" placeholder="Name *">

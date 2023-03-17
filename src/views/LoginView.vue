@@ -1,6 +1,7 @@
 <script lang="ts">
 import { inject } from "vue";
 
+import constants from "@/constants";
 import router from "../router/index";
 import { request } from "../requests/index";
 import { usersRequest } from "../requests/users"
@@ -17,6 +18,8 @@ export default {
     return {
       notificationWarning: this.$notificationWarning,
       notificationInfo: this.$notificationInfo,
+
+      text: `v${constants.version} (v${constants.serverVersion})`,
 
       user: '',
       pw: ''
@@ -69,6 +72,7 @@ export default {
       <input id="ipt1" v-model="user" v-on:keyup.enter="login()" type="text" placeholder="user" ref="userInput">
       <input id="ipt2" v-model="pw" v-on:keyup.enter="login()" type="password" placeholder="password" ref="pwInput">
       <button id="btn1" v-on:click="login()">Login</button>
+      <span id="text" class="version">{{ text }}</span>
     </div>
   </div>
 </template>
@@ -102,12 +106,13 @@ export default {
 
   display: grid;
   grid-gap: 20px;
-  grid-template-rows: 110px 30px 30px 30px;
+  grid-template-rows: 110px 30px 30px 30px 14px;
   grid-template-columns: 150px 150px;
   grid-template-areas: 'header header'
     'ipt1 ipt1'
     'ipt2 ipt2'
-    'btn1 btn1';
+    'btn1 btn1'
+    'text text';
 
   background: $main-color;
   border-radius: 5px;
@@ -115,13 +120,14 @@ export default {
   text-align: center;
   padding: 30px;
   padding-top: 0;
-  padding-bottom: 30px;
+  padding-bottom: 0px;
 }
 
 h1 {
   font-family: 'Lobster', 'Segoe UI', 'Arial';
   font-size: 3em;
   font-weight: thin;
+  padding-top: 20px;
 }
 
 input {
@@ -152,6 +158,13 @@ button:hover {
   /* outline: 0; */
 }
 
+.version {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.75em;
+  font-weight: thin;
+  color: white;
+}
+
 #header {
   grid-area: header;
 }
@@ -170,5 +183,9 @@ button:hover {
 
 #btn2 {
   grid-area: btn2;
+}
+
+#text {
+  grid-area: text;
 }
 </style>

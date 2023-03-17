@@ -16,6 +16,18 @@ export default {
     };
   },
   methods: {
+    onReconnection() {
+      this.showBox = false;
+      // @ts-ignore
+      this.notificationInfo = "Reconnected to the server.";
+
+      if (!config.debug) {
+        localStorage.setItem("gladosTokenValue", "");
+        localStorage.setItem("gladosTokenType", "");
+        router.push({ name: "Login" });
+      }
+    },
+
     watchServerConnection() {
       request.get(constants.apiGetHostVersion, requestConfig(null)).then(response => {
         if (response.status === 200) {
@@ -24,16 +36,10 @@ export default {
             this.text = "Server version not supported.<br>Try reloading the page.";
             this.showBox = true;
           } else if (this.showBox) {
-            this.showBox = false;
-            // @ts-ignore
-            this.notificationInfo = "Reconnected to the server.";
-
-            if (!config.debug) {
-              localStorage.setItem("gladosTokenValue", "");
-              localStorage.setItem("gladosTokenType", "");
-              router.push({ name: "Login" });
-            }
+            this.onReconnection();
           }
+        } else if (this.showBox) {
+          this.onReconnection();
         }
         setTimeout(this.watchServerConnection.bind(this), constants.watchServerConnInterval);
       }).catch(error => {

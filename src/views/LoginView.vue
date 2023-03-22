@@ -120,7 +120,7 @@ export default {
   text-align: center;
   padding: 30px;
   padding-top: 0;
-  padding-bottom: 0px;
+  padding-bottom: 5px;
 }
 
 h1 {

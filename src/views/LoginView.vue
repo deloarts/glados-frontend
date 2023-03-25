@@ -3,15 +3,33 @@ import { inject } from "vue";
 
 import constants from "@/constants";
 import router from "../router/index";
+import { baseParticles } from "@/presets/particles";
+import { loadFull } from "tsparticles";
 import { request } from "../requests/index";
-import { usersRequest } from "../requests/users"
+import { usersRequest } from "../requests/users";
 
 export default {
   name: 'Login',
+  components: {
+    // Particles
+  },
   setup() {
-    const currentUser = inject("currentUser")
+    const currentUser = inject("currentUser");
+
+    // @ts-ignore
+    const particlesInit = async (engine) => {
+      console.log("Init Particles...");
+      await loadFull(engine);
+    };
+    // @ts-ignore
+    const particlesLoaded = async (container) => {
+      console.log("Particles container loaded", container);
+    };
     return {
+      baseParticles,
       currentUser,
+      particlesInit,
+      particlesLoaded
     }
   },
   data() {
@@ -66,7 +84,7 @@ export default {
 
 <template>
   <div class="login">
-    <div class="coat"></div>
+    <!-- <div class="coat"></div> -->
     <div class="center">
       <h1 id="header">Glados</h1>
       <input id="ipt1" v-model="user" v-on:keyup.enter="login()" type="text" placeholder="user" ref="userInput">
@@ -75,6 +93,12 @@ export default {
       <span id="text" class="version">{{ text }}</span>
     </div>
   </div>
+  <Particles                
+    id="tsparticles"
+    :particlesInit="particlesInit"
+    :particlesLoaded="particlesLoaded"
+    :options="baseParticles"
+      />
 </template>
 
 <style scoped lang='scss'>
@@ -96,7 +120,7 @@ export default {
 }
 
 .center {
-  z-index: 1001;
+  z-index: 1002;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -187,5 +211,15 @@ button:hover {
 
 #text {
   grid-area: text;
+}
+
+#tsparticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $main-background-color;
+  z-index: 1001;
 }
 </style>

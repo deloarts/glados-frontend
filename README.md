@@ -3,7 +3,7 @@
 Frontend for the glados project.
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
-![version](https://img.shields.io/badge/Version-0.1.8-orange.svg?style=for-the-badge)
+![version](https://img.shields.io/badge/Version-0.2.0-orange.svg?style=for-the-badge)
 ![backend](https://img.shields.io/badge/Backend-0.2.3-orange.svg?style=for-the-badge)
 
 ![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
@@ -124,7 +124,7 @@ cd glados-frontend
 git checkout {TAG_NAME}
 ```
 
-Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.1.8`.
+Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.2.0`.
 
 > ✏️ You can use this command to update the app as well. Just modify the tag name.
 >
@@ -173,7 +173,7 @@ git fetch --all --tags
 git checkout {TAG_NAME}
 ```
 
-Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.1.8`.
+Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.2.0`.
 
 ### 2.2 update the config file
 
@@ -292,6 +292,7 @@ No license.
 
 ## 5 changelog
 
+**v0.2.0**: Add copy button.  
 **v0.1.8**: Add particles js.  
 **v0.1.7**: Bump server version.  
 **v0.1.6**: Bump server version.  

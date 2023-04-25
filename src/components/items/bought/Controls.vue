@@ -8,6 +8,7 @@ import ExcelImport from "./ExcelImport.vue";
 import Prompt from "../../Prompt.vue";
 import ButtonNew from "../../elements/ButtonNew.vue";
 import ButtonEdit from "../../elements/ButtonEdit.vue";
+import ButtonCopy from "../../elements/ButtonCopy.vue";
 import ButtonDelete from "../../elements/ButtonDelete.vue";
 import ButtonExcel from "../../elements/ButtonExcel.vue";
 import ButtonFilterClear from "../../elements/ButtonFilterClear.vue";
@@ -47,6 +48,7 @@ export default {
     Prompt,
     ButtonNew,
     ButtonEdit,
+    ButtonCopy,
     ButtonDelete,
     ButtonExcel,
     ButtonFilterClear,
@@ -134,6 +136,19 @@ export default {
         this.notificationWarning = "You can only edit one item."
       } else {
         router.push(`/items/bought/edit/${this.selectedItemIds[0]}`);
+      }
+    },
+
+    onButtonCopy() {
+      if (this.selectedItemIds.length == 0) {
+        // @ts-ignore
+        this.notificationWarning = "Select an item first.";
+      }
+      else if (this.selectedItemIds.length != 1) {
+        // @ts-ignore
+        this.notificationWarning = "You can only edit one item."
+      } else {
+        router.push(`/items/bought/copy/${this.selectedItemIds[0]}`);
       }
     },
 
@@ -267,10 +282,10 @@ export default {
 
         <!-- AREA EDIT -->
         <div id="edit-1" class="grid-item-center">
-
+          <ButtonDelete text="Delete Item" v-on:click="onButtonDelete"></ButtonDelete>
         </div>
         <div id="edit-2" class="grid-item-center">
-          <ButtonDelete text="Delete Item" v-on:click="onButtonDelete"></ButtonDelete>
+            <ButtonCopy text="Copy Item" v-on:click="onButtonCopy"></ButtonCopy>
         </div>
         <div id="edit-3" class="grid-item-center">
           <ButtonEdit text="Edit Item" v-on:click="onButtonEdit"></ButtonEdit>

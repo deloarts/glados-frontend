@@ -1,20 +1,28 @@
 <script lang="ts">
 
+
+import router from "../../../router/index";
+
+import { boughtItemsRequest } from "../../../requests/items";
 import ControlsNew from "../../../components/items/bought/ControlsNew.vue";
-import CreateItemForm from "../../../components/items/bought/CreateItemForm.vue";
+import UpdateItemForm from "../../../components/items/bought/UpdateItemForm.vue";
+
 
 export default {
-  name: 'BoughtItemsNew',
+  name: 'BoughtItemsEdit',
   props: [],
   emits: [],
   components: {
     ControlsNew,
-    CreateItemForm
+    UpdateItemForm
   },
   data() {
     return {
+      // Globals
+      notificationWarning: this.$notificationWarning,
+
       formData: {
-        high_priority: false,
+        high_priority: null,
         notify_on_delivery: false,
         project: null,
         machine: null,
@@ -29,6 +37,22 @@ export default {
         desired_delivery_date: null
       }
     }
+  },
+  mounted() {
+    const itemId = this.$route.params.id;
+
+    boughtItemsRequest.getItemsId(Number(itemId)).then(response => {
+      if (response.status === 200) {
+        this.formData = response.data;
+      }
+      else {
+        // @ts-ignore
+        this.notificationWarning = `Could not fetch an item with the ID ${itemId}.`;
+        setTimeout(function () { router.push({ name: "BoughtItems" }) }, 4000);
+      }
+    }).catch(error => {
+
+    });
   }
 }
 </script>
@@ -37,10 +61,10 @@ export default {
   <div class="scope">
     <div class="grid">
       <div id="controls" class="controls">
-        <ControlsNew v-model:form-data="formData" header="New item"/>
+        <ControlsNew v-model:form-data="formData" header="Copy item"/>
       </div>
       <div id="data" class="data">
-        <CreateItemForm v-model:form-data="formData" />
+        <UpdateItemForm v-model:form-data="formData" />
       </div>
     </div>
   </div>

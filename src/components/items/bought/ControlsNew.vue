@@ -7,7 +7,7 @@ import ButtonAbort from "@/components/elements/ButtonAbort.vue";
 
 export default {
   name: 'ControlsNew',
-  props: ["formData"],
+  props: ["formData", "header"],
   emits: [],
   components: {
     ButtonCreate,
@@ -49,7 +49,7 @@ export default {
     <div class="container">
       <div id="grid">
         <div id="header" class="grid-item-center">
-          New Item
+          {{ header }}
         </div>
         <div id="placeholder-1" class="grid-item-center">
 

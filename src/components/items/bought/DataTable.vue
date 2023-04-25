@@ -970,7 +970,7 @@ tr:nth-child(odd)>td {
 }
 
 tr:hover>td {
-  background: rgb(255, 255, 255)
+  filter: brightness(1.05)
 }
 
 tr.open>td {

@@ -6,6 +6,7 @@ import LoginView from "../views/LoginView.vue";
 import DashboardView from "../views/dashboard/DashboardView.vue";
 import ItemsBoughtView from "../views/items/bought/ItemsBoughtView.vue";
 import ItemsBoughtNewView from "../views/items/bought/ItemsBoughtNewView.vue";
+import ItemsBoughtCopyView from "../views/items/bought/ItemsBoughtCopyView.vue";
 import ItemsBoughtEditView from "../views/items/bought/ItemsBoughtEditView.vue";
 import SettingsHostView from "../views/settings/SettingsHostView.vue";
 import SettingsLogsView from "../views/settings/SettingsLogsView.vue";
@@ -46,6 +47,11 @@ const router = createRouter({
       path: "/items/bought/edit/:id",
       name: "EditBoughtItem",
       component: ItemsBoughtEditView,
+    },
+    {
+      path: "/items/bought/copy/:id",
+      name: "CopyBoughtItem",
+      component: ItemsBoughtCopyView,
     },
     {
       path: "/account",

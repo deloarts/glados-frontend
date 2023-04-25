@@ -37,7 +37,7 @@ export default {
   <div class="scope">
     <div class="grid">
       <div id="controls" class="controls">
-        <ControlsNew v-model:form-data="formData" />
+        <ControlsNew v-model:form-data="formData" header="New item"/>
       </div>
       <div id="data" class="data">
         <CreateItemForm v-model:form-data="formData" />

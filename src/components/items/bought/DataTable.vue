@@ -6,9 +6,12 @@ import Datepicker from 'vue3-datepicker';
 
 import constants from "@/constants";
 import { usersService } from "@/services/users.service";
+import { usersRequest } from "@/requests/users";
 import { boughtItemsService } from "@/services/items.service";
 import { getFilterParams } from "@/requests/params";
 import { boughtItemsRequest } from "@/requests/items";
+import { hostRequest } from "@/requests/host";
+import { capitalizeFirstLetter } from "@/helper/string.helper";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
 
 export default {
@@ -36,16 +39,9 @@ export default {
       autoFetchIsPaused: false,
 
       // Select options
-      availableOptionsStatus: [
-        { text: "Open", value: "open" },
-        { text: "Requested", value: "requested" },
-        { text: "Ordered", value: "ordered" },
-        { text: "Late", value: "late" },
-        { text: "Partial", value: "partial" },
-        { text: "Delivered", value: "delivered" },
-        { text: "Canceled", value: "canceled" },
-        { text: "Lost", value: "lost" }
-      ],
+      availableOptionsStatus: [{ text: "All", value: "" }],
+      availableOptionsUnit: [{ text: "All", value: "" }],
+      availableOptionsUsers: [{ text: "All", value: "" }],
 
       // Items
       lineIndex: 0,
@@ -87,21 +83,42 @@ export default {
     };
   },
   methods: {
-    fetchUserById() {
-      usersService.getUsers().then(response => {
+    fetchAvailableStatus() {
+      hostRequest.getConfigItemsBoughtStatus().then(response => {
         const data = response.data;
-        var userById = {};
-
-        for (let i = 0; i < data.length; i++) {
-          // @ts-ignore
-          userById[data[i].id] = data[i].full_name;
+        var availableOptions = [{ text: "All", value: "" }];
+        for (const key in data) {
+          availableOptions.push({ text: capitalizeFirstLetter(key), value: data[key] });
         }
-
-        console.log(userById);
-        this.userById = userById;
+        this.availableOptionsStatus = availableOptions;
       });
     },
 
+    fetchAvailableUnits() {
+      hostRequest.getConfigItemsBoughtUnits().then(response => {
+        const data = response.data.values;
+        var availableOptions = [{ text: "All", value: "" }];
+        for (let i = 0; i < data.length; i++) {
+          availableOptions.push({ text: data[i], value: data[i] });
+        }
+        this.availableOptionsUnit = availableOptions;
+      });
+    },
+
+    fetchAvailableUsers() {
+      usersRequest.getUsers().then(response => {
+        const data = response.data;
+        var userById = {};
+        var availableOptions = [{ text: "All", value: "" }];
+        for (let i = 0; i < data.length; i++) {
+          // @ts-ignore
+          userById[data[i].id] = data[i].full_name;
+          availableOptions.push({ text: data[i].full_name, value: data[i].id });
+        }
+        this.userById = userById;
+        this.availableOptionsUsers = availableOptions;
+      });
+    },
 
     fetchBoughtItems() {
       const params = getFilterParams(this.filter);
@@ -524,13 +541,6 @@ export default {
       }
     },
 
-    // autoFetchIsPaused() {
-    //   if (!this.autoFetchIsPaused) {
-    //     boughtItemsService.clearCache();
-    //     this.autoFetchBoughtItems();
-    //   }
-    // },
-
     filter: {
       handler: function (newVal) {
         this.$emit("update:filter", this.filter);
@@ -559,8 +569,9 @@ export default {
   mounted() {
     this.boughtItems = [];
 
-    this.fetchUserById();
-    // this.fetchBoughtItems();
+    this.fetchAvailableUsers();
+    this.fetchAvailableStatus();
+    this.fetchAvailableUnits();
     this.autoFetchBoughtItems();
   },
 }
@@ -610,7 +621,6 @@ export default {
             </th>
             <th class="second sticky-col" id="status" @contextmenu.prevent="() => { filter.status = '' }">
               <select class="filter-select" v-model="filter.status" @change="fetchBoughtItems">
-                <option value="">All</option>
                 <option v-for="option in availableOptionsStatus" :value="option.value">
                   {{ option.text }}
                 </option>
@@ -624,8 +634,15 @@ export default {
               <input class="filter-input" v-model="filter.machine" v-on:keyup.enter="fetchBoughtItems()" type="text"
                 placeholder="Filter">
             </th>
-            <th class="second sticky-col" id="quantity"></th>
-            <th class="second sticky-col" id="unit"></th>
+            <th class="second sticky-col" id="quantity" @contextmenu.prevent="() => { filter.quantity = '' }">
+              <input class="filter-input" v-model="filter.quantity" v-on:keyup.enter="fetchBoughtItems()" type="text"
+                placeholder="Filter">
+            </th>
+            <th class="second sticky-col" id="unit" @contextmenu.prevent="() => { filter.unit = '' }">
+              <select class="filter-select" v-model="filter.unit" @change="fetchBoughtItems">
+                <option v-for="option in availableOptionsUnit" :value="option.value">{{ option.text }}</option>
+              </select>
+            </th>
             <th class="second sticky-col" id="partnumber" @contextmenu.prevent="() => { filter.partnumber = '' }">
               <input class="filter-input" v-model="filter.partnumber" v-on:keyup.enter="fetchBoughtItems()" type="text"
                 placeholder="Filter">
@@ -646,25 +663,58 @@ export default {
               <input class="filter-input" v-model="filter.group1" v-on:keyup.enter="fetchBoughtItems()" type="text"
                 placeholder="Filter">
             </th>
-            <th class="second" id="note-general"></th>
-            <th class="second" id="note-supplier"></th>
-            <th class="second" id="created" v-if="!showRequestView"
-              @contextmenu.prevent="() => { filter.createdDate = '' }">
-              <input class="filter-input" v-model="filter.createdDate" v-on:keyup.enter="fetchBoughtItems()" type="text"
+            <th class="second" id="note-general" @contextmenu.prevent="() => { filter.noteGeneral = '' }">
+              <input class="filter-input" v-model="filter.noteGeneral" v-on:keyup.enter="fetchBoughtItems()" type="text"
                 placeholder="Filter">
             </th>
-            <th class="second" id="creator" v-if="!showUnclutter && !showRequestView"></th>
-            <th class="second" id="desired"></th>
-            <th class="second" id="requested" v-if="!showRequestView"></th>
-            <th class="second" id="requester" v-if="!showUnclutter && !showRequestView"></th>
-            <th class="second" id="ordered" v-if="!showRequestView"></th>
-            <th class="second" id="orderer" v-if="!showUnclutter && !showRequestView"></th>
-            <th class="second" id="expected" v-if="!showRequestView"></th>
-            <th class="second" id="delivered" v-if="!showRequestView"></th>
-            <th class="second" id="taken-over-by" v-if="!showUnclutter && !showRequestView"></th>
+            <th class="second" id="note-supplier" @contextmenu.prevent="() => { filter.noteSupplier = '' }">
+              <input class="filter-input" v-model="filter.noteSupplier" v-on:keyup.enter="fetchBoughtItems()" type="text"
+                placeholder="Filter">
+            </th>
+            <th class="second" id="created" v-if="!showRequestView" @contextmenu.prevent="() => { filter.createdDate = '' }">
+              <input class="filter-input" v-model="filter.createdDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            </th>
+            <th class="second" id="creator" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.creatorId = '' }">
+              <select class="filter-select" v-model="filter.creatorId" @change="fetchBoughtItems">
+                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+              </select>
+            </th>
+            <th class="second" id="desired" @contextmenu.prevent="() => { filter.desiredDate = '' }">
+              <input class="filter-input" v-model="filter.desiredDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            </th>
+            <th class="second" id="requested" v-if="!showRequestView" @contextmenu.prevent="() => { filter.requestedDate = '' }">
+              <input class="filter-input" v-model="filter.requestedDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            </th>
+            <th class="second" id="requester" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.requesterId = '' }">
+              <select class="filter-select" v-model="filter.requesterId" @change="fetchBoughtItems">
+                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+              </select>
+            </th>
+            <th class="second" id="ordered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.orderedDate = '' }">
+              <input class="filter-input" v-model="filter.orderedDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            </th>
+            <th class="second" id="orderer" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.ordererId = '' }">
+              <select class="filter-select" v-model="filter.ordererId" @change="fetchBoughtItems">
+                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+              </select>
+            </th>
+            <th class="second" id="expected" v-if="!showRequestView" @contextmenu.prevent="() => { filter.expectedDate = '' }">
+              <input class="filter-input" v-model="filter.expectedDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            </th>
+            <th class="second" id="delivered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.deliveredDate = '' }">
+              <input class="filter-input" v-model="filter.deliveredDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            </th>
+            <th class="second" id="taken-over-by" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.takeOverId = '' }">
+              <select class="filter-select" v-model="filter.takeOverId" @change="fetchBoughtItems">
+                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+              </select>
+            </th>
             <th class="second" id="arrival-weeks" v-if="!showUnclutter && !showRequestView">(Weeks)</th>
             <th class="second" id="total-delivery-weeks" v-if="!showUnclutter && !showRequestView">(Weeks)</th>
-            <th class="second" id="storage-place" v-if="!showUnclutter && !showRequestView"></th>
+            <th class="second" id="storage-place" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.storagePlace = '' }">
+              <input class="filter-input" v-model="filter.storagePlace" v-on:keyup.enter="fetchBoughtItems()" type="text"
+                placeholder="Filter">
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -672,16 +722,16 @@ export default {
           multiSelect($event, item.id, index),
           setExpectedDeliveryDate(item.expected_delivery_date),
           setDesiredDeliveryDate(item.desired_delivery_date)" v-bind:class="{
-    'selected': selectedItemIds.includes(item.id),
-    'open': showRainbow && item.status == 'open',
-    'requested': showRainbow && item.status == 'requested',
-    'ordered': showRainbow && item.status == 'ordered',
-    'late': showRainbow && item.status == 'late',
-    'partial': showRainbow && item.status == 'partial',
-    'delivered': showRainbow && item.status == 'delivered',
-    'canceled': showRainbow && item.status == 'canceled',
-    'lost': showRainbow && item.status == 'lost'
-  }">
+            'selected': selectedItemIds.includes(item.id),
+            'open': showRainbow && item.status == 'open',
+            'requested': showRainbow && item.status == 'requested',
+            'ordered': showRainbow && item.status == 'ordered',
+            'late': showRainbow && item.status == 'late',
+            'partial': showRainbow && item.status == 'partial',
+            'delivered': showRainbow && item.status == 'delivered',
+            'canceled': showRainbow && item.status == 'canceled',
+            'lost': showRainbow && item.status == 'lost'
+          }">
             <td id="number" class="sticky-col">
               <IconBellRing v-if="item.high_priority" class="bell-icon" />
               <span v-else>{{ index + 1 }}</span>
@@ -725,7 +775,7 @@ export default {
                 {{ item.machine }}
               </div>
             </td>
-            <td id="quantity" class="sticky-col">
+            <td id="quantity" class="sticky-col" @contextmenu.prevent="() => { filter.quantity = item.quantity }">
               <div v-if="//@ts-ignore
               currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
                 <input class="cell-input" v-model="item.quantity" type="number" placeholder="Quantity"
@@ -737,7 +787,7 @@ export default {
                 {{ item.quantity }}
               </div>
             </td>
-            <td id="unit" class="sticky-col">
+            <td id="unit" class="sticky-col" @contextmenu.prevent="() => { filter.unit = item.unit }">
               <div v-bind:class="{ 'fix-height': showFixHeight }">
                 {{ item.unit }}
               </div>
@@ -802,7 +852,7 @@ export default {
                 {{ item.group_1 }}
               </div>
             </td>
-            <td id="note-general">
+            <td id="note-general" @contextmenu.prevent="() => { filter.noteGeneral = item.note_general }">
               <div v-if="//@ts-ignore
               currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
                 <textarea class="cell-textarea-note" v-model="item.note_general" type="text" placeholder="Note"
@@ -814,7 +864,7 @@ export default {
                 {{ item.note_general }}
               </div>
             </td>
-            <td id="note-supplier">
+            <td id="note-supplier" @contextmenu.prevent="() => { filter.noteSupplier = item.note_supplier }">
               <div v-if="//@ts-ignore
               currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
                 <textarea class="cell-textarea-note" v-model="item.note_supplier" type="text"
@@ -830,13 +880,13 @@ export default {
             <td id="created" v-if="!showRequestView" @contextmenu.prevent="() => { filter.createdDate = item.created }">
               {{ item.created }}
             </td>
-            <td id="creator" v-if="!showUnclutter && !showRequestView">
+            <td id="creator" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.creatorId = item.creator_id }">
               <div v-bind:class="{ 'fix-height': showFixHeight }">{{
               //@ts-ignore
               userById[item.creator_id] }}
               </div>
             </td>
-            <td id="desired">
+            <td id="desired" @contextmenu.prevent="() => { filter.desiredDate = item.desired_delivery_date }">
               <div v-if="//@ts-ignore
               currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
                 <!-- <Datepicker class="datepicker" v-model="pickedDesiredDate" style="width:75px;text-align:center" /> -->
@@ -847,21 +897,21 @@ export default {
                 {{ item.desired_delivery_date }}
               </div>
             </td>
-            <td id="requested" v-if="!showRequestView">{{ item.requested_date }}</td>
-            <td id="requester" v-if="!showUnclutter && !showRequestView">
+            <td id="requested" v-if="!showRequestView" @contextmenu.prevent="() => { filter.requestedDate = item.requested_date }">{{ item.requested_date }}</td>
+            <td id="requester" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.requesterId = item.requester_id }">
               <div v-bind:class="{ 'fix-height': showFixHeight }">{{
               //@ts-ignore
               userById[item.requester_id] }}
               </div>
             </td>
-            <td id="ordered" v-if="!showRequestView">{{ item.ordered_date }}</td>
-            <td id="orderer" v-if="!showUnclutter && !showRequestView">
+            <td id="ordered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.orderedDate = item.ordered_date }">{{ item.ordered_date }}</td>
+            <td id="orderer" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.ordererId = item.orderer_id }">
               <div v-bind:class="{ 'fix-height': showFixHeight }">{{
               //@ts-ignore
               userById[item.orderer_id] }}
               </div>
             </td>
-            <td id="expected" v-if="!showRequestView">
+            <td id="expected" v-if="!showRequestView" @contextmenu.prevent="() => { filter.expectedDate = item.expected_delivery_date }">
               <div v-if="//@ts-ignore
               currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
                 <!-- <Datepicker class="datepicker" v-model="pickedExpectedDate" style="width:75px;text-align:center" /> -->
@@ -872,8 +922,8 @@ export default {
                 {{ item.expected_delivery_date }}
               </div>
             </td>
-            <td id="delivered" v-if="!showRequestView">{{ item.delivery_date }}</td>
-            <td id="taken-over-by" v-if="!showUnclutter && !showRequestView">
+            <td id="delivered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.deliveredDate = item.delivery_date }">{{ item.delivery_date }}</td>
+            <td id="taken-over-by" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.takeOverId = item.taken_over_id }">
               <div v-bind:class="{ 'fix-height': showFixHeight }">{{
               //@ts-ignore
               userById[item.taken_over_id] }}
@@ -885,7 +935,7 @@ export default {
             <td id="total-delivery-weeks" v-if="!showUnclutter && !showRequestView">{{
               calcDiffInWeeks(item.ordered_date, item.delivery_date)
             }}</td>
-            <td id="storage-place" v-if="!showUnclutter && !showRequestView">
+            <td id="storage-place" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.storagePlace = item.storage_place }">
               <div v-if="//@ts-ignore
               currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
                 <input class="cell-input" v-model="item.storage_place" type="text" placeholder="Storage Place"

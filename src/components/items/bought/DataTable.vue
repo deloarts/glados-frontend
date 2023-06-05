@@ -5,7 +5,6 @@ import moment from "moment";
 import Datepicker from 'vue3-datepicker';
 
 import constants from "@/constants";
-import { usersService } from "@/services/users.service";
 import { usersRequest } from "@/requests/users";
 import { boughtItemsService } from "@/services/items.service";
 import { getFilterParams } from "@/requests/params";
@@ -215,223 +214,92 @@ export default {
       event.target.blur();
     },
 
-    updateStatus(status: string) {
+    updateItemHandler(requestFn: Function, value: string, desc: string) {
       var c = 0;
+      var confirmation = true;
       const ids = this.selectedItemIds;
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsStatus(id, status).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated status.";
-          }
-        });
+      if (value == null) { return }
+
+      if (ids.length > 1) {
+        confirmation = confirm(`Do you want to change the ${desc.toLowerCase()} of ${ids.length} items?`);
       }
+      if (confirmation) {
+        for (var i = 0; i < ids.length; i++) {
+          const id = ids[i];
+          // @ts-ignore
+          requestFn(id, value).then(response => {
+            c++;
+            if (response.status == 403) {
+              this.notificationWarning = response.data.detail;
+            }
+            if (c == ids.length) {
+              this.fetchBoughtItems();
+              // @ts-ignore
+              this.notificationInfo = `Updated ${desc}.`;
+            }
+          });
+        }
+      } else {
+        this.fetchBoughtItems();
+      }
+    },
+
+    updateStatus(status: string) {
+      this.updateItemHandler(boughtItemsRequest.putItemsStatus, status, "Status");
     },
 
     updateGroup1(group: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (group == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsGroup1(id, group).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated group.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsGroup1, group, "Group");
     },
 
     updateProject(project: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (project == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsProject(id, project).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated project.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsProject, project, "Project");
     },
 
     updateMachine(machine: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (machine == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsMachine(id, machine).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated machine.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsMachine, machine, "Machine");
     },
 
     updateQuantity(qty: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (qty == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsQuantity(id, qty).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated quantity.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsQuantity, qty, "Quantity");
     },
 
     updatePartnumber(partnumber: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (partnumber == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsPartnumber(id, partnumber).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated partnumber.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsPartnumber, partnumber, "Partnumber");
     },
 
     updateDefinition(definition: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (definition == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsDefinition(id, definition).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated definition.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsDefinition, definition, "Definition");
     },
 
     updateManufacturer(manufacturer: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (manufacturer == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsManufacturer(id, manufacturer).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated manufacturer.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsManufacturer, manufacturer, "Manufacturer");
     },
 
     updateSupplier(supplier: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (supplier == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsSupplier(id, supplier).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated supplier.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsSupplier, supplier, "Supplier");
     },
 
     updateNoteGeneral(note: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (note == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsNoteGeneral(id, note).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated note.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsNoteGeneral, note, "General Note");
     },
 
     updateNoteSupplier(note: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (note == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsNoteSupplier(id, note).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated supplier note.";
-          }
-        });
-      }
+      this.updateItemHandler(boughtItemsRequest.putItemsNoteSupplier, note, "Supplier Note");
+    },
+
+    updateDesiredDeliveryDate() {
+      const formattedDate = moment(this.pickedDesiredDate).format("YYYY-MM-DD");
+      this.updateItemHandler(boughtItemsRequest.putItemsDesiredDeliveryDate, formattedDate, "Desired Delivery Date");
+    },
+
+    updateExpectedDeliveryDate() {
+      const formattedDate = moment(this.pickedDesiredDate).format("YYYY-MM-DD");
+      this.updateItemHandler(boughtItemsRequest.putItemsExpectedDeliveryDate, formattedDate, "Expected Delivery Date");
+    },
+
+    updateStorage(storage: string) {
+      this.updateItemHandler(boughtItemsRequest.putItemsStorage, storage, "Storage Place");
     },
 
     setDesiredDeliveryDate(date: any) {
@@ -443,72 +311,12 @@ export default {
       }
     },
 
-    updateDesiredDeliveryDate() {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      const formattedDate = moment(this.pickedDesiredDate).format("YYYY-MM-DD");
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsDesiredDeliveryDate(id, formattedDate).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated desired delivery date.";
-          }
-        });
-      }
-    },
-
     setExpectedDeliveryDate(date: any) {
       if (date != null && date != undefined) {
         this.pickedExpectedDate = new Date(date);
       } else {
         //@ts-ignore
         this.pickedExpectedDate = null;  // new Date();
-      }
-    },
-
-    updateExpectedDeliveryDate() {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      const formattedDate = moment(this.pickedExpectedDate).format("YYYY-MM-DD");
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsExpectedDeliveryDate(id, formattedDate).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated expected delivery date.";
-          }
-        });
-      }
-    },
-
-    updateStorage(storage: string) {
-      var c = 0;
-      const ids = this.selectedItemIds;
-      if (storage == null) { return }
-      for (var i = 0; i < ids.length; i++) {
-        const id = ids[i];
-        boughtItemsRequest.putItemsStorage(id, storage).then(response => {
-          c++;
-          if (response.status == 403) {
-            this.notificationWarning = response.data.detail;
-          }
-          if (c == ids.length) {
-            this.fetchBoughtItems();
-            // @ts-ignore
-            this.notificationInfo = "Updated storage place.";
-          }
-        });
       }
     },
 
@@ -551,12 +359,6 @@ export default {
       },
       deep: true
     },
-    // pickedExpectedDate() {
-    //   this.updateExpectedDeliveryDate();
-    // },
-    // pickedDesiredDate() {
-    //   this.updateDesiredDeliveryDate();
-    // }
   },
   created() {
     let vm = this;

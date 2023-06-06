@@ -221,7 +221,7 @@ export default {
       if (value == null) { return }
 
       if (ids.length > 1) {
-        confirmation = confirm(`Do you want to change the ${desc.toLowerCase()} of ${ids.length} items?`);
+        confirmation = confirm(`Do you want to change the ${desc.toLowerCase()} of ${ids.length} items to '${value}'?`);
       }
       if (confirmation) {
         for (var i = 0; i < ids.length; i++) {

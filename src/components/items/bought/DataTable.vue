@@ -294,7 +294,7 @@ export default {
     },
 
     updateExpectedDeliveryDate() {
-      const formattedDate = moment(this.pickedDesiredDate).format("YYYY-MM-DD");
+      const formattedDate = moment(this.pickedExpectedDate).format("YYYY-MM-DD");
       this.updateItemHandler(boughtItemsRequest.putItemsExpectedDeliveryDate, formattedDate, "Expected Delivery Date");
     },
 

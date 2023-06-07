@@ -292,6 +292,7 @@ No license.
 
 ## 5 changelog
 
+**v0.3.2**: Fix faulty version checking.  
 **v0.3.1**: Fix expected delivery date.  
 **v0.3.0**: Add more filters, add prompt before multi-change.  
 **v0.2.1**: Fix server-side excel import.  

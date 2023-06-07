@@ -3,8 +3,8 @@
 Frontend for the glados project.
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
-![version](https://img.shields.io/badge/Version-0.3.1-orange.svg?style=for-the-badge)
-![backend](https://img.shields.io/badge/Backend-0.3.0-orange.svg?style=for-the-badge)
+![version](https://img.shields.io/badge/Version-0.3.2-orange.svg?style=for-the-badge)
+![backend](https://img.shields.io/badge/Backend-0.3.1-orange.svg?style=for-the-badge)
 
 ![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
 ![vue](https://img.shields.io/badge/vue%2Fcli-v4.5-blue.svg?style=for-the-badge)
@@ -124,7 +124,7 @@ cd glados-frontend
 git checkout {TAG_NAME}
 ```
 
-Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.3.1`.
+Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.3.2`.
 
 > ✏️ You can use this command to update the app as well. Just modify the tag name.
 >
@@ -173,7 +173,7 @@ git fetch --all --tags
 git checkout {TAG_NAME}
 ```
 
-Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.3.1`.
+Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.3.2`.
 
 ### 2.2 update the config file
 
@@ -292,6 +292,7 @@ No license.
 
 ## 5 changelog
 
+**v0.3.2**: Fix faulty version checking.  
 **v0.3.1**: Fix expected delivery date.  
 **v0.3.0**: Add more filters, add prompt before multi-change.  
 **v0.2.1**: Fix server-side excel import.  

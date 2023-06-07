@@ -31,7 +31,10 @@ export default {
     watchServerConnection() {
       request.get(constants.apiGetHostVersion, requestConfig(null)).then(response => {
         if (response.status === 200) {
-          if (response.data.version != constants.serverVersion) {
+          var serverVersion = response.data.version.split(".");
+          var requiredVersion = constants.serverVersion.split(".");
+
+          if (serverVersion[0] != requiredVersion[0] || serverVersion[1] != requiredVersion[1] || serverVersion[2] < requiredVersion[2]) {
             console.error("Server version is not supported.");
             this.text = "Server version not supported.<br>Try reloading the page.";
             this.showBox = true;

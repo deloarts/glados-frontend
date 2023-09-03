@@ -1,10 +1,12 @@
 <script lang="ts">
 import AccountUpdate from "@/components/account/AccountUpdate.vue";
+import AccountPersonalAccessToken from "@/components/account/AccountPersonalAccessToken.vue";
 
 export default {
     name: 'AccountView',
     components: {
-        AccountUpdate
+        AccountUpdate,
+        AccountPersonalAccessToken
     },
     data() {
         return {
@@ -32,7 +34,7 @@ export default {
         <hr>
         <div class="content">
             <h1>Personal Access Token</h1>
-            <span class="gray">Coming soon...</span>
+            <AccountPersonalAccessToken />
         </div>
     </div>
 </template>

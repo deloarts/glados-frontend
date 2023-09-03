@@ -1,6 +1,6 @@
 <script lang="ts">
 export default {
-  name: 'ButtonUpdateUser',
+  name: 'ButtonNewPersonalAccessToken',
   props: {
     text: String
   },
@@ -10,18 +10,17 @@ export default {
 </script>
 
 <template>
-  
   <button class="imi-btn imi-btn-primary">
     <designer-imi-icon>
       <i class="imi-icon">
         <svg height="100%" viewBox="0 0 24 24" width="100%" xmlns="http://www.w3.org/2000/svg" fill="white">
           <path
-            d="M21.7,13.35L20.7,14.35L18.65,12.3L19.65,11.3C19.86,11.09 20.21,11.09 20.42,11.3L21.7,12.58C21.91,12.79 21.91,13.14 21.7,13.35M12,18.94L18.06,12.88L20.11,14.93L14.06,21H12V18.94M12,14C7.58,14 4,15.79 4,18V20H10V18.11L14,14.11C13.34,14.03 12.67,14 12,14M12,4A4,4 0 0,0 8,8A4,4 0 0,0 12,12A4,4 0 0,0 16,8A4,4 0 0,0 12,4Z">
+            d="M11 10V12H9V14H7V12H5.8C5.4 13.2 4.3 14 3 14C1.3 14 0 12.7 0 11S1.3 8 3 8C4.3 8 5.4 8.8 5.8 10H11M3 10C2.4 10 2 10.4 2 11S2.4 12 3 12 4 11.6 4 11 3.6 10 3 10M16 14C18.7 14 24 15.3 24 18V20H8V18C8 15.3 13.3 14 16 14M16 12C13.8 12 12 10.2 12 8S13.8 4 16 4 20 5.8 20 8 18.2 12 16 12Z">
           </path>
         </svg>
       </i>
     </designer-imi-icon>
-    {{ text }}
+    {{  text }}
   </button>
 </template>
 

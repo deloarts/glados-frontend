@@ -1,6 +1,4 @@
 <script lang="ts">
-
-
 import router from "../../../router/index";
 
 import { boughtItemsRequest } from "../../../requests/items";

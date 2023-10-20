@@ -1,4 +1,5 @@
 <script lang="ts">
+//@ts-ignore
 import moment from "moment";
 
 import constants from "@/constants";

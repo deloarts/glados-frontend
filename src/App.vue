@@ -1,8 +1,5 @@
 <script lang="ts">
-import { ref, provide, computed } from 'vue'
-
-import { currentUserKey } from "@/symbols/users";
-import type { CurrentUserType } from "@/types/users";
+import { ref, provide } from 'vue'
 
 import router from "./router/index";
 import { usersRequest } from "./requests/users"

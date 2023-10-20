@@ -1,6 +1,5 @@
 <script lang="ts">
-import router from "../../router/index";
-import Toggle from "@vueform/toggle";
+import * as Toggle from "@vueform/toggle";
 import ButtonCreateUser from "@/components/elements/ButtonCreateUser.vue";
 import { usersService } from "@/services/users.service";
 import { usersRequest } from "@/requests/users";

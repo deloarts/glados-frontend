@@ -1,4 +1,5 @@
 <script lang="ts">
+//@ts-ignore
 import moment from "moment";
 import { logsRequest } from "@/requests/logs";
 import Spinner from "@/components/spinner/LoadingSpinner.vue";

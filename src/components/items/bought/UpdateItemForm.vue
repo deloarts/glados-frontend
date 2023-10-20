@@ -1,7 +1,8 @@
 <script lang="ts">
 import { ref } from "vue";
+//@ts-ignore
 import moment from "moment";
-
+//@ts-ignore
 import Toggle from "@vueform/toggle";
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'

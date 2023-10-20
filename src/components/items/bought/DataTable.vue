@@ -1,6 +1,7 @@
 <script lang="ts">
 import { ref, inject } from 'vue';
 
+//@ts-ignore
 import moment from "moment";
 import Datepicker from 'vue3-datepicker';
 

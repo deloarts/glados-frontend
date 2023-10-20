@@ -1,5 +1,5 @@
 <script lang="ts">
-import { inject, ref } from "vue";
+import { inject } from "vue";
 
 import router from "@/router/index";
 import config from "@/config";

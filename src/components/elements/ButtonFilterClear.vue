@@ -1,5 +1,4 @@
 <script lang="ts">
-import router from "../../router/index";
 
 export default {
   name: 'ButtonFilterClear',

@@ -16,6 +16,7 @@ import ButtonFilterSave from "../../elements/ButtonFilterSave.vue";
 import ButtonFilterLoad from "../../elements/ButtonFilterLoad.vue";
 import SelectControls from "../../elements/SelectControls.vue";
 
+//@ts-ignore
 import Toggle from "@vueform/toggle";
 
 

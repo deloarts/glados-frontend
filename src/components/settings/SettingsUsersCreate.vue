@@ -1,5 +1,6 @@
 <script lang="ts">
-import * as Toggle from "@vueform/toggle";
+//@ts-ignore
+import Toggle from "@vueform/toggle";
 import ButtonCreateUser from "@/components/elements/ButtonCreateUser.vue";
 import { usersService } from "@/services/users.service";
 import { usersRequest } from "@/requests/users";

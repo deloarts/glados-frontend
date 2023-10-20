@@ -1,5 +1,6 @@
 <script lang="ts">
-import * as Toggle from "@vueform/toggle";
+//@ts-ignore
+import Toggle from "@vueform/toggle";
 import ButtonNewPersonalAccessToken from "@/components/elements/ButtonNewPersonalAccessToken.vue";
 import { usersRequest } from "@/requests/users";
 

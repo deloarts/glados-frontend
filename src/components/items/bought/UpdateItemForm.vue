@@ -2,8 +2,8 @@
 import { ref } from "vue";
 //@ts-ignore
 import moment from "moment";
-
-import * as Toggle from "@vueform/toggle";
+//@ts-ignore
+import Toggle from "@vueform/toggle";
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 

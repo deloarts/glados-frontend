@@ -1,6 +1,4 @@
 <script lang="ts"> 
-import moment from "moment";
-import { usersRequest } from "@/requests/users";
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import SettingsUsersTable from "@/components/settings/SettingsUsersTable.vue";
 import SettingsUsersCreate from "@/components/settings/SettingsUsersCreate.vue";

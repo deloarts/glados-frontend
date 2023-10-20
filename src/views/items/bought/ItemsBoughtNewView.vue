@@ -1,5 +1,4 @@
 <script lang="ts">
-
 import ControlsNew from "../../../components/items/bought/ControlsNew.vue";
 import CreateItemForm from "../../../components/items/bought/CreateItemForm.vue";
 

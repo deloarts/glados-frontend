@@ -1,5 +1,5 @@
 <script lang="ts">
-import Toggle from "@vueform/toggle";
+import * as Toggle from "@vueform/toggle";
 import ButtonUpdateUser from "@/components/elements/ButtonUpdateUser.vue";
 import { usersRequest } from "@/requests/users";
 import { usersService } from "@/services/users.service";

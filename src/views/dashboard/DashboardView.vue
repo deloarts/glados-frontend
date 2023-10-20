@@ -129,9 +129,32 @@ export default {
               }
             }
 
+            // Sort user dataset and limit to 10 items
+            let sortedUsers = [];
+            let sortedUsersDataset = {};
+            let userLimit = 0;
+
+            for (var user in usersDataset) {
+              sortedUsers.push([user, usersDataset[user]]);
+            }
+
+            sortedUsers.sort(function (a, b) {
+              return b[1] - a[1];
+            });
+
+            if (sortedUsers.length > 10) {
+              userLimit = 10;
+            } else {
+              userLimit = sortedUsers.length;
+            }
+
+            for (var i = 0; i < userLimit; i++) {
+              sortedUsersDataset[sortedUsers[i][0]] = sortedUsers[i][1];
+            }
+
             // WRITE DATASETS
             this.boughtItems = boughtItems;
-            this.usersDataset = usersDataset;
+            this.usersDataset = sortedUsersDataset;
             this.overviewDataset = {
               "Open": boughtItems.open,
               "Requested": boughtItems.requested,
@@ -143,7 +166,7 @@ export default {
               "Lost": boughtItems.lost
             }
           } else {
-            console.error("Failed to fetch data for dahboard.");
+            console.error("Failed to fetch data for dashboard.");
           }
           setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
         })

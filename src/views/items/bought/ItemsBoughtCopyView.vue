@@ -1,58 +1,51 @@
-<script lang="ts">
-import router from "../../../router/index";
+<script setup>
+import { ref, onMounted } from "vue"
+import { useRoute } from "vue-router"
 
-import { boughtItemsRequest } from "../../../requests/items";
-import ControlsNew from "../../../components/items/bought/ControlsNew.vue";
-import UpdateItemForm from "../../../components/items/bought/UpdateItemForm.vue";
+import router from "@/router/index"
+import { boughtItemsRequest } from "@/requests/items"
+import { useNotificationStore } from "@/stores/notification.js"
 
+import ControlsNew from "@/components/items/bought/ControlsNew.vue"
+import UpdateItemForm from "@/components/items/bought/UpdateItemForm.vue"
 
-export default {
-  name: 'BoughtItemsEdit',
-  props: [],
-  emits: [],
-  components: {
-    ControlsNew,
-    UpdateItemForm
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
+// Router
+const route = useRoute()
 
-      formData: {
-        high_priority: null,
-        notify_on_delivery: false,
-        project: null,
-        machine: null,
-        quantity: null,
-        unit: null,
-        partnumber: null,
-        definition: null,
-        supplier: null,
-        manufacturer: null,
-        note_general: null,
-        note_supplier: null,
-        desired_delivery_date: null
-      }
+// Stores
+const notificationStore = useNotificationStore()
+
+const formData = ref({
+  high_priority: null,
+  notify_on_delivery: false,
+  project: null,
+  machine: null,
+  quantity: null,
+  unit: null,
+  partnumber: null,
+  definition: null,
+  supplier: null,
+  manufacturer: null,
+  note_general: null,
+  note_supplier: null,
+  desired_delivery_date: null
+})
+
+onMounted(() => {
+  const itemId = route.params.id
+
+  boughtItemsRequest.getItemsId(Number(itemId)).then(response => {
+    if (response.status === 200) {
+      formData.value = response.data
     }
-  },
-  mounted() {
-    const itemId = this.$route.params.id;
+    else {
+      notificationStore.warning = `Could not fetch an item with the ID ${itemId}.`
+      setTimeout(function () { router.push({ name: "BoughtItems" }) }, 4000)
+    }
+  }).catch(error => {
 
-    boughtItemsRequest.getItemsId(Number(itemId)).then(response => {
-      if (response.status === 200) {
-        this.formData = response.data;
-      }
-      else {
-        // @ts-ignore
-        this.notificationWarning = `Could not fetch an item with the ID ${itemId}.`;
-        setTimeout(function () { router.push({ name: "BoughtItems" }) }, 4000);
-      }
-    }).catch(error => {
-
-    });
-  }
-}
+  })
+})
 </script>
 
 <template>
@@ -69,7 +62,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '../../../assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;
@@ -77,8 +70,6 @@ export default {
 }
 
 .grid {
-  // width: 100%;
-  // height: 100%;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -104,7 +95,6 @@ export default {
   border-radius: 5px;
 }
 
-// grid
 #controls {
   grid-area: controls;
 }

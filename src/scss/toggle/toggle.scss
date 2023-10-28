@@ -1,3 +1,5 @@
+@import '@/scss/variables.scss';
+
 :root {
     --toggle-width: 2.5rem;
     --toggle-height: 1rem;
@@ -8,8 +10,8 @@
     --toggle-bg-off: rgb(40, 40, 40);
     --toggle-bg-on-disabled: #d1d5db;
     --toggle-bg-off-disabled: #e5e7eb;
-    --toggle-border-on: #d1d5db;
-    --toggle-border-off: #e5e7eb;
+    --toggle-border-on: rgb(30, 30, 30);
+    --toggle-border-off: rgb(30, 30, 30);
     --toggle-border-on-disabled: #d1d5db;
     --toggle-border-off-disabled: #e5e7eb;
     --toggle-ring-width: 3px;

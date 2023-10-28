@@ -1,22 +1,6 @@
-<script lang="ts">
-import SettingsSidebar from "@/components/settings/SettingsSidebar.vue";
-import SettingsLogs from "@/components/settings/SettingsLogs.vue";
-
-export default {
-  name: 'SettingsLogsView',
-  props: {
-  },
-  components: {
-    SettingsSidebar,
-    SettingsLogs
-  },
-  data() {
-    return {
-    };
-  },
-  methods: {
-  },
-}
+<script setup>
+import SettingsSidebar from "@/components/settings/SettingsSidebar.vue"
+import SettingsLogs from "@/components/settings/SettingsLogs.vue"
 </script>
 
 <template>
@@ -33,5 +17,5 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/settingsView.scss';
+@import '@/scss/grid/gridSettingsView.scss';
 </style>

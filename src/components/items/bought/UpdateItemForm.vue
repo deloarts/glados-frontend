@@ -1,99 +1,52 @@
-<script lang="ts">
-import { ref } from "vue";
-//@ts-ignore
-import moment from "moment";
-//@ts-ignore
-import Toggle from "@vueform/toggle";
-import Datepicker from '@vuepic/vue-datepicker';
+<script setup>
+import { ref, watch } from "vue"
+import moment from "moment"
+
+import { useUnitsStore } from "@/stores/units.js"
+
+import SelectNewUpdate from "@/components/elements/SelectNewUpdate.vue"
+
+import Toggle from "@vueform/toggle"
+import Datepicker from "@vuepic/vue-datepicker"
 import '@vuepic/vue-datepicker/dist/main.css'
 
-import SelectNewUpdate from "@/components/elements/SelectNewUpdate.vue";
+// Props & Emits
+const props = defineProps(["formData"])
+const emit = defineEmits(["update:formData"])
 
-export default {
-  name: 'UpdateItemForm.vue',
-  props: ["formData"],
-  emits: ["update:formData"],
-  components: {
-    Toggle,
-    SelectNewUpdate,
-    Datepicker
-  },
-  setup() {
-    const pickedDesiredDate = ref(); // ref(new Date());
+// Stores
+const unitStore = useUnitsStore()
 
-    const formatDesiredDate = (pickedDesiredDate: Date) => {
-      const day = pickedDesiredDate.getDate();
-      const month = pickedDesiredDate.getMonth() + 1;
-      const year = pickedDesiredDate.getFullYear();
+// Dates
+const pickedDesiredDate = ref()
+const formatDesiredDate = (pickedDesiredDate) => {
+  const day = pickedDesiredDate.getDate()
+  const month = pickedDesiredDate.getMonth() + 1
+  const year = pickedDesiredDate.getFullYear()
+  return `${day}.${month}.${year}`
+}
 
-      return `${day}.${month}.${year}`;
-    }
+// Form stuff
+let highPriority = false
 
-    return {
-      pickedDesiredDate,
-      formatDesiredDate
-    }
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
-
-      // Vars
-      highPriority: false,
-
-      // Options
-      availableOptionsPriority: [
-        { text: "Normal", value: "normal" },
-        { text: "High", value: "high" }
-      ],
-      availableUnits: [],
-    };
-  },
-  methods: {
-  },
-  watch: {
-    formData: {
-      handler: function (newVal) {
-
-        // if (this.formData.high_priority == "high") {
-        //   this.highPriority = true;
-        // } else {
-        //   this.highPriority = false;
-        // }
-
-        if (this.formData.desired_delivery_date != null && this.formData.desired_delivery_date != undefined) {
-          const date = Date.parse(String(this.formData.desired_delivery_date));
-          this.pickedDesiredDate = new Date(date);
-        }
-
-        this.$emit("update:formData", this.formData);
-      },
-      deep: true
-    },
-
-    pickedDesiredDate() {
-      if (this.pickedDesiredDate instanceof Date) {
-        this.formData.desired_delivery_date = moment(this.pickedDesiredDate).format("YYYY-MM-DD");
-      } else {
-        this.formData.desired_delivery_date = null;
-      }
-    },
-
-    // highPriority() {
-    //   if (this.highPriority) {
-    //     this.formData.priority = "high";
-    //   } else {
-    //     this.formData.priority = "normal";
-    //   }
-    // }
-  },
-  mounted() {
-  },
-  beforeMount() {
+watch(props.formData, () => {
+  let data = props.formData
+  if (data.desired_delivery_date != null && data.desired_delivery_date != undefined) {
+    const date = Date.parse(String(data.desired_delivery_date))
+    pickedDesiredDate.value = new Date(date)
   }
-};
+  emit("update:formData", data)
+}, { deep: true })
+
+watch(pickedDesiredDate, () => {
+  let data = props.formData
+  if (pickedDesiredDate.value instanceof Date) {
+    data.desired_delivery_date = moment(pickedDesiredDate.value).format("YYYY-MM-DD")
+  } else {
+    data.desired_delivery_date = null
+  }
+  emit("update:formData", data)
+})
 </script>
 
 <template>
@@ -101,48 +54,48 @@ export default {
     <div class="container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <input class="text-input" v-model="formData.project" placeholder="Project *">
+          <input class="text-input" v-model="props.formData.project" placeholder="Project *">
         </div>
         <div id="machine" class="grid-item-center">
-          <input class="text-input" v-model="formData.machine" placeholder="Machine">
+          <input class="text-input" v-model="props.formData.machine" placeholder="Machine">
         </div>
         <div id="quantity" class="grid-item-center">
-          <input class="text-input" v-model="formData.quantity" type="number" placeholder="Quantity *">
+          <input class="text-input" v-model="props.formData.quantity" type="number" placeholder="Quantity *">
         </div>
         <div id="unit" class="grid-item-center">
-          <SelectNewUpdate v-model:selection="formData.unit" />
+            <SelectNewUpdate v-model:selection="formData.unit" :options="unitStore.boughtItemUnits.values"/>
         </div>
         <div id="partnumber" class="grid-item-center">
-          <input class="text-input" v-model="formData.partnumber" placeholder="Partnumber *">
+          <input class="text-input" v-model="props.formData.partnumber" placeholder="Partnumber *">
         </div>
         <div id="definition" class="grid-item-center">
-          <input class="text-input" v-model="formData.definition" placeholder="Definition *">
+          <input class="text-input" v-model="props.formData.definition" placeholder="Definition *">
         </div>
         <div id="manufacturer" class="grid-item-center">
-          <input class="text-input" v-model="formData.manufacturer" placeholder="Manufacturer *">
+          <input class="text-input" v-model="props.formData.manufacturer" placeholder="Manufacturer *">
         </div>
         <div id="supplier" class="grid-item-center">
-          <input class="text-input" v-model="formData.supplier" placeholder="Supplier">
+          <input class="text-input" v-model="props.formData.supplier" placeholder="Supplier">
         </div>
         <div id="desired" class="grid-item-center">
           <Datepicker class="date-input" v-model="pickedDesiredDate" :format="formatDesiredDate" :clearable="true"
             placeholder="Desired Delivery Date" dark />
         </div>
         <div id="note-general" class="grid-item-center">
-          <textarea class="text-input-multiline" v-model="formData.note_general" placeholder="Note"></textarea>
+          <textarea class="text-input-multiline" v-model="props.formData.note_general" placeholder="Note"></textarea>
         </div>
         <div id="note-supplier" class="grid-item-center">
-          <textarea class="text-input-multiline" v-model="formData.note_supplier"
+          <textarea class="text-input-multiline" v-model="props.formData.note_supplier"
             placeholder="Note Supplier"></textarea>
         </div>
         <div id="notify" class="grid-item-center">
-          <Toggle v-model="formData.notify_on_delivery"></Toggle>
+          <Toggle v-model="props.formData.notify_on_delivery"></Toggle>
         </div>
         <div id="notify-text" class="grid-item-left">
           Notify me on delivery
         </div>
         <div id="priority" class="grid-item-center">
-          <Toggle v-model="formData.high_priority"></Toggle>
+          <Toggle v-model="props.formData.high_priority"></Toggle>
         </div>
         <div id="priority-text" class="grid-item-left">
           High priority
@@ -153,8 +106,8 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
+@import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
 
 
 .container {

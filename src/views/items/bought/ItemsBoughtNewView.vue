@@ -1,42 +1,32 @@
-<script lang="ts">
-import ControlsNew from "../../../components/items/bought/ControlsNew.vue";
-import CreateItemForm from "../../../components/items/bought/CreateItemForm.vue";
+<script setup>
+import { ref } from "vue"
 
-export default {
-  name: 'BoughtItemsNew',
-  props: [],
-  emits: [],
-  components: {
-    ControlsNew,
-    CreateItemForm
-  },
-  data() {
-    return {
-      formData: {
-        high_priority: false,
-        notify_on_delivery: false,
-        project: null,
-        machine: null,
-        quantity: null,
-        unit: null,
-        partnumber: null,
-        definition: null,
-        supplier: null,
-        manufacturer: null,
-        note_general: null,
-        note_supplier: null,
-        desired_delivery_date: null
-      }
-    }
-  }
-}
+import ControlsNew from "@/components/items/bought/ControlsNew.vue"
+import CreateItemForm from "@/components/items/bought/CreateItemForm.vue"
+
+// Form stuff
+const formData = ref({
+  high_priority: false,
+  notify_on_delivery: false,
+  project: null,
+  machine: null,
+  quantity: null,
+  unit: null,
+  partnumber: null,
+  definition: null,
+  supplier: null,
+  manufacturer: null,
+  note_general: null,
+  note_supplier: null,
+  desired_delivery_date: null
+})
 </script>
 
 <template>
   <div class="scope">
     <div class="grid">
       <div id="controls" class="controls">
-        <ControlsNew v-model:form-data="formData" header="New item"/>
+        <ControlsNew v-model:form-data="formData" />
       </div>
       <div id="data" class="data">
         <CreateItemForm v-model:form-data="formData" />
@@ -46,7 +36,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '../../../assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;
@@ -54,8 +44,6 @@ export default {
 }
 
 .grid {
-  // width: 100%;
-  // height: 100%;
   position: absolute;
   top: 0;
   bottom: 0;

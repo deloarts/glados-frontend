@@ -5,6 +5,7 @@
     "src/**/*.vue"
   ],
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [

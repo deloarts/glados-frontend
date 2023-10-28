@@ -1,76 +1,49 @@
-<script lang="ts">
-import Changelog from "../../../components/items/bought/Changelog.vue";
-import DataTable from "../../../components/items/bought/DataTable.vue";
-import Controls from "../../../components/items/bought/Controls.vue";
+<script setup>
+import { ref, watch, onBeforeMount, onBeforeUnmount } from "vue"
+import { useBoughtItemFilterStore } from "@/stores/filter.js"
+import { useBoughtItemsControlsStore } from "@/stores/controls.js"
 
-import { boughtItemsFilter } from "@/presets/boughtItemsFilter";
+import Changelog from "@/components/items/bought/Changelog.vue"
+import DataTable from "@/components/items/bought/DataTable.vue"
+import Controls from "@/components/items/bought/Controls.vue"
 
-export default {
-  name: 'Bought Items',
-  components: {
-    Changelog,
-    DataTable,
-    Controls,
-  },
-  data() {
-    return {
-      // Trigger
-      triggerGetNewData: false,
+// Store
+const filterStore = useBoughtItemFilterStore()
+const controlsStore = useBoughtItemsControlsStore()
 
-      // Controls options
-      controlsShowChangelog: localStorage.getItem("gladosBoughtItemControlsShowChangelog") === "true",
-      controlsShowRainbow: localStorage.getItem("gladosBoughtItemControlsShowRainbow") === "true",
-      controlsShowTextOnly: localStorage.getItem("gladosBoughtItemControlsShowTextOnly") === "true",
-      controlsShowFixHeight: localStorage.getItem("gladosBoughtItemControlsShowFixHeight") === "true",
-      controlsShowUnclutter: localStorage.getItem("gladosBoughtItemControlsShowUnclutter") === "true",
-      controlsShowRequestView: localStorage.getItem("gladosBoughtItemControlsShowRequestView") === "true",
+// Items
+const selectedItemIds = ref([])
+const triggerGetNewData = ref(false)
 
-      // Items
-      selectedItemIds: [],
-      selectedFilter: JSON.parse(JSON.stringify(boughtItemsFilter)),
-    };
-  },
-  methods: {
+watch(filterStore.$state, () => {
+  localStorage.setItem("gladosBoughtItemControls", JSON.stringify(controlsStore.$state))
+  localStorage.setItem("gladosBoughtItemDataTableFilter", JSON.stringify(filterStore.$state))
+}, { deep: true })
 
-  },
-  watch: {
-    selectedFilter: {
-      handler: function (newVal) {
-        localStorage.setItem("gladosBoughtItemDataTableFilter", JSON.stringify(this.selectedFilter));
-        console.log("Saved new filter");
-      },
-      deep: true
-    },
-  },
-  beforeMount() {
-    const filterObject = localStorage.getItem("gladosBoughtItemDataTableFilter");
-    if (filterObject != null) { this.selectedFilter = JSON.parse(filterObject) }
-  },
-  computed: {
-  }
-}
+onBeforeMount(() => {
+  const controlsObject = localStorage.getItem("gladosBoughtItemControls")
+  if (controlsObject != null) { controlsStore.$state = JSON.parse(controlsObject) }
+
+  const filterObject = localStorage.getItem("gladosBoughtItemDataTableFilter")
+  if (filterObject != null) { filterStore.$state = JSON.parse(filterObject) }
+})
+
+onBeforeUnmount(() => {
+  localStorage.setItem("gladosBoughtItemControls", JSON.stringify(controlsStore.$state))
+  localStorage.setItem("gladosBoughtItemDataTableFilter", JSON.stringify(filterStore.$state))
+})
 </script>
 
 <template>
   <div class="scope">
-    <div class="grid" v-bind:class="{ 'show-changelog': controlsShowChangelog }">
+    <div class="grid" v-bind:class="{ 'show-changelog': controlsStore.changelog }">
       <div id="controls" class="controls">
-        <Controls v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData"
-          v-model:filter="selectedFilter" v-model:show-changelog="controlsShowChangelog"
-          v-model:show-rainbow="controlsShowRainbow" v-model:show-text-only="controlsShowTextOnly"
-          v-model:showFixHeight="controlsShowFixHeight"
-          v-model:show-unclutter="controlsShowUnclutter" v-model:show-request-view="controlsShowRequestView">
-        </Controls>
+        <Controls v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData" />
       </div>
       <div id="data" class="data">
-        <DataTable v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData"
-          v-model:filter="selectedFilter" v-model:show-text-only="controlsShowTextOnly"
-          v-model:show-rainbow="controlsShowRainbow" v-model:showFixHeight="controlsShowFixHeight"
-          v-model:show-unclutter="controlsShowUnclutter"
-          v-model:show-request-view="controlsShowRequestView">
-        </DataTable>
+        <DataTable v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData" />
       </div>
-      <div id="changelog" class="changelog" v-if="controlsShowChangelog">
+      <div id="changelog" class="changelog" v-if="controlsStore.changelog">
         <Changelog v-model:selected-item-ids="selectedItemIds"></Changelog>
       </div>
     </div>
@@ -81,7 +54,7 @@ export default {
 
 </style>
 <style scoped lang="scss">
-@import "../../../assets/variables.scss";
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;

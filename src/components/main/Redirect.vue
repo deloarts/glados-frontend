@@ -1,12 +1,10 @@
-<script lang="ts">
+<script setup>
+import { onBeforeMount } from "vue"
 import router from "@/router/index";
 
-export default {
-    name: "Redirect",
-    created() {
-        router.push({ name: "Dashboard" });
-    }
-}
+onBeforeMount(() =>  {
+  router.push({ name: "Dashboard" })
+})
 </script>
 
 <template>

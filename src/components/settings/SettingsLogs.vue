@@ -1,83 +1,78 @@
-<script lang="ts">
-//@ts-ignore
-import moment from "moment";
-import { logsRequest } from "@/requests/logs";
-import Spinner from "@/components/spinner/LoadingSpinner.vue";
+<script setup>
+import { ref, nextTick, watch, onMounted, onBeforeUnmount } from "vue"
+import moment from "moment"
 
-export default {
-  name: 'SettingsLogs',
-  components: {
-    Spinner
-  },
-  data() {
-    return {
-      windowWidth: window.innerWidth,
-      loading: false,
-      logfiles: [],
-      logfile: '',
-      content: []
-    };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
+import { logsRequest } from "@/requests/logs"
+import Spinner from "@/components/spinner/LoadingSpinner.vue"
+
+const windowWidth = ref(window.innerWidth)
+const loading = ref(false)
+const logfiles = ref([])
+const logfile = ref("")
+const content = ref([])
+
+function onResize() {
+  windowWidth.value = window.innerWidth
+}
+
+function getLogs() {
+  loading.value = true
+  logsRequest.getLogs()
+    .then(response => {
+      logfiles.value = response.data
+      loading.value = false
     })
-    this.loading = true;
-    this.getLogs();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
-  },
-  methods: {
-    onResize() {
-      this.windowWidth = window.innerWidth
-    },
-    getLogs() {
-      this.loading = true;
-      logsRequest.getLogs()
-        .then(response => {
-          this.logfiles = response.data;
-          this.loading = false;
-        })
-        .catch(() => {
-          console.warn('could not get logs');
-          this.loading = false;
-        })
-    },
+    .catch(() => {
+      console.warn('could not get logs')
+      loading.value = false
+    })
+}
 
-    getLog(logfile: any) {
-      if (this.logfile == logfile) {
-        this.logfile = '';
-        this.content = [];
-      } else {
-        this.loading = true;
-        this.logfile = logfile;
-        logsRequest.getLogFile(logfile)
-          .then(response => {
-            this.content = response.data;
-            this.loading = false;
-          })
-          .catch(() => {
-            console.warn('could not get logfile');
-            this.loading = false;
-          })
-      }
-    },
-    format(line: string, type: string) {
-      let splitted = line.split('\t');
-      if (type == 'date') { return splitted[0]; }
-      else if (type == 'name') { return splitted[1]; }
-      else if (type == 'level') { return splitted[2]; }
-      else if (type == 'msg') { return splitted[3] }
-      else { return (line); }
-    },
-    isDate(line: any) {
-      let date = moment(line.split('\t')[0]);
-      if (date.isValid()) { return true; }
-      else { return false; }
-    }
+function getLog(filename) {
+  if (logfile.value == filename) {
+    logfile.value = ''
+    content.value = []
+  } else {
+    loading.value = true
+    logfile.value = filename
+    logsRequest.getLogFile(logfile.value)
+      .then(response => {
+        content.value = response.data
+        loading.value = false
+      })
+      .catch(() => {
+        console.warn('could not get logfile')
+        loading.value = false
+      })
   }
 }
+
+function format(line, type) {
+  let splitted = line.split('\t')
+  if (type == 'date') { return splitted[0] }
+  else if (type == 'name') { return splitted[1] }
+  else if (type == 'level') { return splitted[2] }
+  else if (type == 'msg') { return splitted[3] }
+  else { return (line) }
+}
+
+function isDate(line) {
+  let date = moment(line.split('\t')[0])
+  if (date.isValid()) { return true }
+  else { return false }
+}
+
+onMounted(() => {
+    nextTick(() => {
+      window.addEventListener('resize', onResize)
+    })
+    loading.value = true
+    getLogs()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', onResize)
+})
 </script>
 
 <template>
@@ -120,7 +115,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;

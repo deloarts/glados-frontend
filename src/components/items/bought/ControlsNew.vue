@@ -1,47 +1,34 @@
-<script lang="ts">
-import { boughtItemsRequest } from "@/requests/items";
-import router from "@/router/index";
+<script setup>
+import router from "@/router/index"
+import { boughtItemsRequest } from "@/requests/items"
+import { useNotificationStore } from "@/stores/notification.js"
 
-import ButtonCreate from "@/components/elements/ButtonCreate.vue";
-import ButtonAbort from "@/components/elements/ButtonAbort.vue";
+import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue"
+import ButtonAbort from "@/components/elements/ButtonAbort.vue"
 
-export default {
-  name: 'ControlsNew',
-  props: ["formData", "header"],
-  emits: [],
-  components: {
-    ButtonCreate,
-    ButtonAbort,
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
-    };
-  },
-  methods: {
-    onCreate() {
-      boughtItemsRequest.postItems(this.formData).then(response => {
-        if (response.status === 200) {
-          // @ts-ignore
-          this.notificationInfo = "Created item."
-          router.push({ name:"BoughtItems"});
-        }
-        if (response.status === 422) {
-          // @ts-ignore
-          this.notificationWarning = "Data is incomplete."
-        }
-      }).catch(error => {
+const props = defineProps(["formData"])
 
-      })
+// Stores
+const notificationStore = useNotificationStore()
+
+function onCreate() {
+  boughtItemsRequest.postItems(props.formData).then(response => {
+    if (response.status === 200) {
+      notificationStore.info = "Created item."
+      router.push({ name:"BoughtItems"})
     }
-  },
-  watch: {
-  },
-  beforeMount() {
-  }
-};
+    if (response.status === 422) {
+      notificationStore.warning = "Data is incomplete."
+    }
+  }).catch(error => {
+    console.log(error);
+    notificationStore.warning = error;
+  })
+}
+
+function onAbort() {
+  router.push({ name: "BoughtItems" })
+}
 </script>
 
 <template>
@@ -49,19 +36,17 @@ export default {
     <div class="container">
       <div id="grid">
         <div id="header" class="grid-item-center">
-          {{ header }}
+          New Item
         </div>
         <div id="placeholder-1" class="grid-item-center">
-
         </div>
         <div id="placeholder-2" class="grid-item-center">
-          <!-- Data: {{ formData }} -->
         </div>
         <div id="btn-1" class="grid-item-center">
-          <ButtonCreate text="Create" v-on:click="onCreate" />
+          <ButtonItemCreate text="Create" v-on:click="onCreate" />
         </div>
         <div id="btn-2" class="grid-item-center">
-          <ButtonAbort text="Abort" route-name="BoughtItems" />
+          <ButtonAbort text="Abort" v-on:click="onAbort" />
         </div>
       </div>
     </div>
@@ -69,7 +54,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
-@import '@/assets/gridItemBoughtControlsNewEdit.scss';
+@import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
+@import '@/scss/grid/gridItemBoughtControlsNewEdit.scss';
 </style>

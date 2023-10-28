@@ -1,86 +1,70 @@
-<script lang="ts">
-//@ts-ignore
-import Toggle from "@vueform/toggle";
-import ButtonUpdateUser from "@/components/elements/ButtonUpdateUser.vue";
-import { usersRequest } from "@/requests/users";
-import { usersService } from "@/services/users.service";
+<script setup>
+import { ref, watch, onMounted } from "vue"
 
-export default {
-  name: 'SettingsUsersUpdate',
-  props: ["selectedUserId"],
-  components: {
-    Toggle,
-    ButtonUpdateUser
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
+import { useNotificationStore } from "@/stores/notification.js"
+import { usersRequest } from "@/requests/users"
+import { usersService } from "@/services/users.service"
 
-      // Vars
-      formData: {
-        id: 0,
-        is_active: false,
-        is_superuser: false,
-        is_systemuser: false,
-        username: "",
-        full_name: "",
-        email: "",
-        password: "",
-      }
-    };
-  },
-  methods: {
-    getUser() {
-      usersRequest.getUsersId(this.selectedUserId).then(response => {
-        this.formData = response.data;
-      })
-    },
-    updateUser() {
-      usersRequest.putUsers(this.selectedUserId, this.formData).then(response => {
-        this.getUser();
-        usersService.clearCache();
-        if (response.status == 200) {
-          //@ts-ignore
-          this.notificationInfo = `Updated user ${this.formData.username}.`
-        } else if (response.status == 404) {
-          //@ts-ignore
-          this.notificationWarning = "User not found."
-        } else if (response.status == 422) {
-          //@ts-ignore
-          this.notificationWarning = "Data is incomplete."
-        } else {
-          //@ts-ignore
-          this.notificationWarning = "Failed to update user."
-        }
-      })
+import Toggle from "@vueform/toggle"
+import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue"
+
+// Props & Emits
+const props = defineProps(["selectedUserID"])
+
+// Stores
+const notificationStore = useNotificationStore()
+
+const formData = ref({
+  id: 0,
+  is_active: false,
+  is_superuser: false,
+  is_systemuser: false,
+  username: "",
+  full_name: "",
+  email: "",
+  password: "",
+})
+
+function getUser() {
+  usersRequest.getUsersId(props.selectedUserID).then(response => {
+    formData.value = response.data
+  })
+}
+    
+function updateUser() {
+  usersRequest.putUsers(props.selectedUserID, formData.value).then(response => {
+    getUser();
+    usersService.clearCache();
+    if (response.status == 200) {
+      notificationStore.info = `Updated user ${formData.value.username}`
+    } else if (response.status == 404) {
+      notificationStore.warning = "User not found"
+    } else if (response.status == 422) {
+      notificationStore.warning = "Data is incomplete"
+    } else {
+      notificationStore.warning = "Failed to update user"
     }
-  },
-  watch: {
-    selectedUserId() {
-      if (this.selectedUserId == 0) {
-        this.formData = {
-          id: 0,
-          is_active: false,
-          is_superuser: false,
-          is_systemuser: false,
-          username: "",
-          full_name: "",
-          email: "",
-          password: "",
-        }
-      } else {
-        this.getUser();
-      }
+  })
+}
+
+watch(props.selectedUserID, () => {
+  if (props.selectedUserID == 0) {
+    formData.value = {
+      id: 0,
+      is_active: false,
+      is_superuser: false,
+      is_systemuser: false,
+      username: "",
+      full_name: "",
+      email: "",
+      password: "",
     }
-  },
-  mounted() {
-    this.getUser();
-  },
-  beforeMount() {
+  } else {
+    getUser()
   }
-};
+})
+
+onMounted(() => getUser())
 </script>
 
 <template>
@@ -114,7 +98,7 @@ export default {
             :disabled="formData.is_systemuser">
         </div>
         <div id="btn">
-          <ButtonUpdateUser v-on:click="updateUser" text="Update User"></ButtonUpdateUser>
+          <ButtonUserUpdate v-on:click="updateUser" text="Update User"></ButtonUserUpdate>
         </div>
       </div>
     </div>
@@ -122,8 +106,8 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
+@import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-rows: 40px 40px 40px 40px 25px 25px 40px;

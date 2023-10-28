@@ -1,22 +1,6 @@
-<script lang="ts">
-import SettingsSidebar from "@/components/settings/SettingsSidebar.vue";
-import SettingsHost from "@/components/settings/SettingsHost.vue";
-
-export default {
-  name: 'SettingsView',
-  props: {
-  },
-  components: {
-    SettingsSidebar,
-    SettingsHost
-  },
-  data() {
-    return {
-    };
-  },
-  methods: {
-  },
-}
+<script setup>
+import SettingsSidebar from "@/components/settings/SettingsSidebar.vue"
+import SettingsHost from "@/components/settings/SettingsHost.vue"
 </script>
 
 <template>
@@ -33,5 +17,5 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/settingsView.scss';
+@import '@/scss/grid/gridSettingsView.scss';
 </style>

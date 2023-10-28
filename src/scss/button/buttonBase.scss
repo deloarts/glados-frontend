@@ -1,0 +1,37 @@
+@import '@/scss/variables.scss';
+
+button {
+  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.9em;
+  display: inline-flex;
+  align-items: center;
+  width: 130px;
+}
+
+.button {
+  background-color: $main-background-color-dark;
+  border: 1px solid $main-background-color-dark-2;
+  padding: 0 10px;
+  height: 32px;
+  color: #fff;
+  border-radius: 4px;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  transition: all 0.2s ease-in;
+}
+
+.button:hover {
+  background-color: $main-background-color;
+  border: 1px solid $main-color;
+}
+
+.icon {
+  cursor: pointer;
+  color: $main-color;
+  display: inline-flex;
+  margin-right: 10px;
+  width: 17px;
+  height: 17px;
+}

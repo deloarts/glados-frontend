@@ -1,43 +1,35 @@
-<script lang="ts">
+<script setup>
+import { ref, watch, onMounted } from "vue"
+
 import { boughtItemsRequest } from "@/requests/items";
 
-export default {
-  name: 'Changelog',
-  props: [
-    "selectedItemIds"
-  ],
-  data() {
-    return {
-      changelog: []
-    };
-  },
-  methods: {
-    fetchChangelog() {
-      if (this.selectedItemIds.length > 0) {
-        boughtItemsRequest.getItemsIdChangelog(this.selectedItemIds[0]).then(response => {
-          this.changelog = response.data;
-        })
-      }
-    },
-  },
-  watch: {
-    selectedItemIds(new_id, old_id) {
-      if (new_id != old_id) {
-        this.changelog = [];
-        this.fetchChangelog();
-      }
-    }
-  },
-  mounted() {
-    this.fetchChangelog();
+// Props & Emits
+const props = defineProps(["selectedItemIds"])
+
+const changelog = ref([""])
+
+function fetchChangelog() {
+  if (props.selectedItemIds.length > 0) {
+    boughtItemsRequest.getItemsIdChangelog(props.selectedItemIds[0]).then(response => {
+      changelog.value = response.data;
+    })
   }
-};
+}
+
+onMounted(() => fetchChangelog())
+
+watch(() => props.selectedItemIds, (newID, oldID) => {
+  if (newID != oldID) {
+    changelog.value = []
+    fetchChangelog()
+  }
+})
 </script>
 
 <template>
   <div class="scope">
-    <div v-if="selectedItemIds.length > 0" class="container">
-      <h1>Changelog of item #{{ selectedItemIds[0] }}</h1>
+    <div v-if="props.selectedItemIds.length > 0" class="container">
+      <h1>Changelog of item #{{ props.selectedItemIds[0] }}</h1>
       <div v-for="log in changelog" class="changelog-item">{{ log }}</div>
     </div>
     <div v-else class="container">
@@ -48,7 +40,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;

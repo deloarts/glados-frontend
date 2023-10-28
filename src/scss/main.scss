@@ -1,6 +1,5 @@
-@import "./base.css";
-@import "./toggle.css";
-@import "./variables.scss";
+@import '@/scss/variables.scss';
+@import "@/scss/toggle/toggle.scss";
 
 #app {
   font-family: Calibri, Arial, Helvetica, sans-serif;

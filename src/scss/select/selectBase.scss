@@ -1,0 +1,29 @@
+@import '@/scss/variables.scss';
+
+select {
+  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.9em;
+  text-align: center;
+
+  margin: 0;
+  padding: 0;
+  width: 130px;
+  height: 30px;
+
+  background-color: $main-background-color-dark;
+  border: 1px solid $main-background-color-dark-2;
+  color: white;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+
+  -webkit-appearance: button;
+  appearance: button;
+  outline: none;
+  border-radius: 3px;
+  
+  transition: all 0.2s ease;
+}
+
+select:hover {
+  background-color: $main-background-color;
+  filter: brightness(1.2);
+}

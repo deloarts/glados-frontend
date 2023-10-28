@@ -1,41 +1,36 @@
-<script lang="ts">
-export default {
-    name: 'Header',
-    props: {
-        title: String
-    }
-}
+<script setup>
+
 </script>
 
 <template>
-    <div class="header">
-        <span>{{ title }}</span>
-    </div>
+  <div class="header">
+    <span>Glados</span>
+  </div>
 </template>
 
 <style scoped lang='scss'>
-@import '../../assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .header {
-    display: table;
+  display: table;
 
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    font-family: 'Lobster', sans-serif;
-    font-size: 2.25em;
-    font-weight: thin;
+  font-family: 'Lobster', sans-serif;
+  font-size: 2.25em;
+  font-weight: thin;
 
-    color: white;
-    background: $main-color;
+  color: white;
+  background: $main-color;
 
-    cursor: default;
+  cursor: default;
 }
 
 .header span {
-    display: table-cell;
+  display: table-cell;
 
-    text-align: center;
-    vertical-align: middle;
+  text-align: center;
+  vertical-align: middle;
 }
 </style>

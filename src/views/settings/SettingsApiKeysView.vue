@@ -1,22 +1,6 @@
-<script lang="ts">
-import SettingsSidebar from "@/components/settings/SettingsSidebar.vue";
-import SettingsApiKeys from "@/components/settings/SettingsApiKeys.vue";
-
-export default {
-  name: 'SettingsApiKeysView',
-  props: {
-  },
-  components: {
-    SettingsSidebar,
-    SettingsApiKeys
-  },
-  data() {
-    return {
-    };
-  },
-  methods: {
-  },
-}
+<script setup>
+import SettingsSidebar from "@/components/settings/SettingsSidebar.vue"
+import SettingsApiKeys from "@/components/settings/SettingsApiKeys.vue"
 </script>
 
 <template>
@@ -33,5 +17,5 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/settingsView.scss';
+@import '@/scss/grid/gridSettingsView.scss';
 </style>

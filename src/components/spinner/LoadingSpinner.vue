@@ -1,11 +1,5 @@
-<script lang="ts">
-  export default {
-      name: 'Spinner',
-      props: {
-          width: Number,
-          height: Number
-      }
-  }
+<script setup>
+
 </script>
 
 <template>
@@ -21,8 +15,6 @@
 .spinner {
     display: inline-block;
     position: relative;
-    /* width: 80px;
-    height: 80px; */
     width: 32px;
     height: 32px;
 }
@@ -31,10 +23,6 @@
     box-sizing: border-box;
     display: block;
     position: absolute;
-    /* width: 64px;
-    height: 64px; */
-    /* width: 100%;
-    height: 100%; */
     width: 20px;
     height: 20px;
     margin: 8px;

@@ -9,6 +9,8 @@ export default {
   watchServerConnInterval: 4000,
 
   // Fetch intervals
+  fetchUserStore: 5000,
+
   fetchUsersAfter: 60000,
   fetchBoughtItemsAfter: 5000,
 

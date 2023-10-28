@@ -1,18 +1,18 @@
-import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router"
 
-import Redirect from "@/components/main/Redirect.vue";
-import RedirectSettings from "@/components/main/RedirectSettings.vue";
-import LoginView from "../views/LoginView.vue";
-import DashboardView from "../views/dashboard/DashboardView.vue";
-import ItemsBoughtView from "../views/items/bought/ItemsBoughtView.vue";
-import ItemsBoughtNewView from "../views/items/bought/ItemsBoughtNewView.vue";
-import ItemsBoughtCopyView from "../views/items/bought/ItemsBoughtCopyView.vue";
-import ItemsBoughtEditView from "../views/items/bought/ItemsBoughtEditView.vue";
-import SettingsHostView from "../views/settings/SettingsHostView.vue";
-import SettingsLogsView from "../views/settings/SettingsLogsView.vue";
-import SettingsUsersView from "../views/settings/SettingsUsersView.vue";
-import SettingsApiKeysView from "../views/settings/SettingsApiKeysView.vue";
-import AccountView from "../views/account/AccountView.vue";
+import Redirect from "@/components/main/Redirect.vue"
+import RedirectSettings from "@/components/main/RedirectSettings.vue"
+import LoginView from "@/views/LoginView.vue"
+import DashboardView from "@/views/dashboard/DashboardView.vue"
+import ItemsBoughtView from "@/views/items/bought/ItemsBoughtView.vue"
+import ItemsBoughtNewView from "@/views/items/bought/ItemsBoughtNewView.vue"
+import ItemsBoughtCopyView from "@/views/items/bought/ItemsBoughtCopyView.vue"
+import ItemsBoughtEditView from "@/views/items/bought/ItemsBoughtEditView.vue"
+import SettingsHostView from "@/views/settings/SettingsHostView.vue"
+import SettingsLogsView from "@/views/settings/SettingsLogsView.vue"
+import SettingsUsersView from "@/views/settings/SettingsUsersView.vue"
+import SettingsApiKeysView from "@/views/settings/SettingsApiKeysView.vue"
+import AccountView from "@/views/account/AccountView.vue"
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,7 +59,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      // component: () => import("../views/account/AccountView.vue"),
+      // component: () => import("@/views/account/AccountView.vue"),
       component: AccountView
     },
     {
@@ -70,13 +70,13 @@ const router = createRouter({
     {
       path: "/settings/host",
       name: "SettingsHost",
-      // component: () => import("../views/settings/SettingsView.vue"),
+      // component: () => import("@/views/settings/SettingsView.vue"),
       component: SettingsHostView
     },
     {
       path: "/settings/logs",
       name: "SettingsLogs",
-      // component: () => import("../views/settings/SettingsLogsView.vue"),
+      // component: () => import("@/views/settings/SettingsLogsView.vue"),
       component: SettingsLogsView
     },
     {
@@ -99,6 +99,6 @@ const router = createRouter({
       component: Redirect
     },
   ],
-});
+})
 
-export default router;
+export default router

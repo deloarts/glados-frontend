@@ -1,32 +1,17 @@
-<script lang="ts">
-export default {
-  name: 'SettingsApiKeys',
-  components: {
-  },
-  data() {
-    return {
-      selectedKeyId: 0,
-      mode: "create",
-    };
-  },
-  mounted() {
-  },
-  beforeMount() {
-  },
-  beforeDestroy() {
-  },
-  methods: {
-    onSelect(id: number) {
-      this.selectedKeyId = id;
-    },
-  }, 
-  watch: {
-    selectedKeyId() {
-      if (this.selectedKeyId == 0) { this.mode = "create" }
-      else { this.mode = "update" }
-    }
-  }
+<script setup>
+import { ref, watch } from "vue"
+
+const selectedKeyID = ref(0)
+const mode = ref("create")
+
+function onSelect(id) {
+  selectedKeyID.value = id
 }
+
+watch(selectedKeyID, () => {
+  if (selectedKeyID.value == 0) { mode.value = "create" }
+  else { mode.value = "update" }
+})
 </script>
 
 <template>
@@ -48,7 +33,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;

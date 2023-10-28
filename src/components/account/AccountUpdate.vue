@@ -1,92 +1,72 @@
-<script lang="ts">
-//@ts-ignore
-import Toggle from "@vueform/toggle";
-import ButtonUpdateUser from "@/components/elements/ButtonUpdateUser.vue";
-import { usersRequest } from "@/requests/users";
+<script setup>
+import { ref, onMounted } from "vue"
+import { usersRequest } from "@/requests/users"
+import { useNotificationStore } from "@/stores/notification.js"
 
-export default {
-    name: "AccountUpdate",
-    components: {
-        Toggle,
-        ButtonUpdateUser
-    },
-    data() {
-        return {
-            // Globals
-            notificationWarning: this.$notificationWarning,
-            notificationInfo: this.$notificationInfo,
+import Toggle from "@vueform/toggle"
+import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue"
 
-            // Vars
-            formData: {
-                username: "",
-                full_name: "",
-                email: "",
-                password: "",
-            }
-        };
-    },
-    methods: {
-        getUser() {
-            usersRequest.getUsersMe().then(response => {
-                this.formData = response.data;
-            })
-        },
-        updateUser() {
-            usersRequest.putUsersMe(this.formData).then(response => {
-                this.getUser();
-                if (response.status == 200) {
-                    //@ts-ignore
-                    this.notificationInfo = `Updated user ${this.formData.username}.`
-                } else if (response.status == 404) {
-                    //@ts-ignore
-                    this.notificationWarning = "User not found."
-                } else if (response.status == 422) {
-                    //@ts-ignore
-                    this.notificationWarning = "Data is incomplete."
-                } else {
-                    //@ts-ignore
-                    this.notificationWarning = response.data.detail;
-                }
-            })
-        }
-    },
-    watch: {
-    },
-    mounted() {
-        this.getUser();
-    },
-    beforeMount() {
+// Stores
+const notificationStore = useNotificationStore()
+
+let formData = ref({
+  username: "",
+  full_name: "",
+  email: "",
+  password: "",
+})
+
+function getUser() {
+  usersRequest.getUsersMe().then(response => {
+    formData.value = response.data
+  })
+}
+        
+function updateUser() {
+  usersRequest.putUsersMe(formData.value).then(response => {
+    getUser()
+    if (response.status == 200) {
+      notificationStore.info = `Updated user ${formData.value.username}.`
+    } else if (response.status == 422) {
+      notificationStore.warning = "Data is incomplete."
+    } else {
+      notificationStore.warning = response.data.detail;
     }
-};
+  })
+}
+
+onMounted(() => {
+  getUser()
+})
 </script>
 
 <template>
-    <div class="scope">
-        <div class="container">
-            <div id="grid">
-                <div id="username" class="grid-item-center">
-                    <input class="text-input" v-model="formData.username" type="text" placeholder="Username">
-                </div>
-                <div id="full-name" class="grid-item-center">
-                    <input class="text-input" v-model="formData.full_name" placeholder="Name">
-                </div>
-                <div id="email" class="grid-item-center">
-                    <input class="text-input" v-model="formData.email" placeholder="Mail">
-                </div>
-                <div id="password" class="grid-item-center">
-                    <input class="text-input" v-model="formData.password" placeholder="Password">
-                </div>
-                <div id="btn">
-                    <ButtonUpdateUser v-on:click="updateUser" text="Save Changes"></ButtonUpdateUser>
-                </div>
-            </div>
+  <div class="scope">
+    <div class="container">
+      <div id="grid">
+        <div id="username" class="grid-item-center">
+          <input class="text-input" v-model="formData.username" type="text" placeholder="Username" readonly>
         </div>
+        <div id="full-name" class="grid-item-center">
+          <input class="text-input" v-model="formData.full_name" placeholder="Name">
+        </div>
+        <div id="email" class="grid-item-center">
+          <input class="text-input" v-model="formData.email" placeholder="Mail">
+        </div>
+        <div id="password" class="grid-item-center">
+          <input class="text-input" v-model="formData.password" placeholder="Password">
+        </div>
+        <div id="btn">
+          <ButtonUserUpdate v-on:click="updateUser" text="Save Changes"></ButtonUserUpdate>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
+@import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
 
 #grid {
     grid-template-rows: 40px 40px 40px 40px 40px;

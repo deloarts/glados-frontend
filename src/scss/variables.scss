@@ -3,8 +3,11 @@ $max-width: 600px;
 
 // Colors
 $main-background-color: rgb(50, 50, 50);
-$main-background-color-dark: rgb(40, 40, 40);
 $main-background-color-hover: rgb(50, 50, 50);
+$main-background-color-dark: rgb(40, 40, 40);
+$main-background-color-dark-2: rgb(30, 30, 30);
+$main-background-color-light: rgb(60, 60, 60);
+$main-background-color-light-2: rgb(70, 70, 70);
 $light-gray: rgb(40, 40, 40);
 $light-gray-hover: rgb(44, 44, 44);
 
@@ -18,10 +21,9 @@ $main-color-active: rgb(7, 155, 253);
 $main-color-active-hover: rgb(20, 161, 255);
 // $main-color-active-hover: rgb(201, 30, 0);
 
-$main-orange: rgb(255, 51, 15);
-$main-orange-hover: rgb(255, 65, 31);
-
-$main-green: lime;
+$main-green: rgb(99, 219, 99);
+$main-red: red;
+$main-orange: rgb(237, 170, 0);
 
 $log-date: lime;
 $log-module: darkslateblue;

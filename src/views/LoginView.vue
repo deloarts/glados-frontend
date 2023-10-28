@@ -1,85 +1,76 @@
-<script lang="ts">
-import { inject } from "vue";
+<script setup>
+import { ref, onMounted, watch } from "vue"
+import { useRouter, useRoute } from "vue-router"
+import { baseParticles } from "@/presets/particles"
+import { loadFull } from "tsparticles"
 
-import constants from "@/constants";
-import router from "../router/index";
-import { baseParticles } from "@/presets/particles";
-import { loadFull } from "tsparticles";
-import { request } from "../requests/index";
-import { usersRequest } from "../requests/users";
+import constants from "@/constants"
+import router from "@/router/index"
+import { request } from "@/requests/index"
+import { usersRequest } from "@/requests/users"
+import { useUserStore } from "@/stores/user.js"
+import { useNotificationStore } from "@/stores/notification.js"
 
-export default {
-  name: 'Login',
-  components: {
-    // Particles
-  },
-  setup() {
-    const currentUser = inject("currentUser");
-
-    // @ts-ignore
-    const particlesInit = async (engine) => {
-      console.log("Init Particles...");
-      await loadFull(engine);
-    };
-    // @ts-ignore
-    const particlesLoaded = async (container) => {
-      console.log("Particles container loaded", container);
-    };
-    return {
-      baseParticles,
-      currentUser,
-      particlesInit,
-      particlesLoaded
-    }
-  },
-  data() {
-    return {
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
-
-      text: `v${constants.version} (v${constants.serverVersion})`,
-
-      user: '',
-      pw: ''
-    };
-  },
-  methods: {
-    login() {
-      request.login(this.user, this.pw).then(response => {
-        if (response.status === 200) {
-          this.fetchCurrentUser();
-          // setTimeout(this.fetchCurrentUser.bind(this), 10);
-        } else {
-          // @ts-ignore
-          this.notificationWarning = "Wrong login credentials.";
-        }
-      })
-    },
-
-    fetchCurrentUser() {
-      usersRequest.getUsersMe().then(response => {
-        if (response.status === 200) {
-          // Current user is injected from App.vue
-          this.currentUser = response.data;
-
-          // @ts-ignore
-          this.notificationInfo = `Welcome ${response.data.full_name}`;
-
-          // Redirect the user to the app.
-          var previousRoute = localStorage.getItem("gladosActiveRoute");
-          if (previousRoute == "/login" || previousRoute == null) {
-            previousRoute = "/"
-          }
-          router.push(previousRoute);
-        }
-      })
-    }
-  },
-  mounted() {
-    // @ts-ignore
-    this.$refs.userInput.focus();
-  },
+// Particles
+const particlesInit = async (engine) => {
+  console.log("Init Particles...")
+  await loadFull(engine);
 }
+const particlesLoaded = async (container) => {
+  console.log("Particles container loaded", container)
+}
+
+// Routes
+const route = useRoute()
+
+// Stores
+const userStore = useUserStore()
+const notificationStore = useNotificationStore()
+
+// Refs
+const userInput = ref(null)
+const focusUserInput = () => { if (userInput.value) { userInput.value.focus() } }
+
+let text = `v${constants.version} (v${constants.serverVersion})`
+let form_user = ""
+let form_pw = ""
+
+function login() {
+  request.login(this.form_user, this.form_pw).then(response => {
+    if (response.status === 200) {
+      fetchCurrentUser()
+    } else {
+      notificationStore.warning = "Wrong login credentials."
+    }
+  })
+}
+
+function fetchCurrentUser() {
+  usersRequest.getUsersMe().then(response => {
+    if (response.status === 200) {
+      console.log("Getting user from login.")
+
+      userStore.$patch({
+        username: response.data.username,
+        full_name: response.data.full_name,
+        email: response.data.email,
+        is_active: response.data.is_active,
+        is_superuser: response.data.is_superuser,
+        id: response.data.id,
+        created: response.data.created
+      })
+      notificationStore.info = `Welcome ${response.data.full_name}`
+
+      var previousRoute = localStorage.getItem("gladosActiveRoute")
+      if (previousRoute == "/login" || previousRoute == null) {
+        previousRoute = "/"
+      }
+      router.push(previousRoute);
+    }
+  })
+}
+
+onMounted(focusUserInput)
 </script>
 
 <template>
@@ -87,8 +78,8 @@ export default {
     <!-- <div class="coat"></div> -->
     <div class="center">
       <h1 id="header">Glados</h1>
-      <input id="ipt1" v-model="user" v-on:keyup.enter="login()" type="text" placeholder="user" ref="userInput">
-      <input id="ipt2" v-model="pw" v-on:keyup.enter="login()" type="password" placeholder="password" ref="pwInput">
+      <input id="ipt1" v-model="form_user" v-on:keyup.enter="login()" type="text" placeholder="user" ref="userInput">
+      <input id="ipt2" v-model="form_pw" v-on:keyup.enter="login()" type="password" placeholder="password">
       <button id="btn1" v-on:click="login()">Login</button>
       <span id="text" class="version">{{ text }}</span>
     </div>
@@ -102,7 +93,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '../assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .login {
   color: white;

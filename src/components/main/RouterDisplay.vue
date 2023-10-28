@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { RouterView } from "vue-router";
 </script>
 
@@ -9,7 +9,7 @@ import { RouterView } from "vue-router";
 </template>
 
 <style scoped lang='scss'>
-@import '../../assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .display {
   background: $main-background-color;

@@ -1,23 +1,5 @@
-<script lang="ts">
-export default {
-  name: 'SettingsHost',
-  components: {
-  },
-  data() {
-    return {
-    };
-  },
-  mounted() {
-  },
-  beforeMount() {
-  },
-  beforeDestroy() {
-  },
-  methods: {
-  }, 
-  watch: {
-  }
-}
+<script setup>
+
 </script>
 
 <template>
@@ -30,7 +12,7 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;

@@ -1,264 +1,165 @@
-<script lang="ts">
-import { boughtItemsFilter, boughtItemsFilterPresetAllOpen, boughtItemsFilterPresetAllRequested, boughtItemsFilterPresetAllActive, boughtItemsFilterPresetAllOrdered, boughtItemsFilterPresetAllPrioritized } from "@/presets/boughtItemsFilter";
-import { boughtItemsRequest } from "@/requests/items";
-import { getFilterParams } from "@/requests/params";
-import router from "@/router/index";
+<script setup>
+import { ref, watch } from "vue"
+import Toggle from "@vueform/toggle"
 
-import ExcelImport from "./ExcelImport.vue";
-import Prompt from "../../Prompt.vue";
-import ButtonNew from "../../elements/ButtonNew.vue";
-import ButtonEdit from "../../elements/ButtonEdit.vue";
-import ButtonCopy from "../../elements/ButtonCopy.vue";
-import ButtonDelete from "../../elements/ButtonDelete.vue";
-import ButtonExcel from "../../elements/ButtonExcel.vue";
-import ButtonFilterClear from "../../elements/ButtonFilterClear.vue";
-import ButtonFilterSave from "../../elements/ButtonFilterSave.vue";
-import ButtonFilterLoad from "../../elements/ButtonFilterLoad.vue";
-import SelectControls from "../../elements/SelectControls.vue";
+import router from "@/router/index"
+import { useBoughtItemsControlsStore } from "@/stores/controls.js"
+import { useBoughtItemFilterStore } from "@/stores/filter.js"
+import { useNotificationStore } from "@/stores/notification.js"
+import { boughtItemsRequest } from "@/requests/items"
+import { getFilterParams } from "@/requests/params"
 
-//@ts-ignore
-import Toggle from "@vueform/toggle";
+import ExcelImport from "@/components/items/bought/ExcelImport.vue"
+import Prompt from "@/components/main/Prompt.vue"
+import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue"
+import ButtonEdit from "@/components/elements/ButtonEdit.vue"
+import ButtonCopy from "@/components/elements/ButtonCopy.vue"
+import ButtonDelete from "@/components/elements/ButtonDelete.vue"
+import ButtonExcel from "@/components/elements/ButtonExcel.vue"
+import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue"
+import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue"
+import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue"
+import SelectControls from "@/components/elements/SelectControls.vue"
 
+// Props & Emits
+const props = defineProps(["selectedItemIds"])
+const emit = defineEmits(["update:triggerGetNewData"])
 
-export default {
-  name: 'Controls',
-  props: [
-    "selectedItemIds",
-    "triggerGetNewData",
-    "showChangelog",
-    "showRainbow",
-    "showTextOnly",
-    "showFixHeight",
-    "showUnclutter",
-    "showRequestView",
-    "filter"
-  ],
-  emits: [
-    "update:showChangelog",
-    "update:triggerGetNewData",
-    "update:showRainbow",
-    "update:showTextOnly",
-    "update:showFixHeight",
-    "update:showUnclutter",
-    "update:showRequestView",
-    "update:filter"
-  ],
-  components: {
-    Toggle,
-    ExcelImport,
-    Prompt,
-    ButtonNew,
-    ButtonEdit,
-    ButtonCopy,
-    ButtonDelete,
-    ButtonExcel,
-    ButtonFilterClear,
-    ButtonFilterSave,
-    ButtonFilterLoad,
-    SelectControls
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
+// Stores
+const controlsStore = useBoughtItemsControlsStore()
+const filterStore = useBoughtItemFilterStore()
+const notificationStore = useNotificationStore()
 
-      // Props & emits
-      showDeletePrompt: false,
-      showExcelImport: false,
-      toggleChangelog: false,
-      toggleRainbow: false,
-      toggleTextOnly: false,
-      toggleFixHeight: false,
-      toggleUnclutter: false,
-      toggleRequestView: false,
-      // toggleIgnoreDelivered: false,
-      // toggleIgnoreCanceled: false,
-      // toggleIgnoreLost: false,
+// Props & emits
+const showDeletePrompt = ref(false)
+const showExcelImport = ref(false)
 
-      // Selections
-      availableOptionsLimit: [
-        { text: "100", value: "100" },
-        { text: "500", value: "500" },
-        { text: "1000", value: "1000" },
-        { text: "All", value: "" },
-      ],
-      availableOptionsOrderBy: [
-        { text: "ID", value: "id" },
-        { text: "Created", value: "created" },
-        { text: "Project", value: "project" },
-        { text: "Machine", value: "machine" },
-        { text: "Group", value: "group1" },
-        { text: "Manufacturer", value: "manufacturer" },
-        { text: "Supplier", value: "supplier" },
-      ],
-      availableOptionsFilterPresets: [
-        { text: "None", value: JSON.parse(JSON.stringify(boughtItemsFilter)) },
-        { text: "All Open", value: JSON.parse(JSON.stringify(boughtItemsFilterPresetAllOpen)) },
-        { text: "All Requested", value: JSON.parse(JSON.stringify(boughtItemsFilterPresetAllRequested)) },
-        { text: "All Ordered", value: JSON.parse(JSON.stringify(boughtItemsFilterPresetAllOrdered)) },
-        { text: "All Active", value: JSON.parse(JSON.stringify(boughtItemsFilterPresetAllActive)) },
-        { text: "All Prioritized", value: JSON.parse(JSON.stringify(boughtItemsFilterPresetAllPrioritized)) }
-      ],
-      selectedOptionFilterPreset: {}
+// Selections
+const availableOptionsLimit = [
+  { text: "100", value: "100" },
+  { text: "500", value: "500" },
+  { text: "1000", value: "1000" },
+  { text: "All", value: "" },
+]
+const availableOptionsOrderBy = [
+  { text: "ID", value: "id" },
+  { text: "Created", value: "created" },
+  { text: "Project", value: "project" },
+  { text: "Machine", value: "machine" },
+  { text: "Group", value: "group1" },
+  { text: "Manufacturer", value: "manufacturer" },
+  { text: "Supplier", value: "supplier" },
+]
+const availableOptionsFilterPresets = [
+  { text: "None", value: "reset" },
+  { text: "All Open", value: "allOpen" },
+  { text: "All Requested", value: "allRequested" },
+  { text: "All Ordered", value: "allOrdered" },
+  { text: "All Active", value: "allActive" },
+  { text: "All Prioritized", value: "allPrioritized" }
+]
+const selectedOptionFilterPreset = ref("")
 
-    };
-  },
-  methods: {
-    saveFilter() {
-      // Save the current filter selection the user made
-      localStorage.setItem("gladosBoughtItemDataTableMyFilter", JSON.stringify(this.filter));
-      // @ts-ignore
-      this.notificationInfo = "Saved new filter.";
-    },
+function saveFilter() {
+  localStorage.setItem("gladosBoughtItemDataTableMyFilter", JSON.stringify(filterStore.$state))
+  notificationStore.info = "Saved new filter."
+}
 
-    loadFilter() {
-      // Load the user defined filter
-      const filterObject = localStorage.getItem("gladosBoughtItemDataTableMyFilter");
-      if (filterObject != null) {
-        this.$emit("update:filter", JSON.parse(filterObject));
-      }
-    },
-
-    clearFilter() {
-      const f = JSON.parse(JSON.stringify(boughtItemsFilter))
-      this.selectedOptionFilterPreset = f;
-      this.$emit("update:filter", f);
-      console.log("Cleared filter");
-    },
-
-    onButtonEdit() {
-      if (this.selectedItemIds.length == 0) {
-        // @ts-ignore
-        this.notificationWarning = "Select an item first.";
-      }
-      else if (this.selectedItemIds.length != 1) {
-        // @ts-ignore
-        this.notificationWarning = "You can only edit one item."
-      } else {
-        router.push(`/items/bought/edit/${this.selectedItemIds[0]}`);
-      }
-    },
-
-    onButtonCopy() {
-      if (this.selectedItemIds.length == 0) {
-        // @ts-ignore
-        this.notificationWarning = "Select an item first.";
-      }
-      else if (this.selectedItemIds.length != 1) {
-        // @ts-ignore
-        this.notificationWarning = "You can only edit one item."
-      } else {
-        router.push(`/items/bought/copy/${this.selectedItemIds[0]}`);
-      }
-    },
-
-    onButtonDelete() {
-      if (this.selectedItemIds.length == 0) {
-        // @ts-ignore
-        this.notificationWarning = "Select an item first.";
-      }
-      else if (this.selectedItemIds.length != 1) {
-        // @ts-ignore
-        this.notificationWarning = "You can only delete one item.";
-      } else {
-        this.showDeletePrompt = true;
-      }
-    },
-
-    onButtonDownloadExcel() {
-      const params = getFilterParams(this.filter);
-      boughtItemsRequest.getItemsExcel(params).then(response => {
-        let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
-          url = window.URL.createObjectURL(blob)
-        window.open(url);
-      });
-    },
-
-    onButtonUploadExcel() {
-      this.showExcelImport = true;
-    },
-
-    getNewData() {
-      this.$emit("update:triggerGetNewData", true);
-    },
-
-    deleteItem() {
-      const itemId = this.selectedItemIds[0];
-      boughtItemsRequest.deleteItemsId(itemId).then(response => {
-        if (response.status === 200) {
-          // @ts-ignore
-          this.notificationInfo = `Deleted item #${itemId}`;
-          this.getNewData()
-        } else {
-          this.notificationWarning = response.data.detail;
-        }
-      })
-      this.showDeletePrompt = false;
-    }
-  },
-  watch: {
-    toggleChangelog() {
-      this.$emit("update:showChangelog", this.toggleChangelog);
-      localStorage.setItem("gladosBoughtItemControlsShowChangelog", String(this.toggleChangelog));
-    },
-    toggleRainbow() {
-      this.$emit("update:showRainbow", this.toggleRainbow);
-      localStorage.setItem("gladosBoughtItemControlsShowRainbow", String(this.toggleRainbow));
-    },
-    toggleTextOnly() {
-      this.$emit("update:showTextOnly", this.toggleTextOnly);
-      localStorage.setItem("gladosBoughtItemControlsShowTextOnly", String(this.toggleTextOnly));
-    },
-    toggleFixHeight() {
-      this.$emit("update:showFixHeight", this.toggleFixHeight);
-      localStorage.setItem("gladosBoughtItemControlsShowFixHeight", String(this.toggleFixHeight));
-    },
-    toggleUnclutter() {
-      this.$emit("update:showUnclutter", this.toggleUnclutter);
-      localStorage.setItem("gladosBoughtItemControlsShowUnclutter", String(this.toggleUnclutter));
-    },
-    toggleRequestView() {
-      this.$emit("update:showRequestView", this.toggleRequestView);
-      localStorage.setItem("gladosBoughtItemControlsShowRequestView", String(this.toggleRequestView));
-    },
-    // toggleIgnoreDelivered() {
-    //   this.filter.ignoreDelivered = this.toggleIgnoreDelivered;
-    //   this.$emit("update:filter", this.filter);
-    // },
-    // toggleIgnoreCanceled() {
-    //   this.filter.ignoreCanceled = this.toggleIgnoreCanceled;
-    //   this.$emit("update:filter", this.filter);
-    // },
-    // toggleIgnoreLost() {
-    //   this.filter.ignoreLost = this.toggleIgnoreLost;
-    //   this.$emit("update:filter", this.filter);
-    // },
-    selectedOptionFilterPreset() {
-      this.$emit("update:filter", JSON.parse(JSON.stringify(this.selectedOptionFilterPreset)));
-    },
-    filter: {
-      handler: function () {
-        // this.toggleIgnoreDelivered = this.filter.ignoreDelivered;
-        // this.toggleIgnoreCanceled = this.filter.ignoreCanceled;
-        // this.toggleIgnoreLost = this.filter.ignoreLost;
-        this.selectedOptionFilterPreset = JSON.parse(JSON.stringify(this.filter));
-      }, deep: true
-    }
-  },
-  beforeMount() {
-    this.toggleChangelog = this.showChangelog;
-    this.toggleRainbow = this.showRainbow;
-    this.toggleTextOnly = this.showTextOnly;
-    this.toggleFixHeight = this.showFixHeight;
-    this.toggleUnclutter = this.showUnclutter;
-    this.toggleRequestView = this.showRequestView;
-    // this.toggleIgnoreDelivered = this.filter.ignoreDelivered;
-    // this.toggleIgnoreCanceled = this.filter.ignoreCanceled;
-    // this.toggleIgnoreLost = this.filter.ignoreLost;
-    this.selectedOptionFilterPreset = JSON.parse(JSON.stringify(this.filter));
+function loadFilter() {
+  const filterObject = localStorage.getItem("gladosBoughtItemDataTableMyFilter")
+  if (filterObject != null) {
+    filterStore.$state = JSON.parse(filterObject)
   }
-};
+}
+
+function clearFilter() {
+  filterStore.reset()
+  console.log("Cleared filter")
+}
+
+function onButtonNewItem() {
+  router.push({ name: "NewBoughtItem" })
+}
+
+function onButtonEdit() {
+  if (props.selectedItemIds.length == 0) {
+    notificationStore.warning = "Select an item first."
+  }
+  else if (props.selectedItemIds.length != 1) {
+    notificationStore.warning = "You can only edit one item."
+  } else {
+    router.push(`/items/bought/edit/${props.selectedItemIds[0]}`)
+  }
+}
+
+function onButtonCopy() {
+  if (props.selectedItemIds.length == 0) {
+    notificationStore.warning = "Select an item first."
+  }
+  else if (props.selectedItemIds.length != 1) {
+    notificationStore.warning = "You can only edit one item."
+  } else {
+    router.push(`/items/bought/copy/${props.selectedItemIds[0]}`)
+  }
+}
+
+function onButtonDelete() {
+  if (props.selectedItemIds.length == 0) {
+    notificationStore.warning = "Select an item first."
+  }
+  else if (props.selectedItemIds.length != 1) {
+    notificationStore.warning = "You can only delete one item."
+  } else {
+    showDeletePrompt.value = true
+  }
+}
+
+function onButtonDownloadExcel() {
+  const params = getFilterParams(filterStore.$state)
+  boughtItemsRequest.getItemsExcel(params).then(response => {
+    let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }),
+      url = window.URL.createObjectURL(blob)
+    window.open(url)
+  })
+}
+
+function onButtonUploadExcel() {
+  showExcelImport.value = true;
+}
+
+function getNewData() {
+  emit("update:triggerGetNewData", true)
+}
+
+function deleteItem() {
+  const itemId = props.selectedItemIds[0]
+  boughtItemsRequest.deleteItemsId(itemId).then(response => {
+    if (response.status === 200) {
+      notificationStore.info = `Deleted item #${itemId}`
+      getNewData()
+    } else {
+      notificationStore.warning = response.data.detail
+    }
+  })
+  showDeletePrompt.value = false
+}
+
+watch(selectedOptionFilterPreset, () => {
+  const value = selectedOptionFilterPreset.value
+  if (value == "allOpen") {
+    filterStore.allOpen()
+  } else if (value == "allRequested") {
+    filterStore.allRequested()
+  } else if (value == "allOrdered") {
+    filterStore.allOrdered()
+  } else if (value == "allActive") {
+    filterStore.allActive()
+  } else if (value == "allPrioritized") {
+    filterStore.allPrioritized()
+  } else {
+    filterStore.reset()
+  }
+})
 </script>
 
 <template>
@@ -267,7 +168,7 @@ export default {
       <div id="grid">
         <!-- AREA PLACEHOLDER -->
         <div id="placeholder" class="grid-item-center">
-          <!-- Selected IDs: {{ selectedItemIds }} -->
+          <!-- Selected IDs: {{ props.selectedItemIds }} -->
         </div>
 
         <!-- AREA NEW -->
@@ -278,7 +179,7 @@ export default {
           <ButtonExcel text="Import Excel" v-on:click="onButtonUploadExcel"></ButtonExcel>
         </div>
         <div id="new-3" class="grid-item-center">
-          <ButtonNew text="New Item" route-name="NewBoughtItem"></ButtonNew>
+          <ButtonItemCreate text="New Item" v-on:click="onButtonNewItem"></ButtonItemCreate>
         </div>
 
         <!-- AREA EDIT -->
@@ -306,20 +207,19 @@ export default {
 
         <!-- AREA LIMIT & SORT -->
         <div id="limit" class="grid-item-center">
-          <SelectControls v-model:selection="filter.limit" :options="availableOptionsLimit"></SelectControls>
+          <SelectControls v-model:selection="filterStore.limit" :options="availableOptionsLimit"></SelectControls>
         </div>
         <div id="limit-text" class="grid-item-left">
           Limit
         </div>
         <div id="sort-by" class="grid-item-center">
-          <SelectControls v-model:selection="filter.sortBy" :options="availableOptionsOrderBy"></SelectControls>
+          <SelectControls v-model:selection="filterStore.sortBy" :options="availableOptionsOrderBy"></SelectControls>
         </div>
         <div id="sort-by-text" class="grid-item-left">
           Order by
         </div>
         <div id="preset-filters" class="grid-item-center">
-          <SelectControls v-model:selection="selectedOptionFilterPreset" :options="availableOptionsFilterPresets">
-          </SelectControls>
+          <SelectControls v-model:selection="selectedOptionFilterPreset" :options="availableOptionsFilterPresets"></SelectControls>
         </div>
         <div id="preset-filters-text" class="grid-item-left">
           Presets
@@ -327,58 +227,57 @@ export default {
 
         <!-- AREA TOGGLE -->
         <div id="toggle-1" class="grid-item-center">
-          <!-- <Toggle v-model="toggleIgnoreDelivered"></Toggle> -->
-          <Toggle v-model="filter.ignoreDelivered"></Toggle>
+          <Toggle v-model="filterStore.ignoreDelivered"></Toggle>
         </div>
         <div id="toggle-1-text" class="grid-item-left">
           Hide Delivered
         </div>
         <div id="toggle-2" class="grid-item-center">
-          <Toggle v-model="filter.ignoreCanceled"></Toggle>
+          <Toggle v-model="filterStore.ignoreCanceled"></Toggle>
         </div>
         <div id="toggle-2-text" class="grid-item-left">
           Hide Canceled
         </div>
         <div id="toggle-3" class="grid-item-center">
-          <Toggle v-model="filter.ignoreLost"></Toggle>
+          <Toggle v-model="filterStore.ignoreLost"></Toggle>
         </div>
         <div id="toggle-3-text" class="grid-item-left">
           Hide Lost
         </div>
 
         <div id="toggle-4" class="grid-item-center">
-          <Toggle v-model="toggleFixHeight"></Toggle>
+          <Toggle v-model="controlsStore.fixedHeight"></Toggle>
         </div>
         <div id="toggle-4-text" class="grid-item-left">
           Fixed Height
         </div>
         <div id="toggle-5" class="grid-item-center">
-          <Toggle v-model="toggleUnclutter"></Toggle>
+          <Toggle v-model="controlsStore.unclutter"></Toggle>
         </div>
         <div id="toggle-5-text" class="grid-item-left">
           Unclutter
         </div>
         <div id="toggle-6" class="grid-item-center">
-          <Toggle v-model="toggleRequestView"></Toggle>
+          <Toggle v-model="controlsStore.requestView"></Toggle>
         </div>
         <div id="toggle-6-text" class="grid-item-left">
           Request View
         </div>
 
         <div id="toggle-7" class="grid-item-center">
-          <Toggle v-model="toggleChangelog"></Toggle>
+          <Toggle v-model="controlsStore.changelog"></Toggle>
         </div>
         <div id="toggle-7-text" class="grid-item-left">
           Changelog
         </div>
         <div id="toggle-8" class="grid-item-center">
-          <Toggle v-model="toggleRainbow"></Toggle>
+          <Toggle v-model="controlsStore.rainbow"></Toggle>
         </div>
         <div id="toggle-8-text" class="grid-item-left">
           Rainbow
         </div>
         <div id="toggle-9" class="grid-item-center">
-          <Toggle v-model="toggleTextOnly"></Toggle>
+          <Toggle v-model="controlsStore.textOnly"></Toggle>
         </div>
         <div id="toggle-9-text" class="grid-item-left">
           Text Only
@@ -387,13 +286,20 @@ export default {
     </div>
   </div>
 
-  <Prompt v-model:show-prompt="showDeletePrompt" prompt-text="Delete item?" v-bind:on-yes="deleteItem"
-    v-bind:on-no="() => { showDeletePrompt = false; }" />
-  <ExcelImport v-bind:on-success="getNewData" v-model:show-uploader="showExcelImport" />
+  <Prompt 
+    text="Delete item?"
+    at-mouse
+    yes-is-danger
+    v-model:show="showDeletePrompt"
+    v-bind:on-yes="deleteItem"
+    v-bind:on-no="() => { showDeletePrompt = false }" />
+  <ExcelImport 
+    v-bind:on-success="getNewData" 
+    v-model:show-uploader="showExcelImport" />
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .scope {
   width: 100%;

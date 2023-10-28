@@ -1,4 +1,3 @@
-
 export function getFilterParams(filter: any) {
   const params = new URLSearchParams();
 

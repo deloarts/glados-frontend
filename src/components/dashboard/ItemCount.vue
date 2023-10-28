@@ -1,29 +1,15 @@
-<script lang="ts">
-import Vue3Autocounter from 'vue3-autocounter';
+<script setup>
+import { ref } from "vue"
+import Vue3Autocounter from "vue3-autocounter"
 
-export default {
-  name: "ItemCount",
-  props: ["text", "count"],
-  components: {
-    Vue3Autocounter
-  },
-  data() {
-    return {
-      start: 0,
-    };
-  },
-  methods: {
-    setStart() {
-      this.start = this.count;
-    }
-  },
-  watch: {
-  },
-  mounted() {
-  },
-  beforeMount() {
-  }
-};
+// Props & Emits
+const props = defineProps(["text", "count"])
+
+let start = ref(0)
+
+function setStart() {
+  start.value = props.count
+}
 </script>
 
 <template>
@@ -31,7 +17,7 @@ export default {
     <div class="container">
       <div id="grid">
         <div id="count" class="grid-item-center">
-          <Vue3Autocounter :startAmount="start" :endAmount="count" :duration="1" @finished="setStart"></Vue3Autocounter>
+          <Vue3Autocounter :startAmount="start" :endAmount="props.count" :duration="1" @finished="setStart"></Vue3Autocounter>
         </div>
         <div id="text" class="grid-item-left">
           {{ text }}
@@ -42,8 +28,8 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
+@import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
 
 .scope {
   background-color: $main-background-color-dark;

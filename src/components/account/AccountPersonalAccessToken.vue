@@ -1,66 +1,46 @@
-<script lang="ts">
-//@ts-ignore
-import Toggle from "@vueform/toggle";
-import ButtonNewPersonalAccessToken from "@/components/elements/ButtonNewPersonalAccessToken.vue";
-import { usersRequest } from "@/requests/users";
+<script setup>
+import { ref } from "vue"
+import { usersRequest } from "@/requests/users"
+import { useNotificationStore } from "@/stores/notification.js"
 
-export default {
-    name: "AccountPersonalAccessToken",
-    components: {
-        Toggle,
-        ButtonNewPersonalAccessToken
-    },
-    data() {
-        return {
-            // Globals
-            notificationWarning: this.$notificationWarning,
-            notificationInfo: this.$notificationInfo,
+import Toggle from "@vueform/toggle"
+import ButtonNewPersonalAccessToken from "@/components/elements/ButtonNewPersonalAccessToken.vue"
 
-            // Vars
-            personalAccessToken: ""
-        };
-    },
-    methods: {
-        newToken() {
-            usersRequest.putUsersMePAT().then(response => {
-                if (response.status == 200) {
-                    //@ts-ignore
-                    this.notificationInfo = `Created new token.`
-                    this.personalAccessToken = response.data;
-                } else {
-                    //@ts-ignore
-                    this.notificationWarning = response.data.detail;
-                }
-            })
-        },
-    },
-    watch: {
-    },
-    mounted() {
-    },
-    beforeMount() {
+// Stores
+const notificationStore = useNotificationStore()
+
+let personalAccessToken = ref("")
+
+function newToken() {
+  usersRequest.putUsersMePAT().then(response => {
+    if (response.status == 200) {
+      notificationStore.info = `Created new token.`
+      personalAccessToken.value = response.data
+    } else {
+      notificationStore.warning = response.data.detail
     }
-};
+  })
+}
 </script>
 
 <template>
-    <div class="scope">
-        <div class="container">
-            <div id="grid">
-                <div id="token" class="grid-item-center">
-                    <input class="text-input" v-model="personalAccessToken" type="text" placeholder="Secret" readonly>
-                </div>
-                <div id="btn">
-                    <ButtonNewPersonalAccessToken v-on:click="newToken" text="New Token"></ButtonNewPersonalAccessToken>
-                </div>
-            </div>
+  <div class="scope">
+    <div class="container">
+      <div id="grid">
+        <div id="token" class="grid-item-center">
+          <input class="text-input" v-model="personalAccessToken" type="text" placeholder="Secret" readonly>
         </div>
+        <div id="btn">
+          <ButtonNewPersonalAccessToken v-on:click="newToken" text="New Token"></ButtonNewPersonalAccessToken>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
+@import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
 
 #grid {
     grid-template-rows: 40px 40px;

@@ -1,95 +1,52 @@
-<script lang="ts">
-import { inject } from "vue";
+<script setup>
+import { watch, computed } from "vue"
 
-import IconWarning from "../icons/IconWarning.vue";
-import IconInfo from "../icons/IconInfo.vue";
+import { useNotificationStore } from "@/stores/notification.js"
 
-export default {
-  name: 'Notification',
-  components: { IconWarning, IconInfo },
+import IconWarning from "@/components/icons/IconWarning.vue"
+import IconInfo from "@/components/icons/IconInfo.vue"
 
-  setup() {
-    const currentUser = inject("currentUser")
-    return {
-      currentUser,
-    }
-  },
-  data() {
-    return {
-      showWarning: false,
-      showInfo: false,
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
-    };
-  },
+const notificationStore = useNotificationStore()
 
-  methods: {
-    updateNotification() {
-      // @ts-ignore
-      if (!this.showWarning && this.notificationWarning != "") {
-        this.showWarning = true;
-        setTimeout(this.removeNotification.bind(this), 5000);
-      }
-      // @ts-ignore
-      else if (!this.showInfo && this.notificationInfo != "" && this.notificationWarning == "") {
-        this.showInfo = true;
-        setTimeout(this.removeNotification.bind(this), 4000);
-      }
-      setTimeout(this.updateNotification.bind(this), 100);
-    },
-    removeNotification() {
-      this.showWarning = false;
-      this.showInfo = false;
-      // @ts-ignore
-      this.notificationWarning = "";
-      // @ts-ignore
-      this.notificationInfo = "";
-    }
-  },
-  watch: {
-    // '$notificationWarning.value': {
-    //   handler: function () {
-    //     this.updateNotification()
-    //   }, deep: true
-    // },
-    // '$notificationInfo.value': {
-    //   handler: function () {
-    //     this.updateNotification()
-    //   }, deep: true
-    // },
-    currentUser: {
-      handler: function (newVal, oldVal) {
+const info = computed(() => notificationStore.info)
+const warning = computed(() => notificationStore.warning)
 
-      },
-      deep: true
-    },
-  },
-  mounted() {
-    this.updateNotification();
-    console.log("Mounted notifications.")
-  },
+function clearWarning() {
+  notificationStore.clearWarning()
 }
+
+function clearInfo() {
+  notificationStore.clearInfo()
+}
+
+watch(info, () => {
+  setTimeout(clearInfo.bind(this), 5000)
+})
+
+watch(warning, () => {
+  setTimeout(clearWarning.bind(this), 5000)
+})
 </script>
 
 <template>
   <div class="scope">
-    <div class="container warning" v-if="showWarning">
+    <div class="container warning" v-on:click="clearWarning" v-bind:class="{ 'slide-in': notificationStore.warning != '', 'slide-out': notificationStore.warning == '' }">
       <div id="grid">
         <div id="icon">
           <IconWarning></IconWarning>
         </div>
         <div id="text">
-          {{ notificationWarning }}
+          {{ notificationStore.warning }}
         </div>
       </div>
     </div>
-    <div class="container info" v-if="showInfo">
+    <div class="container info" v-on:click="clearInfo" v-bind:class="{ 'slide-in': notificationStore.info != '', 'slide-out': notificationStore.info == '' }">
       <div id="grid">
         <div id="icon">
           <IconInfo></IconInfo>
         </div>
         <div id="text">
-          {{ notificationInfo }}
+          {{ notificationStore.info }}
         </div>
       </div>
     </div>
@@ -97,46 +54,70 @@ export default {
 </template>
 
 <style scoped lang='scss'>
-@import '../../assets/variables.scss';
+@import '@/scss/variables.scss';
 
 .container {
   position: absolute;
-  top: 20px;
   z-index: 9999;
   position: absolute;
   right: 20px;
   top: 20px;
   width: 350px;
-  height: 90px;
+  height: 70px;
   border-radius: 5px;
 
   font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1em;
   color: white;
 
-  border-width: 3px;
-  border-radius: 5px;
+  border-width: 1px;
+  border-radius: 0.25em;
   border-style: solid;
+  box-shadow: 
+    0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+    0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.3);
 
-  opacity: 1;
-  animation: fade 0.25s linear;
+  animation: fade 1s linear;
+  transform: translateX(400px);
 }
 
+
 .warning {
-  background: orange;
+  background: $main-background-color-dark;
   border-color: orangered;
 }
 
 .info {
-  background: rgb(25, 216, 0);
-  border-color: green;
+  background: $main-background-color-dark;
+  border-color: $main-color;
+}
+
+.slide-in {
+  animation: slide-in 0.3s forwards;
+}
+
+.slide-out {
+  animation: slide-out 0.2s forwards;
+}
+    
+@keyframes slide-in {
+  100% { transform: translateX(0%); }
+}
+    
+@keyframes slide-out {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(400px); }
 }
 
 #grid {
   display: grid;
-  grid-gap: 20px;
-  grid-template-rows: 90px;
-  grid-template-columns: 50px auto;
+  grid-gap: 5px;
+  grid-template-rows: 70px;
+  grid-template-columns: 80px auto;
   grid-template-areas: 'icon text';
 }
 
@@ -152,6 +133,11 @@ export default {
   display: flex;
   justify-content: left;
   align-items: center;
+}
+
+svg {
+  width: 30px;
+  height: 30px;
 }
 
 @keyframes fade {

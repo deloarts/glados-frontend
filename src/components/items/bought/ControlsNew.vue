@@ -32,8 +32,8 @@ function onAbort() {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="controls-base-scope">
+    <div class="controls-base-container">
       <div id="grid">
         <div id="header" class="grid-item-center">
           New Item
@@ -55,6 +55,36 @@ function onAbort() {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/controls/controlsBase.scss';
 @import '@/scss/grid/gridBase.scss';
-@import '@/scss/grid/gridItemBoughtControlsNewEdit.scss';
+
+#grid {
+    grid-gap: 5px;
+    grid-template-rows: 35px 35px 35px;
+    grid-template-columns: 135px 135px auto;
+    grid-template-areas: "header header header"
+        "placeholder-1 placeholder-1 placeholder-2"
+        "btn-1 btn-2 placeholder-2"
+}
+
+#header {
+    grid-area: header;
+    font-size: 1.5em;
+}
+
+#placeholder-1 {
+    grid-area: placeholder-1;
+}
+
+#placeholder-2 {
+    grid-area: placeholder-2;
+}
+
+#btn-1 {
+    grid-area: btn-1;
+}
+
+#btn-2 {
+    grid-area: btn-2;
+}
 </style>

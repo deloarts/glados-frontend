@@ -64,9 +64,9 @@ watch(() => props.dataset, () => { updateChart() })
 </script>
 
 <template>
-  <div class="scope">
+  <div class="chart-base-scope">
     <h1>Created Items</h1>
-    <div class="wrapper">
+    <div class="chart-base-wrapper">
       <Doughnut :data="chartData" :options="chartOptions" />
     </div>
   </div>

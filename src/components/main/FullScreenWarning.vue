@@ -39,6 +39,7 @@ const particlesLoaded = async (container) => {
 
 .center {
   z-index: 1002;
+  
   position: absolute;
   left: 50%;
   top: 50%;
@@ -46,15 +47,18 @@ const particlesLoaded = async (container) => {
   height: auto;
   transform: translate(-50%, -50%);
 
+  padding: $main-padding;
+
   background: $main-background-color-dark;
-  border-style: solid;
-  border-color: $main-color;
-  border-width: 1px;
-  border-radius: 5px;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-border-color;
+  border-radius: $main-border-radius;
+
   opacity: 0.95;
 
   text-align: center;
-  padding: 30px;
 }
 
 .wrapper {

@@ -50,42 +50,42 @@ watch(pickedDesiredDate, () => {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="form-base-scope">
+    <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <input class="text-input" v-model="props.formData.project" placeholder="Project *">
+          <input class="form-base-text-input" v-model="props.formData.project" placeholder="Project *">
         </div>
         <div id="machine" class="grid-item-center">
-          <input class="text-input" v-model="props.formData.machine" placeholder="Machine">
+          <input class="form-base-text-input" v-model="props.formData.machine" placeholder="Machine">
         </div>
         <div id="quantity" class="grid-item-center">
-          <input class="text-input" v-model="props.formData.quantity" type="number" placeholder="Quantity *">
+          <input class="form-base-text-input" v-model="props.formData.quantity" type="number" placeholder="Quantity *">
         </div>
         <div id="unit" class="grid-item-center">
             <SelectNewUpdate v-model:selection="formData.unit" :options="unitStore.boughtItemUnits.values"/>
         </div>
         <div id="partnumber" class="grid-item-center">
-          <input class="text-input" v-model="props.formData.partnumber" placeholder="Partnumber *">
+          <input class="form-base-text-input" v-model="props.formData.partnumber" placeholder="Partnumber *">
         </div>
         <div id="definition" class="grid-item-center">
-          <input class="text-input" v-model="props.formData.definition" placeholder="Definition *">
+          <input class="form-base-text-input" v-model="props.formData.definition" placeholder="Definition *">
         </div>
         <div id="manufacturer" class="grid-item-center">
-          <input class="text-input" v-model="props.formData.manufacturer" placeholder="Manufacturer *">
+          <input class="form-base-text-input" v-model="props.formData.manufacturer" placeholder="Manufacturer *">
         </div>
         <div id="supplier" class="grid-item-center">
-          <input class="text-input" v-model="props.formData.supplier" placeholder="Supplier">
+          <input class="form-base-text-input" v-model="props.formData.supplier" placeholder="Supplier">
         </div>
         <div id="desired" class="grid-item-center">
-          <Datepicker class="date-input" v-model="pickedDesiredDate" :format="formatDesiredDate" :clearable="true"
+          <Datepicker class="form-base-date-input" v-model="pickedDesiredDate" :format="formatDesiredDate" :clearable="true"
             placeholder="Desired Delivery Date" dark />
         </div>
         <div id="note-general" class="grid-item-center">
-          <textarea class="text-input-multiline" v-model="props.formData.note_general" placeholder="Note"></textarea>
+          <textarea class="form-base-text-input-multiline" v-model="props.formData.note_general" placeholder="Note"></textarea>
         </div>
         <div id="note-supplier" class="grid-item-center">
-          <textarea class="text-input-multiline" v-model="props.formData.note_supplier"
+          <textarea class="form-base-text-input-multiline" v-model="props.formData.note_supplier"
             placeholder="Note Supplier"></textarea>
         </div>
         <div id="notify" class="grid-item-center">
@@ -107,16 +107,17 @@ watch(pickedDesiredDate, () => {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/form/formBase.scss';
 @import '@/scss/grid/gridBase.scss';
 
 
-.container {
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
+// .container {
+//   padding-top: 25px;
+//   padding-bottom: 25px;
+// }
 
 #grid {
-  grid-gap: 10px;
+  // grid-gap: 10px;
   grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
   grid-template-columns: 50px 200px 150px 450px;
   grid-template-areas: "project project project note-general"

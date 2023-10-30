@@ -4,13 +4,13 @@ import AccountPersonalAccessToken from "@/components/account/AccountPersonalAcce
 </script>
 
 <template>
-  <div class="scope">
-    <div class="content">
+  <div class="views-scope">
+    <div class="views-content">
       <h1>My Account</h1>
       <AccountUpdate />
     </div>
     <hr>
-    <div class="content">
+    <div class="views-content">
       <h1>Personal Access Token</h1>
       <AccountPersonalAccessToken />
     </div>
@@ -19,15 +19,7 @@ import AccountPersonalAccessToken from "@/components/account/AccountPersonalAcce
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
-
-.scope {
-  width: 100%;
-  height: 100%;
-}
-
-.content {
-  padding: 30px;
-}
+@import '@/scss/views.scss';
 
 .gray {
   color: gray;

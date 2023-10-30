@@ -161,8 +161,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="views-scope">
+    <div class="views-content">
       <div id="grid">
         <div id="items-overview" class="grid-item-center">
           <OverviewChart v-model:dataset="boughtItemsOverviewDataset"></OverviewChart>
@@ -174,28 +174,28 @@ onMounted(() => {
           <TimelineChart v-model:datasets="timelineDatasets"></TimelineChart>
         </div> -->
         <div id="active-items" class="grid-item-center">
-          <ItemCount text="Active Items" v-model:count="boughtItemsAmount.active"></ItemCount>
+          <ItemCount text="Active" v-model:count="boughtItemsAmount.active"></ItemCount>
         </div>
         <div id="open-items" class="grid-item-center">
-          <ItemCount text="Open Items" v-model:count="boughtItemsAmount.open"></ItemCount>
+          <ItemCount text="Open" v-model:count="boughtItemsAmount.open"></ItemCount>
         </div>
         <div id="requested-items" class="grid-item-center">
-          <ItemCount text="Requested Items" v-model:count="boughtItemsAmount.requested"></ItemCount>
+          <ItemCount text="Requested" v-model:count="boughtItemsAmount.requested"></ItemCount>
         </div>
         <div id="ordered-items" class="grid-item-center">
-          <ItemCount text="Ordered Items" v-model:count="boughtItemsAmount.ordered"></ItemCount>
+          <ItemCount text="Ordered" v-model:count="boughtItemsAmount.ordered"></ItemCount>
         </div>
         <div id="delivered-items" class="grid-item-center">
-          <ItemCount text="Delivered Items" v-model:count="boughtItemsAmount.delivered"></ItemCount>
+          <ItemCount text="Delivered" v-model:count="boughtItemsAmount.delivered"></ItemCount>
         </div>
         <div id="partial-items" class="grid-item-center">
-          <ItemCount text="Partial Items" v-model:count="boughtItemsAmount.partial"></ItemCount>
+          <ItemCount text="Partial" v-model:count="boughtItemsAmount.partial"></ItemCount>
         </div>
         <div id="late-items" class="grid-item-center">
-          <ItemCount text="Late Items" v-model:count="boughtItemsAmount.late"></ItemCount>
+          <ItemCount text="Late" v-model:count="boughtItemsAmount.late"></ItemCount>
         </div>
         <div id="canceled-items" class="grid-item-center">
-          <ItemCount text="Canceled Items" v-model:count="boughtItemsAmount.canceled"></ItemCount>
+          <ItemCount text="Canceled" v-model:count="boughtItemsAmount.canceled"></ItemCount>
         </div>
         <div id="data-note" class="grid-item-left">
           Showing all items that have been edited within the last 30 days.
@@ -207,15 +207,11 @@ onMounted(() => {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/views.scss';
 @import '@/scss/grid/gridBase.scss';
 
 h1 {
   padding-bottom: 35px;
-}
-
-.container {
-  padding: 30px;
-  border: none;
 }
 
 #grid {

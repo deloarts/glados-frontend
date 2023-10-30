@@ -68,8 +68,8 @@ onMounted(() => getUser())
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="form-base-scope">
+    <div class="form-base-container">
       <div id="grid">
         <div id="superuser" class="grid-item-center">
           <Toggle v-model="formData.is_superuser" :disabled="formData.is_systemuser"></Toggle>
@@ -84,17 +84,17 @@ onMounted(() => getUser())
           Active
         </div>
         <div id="username" class="grid-item-center">
-          <input class="text-input" v-model="formData.username" type="text" placeholder="Username"
+          <input class="form-base-text-input" v-model="formData.username" type="text" placeholder="Username"
             :disabled="formData.is_systemuser">
         </div>
         <div id="full-name" class="grid-item-center">
-          <input class="text-input" v-model="formData.full_name" placeholder="Name">
+          <input class="form-base-text-input" v-model="formData.full_name" placeholder="Name">
         </div>
         <div id="email" class="grid-item-center">
-          <input class="text-input" v-model="formData.email" placeholder="Mail">
+          <input class="form-base-text-input" v-model="formData.email" placeholder="Mail">
         </div>
         <div id="password" class="grid-item-center">
-          <input class="text-input" v-model="formData.password" placeholder="Password"
+          <input class="form-base-text-input" v-model="formData.password" placeholder="Password"
             :disabled="formData.is_systemuser">
         </div>
         <div id="btn">
@@ -107,6 +107,7 @@ onMounted(() => getUser())
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/form/formBase.scss';
 @import '@/scss/grid/gridBase.scss';
 
 #grid {

@@ -44,7 +44,7 @@ watch(() => props.selectedItemIds, (newID, oldID) => {
 
 .scope {
   width: 100%;
-  height: 100%;
+  height: 200px;
   cursor: default;
 }
 
@@ -59,7 +59,7 @@ watch(() => props.selectedItemIds, (newID, oldID) => {
   border-color: $main-color;
   border-radius: 5px;
 
-  height: 160px;
+  height: 178px;
   overflow: auto;
 }
 

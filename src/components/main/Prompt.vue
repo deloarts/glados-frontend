@@ -23,7 +23,7 @@ const y = ref("")
 
 function eventMouseMove(event) {
   if (props.atMouse) {
-    x.value = `${event.pageX - 240}px` // FIXME: This is super ugly, but the main app is shifted by 250px due to the sidebar
+    x.value = `${event.pageX + 10}px`
     y.value = `${event.pageY + 10}px`
   } else {
     x.value = "50%"
@@ -62,6 +62,7 @@ onUnmounted(() => {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
 
 .scope {
   color: white;
@@ -103,26 +104,27 @@ onUnmounted(() => {
 }
 
 .grid {
-  display: grid;
-  grid-gap: 10px;
   grid-template-rows: auto 30px;
   grid-template-columns: 40px auto 90px 90px;
   grid-template-areas: 'icon text text text'
   'empty empty btnYes btnNo';
 
+  padding: $main-padding;
+
   background: $main-background-color;
-  border-style: solid;
-  border-color: $main-color;
-  border-width: 1px;
-  border-radius: 5px;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-border-color;
+  border-radius: $main-border-radius;
 
   text-align: center;
-  padding: 20px;
 }
 
 .text {
-  font-family: 'Play', 'Segoe UI', 'Arial';
+  font-family: $main-font;
   font-size: 1.2em;
+  
   display: flex;
   justify-content: center;
   align-items: center;

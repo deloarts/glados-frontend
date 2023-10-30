@@ -45,8 +45,8 @@ function createUser() {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="form-base-scope">
+    <div class="form-base-container">
       <div id="grid">
         <div id="superuser" class="grid-item-center">
           <Toggle v-model="formData.is_superuser"></Toggle>
@@ -61,16 +61,16 @@ function createUser() {
           Active
         </div>
         <div id="username" class="grid-item-center">
-          <input class="text-input" v-model="formData.username" type="text" placeholder="Username">
+          <input class="form-base-text-input" v-model="formData.username" type="text" placeholder="Username">
         </div>
         <div id="full-name" class="grid-item-center">
-          <input class="text-input" v-model="formData.full_name" placeholder="Name">
+          <input class="form-base-text-input" v-model="formData.full_name" placeholder="Name">
         </div>
         <div id="email" class="grid-item-center">
-          <input class="text-input" v-model="formData.email" placeholder="Mail">
+          <input class="form-base-text-input" v-model="formData.email" placeholder="Mail">
         </div>
         <div id="password" class="grid-item-center">
-          <input class="text-input" v-model="formData.password" placeholder="Password (at least 8 characters)">
+          <input class="form-base-text-input" v-model="formData.password" placeholder="Password (at least 8 characters)">
         </div>
         <div id="btn">
           <ButtonUserCreate v-on:click="createUser" text="Create User"></ButtonUserCreate>
@@ -82,6 +82,7 @@ function createUser() {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/form/formBase.scss';
 @import '@/scss/grid/gridBase.scss';
 
 #grid {

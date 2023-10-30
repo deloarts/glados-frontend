@@ -46,7 +46,7 @@ watch(selectedUserID, () => {
 }
 
 .content {
-  padding: 30px;
+  padding: $main-padding;
 }
 
 .gray {

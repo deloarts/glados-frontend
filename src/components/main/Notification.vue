@@ -1,5 +1,5 @@
 <script setup>
-import { watch, computed } from "vue"
+import { ref, watch, computed } from "vue"
 
 import { useNotificationStore } from "@/stores/notification.js"
 
@@ -11,42 +11,58 @@ const notificationStore = useNotificationStore()
 const info = computed(() => notificationStore.info)
 const warning = computed(() => notificationStore.warning)
 
+const showInfo = ref(false)
+const showWarning = ref(false)
+
+function hideSlider() {
+  showInfo.value = false
+  showWarning.value = false
+}
+
 function clearWarning() {
   notificationStore.clearWarning()
+  setTimeout(hideSlider.bind(this), 500)
 }
 
 function clearInfo() {
   notificationStore.clearInfo()
+  setTimeout(hideSlider.bind(this), 500)
 }
 
 watch(info, () => {
-  setTimeout(clearInfo.bind(this), 5000)
+  if (info.value != "") {
+    showInfo.value = true
+    setTimeout(clearInfo.bind(this), 5000)
+  }
 })
 
 watch(warning, () => {
-  setTimeout(clearWarning.bind(this), 5000)
+  if (warning.value != "") {
+    showWarning.value = true
+    setTimeout(clearWarning.bind(this), 5000)
+  }
 })
 </script>
 
 <template>
   <div class="scope">
-    <div class="container warning" v-on:click="clearWarning" v-bind:class="{ 'slide-in': notificationStore.warning != '', 'slide-out': notificationStore.warning == '' }">
+    <div class="container warning" v-if="showWarning" v-on:click="clearWarning" v-bind:class="{ 'slide-in': showWarning, 'slide-out': warning == '' }">
       <div id="grid">
         <div id="icon">
           <IconWarning></IconWarning>
         </div>
         <div id="text">
-          {{ notificationStore.warning }}
+          {{ warning }}
         </div>
       </div>
     </div>
-    <div class="container info" v-on:click="clearInfo" v-bind:class="{ 'slide-in': notificationStore.info != '', 'slide-out': notificationStore.info == '' }">
+    <div class="container info" v-if="showInfo" v-on:click="clearInfo" v-bind:class="{ 'slide-in': showInfo, 'slide-out': info == '' }">
       <div id="grid">
         <div id="icon">
           <IconInfo></IconInfo>
         </div>
         <div id="text">
-          {{ notificationStore.info }}
+          {{ info }}
         </div>
       </div>
     </div>
@@ -55,24 +71,30 @@ watch(warning, () => {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/grid/gridBase.scss';
+
+.scope {
+  overflow: hidden;
+}
 
 .container {
-  position: absolute;
   z-index: 9999;
-  position: absolute;
+
+  position: fixed;
   right: 20px;
   top: 20px;
   width: 350px;
   height: 70px;
-  border-radius: 5px;
 
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1em;
+
+  font-family: $main-font;
+  font-size: $main-font-size;
   color: white;
 
-  border-width: 1px;
-  border-radius: 0.25em;
-  border-style: solid;
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-radius: $main-border-radius;
+
   box-shadow: 
     0 2.8px 2.2px rgba(0, 0, 0, 0.034),
     0 6.7px 5.3px rgba(0, 0, 0, 0.048),
@@ -114,8 +136,7 @@ watch(warning, () => {
 }
 
 #grid {
-  display: grid;
-  grid-gap: 5px;
+  // grid-gap: 5px;
   grid-template-rows: 70px;
   grid-template-columns: 80px auto;
   grid-template-areas: 'icon text';

@@ -22,7 +22,7 @@ const text = `v${constants.version} (v${constants.serverVersion})`
   width: 100%;
   height: 100%;
 
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: $main-font-neutral;
   font-size: 0.75em;
   font-weight: thin;
 

@@ -1188,7 +1188,7 @@ input {
   position: absolute;
   width: auto;
   height: auto;
-  left: 50%;
+  left: 50vw;
   top: 260px;
   transform: translate(-50%, -50%);
 }

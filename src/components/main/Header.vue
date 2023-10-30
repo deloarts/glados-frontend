@@ -17,7 +17,7 @@
   width: 100%;
   height: 100%;
 
-  font-family: 'Lobster', sans-serif;
+  font-family: $main-font-2;
   font-size: 2.25em;
   font-weight: thin;
 

@@ -35,16 +35,18 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="grid" v-bind:class="{ 'show-changelog': controlsStore.changelog }">
-      <div id="controls" class="controls">
-        <Controls v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData" />
-      </div>
-      <div id="data" class="data">
-        <DataTable v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData" />
-      </div>
-      <div id="changelog" class="changelog" v-if="controlsStore.changelog">
-        <Changelog v-model:selected-item-ids="selectedItemIds"></Changelog>
+  <div class="views-scope">
+    <div class="views-content">
+      <div class="grid" v-bind:class="{ 'show-changelog': controlsStore.changelog }">
+        <div id="controls" class="controls">
+          <Controls v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData" />
+        </div>
+        <div id="data" class="data">
+          <DataTable v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData" />
+        </div>
+        <div id="changelog" class="changelog" v-if="controlsStore.changelog">
+          <Changelog v-model:selected-item-ids="selectedItemIds"></Changelog>
+        </div>
       </div>
     </div>
   </div>
@@ -55,51 +57,39 @@ onBeforeUnmount(() => {
 </style>
 <style scoped lang="scss">
 @import '@/scss/variables.scss';
+@import '@/scss/views.scss';
+@import '@/scss/grid/gridBase.scss';
 
-.scope {
-  width: 100%;
-  height: 100%;
+.views-content {
+  padding: 10px;
+  height: calc(100% - 20px); // This is ugly, should be changed...
+  overflow: none;
 }
 
 .grid {
-  // width: 100%;
-  // height: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 250px;
-  right: 0;
+  width: 100%;
+  height: 100%;
 
   display: grid;
 
-  grid-gap: 0;
+  grid-gap: 10px;
   grid-template-columns: 100%;
-  grid-template-rows: 150px auto;
+  grid-template-rows: 135px auto;
   grid-template-areas: "controls"
     "data"
 }
 
 .show-changelog {
-  grid-template-rows: 150px auto 200px;
+  grid-template-rows: 135px auto 200px;
   grid-template-areas: "controls"
     "data"
     "changelog";
 }
 
-.grid .controls {
-  padding: 10px;
-}
-
 .grid .data {
   overflow: auto;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.grid .changelog {
-  // overflow: auto;
-  padding: 10px;
-  padding-top: 5px;
+  padding-bottom: 10px;
+  // border-radius: 5px;
 }
 
 // grid

@@ -24,11 +24,11 @@ function newToken() {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="form-base-scope">
+    <div class="form-base-container">
       <div id="grid">
         <div id="token" class="grid-item-center">
-          <input class="text-input" v-model="personalAccessToken" type="text" placeholder="Secret" readonly>
+          <input class="form-base-text-input" v-model="personalAccessToken" type="text" placeholder="Secret" readonly>
         </div>
         <div id="btn">
           <ButtonNewPersonalAccessToken v-on:click="newToken" text="New Token"></ButtonNewPersonalAccessToken>
@@ -40,10 +40,11 @@ function newToken() {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/form/formBase.scss';
 @import '@/scss/grid/gridBase.scss';
 
 #grid {
-    grid-template-rows: 40px 40px;
+    grid-template-rows: 40px auto;
     grid-template-columns: auto;
     grid-template-areas: "token"
         "btn"

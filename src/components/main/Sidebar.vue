@@ -91,44 +91,4 @@ watch(full_name, () => {
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
 @import '@/scss/sidebar.scss';
-
-.sidebar hr {
-  width: 100%;
-  border: none;
-  height: 2px;
-  background-color: $main-color-hover;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar .user {
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  cursor: default;
-  padding: 25px;
-}
-
-.sidebar .user .full-name {
-  font-size: 1.3em;
-  height: 25px;
-}
-
-.sidebar .user .email {
-  font-size: 0.75em;
-  height: 15px;
-}
-
-.sidebar .user .logout {
-  font-size: 0.75em;
-  cursor: pointer;
-  padding-top: 20px;
-}
-
-.sidebar .debug {
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 25px;
-  font-size: 1.3em;
-
-  background-color: red;
-  text-align: center;
-}
 </style>

@@ -163,8 +163,8 @@ watch(selectedOptionFilterPreset, () => {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="controls-base-scope">
+    <div class="controls-base-container">
       <div id="grid">
         <!-- AREA PLACEHOLDER -->
         <div id="placeholder" class="grid-item-center">
@@ -300,48 +300,10 @@ watch(selectedOptionFilterPreset, () => {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
-
-.scope {
-  width: 100%;
-  height: 100%;
-  cursor: default;
-
-  margin: 0;
-  padding: 0;
-
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.9em;
-}
-
-.container {
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-
-  border-width: 1px;
-  border-style: solid;
-  border-color: $main-color;
-  border-radius: 5px;
-}
-
-.grid-item-left {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-.grid-item-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+@import '@/scss/controls/controlsBase.scss';
+@import '@/scss/grid/gridBase.scss';
 
 #grid {
-  width: 100%;
-  height: 100%;
-
-  display: grid;
   grid-gap: 5px;
   grid-template-rows: 35px 35px 35px;
   grid-template-columns: 135px 135px 135px 135px 100px auto 50px 100px 50px 100px 50px 100px;

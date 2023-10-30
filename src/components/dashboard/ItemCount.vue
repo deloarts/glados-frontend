@@ -31,13 +31,34 @@ function setStart() {
 @import '@/scss/variables.scss';
 @import '@/scss/grid/gridBase.scss';
 
-.scope {
+.scope  {
+  width: 100%;
+  height: 100%;
+  cursor: default;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: $main-font;
+  font-size: $main-font-size;
+
   background-color: $main-background-color-dark;
 }
 
+.container {
+  width: 100%;
+  height: 100%;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-border-color;
+  border-radius: $main-border-radius;
+}
+
 #grid {
-  grid-template-rows: 60px;
-  grid-template-columns: 60px auto;
+  grid-gap: 0;
+  grid-template-rows: auto;
+  grid-template-columns: 100px auto;
   grid-template-areas: "count text";
 }
 

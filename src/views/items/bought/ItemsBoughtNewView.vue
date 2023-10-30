@@ -23,13 +23,15 @@ const formData = ref({
 </script>
 
 <template>
-  <div class="scope">
-    <div class="grid">
-      <div id="controls" class="controls">
-        <ControlsNew v-model:form-data="formData" />
-      </div>
-      <div id="data" class="data">
-        <CreateItemForm v-model:form-data="formData" />
+  <div class="views-scope">
+    <div class="views-content">
+      <div id="grid">
+        <div id="controls">
+          <ControlsNew v-model:form-data="formData" />
+        </div>
+        <div id="data">
+          <CreateItemForm v-model:form-data="formData" />
+        </div>
       </div>
     </div>
   </div>
@@ -37,39 +39,16 @@ const formData = ref({
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/views.scss';
+@import '@/scss/grid/gridBase.scss';
 
-.scope {
-  width: 100%;
-  height: 100%;
-}
-
-.grid {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 250px;
-  right: 0;
-
-  display: grid;
-
-  grid-gap: 0;
+#grid {
   grid-template-columns: 100%;
-  grid-template-rows: 150px auto;
+  grid-template-rows: auto auto;
   grid-template-areas: "controls"
     "data"
 }
 
-.grid .controls {
-  padding: 10px;
-}
-
-.grid .data {
-  overflow: auto;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-// grid
 #controls {
   grid-area: controls;
 }

@@ -38,6 +38,8 @@ function routeIsActive(currentLink) {
 <style scoped lang='scss'>
 @import '@/scss/sidebar.scss';
 .sidebar {
+  width: 100%;
+  height: 100%;
   background: $main-color-shade-1;
 }
 </style>

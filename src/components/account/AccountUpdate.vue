@@ -41,23 +41,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="form-base-scope">
+    <div class="form-base-container">
       <div id="grid">
         <div id="username" class="grid-item-center">
-          <input class="text-input" v-model="formData.username" type="text" placeholder="Username" readonly>
+          <input class="form-base-text-input" v-model="formData.username" type="text" placeholder="Username" readonly>
         </div>
         <div id="full-name" class="grid-item-center">
-          <input class="text-input" v-model="formData.full_name" placeholder="Name">
+          <input class="form-base-text-input" v-model="formData.full_name" placeholder="Name">
         </div>
         <div id="email" class="grid-item-center">
-          <input class="text-input" v-model="formData.email" placeholder="Mail">
+          <input class="form-base-text-input" v-model="formData.email" placeholder="Mail">
         </div>
         <div id="password" class="grid-item-center">
-          <input class="text-input" v-model="formData.password" placeholder="Password">
+          <input class="form-base-text-input" v-model="formData.password" placeholder="Password">
         </div>
         <div id="btn">
-          <ButtonUserUpdate v-on:click="updateUser" text="Save Changes"></ButtonUserUpdate>
+          <ButtonUserUpdate v-on:click="updateUser" text="Save"></ButtonUserUpdate>
         </div>
       </div>
     </div>
@@ -66,10 +66,11 @@ onMounted(() => {
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
+@import '@/scss/form/formBase.scss';
 @import '@/scss/grid/gridBase.scss';
 
 #grid {
-    grid-template-rows: 40px 40px 40px 40px 40px;
+    grid-template-rows: 40px 40px 40px 40px auto;
     grid-template-columns: 50px auto;
     grid-template-areas: "username username"
         "full-name full-name"

@@ -61,7 +61,6 @@ onBeforeUnmount(() => {
 @import '@/scss/grid/gridBase.scss';
 
 .views-content {
-  padding: 10px;
   height: calc(100% - 20px); // This is ugly, should be changed...
   overflow: none;
 }
@@ -74,22 +73,25 @@ onBeforeUnmount(() => {
 
   grid-gap: 10px;
   grid-template-columns: 100%;
-  grid-template-rows: 135px auto;
+  grid-template-rows: min-content auto;
   grid-template-areas: "controls"
     "data"
 }
 
 .show-changelog {
-  grid-template-rows: 135px auto 200px;
+  grid-template-rows: min-content auto 200px;
   grid-template-areas: "controls"
     "data"
     "changelog";
 }
 
-.grid .data {
+.controls {
   overflow: auto;
-  padding-bottom: 10px;
-  // border-radius: 5px;
+}
+
+.data {
+  overflow: auto;
+  padding-bottom: 2px;
 }
 
 // grid

@@ -41,11 +41,11 @@ function getCurrentUser() {
       })
 
       // Redirect the user to the app.
-      var previousRoute = localStorage.getItem("gladosActiveRoute")
-      if (previousRoute == "/login" || previousRoute == null) {
-        previousRoute = "/"
-      }
-      router.push(previousRoute)
+      // var previousRoute = localStorage.getItem("gladosActiveRoute")
+      // if (previousRoute == "/login" || previousRoute == null) {
+      //   previousRoute = "/"
+      // }
+      // router.push(previousRoute)
     } else {
       userStore.logout()
       router.push({ name: "Login" })
@@ -116,6 +116,14 @@ onBeforeMount(() => {
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
 
+html {
+  background-color: $main-background-color;
+}
+
+body {
+  background-color: $main-background-color;
+}
+
 .grid {
   position: absolute;
   top: 0;
@@ -127,11 +135,11 @@ onBeforeMount(() => {
   background: $main-background-color;
 
   display: grid;
-  grid-template-rows: 80px auto 20px;
-  grid-template-columns: 250px auto;
-  grid-template-areas: 'header display'
+  grid-template-rows: max-content auto 20px;
+  grid-template-columns: 50px auto;
+  grid-template-areas: 'header header'
     'sidebar display'
-    'footer display';
+    'footer footer';
 }
 
 #header {

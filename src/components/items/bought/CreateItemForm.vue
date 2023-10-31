@@ -124,9 +124,8 @@ watch(pickedDesiredDate, () => {
 @import '@/scss/grid/gridBase.scss';
 
 #grid {
-  // grid-gap: 10px;
   grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
-  grid-template-columns: 50px 200px 150px 450px;
+  grid-template-columns: 50px 300px 150px 550px;
   grid-template-areas: "project project project note-general"
     "machine machine machine note-general"
     "quantity quantity unit note-general"

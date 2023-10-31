@@ -1,111 +1,72 @@
 @import '@/scss/variables.scss';
 
 .sidebar {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    background: $main-color;
+  background: $main-background-color-dark-2;
 }
 
 .sidebar .wrapper {
-    display: grid;
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
-@media screen and (max-width: $max-width) {
-    .sidebar .wrapper {
-        grid-template-columns: 1fr 1fr 1fr;
-        height: 100%;
-    }
-}
+// @media screen and (max-width: $max-width) {
+//     .sidebar .wrapper {
+//         grid-template-columns: 1fr 1fr 1fr;
+//         height: 100%;
+//     }
+// }
 
 .sidebar a {
-    display: table;
+  cursor: pointer;
 
-    font-family: $main-font;
-    font-size: 1.25em;
-    font-weight: thin;
+  width: 100%;
+  height: 100%;
 
-    text-decoration: none;
-    text-align: left;
+  display: flex;
+  vertical-align: middle;
+  text-align: center;
 
-    color: white;
-
-    height: 55px;
-    /* padding-top: 12px;
-    padding-bottom: 12px; */
-
-    transition: background 0.4s ease;
+  color: white;
+  font-family: $main-font;
 }
 
-@media screen and (max-width: $max-width) {
-    .sidebar a {
-        font-size: 1.3em;
-        height: 100%;
-    }
+svg {
+  width: 100%;
+  height: 100%;
+
+  padding: 10px;
+  margin: 4px;
+
+  border-radius: $main-border-radius;
+  
+  transition: background 0.2s ease;
 }
 
-.sidebar a:hover {
-    background: $main-color-hover;
-}
-
-.sidebar a .link-icon {
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 25px;
-}
-
-.sidebar a .link-text {
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 25px;
+svg:hover {
+  background: $main-background-color-dark;
 }
 
 .sidebar hr {
-    width: 100%;
-    border: none;
-    height: 2px;
-    background-color: $main-color-hover;
-    padding: 0;
-    margin: 0;
+  width: 100%;
+  background-image: none;
+  background-color: $main-background-color;
+  border: none;
+  height: 1px;
+  padding: 0;
+  margin: 0;
 }
 
-.sidebar .active {
-    background: $main-color-active;
+.active {
+  background: $main-color-active;
 }
 
-.sidebar .active:hover {
-    background: $main-color-active-hover;
+.active:hover {
+  background: $main-color-active-hover;
 }
 
-.sidebar .user {
-    font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    cursor: default;
-    padding: 25px;
-}
-
-.sidebar .user .full-name {
-    font-size: 1.3em;
-    height: 25px;
-}
-
-.sidebar .user .email {
-    font-size: 0.75em;
-    height: 15px;
-}
-
-.sidebar .user .logout {
-    font-size: 0.75em;
-    cursor: pointer;
-    padding-top: 20px;
-}
-
-.sidebar .debug {
-    font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 25px;
-    font-size: 1.3em;
-
-    background-color: red;
-    text-align: center;
+.logout:hover {
+  background: $main-red;
 }

@@ -1,5 +1,5 @@
 <script setup>
-import SettingsSidebar from "@/components/settings/SettingsSidebar.vue"
+import SettingsControls from "@/components/settings/SettingsControls.vue"
 import SettingsUsers from "@/components/settings/SettingsUsers.vue"
 </script>
 
@@ -7,8 +7,8 @@ import SettingsUsers from "@/components/settings/SettingsUsers.vue"
   <div class="views-scope">
     <div class="views-content">
       <div id="grid">
-        <div id="sidebar">
-          <SettingsSidebar></SettingsSidebar>
+        <div id="controls">
+          <SettingsControls></SettingsControls>
         </div>
         <div id="display">
           <SettingsUsers></SettingsUsers>
@@ -23,23 +23,15 @@ import SettingsUsers from "@/components/settings/SettingsUsers.vue"
 @import '@/scss/views.scss';
 @import '@/scss/grid/gridBase.scss';
 
-.views-scope {
-  padding: 0;
-}
-
-.views-content {
-  height: 100%;
-  padding: 0;
-}
-
 #grid {
-  grid-template-rows: auto;
-  grid-template-columns: 250px auto;
-  grid-template-areas: 'sidebar display';
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto;
+  grid-template-areas: 'controls'
+    'display';
 }
 
-#sidebar {
-  grid-area: sidebar;
+#controls {
+  grid-area: controls;
 }
 
 #display {

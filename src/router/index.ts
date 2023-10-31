@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, createWebHashHistory } from "vue-router
 
 import Redirect from "@/components/main/Redirect.vue"
 import RedirectSettings from "@/components/main/RedirectSettings.vue"
+import RedirectAccount from "@/components/main/RedirectAccount.vue"
 import LoginView from "@/views/LoginView.vue"
 import DashboardView from "@/views/dashboard/DashboardView.vue"
 import ItemsBoughtView from "@/views/items/bought/ItemsBoughtView.vue"
@@ -12,7 +13,9 @@ import SettingsHostView from "@/views/settings/SettingsHostView.vue"
 import SettingsLogsView from "@/views/settings/SettingsLogsView.vue"
 import SettingsUsersView from "@/views/settings/SettingsUsersView.vue"
 import SettingsApiKeysView from "@/views/settings/SettingsApiKeysView.vue"
-import AccountView from "@/views/account/AccountView.vue"
+import AccountUpdateView from "@/views/account/AccountUpdateView.vue"
+import AccountPersonalAccessTokenView from "@/views/account/AccountPersonalAccessTokenView.vue"
+
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,7 +63,17 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       // component: () => import("@/views/account/AccountView.vue"),
-      component: AccountView
+      component: RedirectAccount
+    },
+    {
+      path: "/account/me",
+      name: "AccountUpdate",
+      component: AccountUpdateView
+    },
+    {
+      path: "/account/pat",
+      name: "AccountPersonalAccessToken",
+      component: AccountPersonalAccessTokenView
     },
     {
       path: "/settings",

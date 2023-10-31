@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue"
 
-const props = defineProps(["selection", "options"])
+const props = defineProps(["selection", "options", "text"])
 const emit = defineEmits(["update:selection"])
 
 function onChange(event) {
@@ -12,8 +12,9 @@ function onChange(event) {
 <template>
   <div class="box">
     <select v-model="props.selection" @change="onChange">
+      <option selected disabled value="">{{ text }}</option>
       <option v-for="option in props.options" :value="option.value">
-        {{ option.text }}
+        {{ props.text }} {{ option.text == '' ? '-': option.text }}
       </option>
     </select>
   </div>

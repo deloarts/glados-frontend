@@ -1,60 +1,26 @@
 <script setup>
-import { ref } from "vue"
-import { usersRequest } from "@/requests/users"
-import { useNotificationStore } from "@/stores/notification.js"
-
-import Toggle from "@vueform/toggle"
-import ButtonNewPersonalAccessToken from "@/components/elements/ButtonNewPersonalAccessToken.vue"
-
-// Stores
-const notificationStore = useNotificationStore()
-
-let personalAccessToken = ref("")
-
-function newToken() {
-  usersRequest.putUsersMePAT().then(response => {
-    if (response.status == 200) {
-      notificationStore.info = `Created new token.`
-      personalAccessToken.value = response.data
-    } else {
-      notificationStore.warning = response.data.detail
-    }
-  })
-}
+import AccountPersonalAccessTokenForm from "@/components/account/AccountPersonalAccessTokenForm.vue"
 </script>
 
 <template>
-  <div class="form-base-scope">
-    <div class="form-base-container">
-      <div id="grid">
-        <div id="token" class="grid-item-center">
-          <input class="form-base-text-input" v-model="personalAccessToken" type="text" placeholder="Secret" readonly>
-        </div>
-        <div id="btn">
-          <ButtonNewPersonalAccessToken v-on:click="newToken" text="New Token"></ButtonNewPersonalAccessToken>
-        </div>
-      </div>
+  <div class="scope">
+    <div class="content">
+      <h1>Personal Access Token</h1>
+      <AccountPersonalAccessTokenForm></AccountPersonalAccessTokenForm>
     </div>
   </div>
 </template>
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
-@import '@/scss/form/formBase.scss';
-@import '@/scss/grid/gridBase.scss';
 
-#grid {
-    grid-template-rows: 40px auto;
-    grid-template-columns: auto;
-    grid-template-areas: "token"
-        "btn"
+.scope {
+  width: 100%;
+  height: 100%;
 }
 
-#btn {
-    grid-area: btn;
-}
-
-#token {
-    grid-area: token;
+h1 {
+  padding-left: 10px;
+  padding-top: 10px;
 }
 </style>

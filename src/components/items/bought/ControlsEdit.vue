@@ -41,59 +41,15 @@ function onAbort() {
 </script>
 
 <template>
-  <div class="controls-base-scope">
-    <div class="controls-base-container">
-      <div id="grid">
-        <div id="header" class="grid-item-center">
-          Edit Item #{{ route.params.id }}
-        </div>
-        <div id="placeholder-1" class="grid-item-center">
-        </div>
-        <div id="placeholder-2" class="grid-item-center">
-        </div>
-        <div id="btn-1" class="grid-item-center">
-          <ButtonItemCreate text="Update" v-on:click="onUpdate" />
-        </div>
-        <div id="btn-2" class="grid-item-center">
-          <ButtonAbort text="Abort" v-on:click="onAbort" />
-        </div>
+    <div class="controls-base-scope">
+      <div id="item-controls" class="controls-base-container">
+        <ButtonItemCreate class="controls-base-element" text="Create" v-on:click="onUpdate"></ButtonItemCreate>
+        <ButtonAbort class="controls-base-element" text="Cancel" v-on:click="onAbort"></ButtonAbort>
       </div>
     </div>
-  </div>
 </template>
 
 <style scoped lang='scss'>
 @import '@/scss/variables.scss';
 @import '@/scss/controls/controlsBase.scss';
-@import '@/scss/grid/gridBase.scss';
-
-#grid {
-    grid-gap: 5px;
-    grid-template-rows: 35px 35px 35px;
-    grid-template-columns: 135px 135px auto;
-    grid-template-areas: "header header header"
-        "placeholder-1 placeholder-1 placeholder-2"
-        "btn-1 btn-2 placeholder-2"
-}
-
-#header {
-    grid-area: header;
-    font-size: 1.5em;
-}
-
-#placeholder-1 {
-    grid-area: placeholder-1;
-}
-
-#placeholder-2 {
-    grid-area: placeholder-2;
-}
-
-#btn-1 {
-    grid-area: btn-1;
-}
-
-#btn-2 {
-    grid-area: btn-2;
-}
 </style>

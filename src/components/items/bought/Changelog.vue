@@ -49,15 +49,21 @@ watch(() => props.selectedItemIds, (newID, oldID) => {
 }
 
 .container {
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  // padding-top: 10px;
+  // padding-left: 10px;
+  // padding-right: 10px;
+  // padding-bottom: 10px;
 
-  border-width: 1px;
-  border-style: solid;
-  border-color: $main-color;
-  border-radius: 5px;
+  
+  padding: 4px;
+  margin: 4px;
+
+  background-color: $main-background-color-dark;
+
+  // border-width: $main-border-width;
+  // border-style: $main-border-style;
+  // border-color: $main-border-color;
+  border-radius: $main-border-radius;
 
   height: 178px;
   overflow: auto;

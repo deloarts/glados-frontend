@@ -51,7 +51,7 @@ onUnmounted(() => {
 <template>
   <div class="scope" v-if="props.show">
     <div class="coat" v-bind:class="{ 'coat-bg': !props.atMouse }"></div>
-    <div class="wrapper grid" v-bind:class="{ 'center': !props.atMouse }" :style="{ 'left': x, 'top': y }">
+    <div id="grid" class="wrapper" v-bind:class="{ 'center': !props.atMouse }" :style="{ 'left': x, 'top': y }">
       <div id="text" class="text"><span>{{ props.text }}</span></div>
       <IconQuestion id="icon" class="icon" />
       <ButtonCheckDanger id="btnYes" v-on:click="props.onYes()" text="Yes"/>
@@ -103,7 +103,10 @@ onUnmounted(() => {
   transform: translate(-50%, -50%);
 }
 
-.grid {
+#grid {
+  width: auto;
+  height: auto;
+
   grid-template-rows: auto 30px;
   grid-template-columns: 40px auto 90px 90px;
   grid-template-areas: 'icon text text text'
@@ -138,7 +141,8 @@ onUnmounted(() => {
 }
 
 .icon {
-  width: 100%;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;

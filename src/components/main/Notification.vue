@@ -81,11 +81,10 @@ watch(warning, () => {
   z-index: 9999;
 
   position: fixed;
-  right: 20px;
-  top: 20px;
+  right: 10px;
+  top: 60px;
   width: 350px;
   height: 70px;
-
 
   font-family: $main-font;
   font-size: $main-font-size;
@@ -138,7 +137,7 @@ watch(warning, () => {
 #grid {
   // grid-gap: 5px;
   grid-template-rows: 70px;
-  grid-template-columns: 80px auto;
+  grid-template-columns: 60px auto;
   grid-template-areas: 'icon text';
 }
 
@@ -157,6 +156,7 @@ watch(warning, () => {
 }
 
 svg {
+  padding-left: 10px;
   width: 30px;
   height: 30px;
 }

@@ -1,6 +1,6 @@
 <script setup>
-import SettingsControls from "@/components/settings/SettingsControls.vue"
-import SettingsLogs from "@/components/settings/SettingsLogs.vue"
+import AccountControls from "@/components/account/AccountControls.vue"
+import AccountUpdate from "@/components/account/AccountUpdate.vue"
 </script>
 
 <template>
@@ -8,10 +8,10 @@ import SettingsLogs from "@/components/settings/SettingsLogs.vue"
     <div class="views-content">
       <div id="grid">
         <div id="controls">
-          <SettingsControls></SettingsControls>
+          <AccountControls></AccountControls>
         </div>
         <div id="display">
-          <SettingsLogs></SettingsLogs>
+          <AccountUpdate></AccountUpdate>
         </div>
       </div>
     </div>

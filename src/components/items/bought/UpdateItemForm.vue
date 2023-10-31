@@ -110,14 +110,7 @@ watch(pickedDesiredDate, () => {
 @import '@/scss/form/formBase.scss';
 @import '@/scss/grid/gridBase.scss';
 
-
-// .container {
-//   padding-top: 25px;
-//   padding-bottom: 25px;
-// }
-
 #grid {
-  // grid-gap: 10px;
   grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
   grid-template-columns: 50px 200px 150px 450px;
   grid-template-areas: "project project project note-general"

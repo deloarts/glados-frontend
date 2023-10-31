@@ -730,11 +730,12 @@ watch(statusStore.$state, () => {
 @import '@/scss/variables.scss';
 
 .scope {
-  width: 100%;
   height: 100%;
+  width: calc(100% - 10px);
+  padding-left: 4px;
+  padding-right: 4px;
 
   color: black;
-  background-color: white;
 
   border-radius: 5px;
 }
@@ -744,17 +745,10 @@ watch(statusStore.$state, () => {
   overflow-y: auto;
   height: 100%;
 
-  border-radius: 5px;
-
   position: relative;
-  // white-space: nowrap;
 
-  background-color: $main-background-color;
-
-  border-width: 1px;
-  border-style: solid;
-  border-color: $main-color;
-  border-radius: 5px;
+  background-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
 }
 
 .bell-icon {
@@ -775,8 +769,6 @@ table {
 
 th {
   z-index: 10;
-  // padding: 8px;
-  // margin: 8px;
   font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px; //0.9em;
 }

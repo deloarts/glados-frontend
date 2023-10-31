@@ -19,6 +19,7 @@
     "moment": "^2.29.4",
     "pinia": "^2.1.7",
     "tsparticles": "^2.12.0",
+    "typed.js": "^2.0.16",
     "typeface-lobster": "^1.1.13",
     "typeface-play": "^1.1.13",
     "vue": "^3.3.5",

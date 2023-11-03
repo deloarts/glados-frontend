@@ -1,19 +1,19 @@
 <script setup>
-import { ref, onMounted } from "vue"
-import { useRoute } from "vue-router"
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
-import router from "@/router/index"
-import { boughtItemsRequest } from "@/requests/items"
-import { useNotificationStore } from "@/stores/notification.js"
+import router from "@/router/index";
+import { boughtItemsRequest } from "@/requests/items";
+import { useNotificationStore } from "@/stores/notification.js";
 
-import ControlsEdit from "@/components/items/bought/ControlsEdit.vue"
-import UpdateItemForm from "@/components/items/bought/UpdateItemForm.vue"
+import ControlsEdit from "@/components/items/bought/ControlsEdit.vue";
+import UpdateItemForm from "@/components/items/bought/UpdateItemForm.vue";
 
 // Router
-const route = useRoute()
+const route = useRoute();
 
 // Stores
-const notificationStore = useNotificationStore()
+const notificationStore = useNotificationStore();
 
 // Form stuff
 const formData = ref({
@@ -29,24 +29,28 @@ const formData = ref({
   manufacturer: null,
   note_general: null,
   note_supplier: null,
-  desired_delivery_date: null
-})
+  desired_delivery_date: null,
+});
 
 onMounted(() => {
-  const itemId = route.params.id
-  boughtItemsRequest.getItemsId(itemId).then(response => {
-    if (response.status === 200) {
-      formData.value = response.data
-    }
-    else {
-      notificationStore.warning = `Could not fetch an item with the ID ${itemId}.`
-      setTimeout(function () { router.push({ name: "BoughtItems" }) }, 4000)
-    }
-  }).catch(error => {
-    console.error(error)
-    notificationStore.warning = error
-  })
-})
+  const itemId = route.params.id;
+  boughtItemsRequest
+    .getItemsId(itemId)
+    .then((response) => {
+      if (response.status === 200) {
+        formData.value = response.data;
+      } else {
+        notificationStore.warning = `Could not fetch an item with the ID ${itemId}.`;
+        setTimeout(function () {
+          router.push({ name: "BoughtItems" });
+        }, 4000);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      notificationStore.warning = error;
+    });
+});
 </script>
 
 <template>
@@ -64,16 +68,17 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/views.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/views.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
-  grid-template-areas: "controls"
-    "data"
+  grid-template-areas:
+    "controls"
+    "data";
 }
 
 #controls {

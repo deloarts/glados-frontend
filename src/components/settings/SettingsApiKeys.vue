@@ -1,17 +1,20 @@
 <script setup>
-import { ref, watch } from "vue"
+import { ref, watch } from "vue";
 
-const selectedKeyID = ref(0)
-const mode = ref("create")
+const selectedKeyID = ref(0);
+const mode = ref("create");
 
 function onSelect(id) {
-  selectedKeyID.value = id
+  selectedKeyID.value = id;
 }
 
 watch(selectedKeyID, () => {
-  if (selectedKeyID.value == 0) { mode.value = "create" }
-  else { mode.value = "update" }
-})
+  if (selectedKeyID.value == 0) {
+    mode.value = "create";
+  } else {
+    mode.value = "update";
+  }
+});
 </script>
 
 <template>
@@ -20,7 +23,7 @@ watch(selectedKeyID, () => {
       <h1>Registered API Keys</h1>
       <span class="gray">Coming soon...</span>
     </div>
-    <hr>
+    <hr />
     <div class="content" v-if="mode == 'create'">
       <h1>Create Key</h1>
       <span class="gray">Coming soon...</span>
@@ -32,8 +35,8 @@ watch(selectedKeyID, () => {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .scope {
   width: 100%;

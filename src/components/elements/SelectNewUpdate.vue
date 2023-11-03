@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from "vue"
+import { ref } from "vue";
 
-const props = defineProps(["selection", "options"])
-const emit = defineEmits(["update:selection"])
+const props = defineProps(["selection", "options"]);
+const emit = defineEmits(["update:selection"]);
 
 function onChange(event) {
-  emit("update:selection", event.target.value)
+  emit("update:selection", event.target.value);
 }
 </script>
 
@@ -19,6 +19,6 @@ function onChange(event) {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/select/selectForm.scss';
+<style scoped lang="scss">
+@import "@/scss/select/selectForm.scss";
 </style>

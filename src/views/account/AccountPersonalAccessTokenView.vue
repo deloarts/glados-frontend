@@ -1,6 +1,6 @@
 <script setup>
-import AccountControls from "@/components/account/AccountControls.vue"
-import AccountPersonalAccessToken from "@/components/account/AccountPersonalAccessToken.vue"
+import AccountControls from "@/components/account/AccountControls.vue";
+import AccountPersonalAccessToken from "@/components/account/AccountPersonalAccessToken.vue";
 </script>
 
 <template>
@@ -18,16 +18,17 @@ import AccountPersonalAccessToken from "@/components/account/AccountPersonalAcce
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/views.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/views.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
-  grid-template-areas: 'controls'
-    'display';
+  grid-template-areas:
+    "controls"
+    "display";
 }
 
 #controls {

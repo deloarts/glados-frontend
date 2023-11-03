@@ -5,10 +5,8 @@ export default {
   name: "RedirectSettings",
   created() {
     router.push({ name: "SettingsHost" });
-  }
-}
+  },
+};
 </script>
 
-<template>
-
-</template>
+<template></template>

@@ -1,40 +1,40 @@
 <script setup>
-import { ref, computed, watch } from "vue"
-import Typed from "typed.js"
+import { ref, computed, watch } from "vue";
+import Typed from "typed.js";
 
-import config from "@/config"
-import { useUserStore } from "@/stores/user.js"
+import config from "@/config";
+import { useUserStore } from "@/stores/user.js";
 // Store
-const userStore = useUserStore()
-const full_name = computed(() => userStore.full_name)
-const email = computed(() => userStore.email)
+const userStore = useUserStore();
+const full_name = computed(() => userStore.full_name);
+const email = computed(() => userStore.email);
 
 function typeFullName() {
   new Typed(".full-name", {
     strings: [full_name.value],
     typeSpeed: 4,
     showCursor: false,
-    onComplete: () => { typeMail() }
-  })
+    onComplete: () => {
+      typeMail();
+    },
+  });
 }
 
 function typeMail() {
   new Typed(".email", {
     strings: [email.value],
     typeSpeed: 3,
-    showCursor: false
-  })
+    showCursor: false,
+  });
 }
 
-watch(full_name, () => typeFullName())
+watch(full_name, () => typeFullName());
 </script>
 
 <template>
   <div class="header">
     <div class="row">
-      <div class="cell">
-        Glados
-      </div>
+      <div class="cell">Glados</div>
       <div class="cell">
         <span class="dev" v-if="config.debug">DEBUG MODE</span>
       </div>
@@ -48,12 +48,12 @@ watch(full_name, () => typeFullName())
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .header {
   display: table;
-  table-layout:fixed;
+  table-layout: fixed;
 
   width: 100%;
   height: 50px;

@@ -1,94 +1,97 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from "vue"
+import { ref, watch, onMounted, onUnmounted } from "vue";
 
-import { boughtItemsRequest } from "@/requests/items"
-import { useNotificationStore } from "@/stores/notification.js"
+import { boughtItemsRequest } from "@/requests/items";
+import { useNotificationStore } from "@/stores/notification.js";
 
-import ButtonExcel from "@/components/elements/ButtonExcel.vue"
-import ButtonAbort from "@/components/elements/ButtonAbort.vue"
-import Spinner from "@/components/spinner/LoadingSpinner.vue"
-import DropZone from "@/components/elements/DropZone.vue"
-import useFileList from "@/compositions/file-list"
+import ButtonExcel from "@/components/elements/ButtonExcel.vue";
+import ButtonAbort from "@/components/elements/ButtonAbort.vue";
+import Spinner from "@/components/spinner/LoadingSpinner.vue";
+import DropZone from "@/components/elements/DropZone.vue";
+import useFileList from "@/compositions/file-list";
 
 // Props & Emits
-const props = defineProps(["showUploader", "onSuccess"])
-const emit = defineEmits(["update:showUploader"])
+const props = defineProps(["showUploader", "onSuccess"]);
+const emit = defineEmits(["update:showUploader"]);
 
 // Stores
-const notificationStore = useNotificationStore()
+const notificationStore = useNotificationStore();
 
 // Files
-const { files, addFiles, removeFile } = useFileList()
+const { files, addFiles, removeFile } = useFileList();
 
 // Handler
-let uploading = ref(false)
-let warningsList = ref([])
+let uploading = ref(false);
+let warningsList = ref([]);
 
 function onInputChange(e) {
-  addFiles(e.target.files)
-  e.target.value = null // reset so that selecting the same file again will still cause it to fire this change
+  addFiles(e.target.files);
+  e.target.value = null; // reset so that selecting the same file again will still cause it to fire this change
 }
 
 function onAbort() {
-  uploading.value = false
-  warningsList.value = []
-  emit("update:showUploader", false)
+  uploading.value = false;
+  warningsList.value = [];
+  emit("update:showUploader", false);
 }
 
 function onTemplate() {
-  boughtItemsRequest.getItemsExcelTemplate().then(response => {
+  boughtItemsRequest.getItemsExcelTemplate().then((response) => {
     if (response.status == 200) {
-      let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      let url = window.URL.createObjectURL(blob)
+      let blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      let url = window.URL.createObjectURL(blob);
       window.open(url);
-      emit("update:showUploader", false)
+      emit("update:showUploader", false);
     } else {
-      notificationStore.warning = "Could not download template file."
+      notificationStore.warning = "Could not download template file.";
     }
-  })
+  });
 }
 
 function uploadFile() {
-  uploading.value = true
+  uploading.value = true;
 
-  let formData = new FormData()
-  formData.append("file", files.value[0].file)
+  let formData = new FormData();
+  formData.append("file", files.value[0].file);
 
-  boughtItemsRequest.postItemsExcel(formData).then(response => {
-    uploading.value = false
-    if (response.status == 200) {
-      notificationStore.info = "EXCEL import successful."
-      props.onSuccess()
-      emit("update:showUploader", false)
-    }
-    else if (response.status == 422) {
-      notificationStore.warning = "EXCEL file content is incomplete."
-      warningsList.value = response.data.detail
-    }
-    else {
-      notificationStore.warning = response.data.detail
-      emit("update:showUploader", false)
-    }
-  }).catch(error => {
-    notificationStore.warning = "Could not process file."
-    emit("update:showUploader", false)
-  })
+  boughtItemsRequest
+    .postItemsExcel(formData)
+    .then((response) => {
+      uploading.value = false;
+      if (response.status == 200) {
+        notificationStore.info = "EXCEL import successful.";
+        props.onSuccess();
+        emit("update:showUploader", false);
+      } else if (response.status == 422) {
+        notificationStore.warning = "EXCEL file content is incomplete.";
+        warningsList.value = response.data.detail;
+      } else {
+        notificationStore.warning = response.data.detail;
+        emit("update:showUploader", false);
+      }
+    })
+    .catch((error) => {
+      notificationStore.warning = "Could not process file.";
+      emit("update:showUploader", false);
+    });
 }
 
 function textErrorInput(text) {
   if (text == null) {
-    return "an empty cell"
+    return "an empty cell";
   } else {
-    return text
+    return text;
   }
 }
 
 watch(files, () => {
   if (files.value.length > 0) {
-    uploadFile()
-    files.value = []
+    uploadFile();
+    files.value = [];
   }
-})
+});
 </script>
 
 <template>
@@ -96,7 +99,11 @@ watch(files, () => {
     <div class="coat" v-on:click="onAbort"></div>
     <div class="center">
       <div v-if="warningsList.length == 0" class="dnd">
-        <DropZone class="drop-area" @files-dropped="addFiles" #default="{ dropZoneActive }">
+        <DropZone
+          class="drop-area"
+          @files-dropped="addFiles"
+          #default="{ dropZoneActive }"
+        >
           <label for="file-input">
             <div v-if="uploading">
               <Spinner class="spinner"></Spinner>
@@ -107,38 +114,62 @@ watch(files, () => {
             <div v-else>
               <span>Drag Your Files Here</span>
             </div>
-            <input type="file" id="file-input" :accept="'.xlsx'" multiple @change="onInputChange" />
+            <input
+              type="file"
+              id="file-input"
+              :accept="'.xlsx'"
+              multiple
+              @change="onInputChange"
+            />
           </label>
         </DropZone>
         <div>
-          <ButtonAbort class="buttonAbort" text="Abort" v-on:click="onAbort"></ButtonAbort>
-          <ButtonExcel class="buttonTemplate" text="Get Template" v-on:click="onTemplate"></ButtonExcel>
+          <ButtonAbort
+            class="buttonAbort"
+            text="Abort"
+            v-on:click="onAbort"
+          ></ButtonAbort>
+          <ButtonExcel
+            class="buttonTemplate"
+            text="Get Template"
+            v-on:click="onTemplate"
+          ></ButtonExcel>
         </div>
       </div>
       <div v-else class="warnings">
         <h1>Import Validation Errors</h1>
         <div class="warningsWrapper">
           <ol>
-            <li class="warningsItem" v-for="(warning, i) in warningsList" :key="i">
+            <li
+              class="warningsItem"
+              v-for="(warning, i) in warningsList"
+              :key="i"
+            >
               <span class="bold bigger">Error in row #{{ warning.row }}:</span>
               <ul>
                 <li v-for="(error, j) in warningsList[i].errors" :key="j">
-                  <span class="bold">{{ error.loc.join(", ") }}</span>: {{ error.msg }}, but received <em>{{ textErrorInput(error.input) }}</em>
+                  <span class="bold">{{ error.loc.join(", ") }}</span
+                  >: {{ error.msg }}, but received
+                  <em>{{ textErrorInput(error.input) }}</em>
                 </li>
               </ul>
             </li>
           </ol>
         </div>
         <div>
-          <ButtonAbort class="buttonAbort" text="Close" v-on:click="onAbort"></ButtonAbort>
+          <ButtonAbort
+            class="buttonAbort"
+            text="Close"
+            v-on:click="onAbort"
+          ></ButtonAbort>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .scope {
   color: white;
@@ -165,7 +196,7 @@ watch(files, () => {
   width: auto;
   height: auto;
   transform: translate(-50%, -50%);
-  
+
   padding: $main-padding;
 
   background: $main-background-color;
@@ -201,7 +232,7 @@ watch(files, () => {
   padding-top: 70px;
 }
 
-.drop-area .spinner{
+.drop-area .spinner {
   position: absolute;
   top: 20px;
   left: 190px;
@@ -252,7 +283,7 @@ input {
 }
 
 h1 {
-  font-family: 'Play', 'Segoe UI', 'Arial';
+  font-family: "Play", "Segoe UI", "Arial";
   font-size: 1.5em;
   font-weight: thin;
 }

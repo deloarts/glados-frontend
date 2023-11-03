@@ -1,65 +1,78 @@
 <script setup>
-import { ref, watch } from "vue"
-import moment from "moment"
+import { ref, watch } from "vue";
+import moment from "moment";
 
-import { useUnitsStore } from "@/stores/units.js"
+import { useUnitsStore } from "@/stores/units.js";
 
-import SelectNewUpdate from "@/components/elements/SelectNewUpdate.vue"
-import Toggle from "@vueform/toggle"
-import Datepicker from "@vuepic/vue-datepicker"
-import '@vuepic/vue-datepicker/dist/main.css'
-
+import SelectNewUpdate from "@/components/elements/SelectNewUpdate.vue";
+import Toggle from "@vueform/toggle";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 // Props & Emits
-const props = defineProps(["formData"])
-const emit = defineEmits(["update:formData"])
+const props = defineProps(["formData"]);
+const emit = defineEmits(["update:formData"]);
 
 // Stores
-const unitStore = useUnitsStore()
+const unitStore = useUnitsStore();
 
 // Dates
-const pickedDesiredDate = ref()
+const pickedDesiredDate = ref();
 const formatDesiredDate = (pickedDesiredDate) => {
-  const day = pickedDesiredDate.getDate()
-  const month = pickedDesiredDate.getMonth() + 1
-  const year = pickedDesiredDate.getFullYear()
-  return `${day}.${month}.${year}`
-}
+  const day = pickedDesiredDate.getDate();
+  const month = pickedDesiredDate.getMonth() + 1;
+  const year = pickedDesiredDate.getFullYear();
+  return `${day}.${month}.${year}`;
+};
 
 // Form stuff
-const name = ref("")
-let highPriority = false
+const name = ref("");
+let highPriority = false;
 
 function buildPartnumber() {
-  const partnumber = name.value + " - " + props.formData.definition + " - " + props.formData.manufacturer
-  let data = props.formData
-  data["partnumber"] = partnumber
-  emit("update:formData", data)
+  const partnumber =
+    name.value +
+    " - " +
+    props.formData.definition +
+    " - " +
+    props.formData.manufacturer;
+  let data = props.formData;
+  data["partnumber"] = partnumber;
+  emit("update:formData", data);
 }
 
-watch(props.formData, () => {
-  let data = props.formData
-  if (data.desired_delivery_date != null && data.desired_delivery_date != undefined) {
-    const date = Date.parse(String(data.desired_delivery_date))
-    pickedDesiredDate.value = new Date(date)
-  }
-  buildPartnumber();
-  emit("update:formData", data)
-}, { deep: true })
+watch(
+  props.formData,
+  () => {
+    let data = props.formData;
+    if (
+      data.desired_delivery_date != null &&
+      data.desired_delivery_date != undefined
+    ) {
+      const date = Date.parse(String(data.desired_delivery_date));
+      pickedDesiredDate.value = new Date(date);
+    }
+    buildPartnumber();
+    emit("update:formData", data);
+  },
+  { deep: true },
+);
 
 watch(name, () => {
-  buildPartnumber()
-})
+  buildPartnumber();
+});
 
 watch(pickedDesiredDate, () => {
-  let data = props.formData
+  let data = props.formData;
   if (pickedDesiredDate.value instanceof Date) {
-    data.desired_delivery_date = moment(pickedDesiredDate.value).format("YYYY-MM-DD")
+    data.desired_delivery_date = moment(pickedDesiredDate.value).format(
+      "YYYY-MM-DD",
+    );
   } else {
-    data.desired_delivery_date = null
+    data.desired_delivery_date = null;
   }
-  emit("update:formData", data)
-})
+  emit("update:formData", data);
+});
 </script>
 
 <template>
@@ -67,66 +80,108 @@ watch(pickedDesiredDate, () => {
     <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <input class="form-base-text-input" v-model="props.formData.project" placeholder="Project *">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.project"
+            placeholder="Project *"
+          />
         </div>
         <div id="machine" class="grid-item-center">
-          <input class="form-base-text-input" v-model="props.formData.machine" placeholder="Machine">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.machine"
+            placeholder="Machine"
+          />
         </div>
         <div id="quantity" class="grid-item-center">
-          <input class="form-base-text-input" v-model="props.formData.quantity" type="number" placeholder="Quantity *">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.quantity"
+            type="number"
+            placeholder="Quantity *"
+          />
         </div>
         <div id="unit" class="grid-item-center">
-          <SelectNewUpdate v-model:selection="props.formData.unit" :options="unitStore.boughtItemUnits.values"/>
+          <SelectNewUpdate
+            v-model:selection="props.formData.unit"
+            :options="unitStore.boughtItemUnits.values"
+          />
         </div>
         <div id="name" class="grid-item-center">
-          <input class="form-base-text-input" v-model="name" placeholder="Name *">
+          <input
+            class="form-base-text-input"
+            v-model="name"
+            placeholder="Name *"
+          />
         </div>
         <div id="definition" class="grid-item-center">
-          <input class="form-base-text-input" v-model="props.formData.definition" placeholder="Definition *">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.definition"
+            placeholder="Definition *"
+          />
         </div>
         <div id="manufacturer" class="grid-item-center">
-          <input class="form-base-text-input" v-model="props.formData.manufacturer" placeholder="Manufacturer *">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.manufacturer"
+            placeholder="Manufacturer *"
+          />
         </div>
         <div id="supplier" class="grid-item-center">
-          <input class="form-base-text-input" v-model="props.formData.supplier" placeholder="Supplier">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.supplier"
+            placeholder="Supplier"
+          />
         </div>
         <div id="desired" class="grid-item-center">
-          <Datepicker class="form-base-date-input" v-model="pickedDesiredDate" :format="formatDesiredDate" :clearable="true"
-            placeholder="Desired Delivery Date" dark />
+          <Datepicker
+            class="form-base-date-input"
+            v-model="pickedDesiredDate"
+            :format="formatDesiredDate"
+            :clearable="true"
+            placeholder="Desired Delivery Date"
+            dark
+          />
         </div>
         <div id="note-general" class="grid-item-center">
-          <textarea class="form-base-text-input-multiline" v-model="props.formData.note_general" placeholder="Note"></textarea>
+          <textarea
+            class="form-base-text-input-multiline"
+            v-model="props.formData.note_general"
+            placeholder="Note"
+          ></textarea>
         </div>
         <div id="note-supplier" class="grid-item-center">
-          <textarea class="form-base-text-input-multiline" v-model="props.formData.note_supplier"
-            placeholder="Note Supplier"></textarea>
+          <textarea
+            class="form-base-text-input-multiline"
+            v-model="props.formData.note_supplier"
+            placeholder="Note Supplier"
+          ></textarea>
         </div>
         <div id="notify" class="grid-item-center">
           <Toggle v-model="props.formData.notify_on_delivery"></Toggle>
         </div>
-        <div id="notify-text" class="grid-item-left">
-          Notify me on delivery
-        </div>
+        <div id="notify-text" class="grid-item-left">Notify me on delivery</div>
         <div id="priority" class="grid-item-center">
           <Toggle v-model="props.formData.high_priority"></Toggle>
         </div>
-        <div id="priority-text" class="grid-item-left">
-          High priority
-        </div>
+        <div id="priority-text" class="grid-item-left">High priority</div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/form/formBase.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/form/formBase.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
   grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
   grid-template-columns: 50px 300px 150px 550px;
-  grid-template-areas: "project project project note-general"
+  grid-template-areas:
+    "project project project note-general"
     "machine machine machine note-general"
     "quantity quantity unit note-general"
     "name name name note-general"
@@ -135,7 +190,7 @@ watch(pickedDesiredDate, () => {
     "supplier supplier supplier note-supplier"
     "desired desired desired note-supplier"
     "notify notify-text notify-text notify-text"
-    "priority priority-text priority-text priority-text"
+    "priority priority-text priority-text priority-text";
 }
 
 #notify {

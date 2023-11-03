@@ -1,20 +1,20 @@
 <script setup>
-import { ref } from "vue"
-import constants from "@/constants"
+import { ref } from "vue";
+import constants from "@/constants";
 
-const hover = ref(false)
-const text = `v${constants.version} (v${constants.serverVersion})`
+const hover = ref(false);
+const text = `v${constants.version} (v${constants.serverVersion})`;
 </script>
 
 <template>
-  <div class="footer" @mouseover="hover=true" @mouseleave="hover=false">
+  <div class="footer" @mouseover="hover = true" @mouseleave="hover = false">
     <span v-if="hover">the cake is a lie</span>
     <span v-else>{{ text }}</span>
   </div>
 </template>
 
 <style scoped lang="scss">
-@import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
 .footer {
   display: table;

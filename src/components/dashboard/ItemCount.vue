@@ -1,14 +1,14 @@
 <script setup>
-import { ref } from "vue"
-import Vue3Autocounter from "vue3-autocounter"
+import { ref } from "vue";
+import Vue3Autocounter from "vue3-autocounter";
 
 // Props & Emits
-const props = defineProps(["text", "count"])
+const props = defineProps(["text", "count"]);
 
-let start = ref(0)
+let start = ref(0);
 
 function setStart() {
-  start.value = props.count
+  start.value = props.count;
 }
 </script>
 
@@ -17,7 +17,12 @@ function setStart() {
     <div class="container">
       <div id="grid">
         <div id="count" class="grid-item-center">
-          <Vue3Autocounter :startAmount="start" :endAmount="props.count" :duration="1" @finished="setStart"></Vue3Autocounter>
+          <Vue3Autocounter
+            :startAmount="start"
+            :endAmount="props.count"
+            :duration="1"
+            @finished="setStart"
+          ></Vue3Autocounter>
         </div>
         <div id="text" class="grid-item-left">
           {{ text }}
@@ -27,11 +32,11 @@ function setStart() {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/grid/gridBase.scss";
 
-.scope  {
+.scope {
   width: 100%;
   height: 100%;
   cursor: default;

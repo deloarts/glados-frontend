@@ -1,90 +1,90 @@
-@import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
 .dropdown {
-    cursor: pointer;
+  cursor: pointer;
 
-    font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 0.9em;
+  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.9em;
 
-    width: 130px;
-    height: 32px;
+  width: 130px;
+  height: 32px;
 
-    display: inline-flex;
-    outline: none;
-    position: relative;
-    align-items: center;
+  display: inline-flex;
+  outline: none;
+  position: relative;
+  align-items: center;
 
-    color: #fff;
-    background-color: $main-background-color-dark-2;
-    border-style: $main-border-style;
-    border-width: $main-border-width;
-    border-color: $main-background-color-dark-2;
-    border-radius: $main-border-radius;
-    transition: all 0.2s ease-in;
+  color: #fff;
+  background-color: $main-background-color-dark-2;
+  border-style: $main-border-style;
+  border-width: $main-border-width;
+  border-color: $main-background-color-dark-2;
+  border-radius: $main-border-radius;
+  transition: all 0.2s ease-in;
 }
 
 .dropdown:hover {
-    background-color: $main-background-color;
-    border-color: $main-border-color;
+  background-color: $main-background-color;
+  border-color: $main-border-color;
 }
 
 .dropdown-active {
-    background-color: $main-background-color;
-    border-color: $main-border-color;
+  background-color: $main-background-color;
+  border-color: $main-border-color;
 }
 
 .inner {
-    width: 100%;
-    height: 100%;
-    padding: 0 5px;
-    display: inline-flex;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .icon {
-    cursor: pointer;
-    color: $main-color;
-    display: flex;
-    vertical-align: middle;
+  cursor: pointer;
+  color: $main-color;
+  display: flex;
+  vertical-align: middle;
 
-    margin-right: 10px;
-    width: 17px;
-    height: 17px;
+  margin-right: 10px;
+  width: 17px;
+  height: 17px;
 }
 
 .items {
-    z-index: 9999;
-    position: fixed;
-    display: inline-block;
-    padding: 0;
-    margin: 0;
+  z-index: 9999;
+  position: fixed;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
 
-    border-style: $main-border-style;
-    border-color: $main-border-color;
-    border-radius: $main-border-radius;
-    border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-border-color;
+  border-radius: $main-border-radius;
+  border-width: $main-border-width;
 
-    background-color: $main-background-color-dark;
+  background-color: $main-background-color-dark;
 
-    transform: translateY(calc(50% + 20px));
+  transform: translateY(calc(50% + 20px));
 }
 
 :deep(.drop-down-toggle-item) {
-    display: list-item;
-    list-style: none;
-    display: flex;
-    vertical-align: middle;
-    padding: 8px;
-    
-    border-radius: $main-border-radius;
+  display: list-item;
+  list-style: none;
+  display: flex;
+  vertical-align: middle;
+  padding: 8px;
 
-    transition: all 0.2s ease;
+  border-radius: $main-border-radius;
+
+  transition: all 0.2s ease;
 }
 
 :deep(.drop-down-toggle-item:hover) {
-    background-color: $main-background-color;
+  background-color: $main-background-color;
 }
 
 :deep(.drop-down-toggle-item-text) {
-    padding-left: 14px;
+  padding-left: 14px;
 }

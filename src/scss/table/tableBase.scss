@@ -1,4 +1,4 @@
-@import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
 .table-base-scope {
   width: 100%;
@@ -11,9 +11,9 @@
 
   // padding: 10px;
   margin: 4px;
-  
+
   background-color: $main-background-color-dark;
-  
+
   border-style: solid;
   border-color: $main-background-color-dark;
   border-width: 10px;
@@ -41,7 +41,7 @@ th {
   padding: 9px;
   margin: 9px;
 
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
 
   background-color: $table-head-background;
@@ -63,23 +63,23 @@ tr {
   border-radius: $main-border-radius;
 }
 
-tr:nth-child(odd)>td {
+tr:nth-child(odd) > td {
   background: $table-row-odd;
 }
 
-tr:nth-child(even)>td {
+tr:nth-child(even) > td {
   background: $table-row-even;
 }
 
-tr:hover>td {
+tr:hover > td {
   background: $table-row-hover;
 }
 
-tr.selected>td {
+tr.selected > td {
   background: $table-row-active;
 }
 
-tr.selected:hover>td {
+tr.selected:hover > td {
   background: $table-row-active-hover;
 }
 

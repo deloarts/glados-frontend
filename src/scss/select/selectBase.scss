@@ -1,7 +1,7 @@
-@import '@/scss/variables.scss';
+@import "@/scss/variables.scss";
 
 select {
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.9em;
   text-align: center;
 
@@ -19,7 +19,7 @@ select {
   appearance: button;
   outline: none;
   border-radius: 3px;
-  
+
   transition: all 0.2s ease;
 }
 

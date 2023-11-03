@@ -8,8 +8,8 @@ import { RouterView } from "vue-router";
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .display {
   width: 100%;

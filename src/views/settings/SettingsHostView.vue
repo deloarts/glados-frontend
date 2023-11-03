@@ -1,6 +1,6 @@
 <script setup>
-import SettingsControls from "@/components/settings/SettingsControls.vue"
-import SettingsHost from "@/components/settings/SettingsHost.vue"
+import SettingsControls from "@/components/settings/SettingsControls.vue";
+import SettingsHost from "@/components/settings/SettingsHost.vue";
 </script>
 
 <template>
@@ -18,16 +18,17 @@ import SettingsHost from "@/components/settings/SettingsHost.vue"
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/views.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/views.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
-  grid-template-areas: 'controls'
-    'display';
+  grid-template-areas:
+    "controls"
+    "display";
 }
 
 #controls {

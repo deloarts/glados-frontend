@@ -1,17 +1,17 @@
 import { ref } from "vue";
-import { defineStore } from "pinia"
+import { defineStore } from "pinia";
 
-export const useNotificationStore = defineStore('notification', () => {
-  const info = ref("")
-  const warning = ref("")
+export const useNotificationStore = defineStore("notification", () => {
+  const info = ref("");
+  const warning = ref("");
 
   function clearInfo() {
-    info.value = ""
+    info.value = "";
   }
 
   function clearWarning() {
-    warning.value = ""
+    warning.value = "";
   }
 
-  return { info, warning, clearInfo, clearWarning }
-})
+  return { info, warning, clearInfo, clearWarning };
+});

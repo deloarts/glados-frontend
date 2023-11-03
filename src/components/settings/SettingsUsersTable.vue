@@ -1,19 +1,21 @@
 <script setup>
-import { useUsersStore } from "@/stores/user.js"
+import { useUsersStore } from "@/stores/user.js";
 
-import IconCheckboxBlank from "@/components/icons/IconCheckboxBlank.vue"
-import IconCheckboxMarked from "@/components/icons/IconCheckboxMarked.vue"
+import IconCheckboxBlank from "@/components/icons/IconCheckboxBlank.vue";
+import IconCheckboxMarked from "@/components/icons/IconCheckboxMarked.vue";
 
 // Props & Emits
-const props = defineProps(["selectedUserID"])
-const emit = defineEmits(["update:selectedUserID"])
+const props = defineProps(["selectedUserID"]);
+const emit = defineEmits(["update:selectedUserID"]);
 
 // Store
-const usersStore = useUsersStore()
+const usersStore = useUsersStore();
 
 function onSelect(id) {
-  if (props.selectedUserID == id) { id = 0 }
-  emit("update:selectedUserID", id)
+  if (props.selectedUserID == id) {
+    id = 0;
+  }
+  emit("update:selectedUserID", id);
 }
 </script>
 
@@ -35,8 +37,12 @@ function onSelect(id) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user, index) in usersStore.users" :key="user.id" v-on:click="onSelect(user.id)"
-            v-bind:class="{ 'selected': props.selectedUserID == user.id}">
+          <tr
+            v-for="(user, index) in usersStore.users"
+            :key="user.id"
+            v-on:click="onSelect(user.id)"
+            v-bind:class="{ selected: props.selectedUserID == user.id }"
+          >
             <td id="user-id" class="sticky-col">{{ user.id }}</td>
             <td id="username" class="sticky-col">{{ user.username }}</td>
             <td id="full-name" class="sticky-col">{{ user.full_name }}</td>
@@ -65,9 +71,9 @@ function onSelect(id) {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/table/tableBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/table/tableBase.scss";
 
 #user-id {
   width: 35px;

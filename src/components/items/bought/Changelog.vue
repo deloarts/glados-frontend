@@ -1,29 +1,34 @@
 <script setup>
-import { ref, watch, onMounted } from "vue"
+import { ref, watch, onMounted } from "vue";
 
 import { boughtItemsRequest } from "@/requests/items";
 
 // Props & Emits
-const props = defineProps(["selectedItemIds"])
+const props = defineProps(["selectedItemIds"]);
 
-const changelog = ref([""])
+const changelog = ref([""]);
 
 function fetchChangelog() {
   if (props.selectedItemIds.length > 0) {
-    boughtItemsRequest.getItemsIdChangelog(props.selectedItemIds[0]).then(response => {
-      changelog.value = response.data;
-    })
+    boughtItemsRequest
+      .getItemsIdChangelog(props.selectedItemIds[0])
+      .then((response) => {
+        changelog.value = response.data;
+      });
   }
 }
 
-onMounted(() => fetchChangelog())
+onMounted(() => fetchChangelog());
 
-watch(() => props.selectedItemIds, (newID, oldID) => {
-  if (newID != oldID) {
-    changelog.value = []
-    fetchChangelog()
-  }
-})
+watch(
+  () => props.selectedItemIds,
+  (newID, oldID) => {
+    if (newID != oldID) {
+      changelog.value = [];
+      fetchChangelog();
+    }
+  },
+);
 </script>
 
 <template>
@@ -39,8 +44,8 @@ watch(() => props.selectedItemIds, (newID, oldID) => {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .scope {
   width: 100%;
@@ -54,7 +59,6 @@ watch(() => props.selectedItemIds, (newID, oldID) => {
   // padding-right: 10px;
   // padding-bottom: 10px;
 
-  
   padding: 4px;
   margin: 4px;
 
@@ -70,7 +74,7 @@ watch(() => props.selectedItemIds, (newID, oldID) => {
 }
 
 h1 {
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.25em;
   margin: 0;
   padding-top: 20px;

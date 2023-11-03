@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from "vue"
+import { ref } from "vue";
 
-import ControlsNew from "@/components/items/bought/ControlsNew.vue"
-import CreateItemForm from "@/components/items/bought/CreateItemForm.vue"
+import ControlsNew from "@/components/items/bought/ControlsNew.vue";
+import CreateItemForm from "@/components/items/bought/CreateItemForm.vue";
 
 // Form stuff
 const formData = ref({
@@ -18,8 +18,8 @@ const formData = ref({
   manufacturer: null,
   note_general: null,
   note_supplier: null,
-  desired_delivery_date: null
-})
+  desired_delivery_date: null,
+});
 </script>
 
 <template>
@@ -37,16 +37,17 @@ const formData = ref({
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/views.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/views.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
-  grid-template-areas: "controls"
-    "data"
+  grid-template-areas:
+    "controls"
+    "data";
 }
 
 #controls {

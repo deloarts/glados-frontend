@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from "vue"
+import { ref } from "vue";
 
-const props = defineProps(["selection", "options", "text"])
-const emit = defineEmits(["update:selection"])
+const props = defineProps(["selection", "options", "text"]);
+const emit = defineEmits(["update:selection"]);
 
 function onChange(event) {
-  emit("update:selection", event.target.value)
+  emit("update:selection", event.target.value);
 }
 </script>
 
@@ -14,12 +14,12 @@ function onChange(event) {
     <select v-model="props.selection" @change="onChange">
       <option selected disabled value="">{{ text }}</option>
       <option v-for="option in props.options" :value="option.value">
-        {{ props.text }} {{ option.text == '' ? '-': option.text }}
+        {{ props.text }} {{ option.text == "" ? "-" : option.text }}
       </option>
     </select>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/select/selectBase.scss';
+<style scoped lang="scss">
+@import "@/scss/select/selectBase.scss";
 </style>

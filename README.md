@@ -210,12 +210,12 @@ The main branch is protected: it's not allowed to make changes directly to it. C
 #### 3.1.3 branch naming convention
 
 1. Use grouping tokens at the beginning of your branch names, such as:
-    - feature: A new feature that will be added to the project
-    - fix: For bugfixes
-    - tests: Adding or updating tests
-    - docs: For updating the docs
-    - wip: Work in progress, won't be finished soon
-    - junk: Just for experimenting
+   - feature: A new feature that will be added to the project
+   - fix: For bugfixes
+   - tests: Adding or updating tests
+   - docs: For updating the docs
+   - wip: Work in progress, won't be finished soon
+   - junk: Just for experimenting
 2. Use slashes `/` as delimiter in branch names (`feature/docket-export`)
 3. Avoid long descriptive names, rather refer to an issue
 4. Do not use bare numbers as leading parts (`fix/108` is bad, `fix/issue108` is good)
@@ -269,8 +269,8 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
 1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
 ### 3.5 new revision checklist

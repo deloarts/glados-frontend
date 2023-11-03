@@ -1,52 +1,57 @@
 <script setup>
-import { ref, watch, computed } from "vue"
+import { ref, watch, computed } from "vue";
 
-import { useNotificationStore } from "@/stores/notification.js"
+import { useNotificationStore } from "@/stores/notification.js";
 
-import IconWarning from "@/components/icons/IconWarning.vue"
-import IconInfo from "@/components/icons/IconInfo.vue"
+import IconWarning from "@/components/icons/IconWarning.vue";
+import IconInfo from "@/components/icons/IconInfo.vue";
 
-const notificationStore = useNotificationStore()
+const notificationStore = useNotificationStore();
 
-const info = computed(() => notificationStore.info)
-const warning = computed(() => notificationStore.warning)
+const info = computed(() => notificationStore.info);
+const warning = computed(() => notificationStore.warning);
 
-const showInfo = ref(false)
-const showWarning = ref(false)
+const showInfo = ref(false);
+const showWarning = ref(false);
 
 function hideSlider() {
-  showInfo.value = false
-  showWarning.value = false
+  showInfo.value = false;
+  showWarning.value = false;
 }
 
 function clearWarning() {
-  notificationStore.clearWarning()
-  setTimeout(hideSlider.bind(this), 500)
+  notificationStore.clearWarning();
+  setTimeout(hideSlider.bind(this), 500);
 }
 
 function clearInfo() {
-  notificationStore.clearInfo()
-  setTimeout(hideSlider.bind(this), 500)
+  notificationStore.clearInfo();
+  setTimeout(hideSlider.bind(this), 500);
 }
 
 watch(info, () => {
   if (info.value != "") {
-    showInfo.value = true
-    setTimeout(clearInfo.bind(this), 5000)
+    showInfo.value = true;
+    setTimeout(clearInfo.bind(this), 5000);
   }
-})
+});
 
 watch(warning, () => {
   if (warning.value != "") {
-    showWarning.value = true
-    setTimeout(clearWarning.bind(this), 5000)
+    showWarning.value = true;
+    setTimeout(clearWarning.bind(this), 5000);
   }
-})
+});
 </script>
 
 <template>
   <div class="scope">
-    <div class="container warning" v-if="showWarning" v-on:click="clearWarning" v-bind:class="{ 'slide-in': showWarning, 'slide-out': warning == '' }">
+    <div
+      class="container warning"
+      v-if="showWarning"
+      v-on:click="clearWarning"
+      v-bind:class="{ 'slide-in': showWarning, 'slide-out': warning == '' }"
+    >
       <div id="grid">
         <div id="icon">
           <IconWarning></IconWarning>
@@ -56,7 +61,12 @@ watch(warning, () => {
         </div>
       </div>
     </div>
-    <div class="container info" v-if="showInfo" v-on:click="clearInfo" v-bind:class="{ 'slide-in': showInfo, 'slide-out': info == '' }">
+    <div
+      class="container info"
+      v-if="showInfo"
+      v-on:click="clearInfo"
+      v-bind:class="{ 'slide-in': showInfo, 'slide-out': info == '' }"
+    >
       <div id="grid">
         <div id="icon">
           <IconInfo></IconInfo>
@@ -69,9 +79,9 @@ watch(warning, () => {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/grid/gridBase.scss";
 
 .scope {
   overflow: hidden;
@@ -94,7 +104,7 @@ watch(warning, () => {
   border-style: $main-border-style;
   border-radius: $main-border-radius;
 
-  box-shadow: 
+  box-shadow:
     0 2.8px 2.2px rgba(0, 0, 0, 0.034),
     0 6.7px 5.3px rgba(0, 0, 0, 0.048),
     0 12.5px 10px rgba(0, 0, 0, 0.06),
@@ -105,7 +115,6 @@ watch(warning, () => {
   animation: fade 1s linear;
   transform: translateX(400px);
 }
-
 
 .warning {
   background: $main-background-color-dark;
@@ -124,21 +133,27 @@ watch(warning, () => {
 .slide-out {
   animation: slide-out 0.2s forwards;
 }
-    
+
 @keyframes slide-in {
-  100% { transform: translateX(0%); }
+  100% {
+    transform: translateX(0%);
+  }
 }
-    
+
 @keyframes slide-out {
-    0% { transform: translateX(0%); }
-    100% { transform: translateX(400px); }
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(400px);
+  }
 }
 
 #grid {
   // grid-gap: 5px;
   grid-template-rows: 70px;
   grid-template-columns: 60px auto;
-  grid-template-areas: 'icon text';
+  grid-template-areas: "icon text";
 }
 
 #icon {
@@ -162,13 +177,12 @@ svg {
 }
 
 @keyframes fade {
-
   0% {
-    opacity: 0
+    opacity: 0;
   }
 
   100% {
-    opacity: 1
+    opacity: 1;
   }
 }
 </style>

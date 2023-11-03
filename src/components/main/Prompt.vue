@@ -1,68 +1,78 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from "vue"
-import ButtonAbort from "@/components/elements/ButtonAbort.vue"
-import ButtonCheckDanger from "@/components/elements/ButtonCheckDanger.vue"
-import IconQuestion from "@/components/icons/IconQuestion.vue"
+import { ref, watch, onMounted, onUnmounted } from "vue";
+import ButtonAbort from "@/components/elements/ButtonAbort.vue";
+import ButtonCheckDanger from "@/components/elements/ButtonCheckDanger.vue";
+import IconQuestion from "@/components/icons/IconQuestion.vue";
 
 // Props & Emits
 interface Props {
-  show?: boolean
-  text?: string
-  onYes?: CallableFunction
-  onNo?: CallableFunction
-  atMouse?: boolean
-  yesIsDanger?: boolean
+  show?: boolean;
+  text?: string;
+  onYes?: CallableFunction;
+  onNo?: CallableFunction;
+  atMouse?: boolean;
+  yesIsDanger?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
   atMouse: false,
-  yesIsDanger: false
-})
+  yesIsDanger: false,
+});
 
-const x = ref("")
-const y = ref("")
+const x = ref("");
+const y = ref("");
 
 function eventMouseMove(event) {
   if (props.atMouse) {
-    x.value = `${event.pageX + 10}px`
-    y.value = `${event.pageY + 10}px`
+    x.value = `${event.pageX + 10}px`;
+    y.value = `${event.pageY + 10}px`;
   } else {
-    x.value = "50%"
-    y.value = "50%"
+    x.value = "50%";
+    y.value = "50%";
   }
 }
 
-watch(() => props.show, () => {
-  if (props.show) {
-    document.removeEventListener("mousemove", eventMouseMove)
-  } else {
-    document.addEventListener("mousemove", eventMouseMove)
-  }
-})
+watch(
+  () => props.show,
+  () => {
+    if (props.show) {
+      document.removeEventListener("mousemove", eventMouseMove);
+    } else {
+      document.addEventListener("mousemove", eventMouseMove);
+    }
+  },
+);
 
 onMounted(() => {
-  document.addEventListener("mousemove", eventMouseMove)
-})
+  document.addEventListener("mousemove", eventMouseMove);
+});
 
 onUnmounted(() => {
-  document.removeEventListener("mousemove", eventMouseMove)
-})
+  document.removeEventListener("mousemove", eventMouseMove);
+});
 </script>
 
 <template>
   <div class="scope" v-if="props.show">
     <div class="coat" v-bind:class="{ 'coat-bg': !props.atMouse }"></div>
-    <div id="grid" class="wrapper" v-bind:class="{ 'center': !props.atMouse }" :style="{ 'left': x, 'top': y }">
-      <div id="text" class="text"><span>{{ props.text }}</span></div>
+    <div
+      id="grid"
+      class="wrapper"
+      v-bind:class="{ center: !props.atMouse }"
+      :style="{ left: x, top: y }"
+    >
+      <div id="text" class="text">
+        <span>{{ props.text }}</span>
+      </div>
       <IconQuestion id="icon" class="icon" />
-      <ButtonCheckDanger id="btnYes" v-on:click="props.onYes()" text="Yes"/>
-      <ButtonAbort id="btnNo" v-on:click="props.onNo()" text="No"/>
+      <ButtonCheckDanger id="btnYes" v-on:click="props.onYes()" text="Yes" />
+      <ButtonAbort id="btnNo" v-on:click="props.onNo()" text="No" />
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/grid/gridBase.scss";
 
 .scope {
   color: white;
@@ -88,7 +98,7 @@ onUnmounted(() => {
   position: absolute;
   width: auto;
   height: auto;
-  box-shadow: 
+  box-shadow:
     0 2.8px 2.2px rgba(0, 0, 0, 0.034),
     0 6.7px 5.3px rgba(0, 0, 0, 0.048),
     0 12.5px 10px rgba(0, 0, 0, 0.06),
@@ -109,8 +119,9 @@ onUnmounted(() => {
 
   grid-template-rows: auto 30px;
   grid-template-columns: 40px auto 90px 90px;
-  grid-template-areas: 'icon text text text'
-  'empty empty btnYes btnNo';
+  grid-template-areas:
+    "icon text text text"
+    "empty empty btnYes btnNo";
 
   padding: $main-padding;
 
@@ -127,7 +138,7 @@ onUnmounted(() => {
 .text {
   font-family: $main-font;
   font-size: 1.2em;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;

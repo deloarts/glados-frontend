@@ -5,10 +5,8 @@ export default {
   name: "RedirectAccount",
   created() {
     router.push({ name: "AccountUpdate" });
-  }
-}
+  },
+};
 </script>
 
-<template>
-
-</template>
+<template></template>

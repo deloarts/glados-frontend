@@ -1,5 +1,5 @@
 <script setup>
-import AccountUpdateForm from "@/components/account/AccountUpdateForm.vue"
+import AccountUpdateForm from "@/components/account/AccountUpdateForm.vue";
 </script>
 
 <template>
@@ -11,8 +11,8 @@ import AccountUpdateForm from "@/components/account/AccountUpdateForm.vue"
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .scope {
   width: 100%;

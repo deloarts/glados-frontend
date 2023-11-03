@@ -30,7 +30,7 @@ export const boughtItemsFilter = {
   noteSupplier: "",
   storagePlace: "",
   takeOverId: "",
-}
+};
 
 export const boughtItemsFilterPresetAllOpen = {
   limit: "",
@@ -64,7 +64,7 @@ export const boughtItemsFilterPresetAllOpen = {
   noteSupplier: "",
   storagePlace: "",
   takeOverId: "",
-}
+};
 
 export const boughtItemsFilterPresetAllRequested = {
   limit: "",
@@ -98,7 +98,7 @@ export const boughtItemsFilterPresetAllRequested = {
   noteSupplier: "",
   storagePlace: "",
   takeOverId: "",
-}
+};
 
 export const boughtItemsFilterPresetAllOrdered = {
   limit: "",
@@ -132,7 +132,7 @@ export const boughtItemsFilterPresetAllOrdered = {
   noteSupplier: "",
   storagePlace: "",
   takeOverId: "",
-}
+};
 
 export const boughtItemsFilterPresetAllActive = {
   limit: "",
@@ -166,7 +166,7 @@ export const boughtItemsFilterPresetAllActive = {
   noteSupplier: "",
   storagePlace: "",
   takeOverId: "",
-}
+};
 
 export const boughtItemsFilterPresetAllPrioritized = {
   limit: "",
@@ -200,4 +200,4 @@ export const boughtItemsFilterPresetAllPrioritized = {
   noteSupplier: "",
   storagePlace: "",
   takeOverId: "",
-}
+};

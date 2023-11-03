@@ -28,12 +28,16 @@ import ButtonExcel from "@/components/elements/ButtonExcel.vue";
 import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue";
 import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue";
 import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue";
+import ButtonClear from "@/components/elements/ButtonClear.vue";
 import DropDownTableView from "@/components/elements/DropDownTableView.vue";
 import SelectControls from "@/components/elements/SelectControls.vue";
 
 // Props & Emits
 const props = defineProps(["selectedItemIds"]);
-const emit = defineEmits(["update:triggerGetNewData"]);
+const emit = defineEmits([
+  "update:selectedItemIds",
+  "update:triggerGetNewData",
+]);
 
 // Stores
 const controlsStore = useBoughtItemsControlsStore();
@@ -168,6 +172,10 @@ function deleteItem() {
   showDeletePrompt.value = false;
 }
 
+function onButtonClear() {
+  emit("update:selectedItemIds", []);
+}
+
 function onResize() {
   if (window.innerWidth < constants.minWidth1) {
     minWidth1.value = true;
@@ -244,6 +252,11 @@ onBeforeUnmount(() => {
         text="Delete Item"
         v-on:click="onButtonDelete"
       ></ButtonDelete>
+      <ButtonClear
+        class="controls-base-element"
+        text="Unselect"
+        v-on:click="onButtonClear"
+      ></ButtonClear>
     </div>
     <div id="filter-controls" class="controls-base-container">
       <ButtonFilterSave

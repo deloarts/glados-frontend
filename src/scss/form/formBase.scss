@@ -46,6 +46,7 @@
   border-style: $main-border-style;
   border-color: $main-background-color-dark-2;
   border-radius: $main-border-radius;
+  outline: none;
 
   transition: all 0.2s ease;
 }
@@ -77,6 +78,7 @@
   border-style: $main-border-style;
   border-color: $main-background-color-dark-2;
   border-radius: $main-border-radius;
+  outline: none;
 
   transition: all 0.2s ease;
 }
@@ -94,4 +96,5 @@
   height: 100%;
 
   padding: 0;
+  outline: none;
 }

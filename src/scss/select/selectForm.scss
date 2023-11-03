@@ -17,6 +17,7 @@ select {
   background-color: $main-background-color-dark-2;
   border: 1px solid $main-background-color-dark-2;
   border-radius: $main-border-radius;
+  outline: none;
 }
 
 select:hover {

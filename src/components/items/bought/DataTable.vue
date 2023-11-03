@@ -1082,7 +1082,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.project"
                   type="text"
-                  placeholder="Project"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateProject(item.project), pauseFetchBoughtItems(false)
@@ -1120,7 +1119,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.machine"
                   type="text"
-                  placeholder="Machine"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateMachine(item.machine), pauseFetchBoughtItems(false)
@@ -1158,7 +1156,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.quantity"
                   type="number"
-                  placeholder="Quantity"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateQuantity(item.quantity), pauseFetchBoughtItems(false)
@@ -1209,7 +1206,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.partnumber"
                   type="text"
-                  placeholder="Partnumber"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updatePartnumber(item.partnumber),
@@ -1247,7 +1243,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.definition"
                   type="text"
-                  placeholder="Definition"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateDefinition(item.definition),
@@ -1285,7 +1280,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.manufacturer"
                   type="text"
-                  placeholder="Manufacturer"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateManufacturer(item.manufacturer),
@@ -1323,7 +1317,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.supplier"
                   type="text"
-                  placeholder="Supplier"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateSupplier(item.supplier), pauseFetchBoughtItems(false)
@@ -1360,7 +1353,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.group_1"
                   type="text"
-                  placeholder="Group"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateGroup1(item.group_1), pauseFetchBoughtItems(false)
@@ -1397,7 +1389,6 @@ watch(statusStore.$state, () => {
                   class="cell-textarea-note"
                   v-model="item.note_general"
                   type="text"
-                  placeholder="Note"
                   @input="resizeTextarea($event)"
                   @focusin="pauseFetchBoughtItems(true), resizeTextarea($event)"
                   @focusout="
@@ -1436,7 +1427,6 @@ watch(statusStore.$state, () => {
                   class="cell-textarea-note"
                   v-model="item.note_supplier"
                   type="text"
-                  placeholder="Supplier Note"
                   @input="resizeTextarea($event)"
                   @focusin="pauseFetchBoughtItems(true), resizeTextarea($event)"
                   @focusout="
@@ -1641,7 +1631,6 @@ watch(statusStore.$state, () => {
                   class="cell-input"
                   v-model="item.storage_place"
                   type="text"
-                  placeholder="Storage Place"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
                     updateStorage(item.storage_place),
@@ -1674,20 +1663,23 @@ watch(statusStore.$state, () => {
   width: calc(100% - 10px);
   padding-left: 4px;
   padding-right: 4px;
-
-  color: black;
-
   border-radius: 5px;
+
+  overflow: hidden;
 }
 
 .wrapper {
   overflow-x: auto;
   overflow-y: auto;
-  height: 100%;
+  height: calc(100% - 20px);
 
   position: relative;
 
   background-color: $main-background-color-dark;
+
+  border-style: solid;
+  border-color: $main-background-color-dark;
+  border-width: 10px;
   border-radius: $main-border-radius;
 }
 
@@ -1704,7 +1696,8 @@ table {
   border-spacing: 0;
 
   width: 100%;
-  border-radius: 5px;
+  border-radius: $main-border-radius;
+  background-color: $main-background-color-dark;
 }
 
 th {
@@ -1720,69 +1713,110 @@ tr {
 }
 
 tbody tr {
-  border-bottom: solid thin rgb(50, 50, 50);
+  border-bottom: solid thin $main-color;
 }
 
 tr:nth-child(even) > td {
-  background: rgb(230, 230, 230);
+  // background: rgb(230, 230, 230);
+  color: white;
+  background: $table-row-even;
 }
 
 tr:nth-child(odd) > td {
-  background: rgb(240, 240, 240);
+  // background: rgb(240, 240, 240);
+  color: white;
+  background: $table-row-odd;
+}
+
+tr.open:nth-child(even) > td {
+  // background: rgb(230, 230, 230);
+  background: $table-background-open-even;
+}
+
+tr.open:nth-child(odd) > td {
+  background: $table-background-open-odd;
+}
+
+tr.requested:nth-child(even) > td {
+  background: $table-background-requested-even;
+}
+
+tr.requested:nth-child(odd) > td {
+  background: $table-background-requested-odd;
+}
+
+tr.ordered:nth-child(even) > td {
+  background: $table-background-ordered-even;
+}
+
+tr.ordered:nth-child(odd) > td {
+  background: $table-background-ordered-odd;
+}
+
+tr.late:nth-child(even) > td {
+  background: $table-background-late-even;
+}
+
+tr.late:nth-child(odd) > td {
+  background: $table-background-late-odd;
+}
+
+// tr.partial > td {
+//   background: rgb(90, 250, 90);
+//   background: linear-gradient(
+//     0deg,
+//     rgba(90, 250, 90, 1) 0%,
+//     rgba(240, 230, 70, 1) 50%
+//   );
+// }
+
+tr.partial:nth-child(even) > td {
+  background: $table-background-partial-even;
+}
+
+tr.partial:nth-child(odd) > td {
+  background: $table-background-partial-odd;
+}
+
+tr.delivered:nth-child(even) > td {
+  background: $table-background-delivered-even;
+}
+
+tr.delivered:nth-child(odd) > td {
+  background: $table-background-delivered-odd;
+}
+
+tr.canceled:nth-child(even) > td {
+  background: $table-background-canceled-even;
+}
+
+tr.canceled:nth-child(odd) > td {
+  background: $table-background-canceled-odd;
+}
+
+tr.lost:nth-child(even) > td {
+  background: $table-background-lost-even;
+}
+
+tr.lost:nth-child(odd) > td {
+  background: $table-background-lost-odd;
 }
 
 tr:hover > td {
-  filter: brightness(1.05);
-}
-
-tr.open > td {
-  background: rgb(230, 230, 230);
-}
-
-tr.requested > td {
-  background: rgb(240, 150, 70);
-}
-
-tr.ordered > td {
-  background: rgb(240, 230, 70);
-}
-
-tr.late > td {
-  background: rgb(250, 100, 80);
-}
-
-tr.partial > td {
-  // background: rgb(180, 250, 170);
-  background: rgb(90, 250, 90);
-  background: linear-gradient(
-    0deg,
-    rgba(90, 250, 90, 1) 0%,
-    rgba(240, 230, 70, 1) 50%
-  );
-}
-
-tr.delivered > td {
-  background: rgb(90, 250, 90);
-}
-
-tr.canceled > td {
-  background: rgb(109, 109, 109);
-  color: white;
-}
-
-tr.lost > td {
-  background: rgb(80, 30, 30);
-  color: white;
+  // filter: brightness(1.05);
+  background: $table-row-hover !important;
 }
 
 tr.selected > td {
-  background: rgb(160, 220, 255);
-  color: black;
+  background: $table-row-active !important;
+  // background: rgb(160, 220, 255);
+  // color: black;
   // font-weight: bold;
 }
 
 tr.selected:hover > td {
-  background: rgb(170, 230, 255);
+  background: $table-row-active-hover !important;
+  // background: rgb(170, 230, 255);
 }
 
 td {
@@ -1795,12 +1829,13 @@ td {
   padding: 0;
   // padding-top: 1px;
   // padding-bottom: 1px;
-  // padding-left: 5px;
-  // padding-right: 5px;
+  // margin-left: 2px;
+  // margin-right: 2px;
 
   word-wrap: break-word;
-  border-right: solid thin rgb(220, 220, 220);
+  // border-right: solid thin rgb(220, 220, 220);
   border-bottom: solid thin rgb(100, 100, 100);
+  border-right: solid thin $table-head-background;
 }
 
 .fix-height {
@@ -1831,7 +1866,9 @@ td {
   margin-top: 0;
   margin-bottom: 0;
 
-  background: rgb(207, 207, 207);
+  // background: rgb(207, 207, 207);
+  color: white;
+  background: $table-head-background;
 }
 
 .second {
@@ -1846,8 +1883,11 @@ td {
   margin-top: 0;
   margin-bottom: 0;
 
-  background: rgb(207, 207, 207);
+  // background: rgb(207, 207, 207);
   border-bottom: solid thin rgb(50, 50, 50);
+
+  color: white;
+  background: $table-head-background;
 }
 
 .sticky-col {
@@ -1893,7 +1933,7 @@ td.sticky-col {
   min-width: 61px;
   max-width: 61px;
   left: 172px;
-  text-align: center;
+  // text-align: center;
 }
 
 #machine {
@@ -1901,7 +1941,7 @@ td.sticky-col {
   min-width: 61px;
   max-width: 61px;
   left: 235px;
-  text-align: center;
+  // text-align: center;
 }
 
 #quantity {
@@ -2041,6 +2081,8 @@ td.sticky-col {
 select {
   padding: 0;
   margin: 0;
+
+  outline: none;
 }
 
 input {
@@ -2055,20 +2097,29 @@ input {
   -webkit-box-sizing: border-box;
 
   border: none;
+
+  color: white;
   background-color: transparent;
 
   font-size: 12px; //0.9em;
+}
+
+.cell-select > option {
+  color: white;
+  background-color: $main-background-color-dark-2;
 }
 
 .cell-input {
   width: 100%;
   height: 18px;
 
+  box-shadow: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
-  box-shadow: none;
+  color: white;
   background-color: transparent;
+
   outline: none;
   border: none;
   border-color: inherit;
@@ -2090,10 +2141,12 @@ input {
   overflow: hidden;
   resize: none;
 
+  box-shadow: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
-  box-shadow: none;
+  color: white;
+
   background-color: transparent;
   outline: none;
   border: none;
@@ -2107,14 +2160,57 @@ input {
   width: 100%;
   height: 22px;
 
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
+  outline: none;
+
   box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  background-color: $main-background-color-hover;
+}
+
+.filter-select:focus {
+  border-color: $main-color;
+}
+
+.filter-select > option {
+  color: white;
+  background-color: $main-background-color-dark-2;
 }
 
 .filter-input {
   width: 100%;
   height: 22px;
 
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
+  outline: none;
+
   box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.filter-input:hover {
+  background-color: $main-background-color-hover;
+}
+
+.filter-input:focus {
+  border-color: $main-color;
 }
 
 .spinner {

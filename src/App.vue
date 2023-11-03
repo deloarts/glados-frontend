@@ -35,10 +35,13 @@ function getCurrentUser() {
         email: response.data.email,
         is_active: response.data.is_active,
         is_superuser: response.data.is_superuser,
+        is_adminuser: response.data.is_adminuser,
+        is_guestuser: response.data.is_guestuser,
         is_systemuser: response.data.is_systemuser,
         id: response.data.id,
         created: response.data.created
       })
+      
 
       // Redirect the user to the app.
       // var previousRoute = localStorage.getItem("gladosActiveRoute")
@@ -135,6 +138,7 @@ body {
   background: $main-background-color;
 
   display: grid;
+  grid-gap: 0;
   grid-template-rows: max-content auto 20px;
   grid-template-columns: 50px auto;
   grid-template-areas: 'header header'

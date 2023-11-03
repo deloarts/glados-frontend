@@ -7,6 +7,8 @@ export const useUserStore = defineStore('user', () => {
   const email = ref("")
   const is_active = ref("")
   const is_superuser = ref("")
+  const is_adminuser = ref("")
+  const is_guestuser = ref("")
   const is_systemuser = ref("")
   const id = ref("")
   const created = ref("")
@@ -17,13 +19,15 @@ export const useUserStore = defineStore('user', () => {
     email.value = ""
     is_active.value = ""
     is_superuser.value = ""
+    is_adminuser.value = ""
+    is_guestuser.value = ""
     is_systemuser.value = ""
     id.value = ""
     created.value = ""
     console.log("Logged out user")
   }
 
-  return { username, full_name, email, is_active, is_superuser, id, created, logout }
+  return { username, full_name, email, is_active, is_superuser, is_adminuser, is_guestuser, is_systemuser, id, created, logout }
 })
 
 export const useUsersStore = defineStore('users', () => {
@@ -33,6 +37,8 @@ export const useUsersStore = defineStore('users', () => {
     email: "",
     is_active: "",
     is_superuser: "",
+    is_adminuser: "",
+    is_guestuser: "",
     is_systemuser: "",
     id: "",
     created: ""

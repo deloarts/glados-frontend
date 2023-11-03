@@ -1,6 +1,4 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
   <div class="scope">
@@ -11,19 +9,20 @@
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .scope {
   width: 100%;
   height: 100%;
 }
 
-.content {
-  padding: $main-padding;
-}
+// .content {
+//   padding: $main-padding;
+// }
 
 .gray {
+  padding-left: 15px;
   color: gray;
 }
 </style>

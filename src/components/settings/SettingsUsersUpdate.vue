@@ -18,7 +18,8 @@ const formData = ref({
   id: 0,
   is_active: false,
   is_superuser: false,
-  is_systemuser: false,
+  is_adminuser: false,
+  is_guestuser: false,
   username: "",
   full_name: "",
   email: "",
@@ -37,23 +38,26 @@ function updateUser() {
     usersService.clearCache();
     if (response.status == 200) {
       notificationStore.info = `Updated user ${formData.value.username}`
+    // } else if (response.status == 403) {
+    //   notificationStore.warning = "Not enough permission"
     } else if (response.status == 404) {
       notificationStore.warning = "User not found"
     } else if (response.status == 422) {
       notificationStore.warning = "Data is incomplete"
     } else {
-      notificationStore.warning = "Failed to update user"
+      notificationStore.warning = response.data.detail
     }
   })
 }
 
-watch(props.selectedUserID, () => {
+watch(() => props.selectedUserID, () => {
   if (props.selectedUserID == 0) {
     formData.value = {
       id: 0,
       is_active: false,
       is_superuser: false,
-      is_systemuser: false,
+      is_adminuser: false,
+      is_guestuser: false,
       username: "",
       full_name: "",
       email: "",
@@ -71,14 +75,26 @@ onMounted(() => getUser())
   <div class="form-base-scope">
     <div class="form-base-container">
       <div id="grid">
+        <div id="guestuser" class="grid-item-center">
+          <Toggle v-model="formData.is_guestuser"></Toggle>
+        </div>
+        <div id="guestuser-text" class="grid-item-left">
+          Guest
+        </div>
         <div id="superuser" class="grid-item-center">
-          <Toggle v-model="formData.is_superuser" :disabled="formData.is_systemuser"></Toggle>
+          <Toggle v-model="formData.is_superuser"></Toggle>
         </div>
         <div id="superuser-text" class="grid-item-left">
           Superuser
         </div>
+        <div id="adminuser" class="grid-item-center">
+          <Toggle v-model="formData.is_adminuser"></Toggle>
+        </div>
+        <div id="adminuser-text" class="grid-item-left">
+          Admin
+        </div>
         <div id="active" class="grid-item-center">
-          <Toggle v-model="formData.is_active" :disabled="formData.is_systemuser"></Toggle>
+          <Toggle v-model="formData.is_active"></Toggle>
         </div>
         <div id="active-text" class="grid-item-left">
           Active
@@ -111,19 +127,37 @@ onMounted(() => getUser())
 @import '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 25px 25px 40px;
+  grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
   grid-template-areas: "username username"
     "full-name full-name"
     "email email"
     "password password"
-    "superuser superuser-text"
     "active active-text"
+    "guestuser guestuser-text"
+    "superuser superuser-text"
+    "adminuser adminuser-text"
     "btn btn"
 }
 
 #btn {
   grid-area: btn;
+}
+
+#active {
+  grid-area: active;
+}
+
+#active-text {
+  grid-area: active-text;
+}
+
+#guestuser {
+  grid-area: guestuser;
+}
+
+#guestuser-text {
+  grid-area: guestuser-text;
 }
 
 #superuser {
@@ -134,12 +168,12 @@ onMounted(() => getUser())
   grid-area: superuser-text;
 }
 
-#active {
-  grid-area: active;
+#adminuser {
+  grid-area: adminuser;
 }
 
-#active-text {
-  grid-area: active-text;
+#adminuser-text {
+  grid-area: adminuser-text;
 }
 
 #username {

@@ -14,11 +14,17 @@ const notificationStore = useNotificationStore()
 function onCreate() {
   boughtItemsRequest.postItems(props.formData).then(response => {
     if (response.status === 200) {
-      notificationStore.info = "Created item."
+      notificationStore.info = "Created item"
       router.push({ name:"BoughtItems"})
     }
-    if (response.status === 422) {
-      notificationStore.warning = "Data is incomplete."
+    // else if (response.status === 403) {
+    //   notificationStore.warning = "Not enough permission"
+    // }
+    else if (response.status === 422) {
+      notificationStore.warning = "Data is incomplete"
+    }
+    else {
+      notificationStore.warning = response.data.detail
     }
   }).catch(error => {
     console.log(error);

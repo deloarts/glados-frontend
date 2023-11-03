@@ -1,6 +1,6 @@
 <script setup>
-import SettingsControls from "@/components/settings/SettingsControls.vue"
-import SettingsUsers from "@/components/settings/SettingsUsers.vue"
+import SettingsControls from "@/components/settings/SettingsControls.vue";
+import SettingsUsers from "@/components/settings/SettingsUsers.vue";
 </script>
 
 <template>
@@ -18,16 +18,17 @@ import SettingsUsers from "@/components/settings/SettingsUsers.vue"
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/scss/variables.scss';
-@import '@/scss/views.scss';
-@import '@/scss/grid/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/views.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
-  grid-template-areas: 'controls'
-    'display';
+  grid-template-areas:
+    "controls"
+    "display";
 }
 
 #controls {
@@ -36,8 +37,9 @@ import SettingsUsers from "@/components/settings/SettingsUsers.vue"
 
 #display {
   grid-area: display;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  // overflow: auto;
+  // overflow-x: hidden;
+  // overflow-y: scroll;
 }
 
 ::-webkit-scrollbar {

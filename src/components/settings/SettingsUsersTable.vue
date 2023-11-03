@@ -18,8 +18,8 @@ function onSelect(id) {
 </script>
 
 <template>
-  <div class="scope">
-    <div class="table-wrapper">
+  <div class="table-base-scope">
+    <div class="table-base-container">
       <table class="cursor-default">
         <thead>
           <tr>
@@ -29,6 +29,8 @@ function onSelect(id) {
             <th class="first sticky-col" id="mail">Mail</th>
             <th class="first sticky-col" id="active">Active</th>
             <th class="first sticky-col" id="superuser">Superuser</th>
+            <th class="first sticky-col" id="superuser">Admin</th>
+            <th class="first sticky-col" id="superuser">Guest</th>
             <th class="first sticky-col" id="created">Created</th>
           </tr>
         </thead>
@@ -45,6 +47,14 @@ function onSelect(id) {
             </td>
             <td id="superuser" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_superuser" />
+              <IconCheckboxBlank v-else />
+            </td>
+            <td id="adminuser" class="sticky-col">
+              <IconCheckboxMarked v-if="user.is_adminuser" />
+              <IconCheckboxBlank v-else />
+            </td>
+            <td id="guestuser" class="sticky-col">
+              <IconCheckboxMarked v-if="user.is_guestuser" />
               <IconCheckboxBlank v-else />
             </td>
             <td id="created" class="sticky-col">{{ user.created }}</td>
@@ -89,6 +99,20 @@ function onSelect(id) {
 }
 
 #superuser {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+}
+
+#adminuser {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+}
+
+#guestuser {
   width: 80px;
   min-width: 80px;
   max-width: 80px;

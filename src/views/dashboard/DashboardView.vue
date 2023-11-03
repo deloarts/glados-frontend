@@ -44,18 +44,6 @@ const boughtItemsOverviewDataset = ref({
 const boughtItemsUsersDataset = ref({})
 const timelineDataset = ref([{ date: "", type: "", amount: "" }])
 
-// TODO Make a pinia store for this
-// function fetchUserById() {
-//   usersService.getUsers().then(response => {
-//     const data = response.data
-//     var userById = {}
-//     for (let i = 0; i < data.length; i++) {
-//       userById[data[i].id] = data[i].full_name
-//     }
-//     userByIdStore.value = userById
-//   })
-// }
-
 function autoFetchBoughtItems() {
   if (route.path != '/dashboard') {
     console.info('Stopped updating routine for bought items: User leaved site.')
@@ -210,6 +198,12 @@ onMounted(() => {
 @import '@/scss/views.scss';
 @import '@/scss/grid/gridBase.scss';
 
+.views-content {
+  display: grid;
+  justify-content: left;
+  padding: 40px;
+}
+
 h1 {
   padding-bottom: 35px;
 }
@@ -217,14 +211,32 @@ h1 {
 #grid {
   grid-gap: 20px;
   grid-template-rows: 380px 92px 92px auto 50px;
-  // grid-template-rows: 380px 92px 92px 380px auto 50px;
   grid-template-columns: 270px 270px 270px 270px;
   grid-template-areas: "items-overview items-overview users-overview users-overview"
     "active-items open-items requested-items ordered-items"
     "delivered-items partial-items late-items canceled-items"
-    // "items-timeline items-timeline items-timeline items-timeline"
     "placeholder placeholder placeholder placeholder"
     "data-note data-note data-note data-note"
+}
+
+@media screen and (max-width: $max-width-1) {
+  .views-content {
+    justify-content: center;
+  }
+
+  #grid {
+    grid-gap: 20px;
+    grid-template-rows: 380px 380px 92px 92px 92px 92px auto 50px;
+    grid-template-columns: 270px 270px;
+    grid-template-areas: "items-overview items-overview"
+      "users-overview users-overview"
+      "active-items open-items"
+      "requested-items ordered-items"
+      "delivered-items partial-items"
+      "late-items canceled-items"
+      "placeholder placeholder"
+      "data-note data-note"
+  }
 }
 
 #placeholder {

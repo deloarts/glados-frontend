@@ -3,8 +3,9 @@ export default {
   serverVersion: "0.3.2",
 
   // Media
-  minWidth: 1450,
-  
+  minWidth: 700,
+  minWidth1: 1280,
+
   // Watch intervals
   watchServerConnInterval: 4000,
 

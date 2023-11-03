@@ -1,5 +1,5 @@
 // Media
-$max-width: 600px;
+$max-width-1: 1280px;
 
 // Colors
 $main-background-color: rgb(50, 50, 50);
@@ -26,6 +26,13 @@ $log-date: lime;
 $log-module: darkslateblue;
 $log-level: red;
 $log-msg: lightgray;
+
+$table-head-background: rgb(33, 33, 33);
+$table-row-even: rgb(44, 44, 44);
+$table-row-odd: rgb(48, 48, 48);
+$table-row-hover: rgb(5, 140, 230);
+$table-row-active: rgb(0, 122, 204);
+$table-row-active-hover: rgb(20, 161, 255);
 
 // Styling
 $main-padding: 20px;

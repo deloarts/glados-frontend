@@ -1,70 +1,103 @@
 @import '@/scss/variables.scss';
 
-.scope {
-    width: 100%;
-    height: 100%;
+.table-base-scope {
+  width: 100%;
+  height: 100%;
 }
 
-.table-wrapper {
-    height: auto;
-    width: auto;
+.table-base-container {
+  height: 100%;
+  overflow: auto;
 
-    background-color: $main-background-color-dark;
-
-    // border-style: solid;
-    // border-color: $main-color;
-    // border-radius: 5px;
-    // border-width: 1px;
-    // padding: 10px;
+  // padding: 10px;
+  margin: 4px;
+  
+  background-color: $main-background-color-dark;
+  
+  border-style: solid;
+  border-color: $main-background-color-dark;
+  border-width: 10px;
+  border-radius: $main-border-radius;
 }
 
 table {
-    border-collapse: separate;
-    border-spacing: 0;
+  width: 100%;
+  margin-top: -6px; // Remove border-spacing from top
+  margin-bottom: -6px; // Remove border-spacing from bottom
 
-    width: 100%;
+  background-color: $main-background-color-dark;
 
-    border-style: solid;
-    border-color: $main-color;
-    border-radius: 5px;
-    border-width: 1px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  border-style: none;
+
+  border-radius: $main-border-radius;
+  border-collapse: separate;
+  border-spacing: 0 6px;
 }
 
 th {
-    font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
+  position: sticky;
+  top: 0;
+
+  padding: 9px;
+  margin: 9px;
+
+  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+
+  background-color: $table-head-background;
+}
+
+th:first-child {
+  border-left-style: none;
+  border-top-left-radius: $main-border-radius;
+  border-bottom-left-radius: $main-border-radius;
+}
+
+th:last-child {
+  border-right-style: none;
+  border-bottom-right-radius: $main-border-radius;
+  border-top-right-radius: $main-border-radius;
 }
 
 tr {
-    margin: 0;
-    padding: 0;
-    height: 30px;
+  border-radius: $main-border-radius;
 }
 
 tr:nth-child(odd)>td {
-    background: $main-background-color;
+  background: $table-row-odd;
 }
 
 tr:nth-child(even)>td {
-    background: $main-background-color-dark;
+  background: $table-row-even;
 }
 
 tr:hover>td {
-    background: $main-color-hover;
+  background: $table-row-hover;
 }
 
 tr.selected>td {
-    background: $main-color;
+  background: $table-row-active;
+}
+
+tr.selected:hover>td {
+  background: $table-row-active-hover;
 }
 
 td {
-    height: 22px;
-    font-size: 14px;
+  font-size: 14px;
+  padding: 6px;
+  margin: 6px;
+  word-wrap: break-word;
+}
 
-    margin: 0;
-    padding: 0;
+td:first-child {
+  border-left-style: none;
+  border-top-left-radius: $main-border-radius;
+  border-bottom-left-radius: $main-border-radius;
+}
 
-    word-wrap: break-word;
+td:last-child {
+  border-right-style: none;
+  border-bottom-right-radius: $main-border-radius;
+  border-top-right-radius: $main-border-radius;
 }

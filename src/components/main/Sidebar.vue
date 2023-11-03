@@ -18,7 +18,7 @@ const route = useRoute()
 
 // Store
 const userStore = useUserStore()
-const is_superuser = computed(() => userStore.is_superuser)
+const is_adminuser = computed(() => userStore.is_adminuser)
 
 function routeIsActive(currentLink) {
   let activeRoute = route.path
@@ -42,7 +42,7 @@ function logout() {
       <router-link :to="'/dashboard'"><IconDashboard v-bind:class="{ 'active': routeIsActive('/dashboard') }" /></router-link>
       <router-link :to="'/items/bought'"><IconItems v-bind:class="{ 'active': routeIsActive('/items/bought') }" /></router-link>
       <router-link :to="'/account'"><IconAccount v-bind:class="{ 'active': routeIsActive('/account') }" /></router-link>
-      <router-link :to="'/settings'"><IconSettings v-if="is_superuser" v-bind:class="{ 'active': routeIsActive('/settings') }" /></router-link>
+      <router-link :to="'/settings'"><IconSettings v-if="is_adminuser" v-bind:class="{ 'active': routeIsActive('/settings') }" /></router-link>
     </div>
   </div>
 </template>

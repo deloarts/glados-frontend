@@ -23,8 +23,11 @@ function onUpdate() {
       notificationStore.info = `Updated item #${itemId}.`
       router.push({ name: "BoughtItems" })
     }
+    // else if (response.status === 403) {
+    //   notificationStore.warning = "Not enough permission"
+    // }
     else if (response.status === 422) {
-      notificationStore.warning = "Data is incomplete."
+      notificationStore.warning = "Data is incomplete"
     }
     else {
       notificationStore.warning = response.data.detail
@@ -43,7 +46,7 @@ function onAbort() {
 <template>
     <div class="controls-base-scope">
       <div id="item-controls" class="controls-base-container">
-        <ButtonItemCreate class="controls-base-element" text="Create" v-on:click="onUpdate"></ButtonItemCreate>
+        <ButtonItemCreate class="controls-base-element" text="Update" v-on:click="onUpdate"></ButtonItemCreate>
         <ButtonAbort class="controls-base-element" text="Cancel" v-on:click="onAbort"></ButtonAbort>
       </div>
     </div>

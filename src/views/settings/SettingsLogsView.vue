@@ -36,8 +36,8 @@ import SettingsLogs from "@/components/settings/SettingsLogs.vue"
 
 #display {
   grid-area: display;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  // overflow-x: hidden;
+  // overflow-y: scroll;
 }
 
 ::-webkit-scrollbar {

@@ -19,8 +19,8 @@ import AccountPersonalAccessTokenForm from "@/components/account/AccountPersonal
   height: 100%;
 }
 
-h1 {
-  padding-left: 10px;
-  padding-top: 10px;
-}
+// h1 {
+//   padding-left: 10px;
+//   padding-top: 10px;
+// }
 </style>

@@ -40,11 +40,12 @@ watch(selectedKeyID, () => {
   height: 100%;
 }
 
-.content {
-  padding: $main-padding;
-}
+// .content {
+//   padding: $main-padding;
+// }
 
 .gray {
   color: gray;
+  padding-left: 15px;
 }
 </style>

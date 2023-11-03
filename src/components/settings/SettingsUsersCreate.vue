@@ -14,6 +14,8 @@ const notificationStore = useNotificationStore()
 const formData = ref({
   is_active: false,
   is_superuser: false,
+  is_adminuser: false,
+  is_guestuser: false,
   username: "",
   full_name: "",
   email: "",
@@ -27,18 +29,22 @@ function createUser() {
       formData.value = {
         is_active: false,
         is_superuser: false,
+        is_adminuser: false,
+        is_guestuser: false,
         username: "",
         full_name: "",
         email: "",
         password: "",
       }
       usersService.clearCache();
+    // } else if (response.status == 403) {
+    //   notificationStore.warning = "Not enough permission"
     } else if (response.status == 406) {
-      notificationStore.warning = "User already exists."
+      notificationStore.warning = "User already exists"
     } else if (response.status == 422) {
-      notificationStore.warning = "Data is incomplete."
+      notificationStore.warning = "Data is incomplete"
     } else {
-      notificationStore.warning = "Failed to create new user."
+      notificationStore.warning = response.data.detail
     }
   })
 }
@@ -48,11 +54,23 @@ function createUser() {
   <div class="form-base-scope">
     <div class="form-base-container">
       <div id="grid">
+        <div id="guestuser" class="grid-item-center">
+          <Toggle v-model="formData.is_guestuser"></Toggle>
+        </div>
+        <div id="guestuser-text" class="grid-item-left">
+          Guest
+        </div>
         <div id="superuser" class="grid-item-center">
           <Toggle v-model="formData.is_superuser"></Toggle>
         </div>
         <div id="superuser-text" class="grid-item-left">
           Superuser
+        </div>
+        <div id="adminuser" class="grid-item-center">
+          <Toggle v-model="formData.is_adminuser"></Toggle>
+        </div>
+        <div id="adminuser-text" class="grid-item-left">
+          Admin
         </div>
         <div id="active" class="grid-item-center">
           <Toggle v-model="formData.is_active"></Toggle>
@@ -86,19 +104,37 @@ function createUser() {
 @import '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 25px 25px 40px;
+  grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
   grid-template-areas: "username username"
     "full-name full-name"
     "email email"
     "password password"
-    "superuser superuser-text"
     "active active-text"
+    "guestuser guestuser-text"
+    "superuser superuser-text"
+    "adminuser adminuser-text"
     "btn btn"
 }
 
 #btn {
   grid-area: btn;
+}
+
+#active {
+  grid-area: active;
+}
+
+#active-text {
+  grid-area: active-text;
+}
+
+#guestuser {
+  grid-area: guestuser;
+}
+
+#guestuser-text {
+  grid-area: guestuser-text;
 }
 
 #superuser {
@@ -109,12 +145,12 @@ function createUser() {
   grid-area: superuser-text;
 }
 
-#active {
-  grid-area: active;
+#adminuser {
+  grid-area: adminuser;
 }
 
-#active-text {
-  grid-area: active-text;
+#adminuser-text {
+  grid-area: adminuser-text;
 }
 
 #username {

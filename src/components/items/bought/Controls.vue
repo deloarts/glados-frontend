@@ -259,41 +259,6 @@ onBeforeUnmount(() => {
       ></ButtonClear>
     </div>
     <div id="filter-controls" class="controls-base-container">
-      <ButtonFilterSave
-        class="controls-base-element"
-        text="Save Filter"
-        v-on:click="saveFilter"
-      ></ButtonFilterSave>
-      <ButtonFilterLoad
-        class="controls-base-element"
-        text="Load Filter"
-        v-on:click="loadFilter"
-      ></ButtonFilterLoad>
-      <ButtonFilterClear
-        class="controls-base-element"
-        text="Clear Filter"
-        v-on:click="clearFilter"
-      ></ButtonFilterClear>
-
-      <SelectControls
-        class="controls-base-element"
-        text="Limit"
-        v-model:selection="filterStore.limit"
-        :options="availableOptionsLimit"
-      ></SelectControls>
-      <SelectControls
-        class="controls-base-element"
-        text="Sort By"
-        v-model:selection="filterStore.sortBy"
-        :options="availableOptionsOrderBy"
-      ></SelectControls>
-      <SelectControls
-        class="controls-base-element"
-        text="Preset"
-        v-model:selection="selectedOptionFilterPreset"
-        :options="availableOptionsFilterPresets"
-      ></SelectControls>
-
       <DropDownTableView
         class="controls-base-element"
         text="Views"
@@ -336,6 +301,41 @@ onBeforeUnmount(() => {
           ><span class="drop-down-toggle-item-text">Text Only</span>
         </div>
       </DropDownTableView>
+
+      <ButtonFilterSave
+        class="controls-base-element"
+        text="Save Filter"
+        v-on:click="saveFilter"
+      ></ButtonFilterSave>
+      <ButtonFilterLoad
+        class="controls-base-element"
+        text="Load Filter"
+        v-on:click="loadFilter"
+      ></ButtonFilterLoad>
+      <ButtonFilterClear
+        class="controls-base-element"
+        text="Clear Filter"
+        v-on:click="clearFilter"
+      ></ButtonFilterClear>
+
+      <SelectControls
+        class="controls-base-element"
+        text="Limit"
+        v-model:selection="filterStore.limit"
+        :options="availableOptionsLimit"
+      ></SelectControls>
+      <SelectControls
+        class="controls-base-element"
+        text="Sort By"
+        v-model:selection="filterStore.sortBy"
+        :options="availableOptionsOrderBy"
+      ></SelectControls>
+      <SelectControls
+        class="controls-base-element"
+        text="Preset"
+        v-model:selection="selectedOptionFilterPreset"
+        :options="availableOptionsFilterPresets"
+      ></SelectControls>
     </div>
   </div>
 

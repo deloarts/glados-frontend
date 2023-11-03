@@ -2214,7 +2214,7 @@ input {
 }
 
 .spinner {
-  z-index: 9999;
+  z-index: 999;
   position: absolute;
   width: auto;
   height: auto;

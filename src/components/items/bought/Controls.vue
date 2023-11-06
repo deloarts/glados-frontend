@@ -79,26 +79,13 @@ const availableOptionsFilterPresets = [
 ];
 const selectedOptionFilterPreset = ref("");
 
-// const dropDownViewOptions = ref([
-//   { "name": "Changelog", "model": controlsStore.changelog },
-//   { "name": "Fixed Height", "model": controlsStore.fixedHeight },
-// ])
-
 function saveFilter() {
-  localStorage.setItem(
-    "gladosBoughtItemDataTableMyFilter",
-    JSON.stringify(filterStore.$state),
-  );
+  filterStore.saveMy();
   notificationStore.info = "Saved new filter.";
 }
 
 function loadFilter() {
-  const filterObject = localStorage.getItem(
-    "gladosBoughtItemDataTableMyFilter",
-  );
-  if (filterObject != null) {
-    filterStore.$state = JSON.parse(filterObject);
-  }
+  filterStore.loadMy();
 }
 
 function clearFilter() {
@@ -141,7 +128,7 @@ function onButtonDelete() {
 }
 
 function onButtonDownloadExcel() {
-  const params = getFilterParams(filterStore.$state);
+  const params = getFilterParams(filterStore.state);
   boughtItemsRequest.getItemsExcel(params).then((response) => {
     let blob = new Blob([response.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -265,39 +252,39 @@ onBeforeUnmount(() => {
         :hide-when-clicked="false"
       >
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.ignoreDelivered"></Toggle
+          <Toggle v-model="filterStore.state.ignoreDelivered"></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Delivered</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.ignoreCanceled"></Toggle
+          <Toggle v-model="filterStore.state.ignoreCanceled"></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Canceled</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.ignoreLost"></Toggle
+          <Toggle v-model="filterStore.state.ignoreLost"></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Lost</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.fixedHeight"></Toggle
+          <Toggle v-model="controlsStore.state.fixedHeight"></Toggle
           ><span class="drop-down-toggle-item-text">Fixed Height</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.unclutter"></Toggle
+          <Toggle v-model="controlsStore.state.unclutter"></Toggle
           ><span class="drop-down-toggle-item-text">Unclutter</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.requestView"></Toggle
+          <Toggle v-model="controlsStore.state.requestView"></Toggle
           ><span class="drop-down-toggle-item-text">Request View</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.changelog"></Toggle
+          <Toggle v-model="controlsStore.state.changelog"></Toggle
           ><span class="drop-down-toggle-item-text">Changelog</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.rainbow"></Toggle
+          <Toggle v-model="controlsStore.state.rainbow"></Toggle
           ><span class="drop-down-toggle-item-text">Rainbow</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.textOnly"></Toggle
+          <Toggle v-model="controlsStore.state.textOnly"></Toggle
           ><span class="drop-down-toggle-item-text">Text Only</span>
         </div>
       </DropDownTableView>
@@ -321,13 +308,13 @@ onBeforeUnmount(() => {
       <SelectControls
         class="controls-base-element"
         text="Limit"
-        v-model:selection="filterStore.limit"
+        v-model:selection="filterStore.state.limit"
         :options="availableOptionsLimit"
       ></SelectControls>
       <SelectControls
         class="controls-base-element"
         text="Sort By"
-        v-model:selection="filterStore.sortBy"
+        v-model:selection="filterStore.state.sortBy"
         :options="availableOptionsOrderBy"
       ></SelectControls>
       <SelectControls

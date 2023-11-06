@@ -1,23 +1,38 @@
-import { ref } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
 export const useBoughtItemsControlsStore = defineStore(
   "boughtItemsControls",
   () => {
-    const changelog = ref(false);
-    const rainbow = ref(false);
-    const textOnly = ref(false);
-    const fixedHeight = ref(false);
-    const unclutter = ref(false);
-    const requestView = ref(false);
+    const state = ref({
+      changelog: false,
+      rainbow: false,
+      textOnly: false,
+      fixedHeight: false,
+      unclutter: false,
+      requestView: false,
+    });
 
-    return {
-      changelog,
-      rainbow,
-      textOnly,
-      fixedHeight,
-      unclutter,
-      requestView,
-    };
+    watch(
+      state,
+      () => {
+        localStorage.setItem(
+          "gladosBoughtItemControls",
+          JSON.stringify(state.value),
+        );
+        console.log("Saved bought items controls to local storage.");
+      },
+      { deep: true },
+    );
+
+    onBeforeMount(() => {
+      const ls = localStorage.getItem("gladosBoughtItemControls");
+      if (ls != null) {
+        state.value = JSON.parse(ls);
+        console.log("Got bought items controls from local storage.");
+      }
+    });
+
+    return { state };
   },
 );

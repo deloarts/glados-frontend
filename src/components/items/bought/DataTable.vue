@@ -118,7 +118,7 @@ function setOptionsUsers() {
 }
 
 function fetchBoughtItems() {
-  const params = getFilterParams(filterStore.$state);
+  const params = getFilterParams(filterStore.state);
   boughtItemsService.clearCache();
   boughtItemsService.getItems(params).then((response) => {
     boughtItems.value = response.data;
@@ -139,7 +139,7 @@ function autoFetchBoughtItems() {
     );
   } else {
     console.log("Automatically fetching bought items...");
-    const params = getFilterParams(filterStore.$state);
+    const params = getFilterParams(filterStore.state);
     boughtItemsService.getItems(params).then((response) => {
       boughtItems.value = response.data;
       setTimeout(
@@ -406,7 +406,7 @@ watch(
 );
 
 watch(
-  filterStore.$state,
+  filterStore.state,
   () => {
     emit("update:selectedItemIds", []);
     fetchBoughtItems();
@@ -434,8 +434,8 @@ watch(statusStore.$state, () => {
       <table
         class="cursor-default"
         v-bind:class="{
-          'allow-text-select': controlsStore.textOnly,
-          'cursor-text': controlsStore.textOnly,
+          'allow-text-select': controlsStore.state.textOnly,
+          'cursor-text': controlsStore.state.textOnly,
         }"
       >
         <thead>
@@ -454,73 +454,114 @@ watch(statusStore.$state, () => {
             <th class="first" id="group">Group</th>
             <th class="first" id="note-general">Note</th>
             <th class="first" id="note-supplier">Supplier Note</th>
-            <th class="first" id="created" v-if="!controlsStore.requestView">
+            <th
+              class="first"
+              id="created"
+              v-if="!controlsStore.state.requestView"
+            >
               Created
             </th>
             <th
               class="first"
               id="creator"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               Creator
             </th>
             <th class="first" id="desired">Desired</th>
-            <th class="first" id="requested" v-if="!controlsStore.requestView">
+            <th
+              class="first"
+              id="requested"
+              v-if="!controlsStore.state.requestView"
+            >
               Requested
             </th>
             <th
               class="first"
               id="requester"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               Requester
             </th>
-            <th class="first" id="ordered" v-if="!controlsStore.requestView">
+            <th
+              class="first"
+              id="ordered"
+              v-if="!controlsStore.state.requestView"
+            >
               Ordered
             </th>
             <th
               class="first"
               id="orderer"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               Orderer
             </th>
-            <th class="first" id="expected" v-if="!controlsStore.requestView">
+            <th
+              class="first"
+              id="expected"
+              v-if="!controlsStore.state.requestView"
+            >
               Expected
             </th>
-            <th class="first" id="delivered" v-if="!controlsStore.requestView">
+            <th
+              class="first"
+              id="delivered"
+              v-if="!controlsStore.state.requestView"
+            >
               Delivered
             </th>
             <th
               class="first"
               id="taken-over-by"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               Taken by
             </th>
             <th
               class="first"
               id="arrival-weeks"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               Arrival
             </th>
             <th
               class="first"
               id="total-delivery-weeks"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               Total
             </th>
             <th
               class="first"
               id="storage-place"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               Storage
             </th>
           </tr>
-          <tr v-if="controlsStore.textOnly == false">
+          <tr v-if="controlsStore.state.textOnly == false">
             <th class="second sticky-col" id="number">
               <!-- {{ filterStore.limit }} -->
             </th>
@@ -529,13 +570,13 @@ watch(statusStore.$state, () => {
               id="item-id"
               @contextmenu.prevent="
                 () => {
-                  filterStore.id = '';
+                  filterStore.state.id = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.id"
+                v-model="filterStore.state.id"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -546,13 +587,13 @@ watch(statusStore.$state, () => {
               id="status"
               @contextmenu.prevent="
                 () => {
-                  filterStore.status = '';
+                  filterStore.state.status = '';
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.status"
+                v-model="filterStore.state.status"
                 @change="fetchBoughtItems"
               >
                 <option
@@ -569,13 +610,13 @@ watch(statusStore.$state, () => {
               id="project"
               @contextmenu.prevent="
                 () => {
-                  filterStore.project = '';
+                  filterStore.state.project = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.project"
+                v-model="filterStore.state.project"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -586,13 +627,13 @@ watch(statusStore.$state, () => {
               id="machine"
               @contextmenu.prevent="
                 () => {
-                  filterStore.machine = '';
+                  filterStore.state.machine = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.machine"
+                v-model="filterStore.state.machine"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -603,13 +644,13 @@ watch(statusStore.$state, () => {
               id="quantity"
               @contextmenu.prevent="
                 () => {
-                  filterStore.quantity = '';
+                  filterStore.state.quantity = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.quantity"
+                v-model="filterStore.state.quantity"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -620,13 +661,13 @@ watch(statusStore.$state, () => {
               id="unit"
               @contextmenu.prevent="
                 () => {
-                  filterStore.unit = '';
+                  filterStore.state.unit = '';
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.unit"
+                v-model="filterStore.state.unit"
                 @change="fetchBoughtItems"
               >
                 <option
@@ -643,13 +684,13 @@ watch(statusStore.$state, () => {
               id="partnumber"
               @contextmenu.prevent="
                 () => {
-                  filterStore.partnumber = '';
+                  filterStore.state.partnumber = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.partnumber"
+                v-model="filterStore.state.partnumber"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -660,13 +701,13 @@ watch(statusStore.$state, () => {
               id="definition"
               @contextmenu.prevent="
                 () => {
-                  filterStore.definition = '';
+                  filterStore.state.definition = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.definition"
+                v-model="filterStore.state.definition"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -677,13 +718,13 @@ watch(statusStore.$state, () => {
               id="manufacturer"
               @contextmenu.prevent="
                 () => {
-                  filterStore.manufacturer = '';
+                  filterStore.state.manufacturer = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.manufacturer"
+                v-model="filterStore.state.manufacturer"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -694,13 +735,13 @@ watch(statusStore.$state, () => {
               id="supplier"
               @contextmenu.prevent="
                 () => {
-                  filterStore.supplier = '';
+                  filterStore.state.supplier = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.supplier"
+                v-model="filterStore.state.supplier"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -711,13 +752,13 @@ watch(statusStore.$state, () => {
               id="group"
               @contextmenu.prevent="
                 () => {
-                  filterStore.group1 = '';
+                  filterStore.state.group1 = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.group1"
+                v-model="filterStore.state.group1"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -728,13 +769,13 @@ watch(statusStore.$state, () => {
               id="note-general"
               @contextmenu.prevent="
                 () => {
-                  filterStore.noteGeneral = '';
+                  filterStore.state.noteGeneral = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.noteGeneral"
+                v-model="filterStore.state.noteGeneral"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -745,13 +786,13 @@ watch(statusStore.$state, () => {
               id="note-supplier"
               @contextmenu.prevent="
                 () => {
-                  filterStore.noteSupplier = '';
+                  filterStore.state.noteSupplier = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.noteSupplier"
+                v-model="filterStore.state.noteSupplier"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -760,16 +801,16 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="created"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.createdDate = '';
+                  filterStore.state.createdDate = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.createdDate"
+                v-model="filterStore.state.createdDate"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -778,16 +819,19 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="creator"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.creatorId = '';
+                  filterStore.state.creatorId = '';
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.creatorId"
+                v-model="filterStore.state.creatorId"
                 @change="fetchBoughtItems"
               >
                 <option
@@ -804,13 +848,13 @@ watch(statusStore.$state, () => {
               id="desired"
               @contextmenu.prevent="
                 () => {
-                  filterStore.desiredDate = '';
+                  filterStore.state.desiredDate = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.desiredDate"
+                v-model="filterStore.state.desiredDate"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -819,16 +863,16 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="requested"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.requestedDate = '';
+                  filterStore.state.requestedDate = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.requestedDate"
+                v-model="filterStore.state.requestedDate"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -837,16 +881,19 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="requester"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.requesterId = '';
+                  filterStore.state.requesterId = '';
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.requesterId"
+                v-model="filterStore.state.requesterId"
                 @change="fetchBoughtItems"
               >
                 <option
@@ -861,16 +908,16 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="ordered"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.orderedDate = '';
+                  filterStore.state.orderedDate = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.orderedDate"
+                v-model="filterStore.state.orderedDate"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -879,16 +926,19 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="orderer"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.ordererId = '';
+                  filterStore.state.ordererId = '';
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.ordererId"
+                v-model="filterStore.state.ordererId"
                 @change="fetchBoughtItems"
               >
                 <option
@@ -903,16 +953,16 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="expected"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.expectedDate = '';
+                  filterStore.state.expectedDate = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.expectedDate"
+                v-model="filterStore.state.expectedDate"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -921,16 +971,16 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="delivered"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.deliveredDate = '';
+                  filterStore.state.deliveredDate = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.deliveredDate"
+                v-model="filterStore.state.deliveredDate"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -939,16 +989,19 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="taken-over-by"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.takeOverId = '';
+                  filterStore.state.takeOverId = '';
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.takeOverId"
+                v-model="filterStore.state.takeOverId"
                 @change="fetchBoughtItems"
               >
                 <option
@@ -963,30 +1016,39 @@ watch(statusStore.$state, () => {
             <th
               class="second"
               id="arrival-weeks"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               (Weeks)
             </th>
             <th
               class="second"
               id="total-delivery-weeks"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               (Weeks)
             </th>
             <th
               class="second"
               id="storage-place"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.storagePlace = '';
+                  filterStore.state.storagePlace = '';
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.storagePlace"
+                v-model="filterStore.state.storagePlace"
                 v-on:keyup.enter="fetchBoughtItems()"
                 type="text"
                 placeholder="Filter"
@@ -1005,14 +1067,17 @@ watch(statusStore.$state, () => {
             "
             v-bind:class="{
               selected: props.selectedItemIds.includes(item.id),
-              open: controlsStore.rainbow && item.status == 'open',
-              requested: controlsStore.rainbow && item.status == 'requested',
-              ordered: controlsStore.rainbow && item.status == 'ordered',
-              late: controlsStore.rainbow && item.status == 'late',
-              partial: controlsStore.rainbow && item.status == 'partial',
-              delivered: controlsStore.rainbow && item.status == 'delivered',
-              canceled: controlsStore.rainbow && item.status == 'canceled',
-              lost: controlsStore.rainbow && item.status == 'lost',
+              open: controlsStore.state.rainbow && item.status == 'open',
+              requested:
+                controlsStore.state.rainbow && item.status == 'requested',
+              ordered: controlsStore.state.rainbow && item.status == 'ordered',
+              late: controlsStore.state.rainbow && item.status == 'late',
+              partial: controlsStore.state.rainbow && item.status == 'partial',
+              delivered:
+                controlsStore.state.rainbow && item.status == 'delivered',
+              canceled:
+                controlsStore.state.rainbow && item.status == 'canceled',
+              lost: controlsStore.state.rainbow && item.status == 'lost',
             }"
           >
             <td id="number" class="sticky-col">
@@ -1024,7 +1089,7 @@ watch(statusStore.$state, () => {
               class="sticky-col"
               @contextmenu.prevent="
                 () => {
-                  filterStore.id = item.id;
+                  filterStore.state.id = item.id;
                 }
               "
             >
@@ -1043,7 +1108,7 @@ watch(statusStore.$state, () => {
                 v-if="
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
                 class="cell-select"
                 v-model="item.status"
@@ -1066,7 +1131,7 @@ watch(statusStore.$state, () => {
               class="sticky-col"
               @contextmenu.prevent="
                 () => {
-                  filterStore.project = item.project;
+                  filterStore.state.project = item.project;
                 }
               "
             >
@@ -1075,7 +1140,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1093,7 +1158,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.project }}
               </div>
@@ -1103,7 +1168,7 @@ watch(statusStore.$state, () => {
               class="sticky-col"
               @contextmenu.prevent="
                 () => {
-                  filterStore.machine = item.machine;
+                  filterStore.state.machine = item.machine;
                 }
               "
             >
@@ -1112,7 +1177,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1130,7 +1195,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.machine }}
               </div>
@@ -1140,7 +1205,7 @@ watch(statusStore.$state, () => {
               class="sticky-col"
               @contextmenu.prevent="
                 () => {
-                  filterStore.quantity = item.quantity;
+                  filterStore.state.quantity = item.quantity;
                 }
               "
             >
@@ -1149,7 +1214,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1167,7 +1232,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.quantity }}
               </div>
@@ -1177,11 +1242,13 @@ watch(statusStore.$state, () => {
               class="sticky-col"
               @contextmenu.prevent="
                 () => {
-                  filterStore.unit = item.unit;
+                  filterStore.state.unit = item.unit;
                 }
               "
             >
-              <div v-bind:class="{ 'fix-height': controlsStore.fixedHeight }">
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.unit }}
               </div>
             </td>
@@ -1190,7 +1257,7 @@ watch(statusStore.$state, () => {
               class="sticky-col"
               @contextmenu.prevent="
                 () => {
-                  filterStore.partnumber = item.partnumber;
+                  filterStore.state.partnumber = item.partnumber;
                 }
               "
             >
@@ -1199,7 +1266,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1218,7 +1285,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.partnumber }}
               </div>
@@ -1227,7 +1294,7 @@ watch(statusStore.$state, () => {
               id="definition"
               @contextmenu.prevent="
                 () => {
-                  filterStore.definition = item.definition;
+                  filterStore.state.definition = item.definition;
                 }
               "
             >
@@ -1236,7 +1303,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1255,7 +1322,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.definition }}
               </div>
@@ -1264,7 +1331,7 @@ watch(statusStore.$state, () => {
               id="manufacturer"
               @contextmenu.prevent="
                 () => {
-                  filterStore.manufacturer = item.manufacturer;
+                  filterStore.state.manufacturer = item.manufacturer;
                 }
               "
             >
@@ -1273,7 +1340,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1292,7 +1359,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.manufacturer }}
               </div>
@@ -1301,7 +1368,7 @@ watch(statusStore.$state, () => {
               id="supplier"
               @contextmenu.prevent="
                 () => {
-                  filterStore.supplier = item.supplier;
+                  filterStore.state.supplier = item.supplier;
                 }
               "
             >
@@ -1310,7 +1377,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1328,7 +1395,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.supplier }}
               </div>
@@ -1337,7 +1404,7 @@ watch(statusStore.$state, () => {
               id="group"
               @contextmenu.prevent="
                 () => {
-                  filterStore.group1 = item.group_1;
+                  filterStore.state.group1 = item.group_1;
                 }
               "
             >
@@ -1346,7 +1413,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1364,7 +1431,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.group_1 }}
               </div>
@@ -1373,7 +1440,7 @@ watch(statusStore.$state, () => {
               id="note-general"
               @contextmenu.prevent="
                 () => {
-                  filterStore.noteGeneral = item.note_general;
+                  filterStore.state.noteGeneral = item.note_general;
                 }
               "
             >
@@ -1382,7 +1449,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <textarea
@@ -1402,7 +1469,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.note_general }}
               </div>
@@ -1411,7 +1478,7 @@ watch(statusStore.$state, () => {
               id="note-supplier"
               @contextmenu.prevent="
                 () => {
-                  filterStore.noteSupplier = item.note_supplier;
+                  filterStore.state.noteSupplier = item.note_supplier;
                 }
               "
             >
@@ -1420,7 +1487,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <textarea
@@ -1440,17 +1507,17 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.note_supplier }}
               </div>
             </td>
             <td
               id="created"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.createdDate = item.created;
+                  filterStore.state.createdDate = item.created;
                 }
               "
             >
@@ -1458,14 +1525,19 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="creator"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.creatorId = item.creator_id;
+                  filterStore.state.creatorId = item.creator_id;
                 }
               "
             >
-              <div v-bind:class="{ 'fix-height': controlsStore.fixedHeight }">
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ usersStore.getNameByID(item.creator_id) }}
               </div>
             </td>
@@ -1473,7 +1545,7 @@ watch(statusStore.$state, () => {
               id="desired"
               @contextmenu.prevent="
                 () => {
-                  filterStore.desiredDate = item.desired_delivery_date;
+                  filterStore.state.desiredDate = item.desired_delivery_date;
                 }
               "
             >
@@ -1482,7 +1554,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <!-- <Datepicker class="datepicker" v-model="pickedDesiredDate" style="width:75px;text-align:center" /> -->
@@ -1499,10 +1571,10 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="requested"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.requestedDate = item.requested_date;
+                  filterStore.state.requestedDate = item.requested_date;
                 }
               "
             >
@@ -1510,23 +1582,28 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="requester"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.requesterId = item.requester_id;
+                  filterStore.state.requesterId = item.requester_id;
                 }
               "
             >
-              <div v-bind:class="{ 'fix-height': controlsStore.fixedHeight }">
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ usersStore.getNameByID(item.requester_id) }}
               </div>
             </td>
             <td
               id="ordered"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.orderedDate = item.ordered_date;
+                  filterStore.state.orderedDate = item.ordered_date;
                 }
               "
             >
@@ -1534,23 +1611,28 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="orderer"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.ordererId = item.orderer_id;
+                  filterStore.state.ordererId = item.orderer_id;
                 }
               "
             >
-              <div v-bind:class="{ 'fix-height': controlsStore.fixedHeight }">
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ usersStore.getNameByID(item.orderer_id) }}
               </div>
             </td>
             <td
               id="expected"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.expectedDate = item.expected_delivery_date;
+                  filterStore.state.expectedDate = item.expected_delivery_date;
                 }
               "
             >
@@ -1559,7 +1641,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <!-- <Datepicker class="datepicker" v-model="pickedExpectedDate" style="width:75px;text-align:center" /> -->
@@ -1576,10 +1658,10 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="delivered"
-              v-if="!controlsStore.requestView"
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.deliveredDate = item.delivery_date;
+                  filterStore.state.deliveredDate = item.delivery_date;
                 }
               "
             >
@@ -1587,35 +1669,49 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="taken-over-by"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.takeOverId = item.taken_over_id;
+                  filterStore.state.takeOverId = item.taken_over_id;
                 }
               "
             >
-              <div v-bind:class="{ 'fix-height': controlsStore.fixedHeight }">
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ usersStore.getNameByID(item.taken_over_id) }}
               </div>
             </td>
             <td
               id="arrival-weeks"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               {{ calcDiffInWeeksFromToday(item.expected_delivery_date) }}
             </td>
             <td
               id="total-delivery-weeks"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
             >
               {{ calcDiffInWeeks(item.ordered_date, item.delivery_date) }}
             </td>
             <td
               id="storage-place"
-              v-if="!controlsStore.unclutter && !controlsStore.requestView"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
               @contextmenu.prevent="
                 () => {
-                  filterStore.storagePlace = item.storage_place;
+                  filterStore.state.storagePlace = item.storage_place;
                 }
               "
             >
@@ -1624,7 +1720,7 @@ watch(statusStore.$state, () => {
                   //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.textOnly == false
+                  controlsStore.state.textOnly == false
                 "
               >
                 <input
@@ -1643,7 +1739,7 @@ watch(statusStore.$state, () => {
               </div>
               <div
                 v-else
-                v-bind:class="{ 'fix-height': controlsStore.fixedHeight }"
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.storage_place }}
               </div>

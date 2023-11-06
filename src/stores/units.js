@@ -26,5 +26,5 @@ export const useUnitsStore = defineStore("units", () => {
     get();
   });
 
-  return { boughtItemUnits };
+  return { loading, boughtItemUnits };
 });

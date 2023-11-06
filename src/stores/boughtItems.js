@@ -4,10 +4,13 @@ import { defineStore } from "pinia";
 import constants from "@/constants";
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
+import { useBoughtItemFilterStore } from "@/stores/filter.js";
+import { getFilterParams } from "@/requests/params";
 
 export const useBoughtItemsStore = defineStore("boughtItems", () => {
-  const _pause = ref(false);
+  const _filterStore = useBoughtItemFilterStore();
 
+  const paused = ref(false);
   const loading = ref(false);
   const items = ref([
     {
@@ -45,23 +48,30 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
   }
 
   function pause(state) {
-    _pause.value = state;
+    paused.value = state;
   }
 
-  function getItems(params) {
-    if (_pause.value) {
+  function get() {
+    console.log("Bought Items store requesting data ...");
+    loading.value = true;
+
+    const params = getFilterParams(_filterStore.state);
+    return boughtItemsRequest.getItems(params).then((response) => {
+      loading.value = false;
+      if (response.status === 200) {
+        items.value = response.data;
+        console.log("Bought Items store got data from server.");
+      }
+      return response;
+    });
+  }
+
+  function getItems() {
+    if (paused.value) {
       console.log("Bought Items store is paused.");
       setTimeout(getItems.bind(this), constants.patchBoughtItemsStoreInterval);
     } else {
-      console.log("Bought Items store requesting users ...");
-      loading.value = true;
-
-      boughtItemsRequest.getItems(params).then((response) => {
-        loading.value = false;
-        if (response.status === 200) {
-          items.value = response.data;
-          console.log("Bought Items store got data from server.");
-        }
+      get().then(() => {
         setTimeout(
           getItems.bind(this),
           constants.patchBoughtItemsStoreInterval,
@@ -71,8 +81,9 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
   }
 
   onBeforeMount(() => {
+    clear();
     getItems();
   });
 
-  return { loading, items, clear, pause };
+  return { loading, paused, items, get, clear, pause };
 });

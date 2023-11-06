@@ -4,13 +4,11 @@ import { useRoute } from "vue-router";
 import moment from "moment";
 import Datepicker from "vue3-datepicker";
 
-import constants from "@/constants";
+import { useBoughtItemsStore } from "@/stores/boughtItems.js";
 import { useUnitsStore } from "@/stores/units.js";
 import { useStatusStore } from "@/stores/status.js";
 import { useBoughtItemsControlsStore } from "@/stores/controls.js";
 import { useBoughtItemFilterStore } from "@/stores/filter.js";
-import { boughtItemsService } from "@/services/items.service";
-import { getFilterParams } from "@/requests/params";
 import { boughtItemsRequest } from "@/requests/items";
 import { capitalizeFirstLetter } from "@/helper/string.helper";
 import { useUserStore, useUsersStore } from "@/stores/user.js";
@@ -30,6 +28,7 @@ const emit = defineEmits([
 const route = useRoute();
 
 // Store
+const boughtItemsStore = useBoughtItemsStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 const controlsStore = useBoughtItemsControlsStore();
@@ -38,9 +37,6 @@ const notificationStore = useNotificationStore();
 const unitsStore = useUnitsStore();
 const statusStore = useStatusStore();
 
-// Controlling vars
-let autoFetchIsPaused = false;
-
 // Select options
 let availableOptionsStatus = [{ text: "All", value: "" }];
 let availableOptionsUnit = [{ text: "All", value: "" }];
@@ -48,37 +44,6 @@ let availableOptionsUsers = [{ text: "All", value: "" }];
 
 // Items
 const lineIndex = ref(0);
-const boughtItems = ref([
-  {
-    _type: "data",
-    id: 0,
-    status: "",
-    group_1: "",
-    created: "",
-    creator_id: "",
-    high_priority: "",
-    notify_on_delivery: "",
-    project: "",
-    machine: "",
-    quantity: "",
-    unit: "",
-    partnumber: "",
-    definition: "",
-    supplier: "",
-    manufacturer: "",
-    note_general: "",
-    note_supplier: "",
-    desired_delivery_date: "",
-    requester_id: "",
-    requested_date: "",
-    orderer_id: "",
-    ordered_date: "",
-    expected_delivery_date: ref(new Date()),
-    taken_over_id: "",
-    delivery_date: "",
-    storage_place: "",
-  },
-]);
 
 // Dates
 let pickedExpectedDate = ref(new Date());
@@ -117,49 +82,16 @@ function setOptionsUsers() {
   availableOptionsUsers = tempAvailableOptions;
 }
 
-function fetchBoughtItems() {
-  const params = getFilterParams(filterStore.state);
-  boughtItemsService.clearCache();
-  boughtItemsService.getItems(params).then((response) => {
-    boughtItems.value = response.data;
-  });
-}
-
-function autoFetchBoughtItems() {
-  boughtItemsService.clearCache();
-  if (route.path != "/items/bought") {
-    console.info(
-      "Stopped updating routine for bought items: User leaved site.",
-    );
-  } else if (autoFetchIsPaused) {
-    console.info("Paused updating routine for bought items.");
-    setTimeout(
-      autoFetchBoughtItems.bind(this),
-      constants.fetchBoughtItemsAfter,
-    );
-  } else {
-    console.log("Automatically fetching bought items...");
-    const params = getFilterParams(filterStore.state);
-    boughtItemsService.getItems(params).then((response) => {
-      boughtItems.value = response.data;
-      setTimeout(
-        autoFetchBoughtItems.bind(this),
-        constants.fetchBoughtItemsAfter,
-      );
-    });
-  }
-}
-
 function pauseFetchBoughtItems(state) {
   if (state) {
     // Wait 100ms before stopping the auto fetch routine because if the user sets the focus on another
     // element it could be possible, that the pause is reset by another element before it's set by the
     // current element.
     setTimeout(() => {
-      autoFetchIsPaused = true;
+      boughtItemsStore.pause(true);
     }, 100);
   } else {
-    autoFetchIsPaused = false;
+    boughtItemsStore.pause(false);
   }
 }
 
@@ -190,7 +122,7 @@ function multiSelect(event, id, index) {
       indexRange[c] = highEnd--;
     }
     for (var i = 0; i < indexRange.length; i++) {
-      tempSelectedItemIds.push(boughtItems.value[indexRange[i] - 1].id);
+      tempSelectedItemIds.push(boughtItemsStore.items[indexRange[i] - 1].id);
     }
   } else if (!tempSelectedItemIds.includes(id)) {
     tempSelectedItemIds = [id];
@@ -231,14 +163,10 @@ function updateItemHandler(requestFn, value, desc) {
         if (response.status == 403) {
           notificationStore.warning = response.data.detail;
         }
-        // if (c == ids.length) {
-        //   fetchBoughtItems();
-        //   notificationStore.info = `Updated ${desc}.`
-        // }
       });
     }
   } else {
-    fetchBoughtItems();
+    boughtItemsStore.get();
   }
 }
 
@@ -379,11 +307,9 @@ function eventKeyUp(event) {
 }
 
 onMounted(() => {
-  boughtItems.value = [];
   setOptionsUsers();
   setOptionsStatus();
   setOptionsUnits();
-  autoFetchBoughtItems();
 });
 
 onBeforeMount(() => {
@@ -398,7 +324,7 @@ watch(
   () => props.triggerGetNewData,
   () => {
     if (props.triggerGetNewData) {
-      fetchBoughtItems();
+      boughtItemsStore.get();
       emit("update:triggerGetNewData", false);
       emit("update:selectedItemIds", []);
     }
@@ -409,7 +335,7 @@ watch(
   filterStore.state,
   () => {
     emit("update:selectedItemIds", []);
-    fetchBoughtItems();
+    boughtItemsStore.get();
   },
   { deep: true },
 );
@@ -429,7 +355,10 @@ watch(statusStore.$state, () => {
 
 <template>
   <div class="scope" v-on:keyup.esc="removeSelection">
-    <Spinner class="spinner" v-if="boughtItems.length == 0" />
+    <Spinner
+      class="spinner"
+      v-if="boughtItemsStore.loading && boughtItemsStore.items.length == 0"
+    />
     <div class="wrapper">
       <table
         class="cursor-default"
@@ -577,7 +506,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.id"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -594,7 +523,7 @@ watch(statusStore.$state, () => {
               <select
                 class="filter-select"
                 v-model="filterStore.state.status"
-                @change="fetchBoughtItems"
+                @change="boughtItemsStore.get()"
               >
                 <option
                   v-for="option in availableOptionsStatus"
@@ -617,7 +546,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.project"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -634,7 +563,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.machine"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -651,7 +580,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.quantity"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -668,7 +597,7 @@ watch(statusStore.$state, () => {
               <select
                 class="filter-select"
                 v-model="filterStore.state.unit"
-                @change="fetchBoughtItems"
+                @change="boughtItemsStore.get()"
               >
                 <option
                   v-for="option in availableOptionsUnit"
@@ -691,7 +620,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.partnumber"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -708,7 +637,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.definition"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -725,7 +654,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.manufacturer"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -742,7 +671,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.supplier"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -759,7 +688,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.group1"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -776,7 +705,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.noteGeneral"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -793,7 +722,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.noteSupplier"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -811,7 +740,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.createdDate"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -832,7 +761,7 @@ watch(statusStore.$state, () => {
               <select
                 class="filter-select"
                 v-model="filterStore.state.creatorId"
-                @change="fetchBoughtItems"
+                @change="boughtItemsStore.get()"
               >
                 <option
                   v-for="option in availableOptionsUsers"
@@ -855,7 +784,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.desiredDate"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -873,7 +802,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.requestedDate"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -894,7 +823,7 @@ watch(statusStore.$state, () => {
               <select
                 class="filter-select"
                 v-model="filterStore.state.requesterId"
-                @change="fetchBoughtItems"
+                @change="boughtItemsStore.get()"
               >
                 <option
                   v-for="option in availableOptionsUsers"
@@ -918,7 +847,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.orderedDate"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -939,7 +868,7 @@ watch(statusStore.$state, () => {
               <select
                 class="filter-select"
                 v-model="filterStore.state.ordererId"
-                @change="fetchBoughtItems"
+                @change="boughtItemsStore.get()"
               >
                 <option
                   v-for="option in availableOptionsUsers"
@@ -963,7 +892,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.expectedDate"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -981,7 +910,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.deliveredDate"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -1002,7 +931,7 @@ watch(statusStore.$state, () => {
               <select
                 class="filter-select"
                 v-model="filterStore.state.takeOverId"
-                @change="fetchBoughtItems"
+                @change="boughtItemsStore.get()"
               >
                 <option
                   v-for="option in availableOptionsUsers"
@@ -1049,7 +978,7 @@ watch(statusStore.$state, () => {
               <input
                 class="filter-input"
                 v-model="filterStore.state.storagePlace"
-                v-on:keyup.enter="fetchBoughtItems()"
+                v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
               />
@@ -1058,7 +987,7 @@ watch(statusStore.$state, () => {
         </thead>
         <tbody>
           <tr
-            v-for="(item, index) in boughtItems"
+            v-for="(item, index) in boughtItemsStore.items"
             :key="item.id"
             v-on:click="
               multiSelect($event, item.id, index),
@@ -1104,9 +1033,9 @@ watch(statusStore.$state, () => {
                 }
               "
             >
+              <Spinner v-if="statusStore.loading" />
               <select
-                v-if="
-                  //@ts-ignore
+                v-else-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   controlsStore.state.textOnly == false
                 "
@@ -1137,7 +1066,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1174,7 +1102,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1211,7 +1138,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1263,7 +1189,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1300,7 +1225,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1337,7 +1261,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1374,7 +1297,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1410,7 +1332,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1446,7 +1367,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1484,7 +1404,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1551,7 +1470,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1638,7 +1556,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false
@@ -1717,7 +1634,6 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  //@ts-ignore
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false

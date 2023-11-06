@@ -13,6 +13,7 @@ import constants from "@/constants";
 import router from "@/router/index";
 import { useBoughtItemsControlsStore } from "@/stores/controls.js";
 import { useBoughtItemFilterStore } from "@/stores/filter.js";
+import { useBoughtItemsStore } from "@/stores/boughtItems.js";
 import { useNotificationStore } from "@/stores/notification.js";
 import { useUserStore } from "@/stores/user.js";
 import { boughtItemsRequest } from "@/requests/items";
@@ -25,6 +26,8 @@ import ButtonEdit from "@/components/elements/ButtonEdit.vue";
 import ButtonCopy from "@/components/elements/ButtonCopy.vue";
 import ButtonDelete from "@/components/elements/ButtonDelete.vue";
 import ButtonExcel from "@/components/elements/ButtonExcel.vue";
+import ButtonSync from "@/components/elements/ButtonSync.vue";
+import ButtonSyncOff from "@/components/elements/ButtonSyncOff.vue";
 import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue";
 import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue";
 import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue";
@@ -40,6 +43,7 @@ const emit = defineEmits([
 ]);
 
 // Stores
+const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
 const notificationStore = useNotificationStore();
@@ -246,6 +250,20 @@ onBeforeUnmount(() => {
       ></ButtonClear>
     </div>
     <div id="filter-controls" class="controls-base-container">
+      <ButtonSyncOff
+        v-if="boughtItemsStore.paused"
+        class="controls-base-element"
+        text="Sync"
+      ></ButtonSyncOff>
+
+      <ButtonSync
+        v-else
+        class="controls-base-element"
+        text="Sync"
+        v-model:rotate="boughtItemsStore.loading"
+        v-on:click="boughtItemsStore.get()"
+      ></ButtonSync>
+
       <DropDownTableView
         class="controls-base-element"
         text="Views"

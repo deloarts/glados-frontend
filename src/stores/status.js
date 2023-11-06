@@ -26,5 +26,5 @@ export const useStatusStore = defineStore("status", () => {
     get();
   });
 
-  return { boughtItemStatus };
+  return { loading, boughtItemStatus };
 });

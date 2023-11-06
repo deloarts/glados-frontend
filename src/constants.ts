@@ -13,7 +13,7 @@ export default {
   // Fetch intervals
   patchUserStoreInterval: 5000,
   patchUsersStoreInterval: 10000,
-  patchBoughtItemsStoreInterval: 5000,
+  patchBoughtItemsStoreInterval: 10000,
   patchServerConfigInterval: 60000,
 
   fetchUsersAfter: 60000,

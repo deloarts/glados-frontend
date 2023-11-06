@@ -1,7 +1,13 @@
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
+import constants from "@/constants";
+import router from "@/router/index";
+import { usersRequest } from "@/requests/users";
+
 export const useUserStore = defineStore("user", () => {
+  const loading = ref(false);
+
   const username = ref("");
   const full_name = ref("");
   const email = ref("");
@@ -27,7 +33,39 @@ export const useUserStore = defineStore("user", () => {
     console.log("Logged out user");
   }
 
+  function getUser() {
+    console.log("User store is requesting user ...");
+    loading.value = true;
+
+    usersRequest.getUsersMe().then((response) => {
+      loading.value = false;
+      if (response.status === 200) {
+        username.value = response.data.username;
+        full_name.value = response.data.full_name;
+        email.value = response.data.email;
+        is_active.value = response.data.is_active;
+        is_superuser.value = response.data.is_superuser;
+        is_adminuser.value = response.data.is_adminuser;
+        is_guestuser.value = response.data.is_guestuser;
+        is_systemuser.value = response.data.is_systemuser;
+        id.value = response.data.id;
+        created.value = response.data.created;
+        console.log("User store got data from server.");
+      } else {
+        console.warn("User store could not get user.");
+        logout();
+        router.push({ name: "Login" });
+      }
+      setTimeout(getUser.bind(this), constants.patchUserStoreInterval);
+    });
+  }
+
+  onBeforeMount(() => {
+    getUser();
+  });
+
   return {
+    loading,
     username,
     full_name,
     email,
@@ -43,6 +81,7 @@ export const useUserStore = defineStore("user", () => {
 });
 
 export const useUsersStore = defineStore("users", () => {
+  const loading = ref(false);
   const users = ref([
     {
       username: "",
@@ -71,5 +110,23 @@ export const useUsersStore = defineStore("users", () => {
     return "Unknown User";
   }
 
-  return { users, getNameByID };
+  function getUsers() {
+    console.log("Users store requesting users ...");
+    loading.value = true;
+
+    usersRequest.getUsers().then((response) => {
+      loading.value = false;
+      if (response.status === 200) {
+        users.value = response.data;
+        console.log("Users store got data from server.");
+      }
+      setTimeout(getUsers.bind(this), constants.patchUsersStoreInterval);
+    });
+  }
+
+  onBeforeMount(() => {
+    getUsers();
+  });
+
+  return { loading, users, getNameByID };
 });

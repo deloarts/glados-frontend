@@ -1,31 +1,26 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { usersRequest } from "@/requests/users";
 import { useNotificationStore } from "@/stores/notification.js";
+import { useUserStore } from "@/stores/user.js";
 
-import Toggle from "@vueform/toggle";
 import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
 
 // Stores
+const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 
 let formData = ref({
-  username: "",
-  full_name: "",
-  email: "",
+  username: userStore.username,
+  full_name: userStore.full_name,
+  email: userStore.email,
   password: "",
 });
 
-function getUser() {
-  usersRequest.getUsersMe().then((response) => {
-    formData.value = response.data;
-  });
-}
-
 function updateUser() {
   usersRequest.putUsersMe(formData.value).then((response) => {
-    getUser();
     if (response.status == 200) {
+      userStore.$patch(response.data);
       notificationStore.info = `Updated user ${formData.value.username}.`;
     } else if (response.status == 422) {
       notificationStore.warning = "Data is incomplete.";
@@ -34,10 +29,6 @@ function updateUser() {
     }
   });
 }
-
-onMounted(() => {
-  getUser();
-});
 </script>
 
 <template>

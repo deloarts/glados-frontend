@@ -164,7 +164,7 @@ onBeforeUnmount(() => {
   grid-template-areas: "list content";
 }
 
-@media screen and (max-width: $max-width-1) {
+@media screen and (max-width: $max-width-desktop) {
   .with-content {
     grid-template-columns: 100%;
     grid-template-areas:

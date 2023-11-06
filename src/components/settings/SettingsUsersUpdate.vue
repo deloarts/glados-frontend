@@ -3,7 +3,6 @@ import { ref, watch, onMounted } from "vue";
 
 import { useNotificationStore } from "@/stores/notification.js";
 import { usersRequest } from "@/requests/users";
-import { usersService } from "@/services/users.service";
 
 import Toggle from "@vueform/toggle";
 import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
@@ -37,7 +36,6 @@ function updateUser() {
     .putUsers(props.selectedUserID, formData.value)
     .then((response) => {
       getUser();
-      usersService.clearCache();
       if (response.status == 200) {
         notificationStore.info = `Updated user ${formData.value.username}`;
         // } else if (response.status == 403) {

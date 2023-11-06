@@ -40,10 +40,12 @@ const particlesLoaded = async (container) => {};
 
 .scope {
   color: white;
+  background-color: $main-background-color;
+  z-index: 1010;
 }
 
 .center {
-  z-index: 1002;
+  z-index: 1012;
 
   position: absolute;
   left: 50%;
@@ -67,7 +69,7 @@ const particlesLoaded = async (container) => {};
 }
 
 .wrapper {
-  width: 400px;
+  width: 200px;
   height: auto;
   overflow: auto;
   text-align: left;
@@ -124,6 +126,6 @@ const particlesLoaded = async (container) => {};
   right: 0;
   bottom: 0;
   background: $main-background-color;
-  z-index: 1001;
+  z-index: 1011;
 }
 </style>

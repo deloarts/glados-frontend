@@ -51,7 +51,7 @@ const showDeletePrompt = ref(false);
 const showExcelImport = ref(false);
 
 // Media
-const minWidth1 = ref(false);
+const minWidthDesktop = ref(false);
 
 // Selections
 const availableOptionsLimit = [
@@ -177,10 +177,10 @@ function onButtonClear() {
 }
 
 function onResize() {
-  if (window.innerWidth < constants.minWidth1) {
-    minWidth1.value = true;
+  if (window.innerWidth < constants.minWidthDesktop) {
+    minWidthDesktop.value = true;
   } else {
-    minWidth1.value = false;
+    minWidthDesktop.value = false;
   }
 }
 
@@ -228,11 +228,11 @@ onBeforeUnmount(() => {
       <ButtonExcel
         class="controls-base-element"
         text="Import Excel"
-        v-if="!minWidth1"
+        v-if="!minWidthDesktop"
         v-on:click="onButtonUploadExcel"
       ></ButtonExcel>
       <ButtonExcel
-        v-if="!minWidth1"
+        v-if="!minWidthDesktop"
         class="controls-base-element"
         text="Export Excel"
         v-on:click="onButtonDownloadExcel"

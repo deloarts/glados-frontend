@@ -2,7 +2,6 @@
 import { ref, watch } from "vue";
 
 import { useNotificationStore } from "@/stores/notification.js";
-import { usersService } from "@/services/users.service";
 import { usersRequest } from "@/requests/users";
 
 import Toggle from "@vueform/toggle";
@@ -36,7 +35,6 @@ function createUser() {
         email: "",
         password: "",
       };
-      usersService.clearCache();
       // } else if (response.status == 403) {
       //   notificationStore.warning = "Not enough permission"
     } else if (response.status == 406) {

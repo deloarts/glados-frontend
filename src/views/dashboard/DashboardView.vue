@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import moment from "moment";
 
@@ -19,6 +19,9 @@ const route = useRoute();
 
 // Stores
 const usersStore = useUsersStore();
+
+// Media
+const gtMinWidthTablet = ref(true);
 
 const boughtItemsAmount = ref({
   active: 0,
@@ -166,19 +169,44 @@ function autoFetchBoughtItems() {
 onMounted(() => {
   // fetchUserById()
   autoFetchBoughtItems();
+
+  onResize();
+  nextTick(() => {
+    window.addEventListener("resize", onResize);
+  });
 });
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResize);
+});
+
+function onResize() {
+  if (window.innerWidth < constants.minWidthTablet) {
+    gtMinWidthTablet.value = false;
+  } else {
+    gtMinWidthTablet.value = true;
+  }
+}
 </script>
 
 <template>
   <div class="views-scope">
     <div class="views-content">
       <div id="grid">
-        <div id="items-overview" class="grid-item-center">
+        <div
+          v-if="gtMinWidthTablet"
+          id="items-overview"
+          class="grid-item-center"
+        >
           <OverviewChart
             v-model:dataset="boughtItemsOverviewDataset"
           ></OverviewChart>
         </div>
-        <div id="users-overview" class="grid-item-center">
+        <div
+          v-if="gtMinWidthTablet"
+          id="users-overview"
+          class="grid-item-center"
+        >
           <UsersChart v-model:dataset="boughtItemsUsersDataset"></UsersChart>
         </div>
         <!-- <div id="items-timeline" class="grid-item-center">
@@ -232,7 +260,7 @@ onMounted(() => {
             v-model:count="boughtItemsAmount.canceled"
           ></ItemCount>
         </div>
-        <div id="data-note" class="grid-item-left">
+        <div v-if="gtMinWidthTablet" id="data-note" class="grid-item-left">
           Showing all items that have been edited within the last 30 days.
         </div>
       </div>
@@ -267,7 +295,7 @@ h1 {
     "data-note data-note data-note data-note";
 }
 
-@media screen and (max-width: $max-width-1) {
+@media screen and (max-width: $max-width-desktop) {
   .views-content {
     justify-content: center;
   }
@@ -285,6 +313,27 @@ h1 {
       "late-items canceled-items"
       "placeholder placeholder"
       "data-note data-note";
+  }
+}
+
+@media screen and (max-width: $max-width-tablet) {
+  .views-content {
+    justify-content: center;
+  }
+
+  #grid {
+    grid-gap: 20px;
+    grid-template-rows: 92px 92px 92px 92px 92px 92px 92px 92px;
+    grid-template-columns: 270px;
+    grid-template-areas:
+      "active-items"
+      "open-items"
+      "requested-items"
+      "ordered-items"
+      "delivered-items"
+      "partial-items"
+      "late-items"
+      "canceled-items";
   }
 }
 

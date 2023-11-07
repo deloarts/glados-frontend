@@ -127,4 +127,18 @@ watch(full_name, () => typeFullName());
   border-radius: $main-border-radius;
   border-color: darkred;
 }
+
+@media screen and (max-width: $max-width-tablet) {
+  .full-name {
+    font-size: 0.8em;
+  }
+
+  .email {
+    font-size: 0.6em;
+  }
+
+  .dev {
+    font-size: 0.7em;
+  }
+}
 </style>

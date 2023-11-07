@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import moment from "moment";
 
 import constants from "@/constants";
+import { useResolutionStore } from "@/stores/resolution.js";
 import { useUsersStore } from "@/stores/user.js";
 import { getFilterParams } from "@/requests/params";
 import { boughtItemsRequest } from "@/requests/items";
@@ -19,9 +20,8 @@ const route = useRoute();
 
 // Stores
 const usersStore = useUsersStore();
-
-// Media
-const gtMinWidthTablet = ref(true);
+const resolutionStore = useResolutionStore();
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
 
 const boughtItemsAmount = ref({
   active: 0,
@@ -167,26 +167,8 @@ function autoFetchBoughtItems() {
 }
 
 onMounted(() => {
-  // fetchUserById()
   autoFetchBoughtItems();
-
-  onResize();
-  nextTick(() => {
-    window.addEventListener("resize", onResize);
-  });
 });
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", onResize);
-});
-
-function onResize() {
-  if (window.innerWidth < constants.minWidthTablet) {
-    gtMinWidthTablet.value = false;
-  } else {
-    gtMinWidthTablet.value = true;
-  }
-}
 </script>
 
 <template>

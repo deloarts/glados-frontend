@@ -23,9 +23,12 @@ function onClickDropDown() {
 </script>
 
 <template>
-  <button class="dropdown" v-bind:class="{ 'dropdown-active': state }">
+  <button
+    class="dropdown"
+    v-bind:class="{ 'dropdown-active': state, text: props.text != '' }"
+  >
     <div class="inner" v-on:click="onClickButton()">
-      <i class="icon">
+      <i class="icon" v-bind:class="{ 'icon-text': props.text != '' }">
         <svg
           height="100%"
           viewBox="0 0 24 24"

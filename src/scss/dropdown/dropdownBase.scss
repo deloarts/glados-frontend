@@ -6,8 +6,8 @@
   font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.9em;
 
-  width: 130px;
   height: 32px;
+  width: 42px;
 
   display: inline-flex;
   outline: none;
@@ -41,15 +41,21 @@
   align-items: center;
 }
 
+.text {
+  width: 130px;
+}
+
 .icon {
   cursor: pointer;
   color: $main-color;
   display: flex;
   vertical-align: middle;
-
-  margin-right: 10px;
   width: 17px;
   height: 17px;
+}
+
+.icon-text {
+  margin-right: 10px;
 }
 
 .items {

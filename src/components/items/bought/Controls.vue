@@ -1,21 +1,14 @@
 <script setup>
-import {
-  ref,
-  watch,
-  computed,
-  onMounted,
-  onBeforeUnmount,
-  nextTick,
-} from "vue";
+import { ref, watch, computed, onBeforeMount } from "vue";
 import Toggle from "@vueform/toggle";
 
-import constants from "@/constants";
 import router from "@/router/index";
 import { useBoughtItemsControlsStore } from "@/stores/controls.js";
 import { useBoughtItemFilterStore } from "@/stores/filter.js";
 import { useBoughtItemsStore } from "@/stores/boughtItems.js";
 import { useNotificationStore } from "@/stores/notification.js";
 import { useUserStore } from "@/stores/user.js";
+import { useResolutionStore } from "@/stores/resolution.js";
 import { boughtItemsRequest } from "@/requests/items";
 import { getFilterParams } from "@/requests/params";
 
@@ -47,15 +40,36 @@ const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
 const notificationStore = useNotificationStore();
+const resolutionStore = useResolutionStore();
 const userStore = useUserStore();
+
 const is_guestuser = computed(() => userStore.is_guestuser);
+const gtMinWidthDesktop = computed(() => resolutionStore.gtMinWidthDesktop);
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
 
 // Shows
 const showDeletePrompt = ref(false);
 const showExcelImport = ref(false);
 
-// Media
-const minWidthDesktop = ref(false);
+// Buttons
+const buttonItemCreateText = computed(() => {
+  return gtMinWidthTablet.value ? "New Item" : "";
+});
+const buttonItemEditText = computed(() => {
+  return gtMinWidthTablet.value ? "Edit Item" : "";
+});
+const buttonItemCopyText = computed(() => {
+  return gtMinWidthTablet.value ? "Copy Item" : "";
+});
+const buttonSyncText = computed(() => {
+  return gtMinWidthTablet.value ? "Sync" : "";
+});
+const buttonViewsText = computed(() => {
+  return gtMinWidthTablet.value ? "Views" : "";
+});
+const buttonClearFilterText = computed(() => {
+  return gtMinWidthTablet.value ? "Clear Filter" : "";
+});
 
 // Selections
 const availableOptionsLimit = [
@@ -167,12 +181,19 @@ function onButtonClear() {
   emit("update:selectedItemIds", []);
 }
 
-function onResize() {
-  if (window.innerWidth < constants.minWidthDesktop) {
-    minWidthDesktop.value = true;
-  } else {
-    minWidthDesktop.value = false;
-  }
+function setupMobileView() {
+  filterStore.reset();
+  controlsStore.state.unclutter = true;
+  controlsStore.state.requestView = false;
+  controlsStore.state.textOnly = false;
+  controlsStore.state.lockCols = false;
+}
+
+function setupTabletView() {
+  filterStore.reset();
+  controlsStore.state.requestView = false;
+  controlsStore.state.textOnly = false;
+  controlsStore.state.lockCols = false;
 }
 
 watch(selectedOptionFilterPreset, () => {
@@ -192,16 +213,16 @@ watch(selectedOptionFilterPreset, () => {
   }
 });
 
-onMounted(() => {
-  onResize();
-  nextTick(() => {
-    window.addEventListener("resize", onResize);
-  });
+watch(gtMinWidthTablet, () => {
+  setupMobileView();
 });
 
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", onResize);
+watch(gtMinWidthDesktop, () => {
+  setupTabletView();
 });
+
+onBeforeMount(setupMobileView);
+onBeforeMount(setupTabletView);
 </script>
 
 <template>
@@ -213,32 +234,33 @@ onBeforeUnmount(() => {
     >
       <ButtonItemCreate
         class="controls-base-element"
-        text="New Item"
+        v-model:text="buttonItemCreateText"
         v-on:click="onButtonNewItem"
       ></ButtonItemCreate>
       <ButtonExcel
         class="controls-base-element"
         text="Import Excel"
-        v-if="!minWidthDesktop"
+        v-if="gtMinWidthDesktop"
         v-on:click="onButtonUploadExcel"
       ></ButtonExcel>
       <ButtonExcel
-        v-if="!minWidthDesktop"
+        v-if="gtMinWidthDesktop"
         class="controls-base-element"
         text="Export Excel"
         v-on:click="onButtonDownloadExcel"
       ></ButtonExcel>
       <ButtonEdit
         class="controls-base-element"
-        text="Edit Item"
+        v-model:text="buttonItemEditText"
         v-on:click="onButtonEdit"
       ></ButtonEdit>
       <ButtonCopy
         class="controls-base-element"
-        text="Copy Item"
+        v-model:text="buttonItemCopyText"
         v-on:click="onButtonCopy"
       ></ButtonCopy>
       <ButtonDelete
+        v-if="gtMinWidthTablet"
         class="controls-base-element"
         text="Delete Item"
         v-on:click="onButtonDelete"
@@ -253,20 +275,19 @@ onBeforeUnmount(() => {
       <ButtonSyncOff
         v-if="boughtItemsStore.paused"
         class="controls-base-element"
-        text="Sync"
+        v-model:text="buttonSyncText"
       ></ButtonSyncOff>
 
       <ButtonSync
-        v-else
         class="controls-base-element"
-        text="Sync"
+        v-model:text="buttonSyncText"
         v-model:rotate="boughtItemsStore.loading"
         v-on:click="boughtItemsStore.get()"
       ></ButtonSync>
 
       <DropDownTableView
         class="controls-base-element"
-        text="Views"
+        v-model:text="buttonViewsText"
         :hide-when-clicked="false"
       >
         <div class="drop-down-toggle-item">
@@ -285,11 +306,11 @@ onBeforeUnmount(() => {
           <Toggle v-model="controlsStore.state.fixedHeight"></Toggle
           ><span class="drop-down-toggle-item-text">Fixed Height</span>
         </div>
-        <div class="drop-down-toggle-item">
+        <div v-if="gtMinWidthTablet" class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.unclutter"></Toggle
           ><span class="drop-down-toggle-item-text">Unclutter</span>
         </div>
-        <div class="drop-down-toggle-item">
+        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.requestView"></Toggle
           ><span class="drop-down-toggle-item-text">Request View</span>
         </div>
@@ -301,35 +322,43 @@ onBeforeUnmount(() => {
           <Toggle v-model="controlsStore.state.rainbow"></Toggle
           ><span class="drop-down-toggle-item-text">Rainbow</span>
         </div>
-        <div class="drop-down-toggle-item">
+        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.textOnly"></Toggle
           ><span class="drop-down-toggle-item-text">Text Only</span>
+        </div>
+        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
+          <Toggle v-model="controlsStore.state.lockCols"></Toggle
+          ><span class="drop-down-toggle-item-text">Lock Columns</span>
         </div>
       </DropDownTableView>
 
       <ButtonFilterSave
+        v-if="gtMinWidthDesktop"
         class="controls-base-element"
         text="Save Filter"
         v-on:click="saveFilter"
       ></ButtonFilterSave>
       <ButtonFilterLoad
+        v-if="gtMinWidthDesktop"
         class="controls-base-element"
         text="Load Filter"
         v-on:click="loadFilter"
       ></ButtonFilterLoad>
       <ButtonFilterClear
         class="controls-base-element"
-        text="Clear Filter"
+        v-model:text="buttonClearFilterText"
         v-on:click="clearFilter"
       ></ButtonFilterClear>
 
       <SelectControls
+        v-if="gtMinWidthDesktop"
         class="controls-base-element"
         text="Limit"
         v-model:selection="filterStore.state.limit"
         :options="availableOptionsLimit"
       ></SelectControls>
       <SelectControls
+        v-if="gtMinWidthTablet"
         class="controls-base-element"
         text="Sort By"
         v-model:selection="filterStore.state.sortBy"

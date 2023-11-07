@@ -1,5 +1,12 @@
 <script setup>
-import { ref, watch, onBeforeMount, onMounted, onUnmounted } from "vue";
+import {
+  ref,
+  watch,
+  computed,
+  onBeforeMount,
+  onMounted,
+  onUnmounted,
+} from "vue";
 import { useRoute } from "vue-router";
 import moment from "moment";
 import Datepicker from "vue3-datepicker";
@@ -13,6 +20,7 @@ import { boughtItemsRequest } from "@/requests/items";
 import { capitalizeFirstLetter } from "@/helper/string.helper";
 import { useUserStore, useUsersStore } from "@/stores/user.js";
 import { useNotificationStore } from "@/stores/notification.js";
+import { useResolutionStore } from "@/stores/resolution.js";
 
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
@@ -36,6 +44,10 @@ const filterStore = useBoughtItemFilterStore();
 const notificationStore = useNotificationStore();
 const unitsStore = useUnitsStore();
 const statusStore = useStatusStore();
+const resolutionStore = useResolutionStore();
+
+const gtMinWidthDesktop = computed(() => resolutionStore.gtMinWidthDesktop);
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
 
 // Select options
 let availableOptionsStatus = [{ text: "All", value: "" }];
@@ -162,6 +174,9 @@ function updateItemHandler(requestFn, value, desc) {
         c++;
         if (response.status == 403) {
           notificationStore.warning = response.data.detail;
+        }
+        if (c == ids.length) {
+          boughtItemsStore.get();
         }
       });
     }
@@ -369,14 +384,62 @@ watch(statusStore.$state, () => {
       >
         <thead>
           <tr>
-            <th class="first sticky-col" id="number">#</th>
-            <th class="first sticky-col" id="item-id">ID</th>
-            <th class="first sticky-col" id="status">Status</th>
-            <th class="first sticky-col" id="project">Project</th>
-            <th class="first sticky-col" id="machine">Machine</th>
-            <th class="first sticky-col" id="quantity">Qty</th>
-            <th class="first sticky-col" id="unit">Unit</th>
-            <th class="first sticky-col" id="partnumber">Partnumber</th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="number"
+            >
+              #
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="item-id"
+            >
+              ID
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="status"
+            >
+              Status
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="project"
+            >
+              Project
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="machine"
+            >
+              Machine
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="quantity"
+            >
+              Qty
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="unit"
+            >
+              Unit
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="partnumber"
+            >
+              Partnumber
+            </th>
             <th class="first" id="definition">Definition</th>
             <th class="first" id="manufacturer">Manufacturer</th>
             <th class="first" id="supplier">Supplier</th>
@@ -491,11 +554,16 @@ watch(statusStore.$state, () => {
             </th>
           </tr>
           <tr v-if="controlsStore.state.textOnly == false">
-            <th class="second sticky-col" id="number">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="number"
+            >
               <!-- {{ filterStore.limit }} -->
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="item-id"
               @contextmenu.prevent="
                 () => {
@@ -512,7 +580,8 @@ watch(statusStore.$state, () => {
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="status"
               @contextmenu.prevent="
                 () => {
@@ -535,7 +604,8 @@ watch(statusStore.$state, () => {
               </select>
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="project"
               @contextmenu.prevent="
                 () => {
@@ -552,7 +622,8 @@ watch(statusStore.$state, () => {
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="machine"
               @contextmenu.prevent="
                 () => {
@@ -569,7 +640,8 @@ watch(statusStore.$state, () => {
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="quantity"
               @contextmenu.prevent="
                 () => {
@@ -586,7 +658,8 @@ watch(statusStore.$state, () => {
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="unit"
               @contextmenu.prevent="
                 () => {
@@ -609,7 +682,8 @@ watch(statusStore.$state, () => {
               </select>
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="partnumber"
               @contextmenu.prevent="
                 () => {
@@ -1009,13 +1083,16 @@ watch(statusStore.$state, () => {
               lost: controlsStore.state.rainbow && item.status == 'lost',
             }"
           >
-            <td id="number" class="sticky-col">
+            <td
+              id="number"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+            >
               <IconBellRing v-if="item.high_priority" class="bell-icon" />
               <span v-else>{{ index + 1 }}</span>
             </td>
             <td
               id="item-id"
-              class="sticky-col"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
                   filterStore.state.id = item.id;
@@ -1026,7 +1103,7 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="status"
-              class="sticky-col"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
                   filterStore.status = item.status;
@@ -1057,7 +1134,7 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="project"
-              class="sticky-col"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
                   filterStore.state.project = item.project;
@@ -1068,7 +1145,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1093,7 +1171,7 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="machine"
-              class="sticky-col"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
                   filterStore.state.machine = item.machine;
@@ -1104,7 +1182,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1129,7 +1208,7 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="quantity"
-              class="sticky-col"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
                   filterStore.state.quantity = item.quantity;
@@ -1140,7 +1219,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1165,7 +1245,7 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="unit"
-              class="sticky-col"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
                   filterStore.state.unit = item.unit;
@@ -1180,7 +1260,7 @@ watch(statusStore.$state, () => {
             </td>
             <td
               id="partnumber"
-              class="sticky-col"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
                   filterStore.state.partnumber = item.partnumber;
@@ -1191,7 +1271,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1227,7 +1308,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1263,7 +1345,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1299,7 +1382,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1334,7 +1418,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1369,7 +1454,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <textarea
@@ -1406,7 +1492,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <textarea
@@ -1472,7 +1559,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <!-- <Datepicker class="datepicker" v-model="pickedDesiredDate" style="width:75px;text-align:center" /> -->
@@ -1558,7 +1646,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <!-- <Datepicker class="datepicker" v-model="pickedExpectedDate" style="width:75px;text-align:center" /> -->
@@ -1636,7 +1725,8 @@ watch(statusStore.$state, () => {
                 v-if="
                   (userStore.is_superuser || userStore.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
                 "
               >
                 <input
@@ -1921,22 +2011,28 @@ td.sticky-col {
   width: 35px;
   min-width: 35px;
   max-width: 35px;
-  left: 0px;
   text-align: center;
+}
+#number.sticky-col {
+  left: 0px;
 }
 
 #item-id {
   width: 45px;
   min-width: 45px;
   max-width: 45px;
-  left: 37px;
   text-align: center;
+}
+#item-id.sticky-col {
+  left: 37px;
 }
 
 #status {
   width: 86px;
   min-width: 86px;
   min-width: 86px;
+}
+#status.sticky-col {
   left: 84px;
 }
 
@@ -1944,38 +2040,48 @@ td.sticky-col {
   width: 61px;
   min-width: 61px;
   max-width: 61px;
-  left: 172px;
   // text-align: center;
+}
+#project.sticky-col {
+  left: 172px;
 }
 
 #machine {
   width: 61px;
   min-width: 61px;
   max-width: 61px;
-  left: 235px;
   // text-align: center;
+}
+#machine.sticky-col {
+  left: 235px;
 }
 
 #quantity {
   width: 41px;
   min-width: 41px;
   max-width: 41px;
-  left: 298px;
   text-align: center;
+}
+#quantity.sticky-col {
+  left: 298px;
 }
 
 #unit {
   width: 41px;
   min-width: 41px;
   max-width: 41px;
-  left: 341px;
   text-align: center;
+}
+#unit.sticky-col {
+  left: 341px;
 }
 
 #partnumber {
   width: 301px;
   min-width: 301px;
   max-width: 301px;
+}
+#partnumber.sticky-col {
   left: 384px;
 }
 

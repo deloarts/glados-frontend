@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { useUserStore } from "@/stores/user.js";
+import { useResolutionStore } from "@/stores/resolution.js";
 
 import IconLogout from "@/components/icons/IconLogout.vue";
 import IconDashboard from "@/components/icons/IconDashboard.vue";
@@ -18,7 +19,10 @@ const route = useRoute();
 
 // Store
 const userStore = useUserStore();
+const resolutionStore = useResolutionStore();
+
 const is_adminuser = computed(() => userStore.is_adminuser);
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
 
 function routeIsActive(currentLink) {
   let activeRoute = route.path;
@@ -55,7 +59,7 @@ function logout() {
       /></router-link>
       <router-link :to="'/settings'"
         ><IconSettings
-          v-if="is_adminuser"
+          v-if="is_adminuser && gtMinWidthTablet"
           v-bind:class="{ active: routeIsActive('/settings') }"
       /></router-link>
     </div>

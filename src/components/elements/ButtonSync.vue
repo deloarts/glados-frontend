@@ -26,8 +26,8 @@ watch(
 </script>
 
 <template>
-  <button class="button">
-    <i class="icon">
+  <button class="button" v-bind:class="{ text: props.text != '' }">
+    <i class="icon" v-bind:class="{ 'icon-text': props.text != '' }">
       <svg
         v-bind:class="{ rotate: sync }"
         height="100%"

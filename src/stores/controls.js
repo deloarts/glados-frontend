@@ -8,9 +8,10 @@ export const useBoughtItemsControlsStore = defineStore(
       changelog: false,
       rainbow: false,
       textOnly: false,
-      fixedHeight: false,
+      fixedHeight: true,
       unclutter: false,
       requestView: false,
+      lockCols: false,
     });
 
     watch(

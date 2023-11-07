@@ -3,8 +3,8 @@ const props = defineProps(["text"]);
 </script>
 
 <template>
-  <button class="button">
-    <i class="icon">
+  <button class="button" v-bind:class="{ text: props.text != '' }">
+    <i class="icon" v-bind:class="{ 'icon-text': props.text != '' }">
       <svg
         height="100%"
         viewBox="0 0 24 24"

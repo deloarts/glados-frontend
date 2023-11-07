@@ -1,37 +1,19 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
+import { ref, computed } from "vue";
 
-import config from "@/config";
-import constants from "@/constants";
-
+import { useResolutionStore } from "@/stores/resolution.js";
 import FullScreenWarning from "@/components/main/FullScreenWarning.vue";
 
-const showBox = ref(false);
+// Stores
+const resolutionStore = useResolutionStore();
+const gtMinWidth = computed(() => resolutionStore.gtMinWidth);
+
 const text = ref("Screen Resolution Not Supported");
-
-function onResize() {
-  if (window.innerWidth < constants.minWidth && !config.debug) {
-    showBox.value = true;
-  } else {
-    showBox.value = false;
-  }
-}
-
-onMounted(() => {
-  onResize();
-  nextTick(() => {
-    window.addEventListener("resize", onResize);
-  });
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", onResize);
-});
 </script>
 
 <template>
   <FullScreenWarning
-    v-model:show="showBox"
+    v-bind:show="!gtMinWidth"
     v-model:text="text"
   ></FullScreenWarning>
 </template>

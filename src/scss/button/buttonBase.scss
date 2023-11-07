@@ -9,8 +9,8 @@ button {
   font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.9em;
 
-  width: 130px;
   height: 32px;
+  width: 42px;
 
   display: inline-flex;
   outline: none;
@@ -34,6 +34,10 @@ button {
   border-color: $main-border-color;
 }
 
+.text {
+  width: 130px;
+}
+
 .active {
   border-color: $main-border-color;
 }
@@ -42,7 +46,10 @@ button {
   cursor: pointer;
   color: $main-color;
   display: inline-flex;
-  margin-right: 10px;
   width: 17px;
   height: 17px;
+}
+
+.icon-text {
+  margin-right: 10px;
 }

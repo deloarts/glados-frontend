@@ -162,7 +162,7 @@ watch(pickedDesiredDate, () => {
 
 #grid {
   grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
-  grid-template-columns: 50px 200px 150px 450px;
+  grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
     "project project project note-general"
     "machine machine machine note-general"
@@ -174,6 +174,26 @@ watch(pickedDesiredDate, () => {
     "desired desired desired note-supplier"
     "notify notify-text notify-text notify-text"
     "priority priority-text priority-text priority-text";
+}
+
+@media screen and (max-width: $max-width-desktop) {
+  #grid {
+    grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
+    grid-template-columns: 50px auto 150px;
+    grid-template-areas:
+      "project project project"
+      "machine machine machine"
+      "quantity quantity unit"
+      "partnumber partnumber partnumber"
+      "definition definition definition"
+      "manufacturer manufacturer manufacturer"
+      "supplier supplier supplier"
+      "desired desired desired"
+      "note-general note-general note-general"
+      "note-supplier note-supplier note-supplier"
+      "notify notify-text notify-text"
+      "priority priority-text priority-text";
+  }
 }
 
 #notify {

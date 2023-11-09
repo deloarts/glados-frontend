@@ -46,7 +46,7 @@ svg {
 }
 
 svg:hover {
-  background: $main-background-color-dark;
+  background: $main-background-color;
 }
 
 .sidebar hr {
@@ -69,4 +69,32 @@ svg:hover {
 
 .logout:hover {
   background: $main-red;
+}
+
+.label {
+  z-index: 999;
+  position: fixed;
+  display: inline-block;
+  padding: 10px;
+  margin-left: 55px;
+
+  font-size: 0.8em;
+
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
+  border-width: $main-border-width;
+
+  background-color: $main-background-color-dark-2;
+  transform: translateY(calc(50% - 12px));
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }

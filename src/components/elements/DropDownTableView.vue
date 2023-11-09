@@ -43,13 +43,25 @@ function onClickDropDown() {
       </i>
       {{ props.text }}
     </div>
-    <div class="items" v-if="state" v-on:click="onClickDropDown()">
-      <slot></slot>
-    </div>
+    <Transition>
+      <div class="items" v-if="state" v-on:click="onClickDropDown()">
+        <slot></slot>
+      </div>
+    </Transition>
   </button>
 </template>
 
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
 @import "@/scss/dropdown/dropdownBase.scss";
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 </style>

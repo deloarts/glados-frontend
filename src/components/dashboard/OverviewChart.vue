@@ -16,12 +16,12 @@ const chartData = computed(() => {
     datasets: [
       {
         backgroundColor: [
-          "#e6e6e6",
+          "#25CCF7",
           "#f09646",
-          "#cbe646",
+          "#cec000",
           "#fa6450",
-          "#9cf79c",
-          "#5afa5a",
+          "#6f9700",
+          "#38a938",
           "#6d6d6d",
           "#501e1e",
         ],

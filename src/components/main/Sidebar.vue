@@ -10,6 +10,7 @@ import IconLogout from "@/components/icons/IconLogout.vue";
 import IconDashboard from "@/components/icons/IconDashboard.vue";
 import IconItems from "@/components/icons/IconItems.vue";
 import IconAccount from "@/components/icons/IconAccount.vue";
+import IconTools from "@/components/icons/IconTools.vue";
 import IconSettings from "@/components/icons/IconSettings.vue";
 
 const props = defineProps(["title"]);
@@ -28,6 +29,7 @@ const showLabelLogout = ref(false);
 const showLabelDashboard = ref(false);
 const showLabelBoughtItems = ref(false);
 const showLabelAccount = ref(false);
+const showLabelTools = ref(false);
 const showLabelSettings = ref(false);
 
 function routeIsActive(currentLink) {
@@ -92,6 +94,16 @@ function logout() {
         <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
         <Transition>
           <div v-if="showLabelAccount" class="label">Account</div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/tools'"
+        @mouseover="showLabelTools = true"
+        @mouseleave="showLabelTools = false"
+      >
+        <IconTools v-bind:class="{ active: routeIsActive('/tools') }" />
+        <Transition>
+          <div v-if="showLabelTools" class="label">Tools</div>
         </Transition>
       </router-link>
       <router-link

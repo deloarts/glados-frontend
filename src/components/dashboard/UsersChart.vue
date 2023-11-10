@@ -80,6 +80,9 @@ const chartOptions = {
         font: { size: 14 },
       },
     },
+    datalabels: {
+      display: false,
+    },
   },
 };
 

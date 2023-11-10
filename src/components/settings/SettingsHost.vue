@@ -8,6 +8,7 @@ import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 
 import IconServer from "@/components/icons/IconServer.vue";
 import IconComputer from "@/components/icons/IconComputer.vue";
+import IconWarning from "@/components/icons/IconWarning.vue";
 
 const discSpaceDatabaseDataset = ref({
   used: 1,
@@ -23,6 +24,7 @@ const os = ref("-");
 const hostname = ref("-");
 const databaseSpace = ref("-");
 const backupSpace = ref("-");
+const backupNotMounted = ref(false);
 
 function getDiscSpace() {
   hostRequest.getHostInfo().then((response) => {
@@ -35,11 +37,18 @@ function getDiscSpace() {
         " GiB free of " +
         response.data.disc_space.db_total +
         " GiB";
-      backupSpace.value =
-        response.data.disc_space.backup_free +
-        " GiB free of " +
-        response.data.disc_space.backup_total +
-        " GiB";
+
+      if (response.data.disc_space.backup_total) {
+        backupSpace.value =
+          response.data.disc_space.backup_free +
+          " GiB free of " +
+          response.data.disc_space.backup_total +
+          " GiB";
+        backupNotMounted.value = false;
+      } else {
+        backupNotMounted.value = true;
+        backupSpace.value = "Not mounted";
+      }
 
       discSpaceDatabaseDataset.value = {
         used: response.data.disc_space.db_used,
@@ -60,44 +69,43 @@ onMounted(getDiscSpace);
   <div class="scope">
     <div class="content">
       <h1>Host Information</h1>
-      <div class="content">
-        <div class="wrapper">
-          <HostInformationItem title="HOSTNAME" v-model:text="hostname">
-            <IconComputer v-if="hostname != '-'" />
-            <LoadingSpinner v-else />
-          </HostInformationItem>
-        </div>
-        <div class="wrapper">
-          <HostInformationItem title="OS" v-model:text="os">
-            <IconServer v-if="os != '-'" />
-            <LoadingSpinner v-else />
-          </HostInformationItem>
-        </div>
-        <div class="wrapper">
-          <HostInformationItem
-            title="Database Disc Space"
-            v-model:text="databaseSpace"
+      <div class="wrapper">
+        <HostInformationItem title="HOSTNAME" v-model:text="hostname">
+          <IconComputer v-if="hostname != '-'" />
+          <LoadingSpinner v-else />
+        </HostInformationItem>
+      </div>
+      <div class="wrapper">
+        <HostInformationItem title="OS" v-model:text="os">
+          <IconServer v-if="os != '-'" />
+          <LoadingSpinner v-else />
+        </HostInformationItem>
+      </div>
+      <div class="wrapper">
+        <HostInformationItem
+          title="Database Disc Space"
+          v-model:text="databaseSpace"
+        >
+          <DiscSpaceChart
+            v-if="databaseSpace != '-'"
+            v-model:dataset="discSpaceDatabaseDataset"
           >
-            <DiscSpaceChart
-              v-if="databaseSpace != '-'"
-              v-model:dataset="discSpaceDatabaseDataset"
-            >
-            </DiscSpaceChart>
-            <LoadingSpinner v-else />
-          </HostInformationItem>
-        </div>
-        <div class="wrapper">
-          <HostInformationItem
-            title="Backup Disc Space"
-            v-model:text="backupSpace"
-          >
-            <DiscSpaceChart
-              v-if="backupSpace != '-'"
-              v-model:dataset="discSpaceBackupDataset"
-            ></DiscSpaceChart>
-            <LoadingSpinner v-else />
-          </HostInformationItem>
-        </div>
+          </DiscSpaceChart>
+          <LoadingSpinner v-else />
+        </HostInformationItem>
+      </div>
+      <div class="wrapper">
+        <HostInformationItem
+          title="Backup Disc Space"
+          v-model:text="backupSpace"
+        >
+          <IconWarning v-if="backupNotMounted" />
+          <DiscSpaceChart
+            v-else-if="backupSpace != '-'"
+            v-model:dataset="discSpaceBackupDataset"
+          ></DiscSpaceChart>
+          <LoadingSpinner v-else />
+        </HostInformationItem>
       </div>
     </div>
   </div>
@@ -112,11 +120,11 @@ onMounted(getDiscSpace);
 }
 
 .content {
-  padding: 10px;
+  // padding: 10px;
 }
 
 .wrapper {
-  padding-bottom: 20px;
+  padding: 10px;
 }
 
 svg {

@@ -375,8 +375,8 @@ onBeforeMount(setupTabletView);
 
   <Prompt
     text="Delete item?"
-    at-mouse
     yes-is-danger
+    v-bind:at-mouse="gtMinWidthDesktop"
     v-model:show="showDeletePrompt"
     v-bind:on-yes="deleteItem"
     v-bind:on-no="

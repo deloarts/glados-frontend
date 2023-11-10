@@ -60,10 +60,10 @@ onUnmounted(() => {
       v-bind:class="{ center: !props.atMouse }"
       :style="{ left: x, top: y }"
     >
-      <div id="text" class="text">
+      <div id="text" class="prompt-text">
         <span>{{ props.text }}</span>
       </div>
-      <IconQuestion id="icon" class="icon" />
+      <IconQuestion id="icon" class="prompt-icon" />
       <ButtonCheckDanger id="btnYes" v-on:click="props.onYes()" text="Yes" />
       <ButtonAbort id="btnNo" v-on:click="props.onNo()" text="No" />
     </div>
@@ -118,7 +118,7 @@ onUnmounted(() => {
   height: auto;
 
   grid-template-rows: auto 30px;
-  grid-template-columns: 40px auto 90px 90px;
+  grid-template-columns: 40px auto 130px 130px;
   grid-template-areas:
     "icon text text text"
     "empty empty btnYes btnNo";
@@ -135,7 +135,7 @@ onUnmounted(() => {
   text-align: center;
 }
 
-.text {
+.prompt-text {
   font-family: $main-font;
   font-size: 1.2em;
 
@@ -144,14 +144,14 @@ onUnmounted(() => {
   align-items: center;
 }
 
-.text span {
+.prompt-text span {
   width: 100%;
   max-width: 300px;
   text-align: left;
   padding-left: 10px;
 }
 
-.icon {
+.prompt-icon {
   width: 40px;
   height: 40px;
   display: flex;
@@ -161,7 +161,6 @@ onUnmounted(() => {
 
 button {
   padding-top: 10px;
-  width: 100%;
 }
 
 #empty {

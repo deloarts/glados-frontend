@@ -279,6 +279,7 @@ onBeforeMount(setupTabletView);
       ></ButtonSyncOff>
 
       <ButtonSync
+        v-else
         class="controls-base-element"
         v-model:text="buttonSyncText"
         v-model:rotate="boughtItemsStore.loading"

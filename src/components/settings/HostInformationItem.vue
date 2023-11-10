@@ -1,6 +1,4 @@
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
-
 // Props & Emits
 const props = defineProps(["title", "text"]);
 </script>

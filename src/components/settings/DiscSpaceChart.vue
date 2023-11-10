@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, computed, toDisplayString } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "vue-chartjs";
 

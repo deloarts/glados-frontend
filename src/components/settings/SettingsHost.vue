@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 
 import { hostRequest } from "@/requests/host";
 import HostInformationItem from "@/components/settings/HostInformationItem.vue";

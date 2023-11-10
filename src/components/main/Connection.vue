@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref, onBeforeMount, watch } from "vue";
+import { useRoute } from "vue-router";
 
 import config from "@/config";
 import constants from "@/constants";
@@ -67,7 +67,7 @@ function watchServerConnection() {
     });
 }
 
-onMounted(() => watchServerConnection());
+onBeforeMount(() => watchServerConnection());
 
 watch(route, () => {
   if (

@@ -4,7 +4,6 @@ import {
   watch,
   computed,
   onBeforeMount,
-  onMounted,
   onUnmounted,
 } from "vue";
 import { useRoute } from "vue-router";
@@ -321,14 +320,11 @@ function eventKeyUp(event) {
   }
 }
 
-onMounted(() => {
+onBeforeMount(() => {
+  document.addEventListener("keyup", eventKeyUp);
   setOptionsUsers();
   setOptionsStatus();
   setOptionsUnits();
-});
-
-onBeforeMount(() => {
-  document.addEventListener("keyup", eventKeyUp);
 });
 
 onUnmounted(() => {

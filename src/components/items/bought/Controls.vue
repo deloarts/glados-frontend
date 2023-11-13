@@ -11,6 +11,7 @@ import { useUserStore } from "@/stores/user.js";
 import { useResolutionStore } from "@/stores/resolution.js";
 import { boughtItemsRequest } from "@/requests/items";
 import { getFilterParams } from "@/requests/params";
+import { capitalizeFirstLetter } from "@/helper/string.helper";
 
 import ExcelImport from "@/components/items/bought/ExcelImport.vue";
 import Prompt from "@/components/main/Prompt.vue";
@@ -87,14 +88,13 @@ const availableOptionsOrderBy = [
   { text: "Manufacturer", value: "manufacturer" },
   { text: "Supplier", value: "supplier" },
 ];
-const availableOptionsFilterPresets = [
-  { text: "None", value: "reset" },
-  { text: "All Open", value: "allOpen" },
-  { text: "All Requested", value: "allRequested" },
-  { text: "All Ordered", value: "allOrdered" },
-  { text: "All Active", value: "allActive" },
-  { text: "All Prioritized", value: "allPrioritized" },
-];
+const availableOptionsFilterPresets = computed(() => {
+  let presets = [];
+  for (const key in filterStore.presets) {
+    presets.push({ text: capitalizeFirstLetter(key), value: key });
+  }
+  return presets;
+});
 const selectedOptionFilterPreset = ref("");
 
 function saveFilter() {
@@ -182,7 +182,6 @@ function onButtonClear() {
 }
 
 function setupMobileView() {
-  filterStore.reset();
   controlsStore.state.unclutter = true;
   controlsStore.state.requestView = false;
   controlsStore.state.textOnly = false;
@@ -190,27 +189,14 @@ function setupMobileView() {
 }
 
 function setupTabletView() {
-  filterStore.reset();
   controlsStore.state.requestView = false;
   controlsStore.state.textOnly = false;
   controlsStore.state.lockCols = false;
 }
 
 watch(selectedOptionFilterPreset, () => {
-  const value = selectedOptionFilterPreset.value;
-  if (value == "allOpen") {
-    filterStore.allOpen();
-  } else if (value == "allRequested") {
-    filterStore.allRequested();
-  } else if (value == "allOrdered") {
-    filterStore.allOrdered();
-  } else if (value == "allActive") {
-    filterStore.allActive();
-  } else if (value == "allPrioritized") {
-    filterStore.allPrioritized();
-  } else {
-    filterStore.reset();
-  }
+  const name = selectedOptionFilterPreset.value;
+  filterStore.applyPreset(name);
 });
 
 watch(gtMinWidthTablet, () => {

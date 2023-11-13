@@ -1,11 +1,5 @@
 <script setup>
-import {
-  ref,
-  watch,
-  computed,
-  onBeforeMount,
-  onUnmounted,
-} from "vue";
+import { ref, watch, computed, onBeforeMount, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import moment from "moment";
 import Datepicker from "vue3-datepicker";
@@ -343,7 +337,7 @@ watch(
 );
 
 watch(
-  filterStore.state,
+  filterStore.$state,
   () => {
     emit("update:selectedItemIds", []);
     boughtItemsStore.get();

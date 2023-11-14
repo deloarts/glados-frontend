@@ -2,6 +2,7 @@
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
 import { useNotificationStore } from "@/stores/notification.js";
+import { useBoughtItemsStore } from "@/stores/boughtItems.js";
 
 import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
 import ButtonAbort from "@/components/elements/ButtonAbort.vue";
@@ -10,6 +11,7 @@ const props = defineProps(["formData"]);
 
 // Stores
 const notificationStore = useNotificationStore();
+const boughtItemsStore = useBoughtItemsStore();
 
 function onCreate() {
   boughtItemsRequest
@@ -17,6 +19,7 @@ function onCreate() {
     .then((response) => {
       if (response.status === 200) {
         notificationStore.info = "Created item";
+        boughtItemsStore.get();
         router.push({ name: "BoughtItems" });
       }
       // else if (response.status === 403) {

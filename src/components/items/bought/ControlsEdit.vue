@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
 import { useNotificationStore } from "@/stores/notification.js";
+import { useBoughtItemsStore } from "@/stores/boughtItems.js";
 
 import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
 import ButtonAbort from "@/components/elements/ButtonAbort.vue";
@@ -15,6 +16,7 @@ const route = useRoute();
 
 // Stores
 const notificationStore = useNotificationStore();
+const boughtItemsStore = useBoughtItemsStore();
 
 function onUpdate() {
   const itemId = route.params.id;
@@ -23,6 +25,7 @@ function onUpdate() {
     .then((response) => {
       if (response.status === 200) {
         notificationStore.info = `Updated item #${itemId}.`;
+        boughtItemsStore.get();
         router.push({ name: "BoughtItems" });
       }
       // else if (response.status === 403) {

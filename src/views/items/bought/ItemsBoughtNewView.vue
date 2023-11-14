@@ -16,6 +16,7 @@ const formData = ref({
   definition: null,
   supplier: null,
   manufacturer: null,
+  group_1: null,
   note_general: null,
   note_supplier: null,
   desired_delivery_date: null,

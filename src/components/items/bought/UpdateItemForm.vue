@@ -118,6 +118,13 @@ watch(pickedDesiredDate, () => {
             placeholder="Supplier"
           />
         </div>
+        <div id="group" class="grid-item-center">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.group_1"
+            placeholder="Group"
+          />
+        </div>
         <div id="desired" class="grid-item-center">
           <Datepicker
             class="form-base-date-input"
@@ -161,16 +168,17 @@ watch(pickedDesiredDate, () => {
 @import "@/scss/grid/gridBase.scss";
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
+  grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
   grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
     "project project project note-general"
     "machine machine machine note-general"
     "quantity quantity unit note-general"
     "partnumber partnumber partnumber note-general"
-    "definition definition definition note-supplier"
+    "definition definition definition note-general"
     "manufacturer manufacturer manufacturer note-supplier"
     "supplier supplier supplier note-supplier"
+    "group group group note-supplier"
     "desired desired desired note-supplier"
     "notify notify-text notify-text notify-text"
     "priority priority-text priority-text priority-text";
@@ -178,7 +186,7 @@ watch(pickedDesiredDate, () => {
 
 @media screen and (max-width: $max-width-desktop) {
   #grid {
-    grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
+    grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
     grid-template-columns: 50px auto 150px;
     grid-template-areas:
       "project project project"
@@ -188,6 +196,7 @@ watch(pickedDesiredDate, () => {
       "definition definition definition"
       "manufacturer manufacturer manufacturer"
       "supplier supplier supplier"
+      "group group group"
       "desired desired desired"
       "note-general note-general note-general"
       "note-supplier note-supplier note-supplier"
@@ -242,6 +251,10 @@ watch(pickedDesiredDate, () => {
 
 #supplier {
   grid-area: supplier;
+}
+
+#group {
+  grid-area: group;
 }
 
 #desired {

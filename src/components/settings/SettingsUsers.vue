@@ -1,63 +1,59 @@
-<script lang="ts"> 
+<script setup>
+import { ref, watch } from "vue";
+
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import SettingsUsersTable from "@/components/settings/SettingsUsersTable.vue";
 import SettingsUsersCreate from "@/components/settings/SettingsUsersCreate.vue";
 import SettingsUsersUpdate from "@/components/settings/SettingsUsersUpdate.vue";
 
-export default {
-  name: 'SettingsUsers',
-  components: {
-    Spinner,
-    SettingsUsersTable,
-    SettingsUsersCreate,
-    SettingsUsersUpdate
-  },
-  data() {
-    return {
-      selectedUserId: 0,
-      mode: "create",
-    };
-  },
-  mounted() {
-  },
-  beforeMount() {
-  },
-  beforeDestroy() {
-  },
-  methods: {
-    onSelect(id: number) {
-      this.selectedUserId = id;
-    },
-  }, 
-  watch: {
-    selectedUserId() {
-      if (this.selectedUserId == 0) { this.mode = "create" }
-      else { this.mode = "update" }
-    }
+const selectedUserID = ref(0);
+const mode = ref("create");
+
+watch(selectedUserID, () => {
+  if (selectedUserID.value == 0) {
+    mode.value = "create";
+  } else {
+    mode.value = "update";
   }
-}
+});
 </script>
 
 <template>
   <div class="scope">
     <div class="content">
-      <h1>Registered Users</h1>
-      <SettingsUsersTable v-model:selected-user-id="selectedUserId"></SettingsUsersTable>
-    </div>
-    <hr>
-    <div class="content" v-if="mode == 'create'">
-      <h1>Create User</h1>
-      <SettingsUsersCreate></SettingsUsersCreate>
-    </div>
-    <div class="content" v-if="mode == 'update'">
-      <h1>Update User #{{ selectedUserId }}</h1>
-      <SettingsUsersUpdate v-model:selected-user-id="selectedUserId"></SettingsUsersUpdate>
+      <div id="grid">
+        <div id="registered-h1">
+          <h1>Registered Users</h1>
+        </div>
+        <div id="registered">
+          <SettingsUsersTable
+            v-model:selectedUserID="selectedUserID"
+          ></SettingsUsersTable>
+        </div>
+
+        <div id="user-h1" v-if="mode == 'create'">
+          <h1>Create User</h1>
+        </div>
+        <div id="user" v-if="mode == 'create'">
+          <SettingsUsersCreate></SettingsUsersCreate>
+        </div>
+
+        <div id="user-h1" v-if="mode == 'update'">
+          <h1>Update User #{{ selectedUserID }}</h1>
+        </div>
+        <div id="user" v-if="mode == 'update'">
+          <SettingsUsersUpdate
+            v-model:selectedUserID="selectedUserID"
+          ></SettingsUsersUpdate>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/grid/gridBase.scss";
 
 .scope {
   width: 100%;
@@ -65,10 +61,32 @@ export default {
 }
 
 .content {
-  padding: 30px;
+  height: 100%;
 }
 
-.gray {
-  color: gray;
+#grid {
+  grid-template-columns: 100%;
+  grid-template-rows: min-content 400px min-content min-content;
+  grid-template-areas:
+    "registered-h1"
+    "registered"
+    "user-h1"
+    "user";
+}
+
+#registered {
+  grid-area: registered;
+}
+
+#registered-h1 {
+  grid-area: registered-h1;
+}
+
+#user {
+  grid-area: user;
+}
+
+#user-h1 {
+  grid-area: user-h1;
 }
 </style>

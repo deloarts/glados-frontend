@@ -1,0 +1,33 @@
+@import "@/scss/variables.scss";
+
+.controls-base-scope {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  cursor: default;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: $main-font;
+  font-size: $main-font-size;
+}
+
+.controls-base-container {
+  height: auto;
+  overflow: hidden;
+  padding: 4px;
+  margin: 4px;
+
+  background-color: $main-background-color-dark;
+
+  // border-width: $main-border-width;
+  // border-style: $main-border-style;
+  // border-color: $main-border-color;
+  border-radius: $main-border-radius;
+}
+
+.controls-base-element {
+  float: left;
+  margin: 2px;
+}

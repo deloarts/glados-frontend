@@ -1,75 +1,11 @@
-<script lang="ts">
-import { ref, provide } from 'vue'
-
-import router from "./router/index";
-import { usersRequest } from "./requests/users"
-
-import Resolution from "./components/main/Resolution.vue";
-import Connection from "./components/main/Connection.vue";
-import Notification from "./components/main/Notification.vue";
-import Header from "./components/main/Header.vue";
-import Footer from "./components/main/Footer.vue";
-import Sidebar from "./components/main/Sidebar.vue";
-import RouterDisplay from "./components/main/RouterDisplay.vue";
-
-export default {
-  name: 'App',
-  components: {
-    Resolution,
-    Connection,
-    Notification,
-    Header,
-    Footer,
-    Sidebar,
-    RouterDisplay
-  },
-  setup() {
-    const currentUser = ref({
-      username: null,
-      full_name: null,
-      email: null,
-      is_active: null,
-      is_superuser: null,
-      id: null,
-      created: null
-    })
-    provide("currentUser", currentUser)
-    
-    return {
-      currentUser
-    }
-  },
-  methods: {
-    getCurrentUser() {
-      usersRequest.getUsersMe().then(response => {
-        if (response.status === 200) {
-          this.currentUser = response.data;
-          // Redirect the user to the app.
-          var previousRoute = localStorage.getItem("gladosActiveRoute");
-          if (previousRoute == "/login" || previousRoute == null) {
-            previousRoute = "/"
-          }
-          router.push(previousRoute);
-        }
-      });
-    }
-  },
-  beforeMount() {
-    this.getCurrentUser();
-  },
-  watch: {
-    currentUser: {
-      handler: function (newVal, oldVal) {
-        if (this.currentUser == undefined || this.currentUser.username == null || this.currentUser.username == undefined || this.currentUser.username == "") {
-          alert("Current user object is invalid. Checking again ...")
-          this.getCurrentUser();
-        }
-      },
-      deep: true
-    },
-  },
-}
-
+<script setup>
+import Resolution from "@/components/main/Resolution.vue";
+import Connection from "@/components/main/Connection.vue";
+import Notification from "@/components/main/Notification.vue";
+import Header from "@/components/main/Header.vue";
+import Footer from "@/components/main/Footer.vue";
+import Sidebar from "@/components/main/Sidebar.vue";
+import RouterDisplay from "@/components/main/RouterDisplay.vue";
 </script>
 <template>
   <div id="app">
@@ -93,8 +29,16 @@ export default {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import './assets/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+
+html {
+  background-color: $main-background-color;
+}
+
+body {
+  background-color: $main-background-color;
+}
 
 .grid {
   position: absolute;
@@ -107,11 +51,13 @@ export default {
   background: $main-background-color;
 
   display: grid;
-  grid-template-rows: 80px auto 20px;
-  grid-template-columns: 250px auto;
-  grid-template-areas: 'header display'
-    'sidebar display'
-    'footer display';
+  grid-gap: 0;
+  grid-template-rows: max-content auto 20px;
+  grid-template-columns: 50px auto;
+  grid-template-areas:
+    "header header"
+    "sidebar display"
+    "footer footer";
 }
 
 #header {

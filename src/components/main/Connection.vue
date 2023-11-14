@@ -1,160 +1,89 @@
-<script lang="ts">
-import IconWarning from "../icons/IconWarning.vue";
-import { request, requestConfig } from "@/requests/index";
-import constants from "@/constants";
+<script setup>
+import { ref, onBeforeMount, watch } from "vue";
+import { useRoute } from "vue-router";
+
 import config from "@/config";
+import constants from "@/constants";
 import router from "@/router/index";
+import { request, requestConfig } from "@/requests/index";
+import { useNotificationStore } from "@/stores/notification.js";
 
-export default {
-  name: 'Connection',
-  components: { IconWarning },
-  data() {
-    return {
-      notificationInfo: this.$notificationInfo,
-      showBox: false,
-      text: "",
-    };
-  },
-  methods: {
-    onReconnection() {
-      this.showBox = false;
-      // @ts-ignore
-      this.notificationInfo = "Reconnected to the server.";
+import FullScreenWarning from "@/components/main/FullScreenWarning.vue";
 
-      if (!config.debug) {
-        localStorage.setItem("gladosTokenValue", "");
-        localStorage.setItem("gladosTokenType", "");
-        router.push({ name: "Login" });
-      }
-    },
+// Routes
+const route = useRoute();
 
-    watchServerConnection() {
-      request.get(constants.apiGetHostVersion, requestConfig(null)).then(response => {
-        if (response.status === 200) {
-          var serverVersion = response.data.version.split(".");
-          var requiredVersion = constants.serverVersion.split(".");
+// Store
+const notificationStore = useNotificationStore();
 
-          if (serverVersion[0] != requiredVersion[0] || serverVersion[1] != requiredVersion[1] || serverVersion[2] < requiredVersion[2]) {
-            console.error("Server version is not supported.");
-            this.text = "Server version not supported.<br>Try reloading the page.";
-            this.showBox = true;
-          } else if (this.showBox) {
-            this.onReconnection();
-          }
-        } else if (this.showBox) {
-          this.onReconnection();
-        }
-        setTimeout(this.watchServerConnection.bind(this), constants.watchServerConnInterval);
-      }).catch(error => {
-        if (error.status == undefined) {
-          console.error("Lost server connection.");
-          this.text = "No server connection.";
-          this.showBox = true;
-        }
-        setTimeout(this.watchServerConnection.bind(this), 1000);
-      })
-    }
-  },
-  watch: {
-    // Ensure user is logged in
-    $route(to, from) {
-      if (localStorage.getItem("gladosTokenValue") == "" || localStorage.getItem("gladosTokenValue") == null) {
-        router.push({ name: "Login" });
-      }
-    }
-  },
-  mounted() {
-    this.watchServerConnection();
-  },
+const showBox = ref(false);
+const text = ref("");
+
+function onReconnection() {
+  showBox.value = false;
+  notificationStore.info = "Reconnected to the server.";
+
+  if (!config.debug) {
+    localStorage.setItem("gladosTokenValue", "");
+    localStorage.setItem("gladosTokenType", "");
+    router.push({ name: "Login" });
+  }
 }
+
+function watchServerConnection() {
+  request
+    .get(constants.apiGetHostVersion, requestConfig(null))
+    .then((response) => {
+      if (response.status === 200) {
+        var serverVersion = response.data.version.split(".");
+        var requiredVersion = constants.serverVersion.split(".");
+
+        if (
+          serverVersion[0] != requiredVersion[0] ||
+          serverVersion[1] != requiredVersion[1] ||
+          serverVersion[2] < requiredVersion[2]
+        ) {
+          console.error("Server version is not supported.");
+          text.value = "Server Version Not Supported";
+          showBox.value = true;
+        } else if (showBox.value) {
+          onReconnection();
+        }
+      } else if (showBox.value) {
+        onReconnection();
+      }
+      setTimeout(
+        watchServerConnection.bind(this),
+        constants.watchServerConnInterval,
+      );
+    })
+    .catch((error) => {
+      if (error.status == undefined) {
+        console.error("Lost server connection.");
+        text.value = "No Server Connection";
+        showBox.value = true;
+      }
+      setTimeout(watchServerConnection.bind(this), 1000);
+    });
+}
+
+onBeforeMount(() => watchServerConnection());
+
+watch(route, () => {
+  if (
+    localStorage.getItem("gladosTokenValue") == "" ||
+    localStorage.getItem("gladosTokenValue") == null
+  ) {
+    router.push({ name: "Login" });
+  }
+});
 </script>
 
 <template>
-  <div class="scope" v-if="showBox">
-    <div class="coat"></div>
-    <div class="container">
-      <div id="grid">
-        <div id="icon">
-          <IconWarning></IconWarning>
-        </div>
-        <div id="text">
-          <span v-html="text"></span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <FullScreenWarning
+    v-model:show="showBox"
+    v-model:text="text"
+  ></FullScreenWarning>
 </template>
 
-<style scoped lang='scss'>
-@import '../../assets/variables.scss';
-
-
-.coat {
-  z-index: 9997;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  background: $main-background-color;
-  opacity: 0.9;
-}
-
-.container {
-  z-index: 9998;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 360px;
-  height: 170px;
-  transform: translate(-50%, -50%);
-
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1.25em;
-  color: white;
-
-  opacity: 1;
-  animation: fade 0.25s linear;
-}
-
-#grid {
-  display: grid;
-  grid-gap: 20px;
-  grid-template-rows: 100px;
-  grid-template-columns: 50px auto;
-  grid-template-areas: 'icon text';
-
-  background: orangered;
-
-  border-width: 3px;
-  border-radius: 5px;
-  border-style: solid;
-  border-color: darkred;
-}
-
-#icon {
-  grid-area: icon;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#text {
-  grid-area: text;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-@keyframes fade {
-
-  0% {
-    opacity: 0
-  }
-
-  100% {
-    opacity: 1
-  }
-}
-</style>
+<style scoped lang="scss"></style>

@@ -1,144 +1,179 @@
-<script lang="ts">
-//@ts-ignore
-import Toggle from "@vueform/toggle";
-import ButtonUpdateUser from "@/components/elements/ButtonUpdateUser.vue";
+<script setup>
+import { ref, watch, onMounted } from "vue";
+
+import { useNotificationStore } from "@/stores/notification.js";
 import { usersRequest } from "@/requests/users";
-import { usersService } from "@/services/users.service";
 
-export default {
-  name: 'SettingsUsersUpdate',
-  props: ["selectedUserId"],
-  components: {
-    Toggle,
-    ButtonUpdateUser
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
+import Toggle from "@vueform/toggle";
+import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
 
-      // Vars
-      formData: {
+// Props & Emits
+const props = defineProps(["selectedUserID"]);
+
+// Stores
+const notificationStore = useNotificationStore();
+
+const formData = ref({
+  id: 0,
+  is_active: false,
+  is_superuser: false,
+  is_adminuser: false,
+  is_guestuser: false,
+  username: "",
+  full_name: "",
+  email: "",
+  password: "",
+});
+
+function getUser() {
+  usersRequest.getUsersId(props.selectedUserID).then((response) => {
+    formData.value = response.data;
+  });
+}
+
+function updateUser() {
+  usersRequest
+    .putUsers(props.selectedUserID, formData.value)
+    .then((response) => {
+      getUser();
+      if (response.status == 200) {
+        notificationStore.info = `Updated user ${formData.value.username}`;
+        // } else if (response.status == 403) {
+        //   notificationStore.warning = "Not enough permission"
+      } else if (response.status == 404) {
+        notificationStore.warning = "User not found";
+      } else if (response.status == 422) {
+        notificationStore.warning = "Data is incomplete";
+      } else {
+        notificationStore.warning = response.data.detail;
+      }
+    });
+}
+
+watch(
+  () => props.selectedUserID,
+  () => {
+    if (props.selectedUserID == 0) {
+      formData.value = {
         id: 0,
         is_active: false,
         is_superuser: false,
-        is_systemuser: false,
+        is_adminuser: false,
+        is_guestuser: false,
         username: "",
         full_name: "",
         email: "",
         password: "",
-      }
-    };
-  },
-  methods: {
-    getUser() {
-      usersRequest.getUsersId(this.selectedUserId).then(response => {
-        this.formData = response.data;
-      })
-    },
-    updateUser() {
-      usersRequest.putUsers(this.selectedUserId, this.formData).then(response => {
-        this.getUser();
-        usersService.clearCache();
-        if (response.status == 200) {
-          //@ts-ignore
-          this.notificationInfo = `Updated user ${this.formData.username}.`
-        } else if (response.status == 404) {
-          //@ts-ignore
-          this.notificationWarning = "User not found."
-        } else if (response.status == 422) {
-          //@ts-ignore
-          this.notificationWarning = "Data is incomplete."
-        } else {
-          //@ts-ignore
-          this.notificationWarning = "Failed to update user."
-        }
-      })
+      };
+    } else {
+      getUser();
     }
   },
-  watch: {
-    selectedUserId() {
-      if (this.selectedUserId == 0) {
-        this.formData = {
-          id: 0,
-          is_active: false,
-          is_superuser: false,
-          is_systemuser: false,
-          username: "",
-          full_name: "",
-          email: "",
-          password: "",
-        }
-      } else {
-        this.getUser();
-      }
-    }
-  },
-  mounted() {
-    this.getUser();
-  },
-  beforeMount() {
-  }
-};
+);
+
+onMounted(() => getUser());
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="form-base-scope">
+    <div class="form-base-container">
       <div id="grid">
+        <div id="guestuser" class="grid-item-center">
+          <Toggle v-model="formData.is_guestuser"></Toggle>
+        </div>
+        <div id="guestuser-text" class="grid-item-left">Guest</div>
         <div id="superuser" class="grid-item-center">
-          <Toggle v-model="formData.is_superuser" :disabled="formData.is_systemuser"></Toggle>
+          <Toggle v-model="formData.is_superuser"></Toggle>
         </div>
-        <div id="superuser-text" class="grid-item-left">
-          Superuser
+        <div id="superuser-text" class="grid-item-left">Superuser</div>
+        <div id="adminuser" class="grid-item-center">
+          <Toggle v-model="formData.is_adminuser"></Toggle>
         </div>
+        <div id="adminuser-text" class="grid-item-left">Admin</div>
         <div id="active" class="grid-item-center">
-          <Toggle v-model="formData.is_active" :disabled="formData.is_systemuser"></Toggle>
+          <Toggle v-model="formData.is_active"></Toggle>
         </div>
-        <div id="active-text" class="grid-item-left">
-          Active
-        </div>
+        <div id="active-text" class="grid-item-left">Active</div>
         <div id="username" class="grid-item-center">
-          <input class="text-input" v-model="formData.username" type="text" placeholder="Username"
-            :disabled="formData.is_systemuser">
+          <input
+            class="form-base-text-input"
+            v-model="formData.username"
+            type="text"
+            placeholder="Username"
+            :disabled="formData.is_systemuser"
+          />
         </div>
         <div id="full-name" class="grid-item-center">
-          <input class="text-input" v-model="formData.full_name" placeholder="Name">
+          <input
+            class="form-base-text-input"
+            v-model="formData.full_name"
+            placeholder="Name"
+          />
         </div>
         <div id="email" class="grid-item-center">
-          <input class="text-input" v-model="formData.email" placeholder="Mail">
+          <input
+            class="form-base-text-input"
+            v-model="formData.email"
+            placeholder="Mail"
+          />
         </div>
         <div id="password" class="grid-item-center">
-          <input class="text-input" v-model="formData.password" placeholder="Password"
-            :disabled="formData.is_systemuser">
+          <input
+            class="form-base-text-input"
+            v-model="formData.password"
+            placeholder="Password"
+            :disabled="formData.is_systemuser"
+          />
         </div>
         <div id="btn">
-          <ButtonUpdateUser v-on:click="updateUser" text="Update User"></ButtonUpdateUser>
+          <ButtonUserUpdate
+            v-on:click="updateUser"
+            text="Update User"
+          ></ButtonUserUpdate>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/form/formBase.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 25px 25px 40px;
+  grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
-  grid-template-areas: "username username"
+  grid-template-areas:
+    "username username"
     "full-name full-name"
     "email email"
     "password password"
-    "superuser superuser-text"
     "active active-text"
-    "btn btn"
+    "guestuser guestuser-text"
+    "superuser superuser-text"
+    "adminuser adminuser-text"
+    "btn btn";
 }
 
 #btn {
   grid-area: btn;
+}
+
+#active {
+  grid-area: active;
+}
+
+#active-text {
+  grid-area: active-text;
+}
+
+#guestuser {
+  grid-area: guestuser;
+}
+
+#guestuser-text {
+  grid-area: guestuser-text;
 }
 
 #superuser {
@@ -149,12 +184,12 @@ export default {
   grid-area: superuser-text;
 }
 
-#active {
-  grid-area: active;
+#adminuser {
+  grid-area: adminuser;
 }
 
-#active-text {
-  grid-area: active-text;
+#adminuser-text {
+  grid-area: adminuser-text;
 }
 
 #username {

@@ -1,552 +1,1120 @@
-<script lang="ts">
-import { ref, inject } from 'vue';
-
-//@ts-ignore
+<script setup>
+import { ref, watch, computed, onBeforeMount, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
 import moment from "moment";
-import Datepicker from 'vue3-datepicker';
+import Datepicker from "vue3-datepicker";
 
-import constants from "@/constants";
-import { usersRequest } from "@/requests/users";
-import { boughtItemsService } from "@/services/items.service";
-import { getFilterParams } from "@/requests/params";
+import { useBoughtItemsStore } from "@/stores/boughtItems.js";
+import { useUnitsStore } from "@/stores/units.js";
+import { useStatusStore } from "@/stores/status.js";
+import { useBoughtItemsControlsStore } from "@/stores/controls.js";
+import { useBoughtItemFilterStore } from "@/stores/filter.js";
 import { boughtItemsRequest } from "@/requests/items";
-import { hostRequest } from "@/requests/host";
 import { capitalizeFirstLetter } from "@/helper/string.helper";
+import { useUserStore, useUsersStore } from "@/stores/user.js";
+import { useNotificationStore } from "@/stores/notification.js";
+import { useResolutionStore } from "@/stores/resolution.js";
+
+import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
 
-export default {
-  name: 'BoughtItems',
-  props: ["selectedItemIds", "triggerGetNewData", "showRainbow", "showTextOnly", "showFixHeight", "showUnclutter", "showRequestView", "filter"],
-  emits: ["update:selectedItemIds", "update:triggerGetNewData", "update:filter"],
-  components: {
-    IconBellRing,
-    Datepicker
-  },
-  setup() {
-    const currentUser = inject("currentUser");
-    // const currentUser = inject(currentUserKey);
-    return {
-      currentUser,
+// Props & Emits
+const props = defineProps(["selectedItemIds", "triggerGetNewData"]);
+const emit = defineEmits([
+  "update:selectedItemIds",
+  "update:triggerGetNewData",
+]);
+
+// Router
+const route = useRoute();
+
+// Store
+const boughtItemsStore = useBoughtItemsStore();
+const userStore = useUserStore();
+const usersStore = useUsersStore();
+const controlsStore = useBoughtItemsControlsStore();
+const filterStore = useBoughtItemFilterStore();
+const notificationStore = useNotificationStore();
+const unitsStore = useUnitsStore();
+const statusStore = useStatusStore();
+const resolutionStore = useResolutionStore();
+
+const gtMinWidthDesktop = computed(() => resolutionStore.gtMinWidthDesktop);
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
+
+// Select options
+let availableOptionsStatus = [{ text: "All", value: "" }];
+let availableOptionsUnit = [{ text: "All", value: "" }];
+let availableOptionsUsers = [{ text: "All", value: "" }];
+
+// Items
+const lineIndex = ref(0);
+
+// Dates
+let pickedExpectedDate = ref(new Date());
+let pickedDesiredDate = ref(new Date());
+
+function setOptionsStatus() {
+  var tempAvailableOptions = [{ text: "All", value: "" }];
+  for (const property in statusStore.boughtItemStatus) {
+    tempAvailableOptions.push({
+      text: capitalizeFirstLetter(property),
+      value: statusStore.boughtItemStatus[property],
+    });
+  }
+  availableOptionsStatus = tempAvailableOptions;
+}
+
+function setOptionsUnits() {
+  var tempAvailableOptions = [{ text: "All", value: "" }];
+  for (let i = 0; i < unitsStore.boughtItemUnits.values.length; i++) {
+    tempAvailableOptions.push({
+      text: unitsStore.boughtItemUnits.values[i],
+      value: unitsStore.boughtItemUnits.values[i],
+    });
+  }
+  availableOptionsUnit = tempAvailableOptions;
+}
+
+function setOptionsUsers() {
+  var tempAvailableOptions = [{ text: "All", value: "" }];
+  for (let i = 0; i < usersStore.users.length; i++) {
+    tempAvailableOptions.push({
+      text: usersStore.users[i].full_name,
+      value: usersStore.users[i].id,
+    });
+  }
+  availableOptionsUsers = tempAvailableOptions;
+}
+
+function pauseFetchBoughtItems(state) {
+  if (state) {
+    // Wait 100ms before stopping the auto fetch routine because if the user sets the focus on another
+    // element it could be possible, that the pause is reset by another element before it's set by the
+    // current element.
+    setTimeout(() => {
+      boughtItemsStore.pause(true);
+    }, 100);
+  } else {
+    boughtItemsStore.pause(false);
+  }
+}
+
+function multiSelect(event, id, index) {
+  var tempSelectedItemIds = props.selectedItemIds;
+
+  if (event.ctrlKey) {
+    if (tempSelectedItemIds.includes(id)) {
+      tempSelectedItemIds.splice(tempSelectedItemIds.indexOf(id), 1);
+    } else {
+      tempSelectedItemIds.push(id);
+    }
+  } else if (event.shiftKey) {
+    var indexRange = [];
+    var highEnd = 0;
+    var lowEnd = 0;
+    tempSelectedItemIds = [];
+
+    if (lineIndex.value > index) {
+      highEnd = lineIndex.value + 1;
+      lowEnd = index + 1;
+    } else {
+      highEnd = index + 1;
+      lowEnd = lineIndex.value + 1;
+    }
+    var c = highEnd - lowEnd + 1;
+    while (c--) {
+      indexRange[c] = highEnd--;
+    }
+    for (var i = 0; i < indexRange.length; i++) {
+      tempSelectedItemIds.push(boughtItemsStore.items[indexRange[i] - 1].id);
+    }
+  } else if (!tempSelectedItemIds.includes(id)) {
+    tempSelectedItemIds = [id];
+  }
+
+  lineIndex.value = index;
+  emit("update:selectedItemIds", tempSelectedItemIds);
+}
+
+function removeSelection() {
+  emit("update:selectedItemIds", []);
+}
+
+function looseFocus(event) {
+  event.target.blur();
+}
+
+function updateItemHandler(requestFn, value, desc) {
+  var c = 0;
+  var confirmation = true;
+  const ids = props.selectedItemIds;
+  if (value == null) {
+    return;
+  }
+
+  if (ids.length > 1) {
+    confirmation = confirm(
+      `Do you want to change the ${desc.toLowerCase()} of ${
+        ids.length
+      } items to '${value}'?`,
+    );
+  }
+  if (confirmation) {
+    for (var i = 0; i < ids.length; i++) {
+      const id = ids[i];
+      requestFn(id, value).then((response) => {
+        c++;
+        if (response.status == 403) {
+          notificationStore.warning = response.data.detail;
+        }
+        if (c == ids.length) {
+          boughtItemsStore.get();
+        }
+      });
+    }
+  } else {
+    boughtItemsStore.get();
+  }
+}
+
+function updateStatus(status) {
+  updateItemHandler(boughtItemsRequest.putItemsStatus, status, "Status");
+}
+
+function updateGroup1(group) {
+  updateItemHandler(boughtItemsRequest.putItemsGroup1, group, "Group");
+}
+
+function updateProject(project) {
+  updateItemHandler(boughtItemsRequest.putItemsProject, project, "Project");
+}
+
+function updateMachine(machine) {
+  updateItemHandler(boughtItemsRequest.putItemsMachine, machine, "Machine");
+}
+
+function updateQuantity(qty) {
+  updateItemHandler(boughtItemsRequest.putItemsQuantity, qty, "Quantity");
+}
+
+function updatePartnumber(partnumber) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsPartnumber,
+    partnumber,
+    "Partnumber",
+  );
+}
+
+function updateDefinition(definition) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsDefinition,
+    definition,
+    "Definition",
+  );
+}
+
+function updateManufacturer(manufacturer) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsManufacturer,
+    manufacturer,
+    "Manufacturer",
+  );
+}
+
+function updateSupplier(supplier) {
+  updateItemHandler(boughtItemsRequest.putItemsSupplier, supplier, "Supplier");
+}
+
+function updateNoteGeneral(note) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsNoteGeneral,
+    note,
+    "General Note",
+  );
+}
+
+function updateNoteSupplier(note) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsNoteSupplier,
+    note,
+    "Supplier Note",
+  );
+}
+
+function updateDesiredDeliveryDate() {
+  const formattedDate = moment(pickedDesiredDate).format("YYYY-MM-DD");
+  updateItemHandler(
+    boughtItemsRequest.putItemsDesiredDeliveryDate,
+    formattedDate,
+    "Desired Delivery Date",
+  );
+}
+
+function updateExpectedDeliveryDate() {
+  const formattedDate = moment(pickedExpectedDate).format("YYYY-MM-DD");
+  updateItemHandler(
+    boughtItemsRequest.putItemsExpectedDeliveryDate,
+    formattedDate,
+    "Expected Delivery Date",
+  );
+}
+
+function updateStorage(storage) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsStorage,
+    storage,
+    "Storage Place",
+  );
+}
+
+function setDesiredDeliveryDate(date) {
+  if (date != null && date != undefined) {
+    pickedDesiredDate = new Date(date);
+  } else {
+    pickedDesiredDate = null;
+  }
+}
+
+function setExpectedDeliveryDate(date) {
+  if (date != null && date != undefined) {
+    pickedExpectedDate = new Date(date);
+  } else {
+    pickedExpectedDate = null;
+  }
+}
+
+function calcDiffInWeeks(fromDate, toDate) {
+  if (fromDate == null || toDate == null) {
+    return "";
+  }
+  const to = moment(toDate);
+  const from = moment(fromDate);
+  return to.diff(from, "week");
+}
+
+function calcDiffInWeeksFromToday(toDate) {
+  if (toDate == null) {
+    return "";
+  }
+  const to = moment(toDate);
+  return to.diff(moment(), "week");
+}
+
+function resizeTextarea(event) {
+  var textarea = event.target;
+  textarea.style.width = "252px";
+  textarea.style.height = "20px";
+  textarea.style.height = textarea.scrollHeight + "px";
+}
+
+function eventKeyUp(event) {
+  if (event.key === "Escape") {
+    removeSelection();
+  }
+}
+
+onBeforeMount(() => {
+  document.addEventListener("keyup", eventKeyUp);
+  setOptionsUsers();
+  setOptionsStatus();
+  setOptionsUnits();
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keyup", eventKeyUp);
+});
+
+watch(
+  () => props.triggerGetNewData,
+  () => {
+    if (props.triggerGetNewData) {
+      boughtItemsStore.get();
+      emit("update:triggerGetNewData", false);
+      emit("update:selectedItemIds", []);
     }
   },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
+);
 
-      // Controlling vars
-      autoFetchIsPaused: false,
-
-      // Select options
-      availableOptionsStatus: [{ text: "All", value: "" }],
-      availableOptionsUnit: [{ text: "All", value: "" }],
-      availableOptionsUsers: [{ text: "All", value: "" }],
-
-      // Items
-      lineIndex: 0,
-      boughtItems: [{
-        _type: "data",
-        id: 0,
-        status: "",
-        group_1: "",
-        created: "",
-        creator_id: "",
-        high_priority: "",
-        notify_on_delivery: "",
-        project: "",
-        machine: "",
-        quantity: "",
-        unit: "",
-        partnumber: "",
-        definition: "",
-        supplier: "",
-        manufacturer: "",
-        note_general: "",
-        note_supplier: "",
-        desired_delivery_date: "",
-        requester_id: "",
-        requested_date: "",
-        orderer_id: "",
-        ordered_date: "",
-        expected_delivery_date: ref(new Date()),
-        taken_over_id: "",
-        delivery_date: "",
-        storage_place: ""
-      }],
-
-      pickedExpectedDate: ref(new Date()),
-      pickedDesiredDate: ref(new Date()),
-
-      // Users
-      userById: {},
-    };
+watch(
+  filterStore.$state,
+  () => {
+    emit("update:selectedItemIds", []);
+    boughtItemsStore.get();
   },
-  methods: {
-    fetchAvailableStatus() {
-      hostRequest.getConfigItemsBoughtStatus().then(response => {
-        const data = response.data;
-        var availableOptions = [{ text: "All", value: "" }];
-        for (const key in data) {
-          availableOptions.push({ text: capitalizeFirstLetter(key), value: data[key] });
-        }
-        this.availableOptionsStatus = availableOptions;
-      });
-    },
+  { deep: true },
+);
 
-    fetchAvailableUnits() {
-      hostRequest.getConfigItemsBoughtUnits().then(response => {
-        const data = response.data.values;
-        var availableOptions = [{ text: "All", value: "" }];
-        for (let i = 0; i < data.length; i++) {
-          availableOptions.push({ text: data[i], value: data[i] });
-        }
-        this.availableOptionsUnit = availableOptions;
-      });
-    },
+watch(usersStore.$state, () => {
+  setOptionsUsers();
+});
 
-    fetchAvailableUsers() {
-      usersRequest.getUsers().then(response => {
-        const data = response.data;
-        var userById = {};
-        var availableOptions = [{ text: "All", value: "" }];
-        for (let i = 0; i < data.length; i++) {
-          // @ts-ignore
-          userById[data[i].id] = data[i].full_name;
-          availableOptions.push({ text: data[i].full_name, value: data[i].id });
-        }
-        this.userById = userById;
-        this.availableOptionsUsers = availableOptions;
-      });
-    },
+watch(unitsStore.$state, () => {
+  setOptionsUnits();
+});
 
-    fetchBoughtItems() {
-      const params = getFilterParams(this.filter);
-
-      boughtItemsService.clearCache();
-      boughtItemsService.getItems(params).then(response => {
-        const dataIn = response.data;
-        // const dataOut = [];
-        // var previousProject = "";
-        // for (let i = 0; i < dataIn; i++) {
-        //   if (dataIn[i].project != previousProject) {
-        //     dataOut.push({ _type: "Header", project: dataIn[i].project })
-        //     previousProject = dataIn[i].project
-        //   }
-        //   dataOut.push(dataIn[i])
-        // }
-        // this.boughtItems = dataOut;
-        this.boughtItems = dataIn;
-      });
-    },
-
-    autoFetchBoughtItems() {
-      boughtItemsService.clearCache();
-      if (this.$route.path != '/items/bought') {
-        console.info('Stopped updating routine for bought items: User leaved site.');
-      } else if (this.autoFetchIsPaused) {
-        console.info('Paused updating routine for bought items.');
-        setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
-      } else {
-        console.log("Automatically fetching bought items...");
-        const params = getFilterParams(this.filter);
-        boughtItemsService.getItems(params).then(response => {
-          this.boughtItems = response.data;
-          setTimeout(this.autoFetchBoughtItems.bind(this), constants.fetchBoughtItemsAfter);
-        });
-      }
-    },
-
-    pauseFetchBoughtItems(state: boolean) {
-      if (state) {
-        // Wait 100ms before stopping the auto fetch routine because if the user sets the focus on another
-        // element it could be possible, that the pause is reset by another element before it's set by the
-        // current element.
-        setTimeout(() => { this.autoFetchIsPaused = true }, 100);
-      } else {
-        this.autoFetchIsPaused = false;
-      }
-    },
-
-    multiSelect(event: any, id: number, lineIndex: number) {
-      var selectedItemIds = this.selectedItemIds;
-
-      if (event.ctrlKey) {
-        if (selectedItemIds.includes(id)) {
-          selectedItemIds.splice(selectedItemIds.indexOf(id), 1);
-        } else {
-          selectedItemIds.push(id);
-        }
-      }
-      else if (event.shiftKey) {
-        var indexRange = [];
-        var highEnd = 0;
-        var lowEnd = 0;
-        selectedItemIds = [];
-
-        if (this.lineIndex > lineIndex) {
-          highEnd = this.lineIndex + 1;
-          lowEnd = lineIndex + 1;
-        } else {
-          highEnd = lineIndex + 1;
-          lowEnd = this.lineIndex + 1;
-        }
-        var c = highEnd - lowEnd + 1;
-        while (c--) {
-          indexRange[c] = highEnd--
-        }
-        for (var i = 0; i < indexRange.length; i++) {
-          selectedItemIds.push(this.boughtItems[indexRange[i] - 1].id);
-        }
-      }
-      else if (!selectedItemIds.includes(id)) {
-        selectedItemIds = [id];
-      }
-
-      this.lineIndex = lineIndex;
-      this.$emit("update:selectedItemIds", selectedItemIds);
-    },
-
-    removeSelection() {
-      this.$emit("update:selectedItemIds", []);
-    },
-
-    looseFocus(event: any) {
-      event.target.blur();
-    },
-
-    updateItemHandler(requestFn: Function, value: string, desc: string) {
-      var c = 0;
-      var confirmation = true;
-      const ids = this.selectedItemIds;
-      if (value == null) { return }
-
-      if (ids.length > 1) {
-        confirmation = confirm(`Do you want to change the ${desc.toLowerCase()} of ${ids.length} items to '${value}'?`);
-      }
-      if (confirmation) {
-        for (var i = 0; i < ids.length; i++) {
-          const id = ids[i];
-          // @ts-ignore
-          requestFn(id, value).then(response => {
-            c++;
-            if (response.status == 403) {
-              this.notificationWarning = response.data.detail;
-            }
-            if (c == ids.length) {
-              this.fetchBoughtItems();
-              // @ts-ignore
-              this.notificationInfo = `Updated ${desc}.`;
-            }
-          });
-        }
-      } else {
-        this.fetchBoughtItems();
-      }
-    },
-
-    updateStatus(status: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsStatus, status, "Status");
-    },
-
-    updateGroup1(group: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsGroup1, group, "Group");
-    },
-
-    updateProject(project: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsProject, project, "Project");
-    },
-
-    updateMachine(machine: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsMachine, machine, "Machine");
-    },
-
-    updateQuantity(qty: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsQuantity, qty, "Quantity");
-    },
-
-    updatePartnumber(partnumber: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsPartnumber, partnumber, "Partnumber");
-    },
-
-    updateDefinition(definition: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsDefinition, definition, "Definition");
-    },
-
-    updateManufacturer(manufacturer: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsManufacturer, manufacturer, "Manufacturer");
-    },
-
-    updateSupplier(supplier: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsSupplier, supplier, "Supplier");
-    },
-
-    updateNoteGeneral(note: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsNoteGeneral, note, "General Note");
-    },
-
-    updateNoteSupplier(note: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsNoteSupplier, note, "Supplier Note");
-    },
-
-    updateDesiredDeliveryDate() {
-      const formattedDate = moment(this.pickedDesiredDate).format("YYYY-MM-DD");
-      this.updateItemHandler(boughtItemsRequest.putItemsDesiredDeliveryDate, formattedDate, "Desired Delivery Date");
-    },
-
-    updateExpectedDeliveryDate() {
-      const formattedDate = moment(this.pickedExpectedDate).format("YYYY-MM-DD");
-      this.updateItemHandler(boughtItemsRequest.putItemsExpectedDeliveryDate, formattedDate, "Expected Delivery Date");
-    },
-
-    updateStorage(storage: string) {
-      this.updateItemHandler(boughtItemsRequest.putItemsStorage, storage, "Storage Place");
-    },
-
-    setDesiredDeliveryDate(date: any) {
-      if (date != null && date != undefined) {
-        this.pickedDesiredDate = new Date(date);
-      } else {
-        //@ts-ignore
-        this.pickedDesiredDate = null; // new Date();
-      }
-    },
-
-    setExpectedDeliveryDate(date: any) {
-      if (date != null && date != undefined) {
-        this.pickedExpectedDate = new Date(date);
-      } else {
-        //@ts-ignore
-        this.pickedExpectedDate = null;  // new Date();
-      }
-    },
-
-    calcDiffInWeeks(fromDate: any, toDate: any) {
-      if (fromDate == null || toDate == null) { return ""; }
-      const to = moment(toDate);
-      const from = moment(fromDate);
-      return to.diff(from, "week");
-    },
-
-    calcDiffInWeeksFromToday(toDate: any) {
-      if (toDate == null) { return ""; }
-      const to = moment(toDate);
-      return to.diff(moment(), "week");
-    },
-
-    resizeTextarea(event: any) {
-      var textarea = event.target;
-      textarea.style.width = "252px";
-      textarea.style.height = "20px";
-      textarea.style.height = textarea.scrollHeight + "px";
-    },
-  },
-  watch: {
-    triggerGetNewData() {
-      if (this.triggerGetNewData) {
-        this.fetchBoughtItems();
-        this.$emit("update:triggerGetNewData", false);
-        this.$emit("update:selectedItemIds", []);
-      }
-    },
-
-    filter: {
-      handler: function (newVal) {
-        this.$emit("update:filter", this.filter);
-        this.$emit("update:selectedItemIds", []);
-
-        // This could slow down everything...
-        this.fetchBoughtItems();
-      },
-      deep: true
-    },
-  },
-  created() {
-    let vm = this;
-    document.addEventListener("keyup", function (event) {
-      if (event.key === "Escape") {
-        vm.removeSelection();
-      }
-    })
-  },
-  mounted() {
-    this.boughtItems = [];
-
-    this.fetchAvailableUsers();
-    this.fetchAvailableStatus();
-    this.fetchAvailableUnits();
-    this.autoFetchBoughtItems();
-  },
-}
+watch(statusStore.$state, () => {
+  setOptionsStatus();
+});
 </script>
 
 <template>
   <div class="scope" v-on:keyup.esc="removeSelection">
+    <Spinner
+      class="spinner"
+      v-if="boughtItemsStore.loading && boughtItemsStore.items.length == 0"
+    />
     <div class="wrapper">
-      <table class="cursor-default" v-bind:class="{ 'allow-text-select': showTextOnly, 'cursor-text': showTextOnly }">
+      <table
+        class="cursor-default"
+        v-bind:class="{
+          'allow-text-select': controlsStore.state.textOnly,
+          'cursor-text': controlsStore.state.textOnly,
+        }"
+      >
         <thead>
           <tr>
-            <th class="first sticky-col" id="number">#</th>
-            <th class="first sticky-col" id="item-id">ID</th>
-            <th class="first sticky-col" id="status">Status</th>
-            <th class="first sticky-col" id="project">Project</th>
-            <th class="first sticky-col" id="machine">Machine</th>
-            <th class="first sticky-col" id="quantity">Qty</th>
-            <th class="first sticky-col" id="unit">Unit</th>
-            <th class="first sticky-col" id="partnumber">Partnumber</th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="number"
+            >
+              #
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="item-id"
+            >
+              ID
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="status"
+            >
+              Status
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="project"
+            >
+              Project
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="machine"
+            >
+              Machine
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="quantity"
+            >
+              Qty
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="unit"
+            >
+              Unit
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="partnumber"
+            >
+              Partnumber
+            </th>
             <th class="first" id="definition">Definition</th>
             <th class="first" id="manufacturer">Manufacturer</th>
             <th class="first" id="supplier">Supplier</th>
             <th class="first" id="group">Group</th>
             <th class="first" id="note-general">Note</th>
             <th class="first" id="note-supplier">Supplier Note</th>
-            <th class="first" id="created" v-if="!showRequestView">Created</th>
-            <th class="first" id="creator" v-if="!showUnclutter && !showRequestView">Creator</th>
+            <th
+              class="first"
+              id="created"
+              v-if="!controlsStore.state.requestView"
+            >
+              Created
+            </th>
+            <th
+              class="first"
+              id="creator"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              Creator
+            </th>
             <th class="first" id="desired">Desired</th>
-            <th class="first" id="requested" v-if="!showRequestView">Requested</th>
-            <th class="first" id="requester" v-if="!showUnclutter && !showRequestView">Requester</th>
-            <th class="first" id="ordered" v-if="!showRequestView">Ordered</th>
-            <th class="first" id="orderer" v-if="!showUnclutter && !showRequestView">Orderer</th>
-            <th class="first" id="expected" v-if="!showRequestView">Expected</th>
-            <th class="first" id="delivered" v-if="!showRequestView">Delivered</th>
-            <th class="first" id="taken-over-by" v-if="!showUnclutter && !showRequestView">Taken by</th>
-            <th class="first" id="arrival-weeks" v-if="!showUnclutter && !showRequestView">Arrival</th>
-            <th class="first" id="total-delivery-weeks" v-if="!showUnclutter && !showRequestView">Total</th>
-            <th class="first" id="storage-place" v-if="!showUnclutter && !showRequestView">Storage</th>
+            <th
+              class="first"
+              id="requested"
+              v-if="!controlsStore.state.requestView"
+            >
+              Requested
+            </th>
+            <th
+              class="first"
+              id="requester"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              Requester
+            </th>
+            <th
+              class="first"
+              id="ordered"
+              v-if="!controlsStore.state.requestView"
+            >
+              Ordered
+            </th>
+            <th
+              class="first"
+              id="orderer"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              Orderer
+            </th>
+            <th
+              class="first"
+              id="expected"
+              v-if="!controlsStore.state.requestView"
+            >
+              Expected
+            </th>
+            <th
+              class="first"
+              id="delivered"
+              v-if="!controlsStore.state.requestView"
+            >
+              Delivered
+            </th>
+            <th
+              class="first"
+              id="taken-over-by"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              Taken by
+            </th>
+            <th
+              class="first"
+              id="arrival-weeks"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              Arrival
+            </th>
+            <th
+              class="first"
+              id="total-delivery-weeks"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              Total
+            </th>
+            <th
+              class="first"
+              id="storage-place"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              Storage
+            </th>
           </tr>
-          <tr v-if="showTextOnly == false">
-            <th class="second sticky-col" id="number">
-              <!-- {{ filter.limit }} -->
+          <tr v-if="controlsStore.state.textOnly == false">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="number"
+            >
+              <!-- {{ filterStore.limit }} -->
             </th>
-            <th class="second sticky-col" id="item-id" @contextmenu.prevent="() => { filter.id = '' }">
-              <input class="filter-input" v-model="filter.id" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="item-id"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.id = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.id"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second sticky-col" id="status" @contextmenu.prevent="() => { filter.status = '' }">
-              <select class="filter-select" v-model="filter.status" @change="fetchBoughtItems">
-                <option v-for="option in availableOptionsStatus" :value="option.value">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="status"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.status = '';
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="filterStore.state.status"
+                @change="boughtItemsStore.get()"
+              >
+                <option
+                  v-for="option in availableOptionsStatus"
+                  :key="option"
+                  :value="option.value"
+                >
                   {{ option.text }}
                 </option>
               </select>
             </th>
-            <th class="second sticky-col" id="project" @contextmenu.prevent="() => { filter.project = '' }">
-              <input class="filter-input" v-model="filter.project" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="project"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.project = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.project"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second sticky-col" id="machine" @contextmenu.prevent="() => { filter.machine = '' }">
-              <input class="filter-input" v-model="filter.machine" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="machine"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.machine = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.machine"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second sticky-col" id="quantity" @contextmenu.prevent="() => { filter.quantity = '' }">
-              <input class="filter-input" v-model="filter.quantity" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="quantity"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.quantity = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.quantity"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second sticky-col" id="unit" @contextmenu.prevent="() => { filter.unit = '' }">
-              <select class="filter-select" v-model="filter.unit" @change="fetchBoughtItems">
-                <option v-for="option in availableOptionsUnit" :value="option.value">{{ option.text }}</option>
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="unit"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.unit = '';
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="filterStore.state.unit"
+                @change="boughtItemsStore.get()"
+              >
+                <option
+                  v-for="option in availableOptionsUnit"
+                  :key="option"
+                  :value="option.value"
+                >
+                  {{ option.text }}
+                </option>
               </select>
             </th>
-            <th class="second sticky-col" id="partnumber" @contextmenu.prevent="() => { filter.partnumber = '' }">
-              <input class="filter-input" v-model="filter.partnumber" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="partnumber"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.partnumber = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.partnumber"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="definition" @contextmenu.prevent="() => { filter.definition = '' }">
-              <input class="filter-input" v-model="filter.definition" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              id="definition"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.definition = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.definition"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="manufacturer" @contextmenu.prevent="() => { filter.manufacturer = '' }">
-              <input class="filter-input" v-model="filter.manufacturer" v-on:keyup.enter="fetchBoughtItems()"
-                type="text" placeholder="Filter">
+            <th
+              class="second"
+              id="manufacturer"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.manufacturer = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.manufacturer"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="supplier" @contextmenu.prevent="() => { filter.supplier = '' }">
-              <input class="filter-input" v-model="filter.supplier" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              id="supplier"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.supplier = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.supplier"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="group" @contextmenu.prevent="() => { filter.group1 = '' }">
-              <input class="filter-input" v-model="filter.group1" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              id="group"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.group1 = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.group1"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="note-general" @contextmenu.prevent="() => { filter.noteGeneral = '' }">
-              <input class="filter-input" v-model="filter.noteGeneral" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              id="note-general"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.noteGeneral = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.noteGeneral"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="note-supplier" @contextmenu.prevent="() => { filter.noteSupplier = '' }">
-              <input class="filter-input" v-model="filter.noteSupplier" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              id="note-supplier"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.noteSupplier = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.noteSupplier"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="created" v-if="!showRequestView" @contextmenu.prevent="() => { filter.createdDate = '' }">
-              <input class="filter-input" v-model="filter.createdDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            <th
+              class="second"
+              id="created"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.createdDate = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.createdDate"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="creator" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.creatorId = '' }">
-              <select class="filter-select" v-model="filter.creatorId" @change="fetchBoughtItems">
-                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+            <th
+              class="second"
+              id="creator"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.creatorId = '';
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="filterStore.state.creatorId"
+                @change="boughtItemsStore.get()"
+              >
+                <option
+                  v-for="option in availableOptionsUsers"
+                  :key="option"
+                  :value="option.value"
+                >
+                  {{ option.text }}
+                </option>
               </select>
             </th>
-            <th class="second" id="desired" @contextmenu.prevent="() => { filter.desiredDate = '' }">
-              <input class="filter-input" v-model="filter.desiredDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            <th
+              class="second"
+              id="desired"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.desiredDate = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.desiredDate"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="requested" v-if="!showRequestView" @contextmenu.prevent="() => { filter.requestedDate = '' }">
-              <input class="filter-input" v-model="filter.requestedDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            <th
+              class="second"
+              id="requested"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.requestedDate = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.requestedDate"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="requester" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.requesterId = '' }">
-              <select class="filter-select" v-model="filter.requesterId" @change="fetchBoughtItems">
-                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+            <th
+              class="second"
+              id="requester"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.requesterId = '';
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="filterStore.state.requesterId"
+                @change="boughtItemsStore.get()"
+              >
+                <option
+                  v-for="option in availableOptionsUsers"
+                  :key="option"
+                  :value="option.value"
+                >
+                  {{ option.text }}
+                </option>
               </select>
             </th>
-            <th class="second" id="ordered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.orderedDate = '' }">
-              <input class="filter-input" v-model="filter.orderedDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            <th
+              class="second"
+              id="ordered"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.orderedDate = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.orderedDate"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="orderer" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.ordererId = '' }">
-              <select class="filter-select" v-model="filter.ordererId" @change="fetchBoughtItems">
-                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+            <th
+              class="second"
+              id="orderer"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.ordererId = '';
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="filterStore.state.ordererId"
+                @change="boughtItemsStore.get()"
+              >
+                <option
+                  v-for="option in availableOptionsUsers"
+                  :key="option"
+                  :value="option.value"
+                >
+                  {{ option.text }}
+                </option>
               </select>
             </th>
-            <th class="second" id="expected" v-if="!showRequestView" @contextmenu.prevent="() => { filter.expectedDate = '' }">
-              <input class="filter-input" v-model="filter.expectedDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            <th
+              class="second"
+              id="expected"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.expectedDate = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.expectedDate"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="delivered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.deliveredDate = '' }">
-              <input class="filter-input" v-model="filter.deliveredDate" v-on:keyup.enter="fetchBoughtItems()" type="text" placeholder="Filter">
+            <th
+              class="second"
+              id="delivered"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.deliveredDate = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.deliveredDate"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
-            <th class="second" id="taken-over-by" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.takeOverId = '' }">
-              <select class="filter-select" v-model="filter.takeOverId" @change="fetchBoughtItems">
-                <option v-for="option in availableOptionsUsers" :value="option.value">{{ option.text }}</option>
+            <th
+              class="second"
+              id="taken-over-by"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.takeOverId = '';
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="filterStore.state.takeOverId"
+                @change="boughtItemsStore.get()"
+              >
+                <option
+                  v-for="option in availableOptionsUsers"
+                  :key="option"
+                  :value="option.value"
+                >
+                  {{ option.text }}
+                </option>
               </select>
             </th>
-            <th class="second" id="arrival-weeks" v-if="!showUnclutter && !showRequestView">(Weeks)</th>
-            <th class="second" id="total-delivery-weeks" v-if="!showUnclutter && !showRequestView">(Weeks)</th>
-            <th class="second" id="storage-place" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.storagePlace = '' }">
-              <input class="filter-input" v-model="filter.storagePlace" v-on:keyup.enter="fetchBoughtItems()" type="text"
-                placeholder="Filter">
+            <th
+              class="second"
+              id="arrival-weeks"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              (Weeks)
+            </th>
+            <th
+              class="second"
+              id="total-delivery-weeks"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              (Weeks)
+            </th>
+            <th
+              class="second"
+              id="storage-place"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.storagePlace = '';
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="filterStore.state.storagePlace"
+                v-on:keyup.enter="boughtItemsStore.get()"
+                type="text"
+                placeholder="Filter"
+              />
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in boughtItems" :key="item.id" v-on:click="
-          multiSelect($event, item.id, index),
-          setExpectedDeliveryDate(item.expected_delivery_date),
-          setDesiredDeliveryDate(item.desired_delivery_date)" v-bind:class="{
-            'selected': selectedItemIds.includes(item.id),
-            'open': showRainbow && item.status == 'open',
-            'requested': showRainbow && item.status == 'requested',
-            'ordered': showRainbow && item.status == 'ordered',
-            'late': showRainbow && item.status == 'late',
-            'partial': showRainbow && item.status == 'partial',
-            'delivered': showRainbow && item.status == 'delivered',
-            'canceled': showRainbow && item.status == 'canceled',
-            'lost': showRainbow && item.status == 'lost'
-          }">
-            <td id="number" class="sticky-col">
+          <tr
+            v-for="(item, index) in boughtItemsStore.items"
+            :key="item.id"
+            v-on:click="
+              multiSelect($event, item.id, index),
+                setExpectedDeliveryDate(item.expected_delivery_date),
+                setDesiredDeliveryDate(item.desired_delivery_date)
+            "
+            v-bind:class="{
+              selected: props.selectedItemIds.includes(item.id),
+              open: controlsStore.state.rainbow && item.status == 'open',
+              requested:
+                controlsStore.state.rainbow && item.status == 'requested',
+              ordered: controlsStore.state.rainbow && item.status == 'ordered',
+              late: controlsStore.state.rainbow && item.status == 'late',
+              partial: controlsStore.state.rainbow && item.status == 'partial',
+              delivered:
+                controlsStore.state.rainbow && item.status == 'delivered',
+              canceled:
+                controlsStore.state.rainbow && item.status == 'canceled',
+              lost: controlsStore.state.rainbow && item.status == 'lost',
+            }"
+          >
+            <td
+              id="number"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+            >
               <IconBellRing v-if="item.high_priority" class="bell-icon" />
               <span v-else>{{ index + 1 }}</span>
             </td>
-            <td id="item-id" class="sticky-col" @contextmenu.prevent="() => { filter.id = item.id }">
+            <td
+              id="item-id"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.id = item.id;
+                }
+              "
+            >
               {{ item.id }}
             </td>
-            <td id="status" class="sticky-col" @contextmenu.prevent="() => { filter.status = item.status }">
-              <select v-if="//@ts-ignore
-              currentUser && currentUser.is_superuser && showTextOnly == false" class="cell-select"
-                v-model="item.status" @change="updateStatus(item.status)">
-                <option v-for="option in availableOptionsStatus" :value="option.value">
+            <td
+              id="status"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.status = item.status;
+                }
+              "
+            >
+              <Spinner v-if="statusStore.loading" />
+              <select
+                v-else-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  controlsStore.state.textOnly == false
+                "
+                class="cell-select"
+                v-model="item.status"
+                @change="updateStatus(item.status)"
+              >
+                <option
+                  v-for="option in availableOptionsStatus"
+                  :key="option"
+                  :value="option.value"
+                >
                   {{ option.text }}
                 </option>
               </select>
@@ -554,199 +1122,621 @@ export default {
                 {{ item.status.toUpperCase() }}
               </div>
             </td>
-            <td id="project" class="sticky-col" @contextmenu.prevent="() => { filter.project = item.project }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.project" type="text" placeholder="Project"
+            <td
+              id="project"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.project = item.project;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.project"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateProject(item.project), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateProject(item.project), pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.project }}
               </div>
             </td>
-            <td id="machine" class="sticky-col" @contextmenu.prevent="() => { filter.machine = item.machine }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.machine" type="text" placeholder="Machine"
+            <td
+              id="machine"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.machine = item.machine;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.machine"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateMachine(item.machine), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateMachine(item.machine), pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.machine }}
               </div>
             </td>
-            <td id="quantity" class="sticky-col" @contextmenu.prevent="() => { filter.quantity = item.quantity }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.quantity" type="number" placeholder="Quantity"
+            <td
+              id="quantity"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.quantity = item.quantity;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.quantity"
+                  type="number"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateQuantity(item.quantity), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateQuantity(item.quantity), pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.quantity }}
               </div>
             </td>
-            <td id="unit" class="sticky-col" @contextmenu.prevent="() => { filter.unit = item.unit }">
-              <div v-bind:class="{ 'fix-height': showFixHeight }">
+            <td
+              id="unit"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.unit = item.unit;
+                }
+              "
+            >
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.unit }}
               </div>
             </td>
-            <td id="partnumber" class="sticky-col" @contextmenu.prevent="() => { filter.partnumber = item.partnumber }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.partnumber" type="text" placeholder="Partnumber"
+            <td
+              id="partnumber"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.partnumber = item.partnumber;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.partnumber"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updatePartnumber(item.partnumber), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updatePartnumber(item.partnumber),
+                      pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.partnumber }}
               </div>
             </td>
-            <td id="definition" @contextmenu.prevent="() => { filter.definition = item.definition }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.definition" type="text" placeholder="Definition"
+            <td
+              id="definition"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.definition = item.definition;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.definition"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateDefinition(item.definition), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateDefinition(item.definition),
+                      pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.definition }}
               </div>
             </td>
-            <td id="manufacturer" @contextmenu.prevent="() => { filter.manufacturer = item.manufacturer }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.manufacturer" type="text" placeholder="Manufacturer"
+            <td
+              id="manufacturer"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.manufacturer = item.manufacturer;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.manufacturer"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateManufacturer(item.manufacturer), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateManufacturer(item.manufacturer),
+                      pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.manufacturer }}
               </div>
             </td>
-            <td id="supplier" @contextmenu.prevent="() => { filter.supplier = item.supplier }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.supplier" type="text" placeholder="Supplier"
+            <td
+              id="supplier"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.supplier = item.supplier;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.supplier"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateSupplier(item.supplier), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateSupplier(item.supplier), pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.supplier }}
               </div>
             </td>
-            <td id="group" @contextmenu.prevent="() => { filter.group1 = item.group_1 }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.group_1" type="text" placeholder="Group"
+            <td
+              id="group"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.group1 = item.group_1;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.group_1"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateGroup1(item.group_1), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateGroup1(item.group_1), pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.group_1 }}
               </div>
             </td>
-            <td id="note-general" @contextmenu.prevent="() => { filter.noteGeneral = item.note_general }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <textarea class="cell-textarea-note" v-model="item.note_general" type="text" placeholder="Note"
-                  @input="resizeTextarea($event)" @focusin="pauseFetchBoughtItems(true), resizeTextarea($event)"
-                  @focusout="updateNoteGeneral(item.note_general), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)"></textarea>
+            <td
+              id="note-general"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.noteGeneral = item.note_general;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <textarea
+                  class="cell-textarea-note"
+                  v-model="item.note_general"
+                  type="text"
+                  @input="resizeTextarea($event)"
+                  @focusin="pauseFetchBoughtItems(true), resizeTextarea($event)"
+                  @focusout="
+                    updateNoteGeneral(item.note_general),
+                      pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                ></textarea>
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.note_general }}
               </div>
             </td>
-            <td id="note-supplier" @contextmenu.prevent="() => { filter.noteSupplier = item.note_supplier }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <textarea class="cell-textarea-note" v-model="item.note_supplier" type="text"
-                  placeholder="Supplier Note" @input="resizeTextarea($event)"
+            <td
+              id="note-supplier"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.noteSupplier = item.note_supplier;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <textarea
+                  class="cell-textarea-note"
+                  v-model="item.note_supplier"
+                  type="text"
+                  @input="resizeTextarea($event)"
                   @focusin="pauseFetchBoughtItems(true), resizeTextarea($event)"
-                  @focusout="updateNoteSupplier(item.note_supplier), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)"></textarea>
+                  @focusout="
+                    updateNoteSupplier(item.note_supplier),
+                      pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                ></textarea>
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.note_supplier }}
               </div>
             </td>
-            <td id="created" v-if="!showRequestView" @contextmenu.prevent="() => { filter.createdDate = item.created }">
+            <td
+              id="created"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.createdDate = item.created;
+                }
+              "
+            >
               {{ item.created }}
             </td>
-            <td id="creator" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.creatorId = item.creator_id }">
-              <div v-bind:class="{ 'fix-height': showFixHeight }">{{
-              //@ts-ignore
-              userById[item.creator_id] }}
+            <td
+              id="creator"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.creatorId = item.creator_id;
+                }
+              "
+            >
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
+                {{ usersStore.getNameByID(item.creator_id) }}
               </div>
             </td>
-            <td id="desired" @contextmenu.prevent="() => { filter.desiredDate = item.desired_delivery_date }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
+            <td
+              id="desired"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.desiredDate = item.desired_delivery_date;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
                 <!-- <Datepicker class="datepicker" v-model="pickedDesiredDate" style="width:75px;text-align:center" /> -->
-                <Datepicker class="datepicker" v-model="pickedDesiredDate"
-                  @update:model-value="updateDesiredDeliveryDate" style="width:75px;height:14px;text-align:center" />
+                <Datepicker
+                  class="datepicker"
+                  v-model="pickedDesiredDate"
+                  @update:model-value="updateDesiredDeliveryDate"
+                  style="width: 75px; height: 14px; text-align: center"
+                />
               </div>
               <div v-else>
                 {{ item.desired_delivery_date }}
               </div>
             </td>
-            <td id="requested" v-if="!showRequestView" @contextmenu.prevent="() => { filter.requestedDate = item.requested_date }">{{ item.requested_date }}</td>
-            <td id="requester" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.requesterId = item.requester_id }">
-              <div v-bind:class="{ 'fix-height': showFixHeight }">{{
-              //@ts-ignore
-              userById[item.requester_id] }}
+            <td
+              id="requested"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.requestedDate = item.requested_date;
+                }
+              "
+            >
+              {{ item.requested_date }}
+            </td>
+            <td
+              id="requester"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.requesterId = item.requester_id;
+                }
+              "
+            >
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
+                {{ usersStore.getNameByID(item.requester_id) }}
               </div>
             </td>
-            <td id="ordered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.orderedDate = item.ordered_date }">{{ item.ordered_date }}</td>
-            <td id="orderer" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.ordererId = item.orderer_id }">
-              <div v-bind:class="{ 'fix-height': showFixHeight }">{{
-              //@ts-ignore
-              userById[item.orderer_id] }}
+            <td
+              id="ordered"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.orderedDate = item.ordered_date;
+                }
+              "
+            >
+              {{ item.ordered_date }}
+            </td>
+            <td
+              id="orderer"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.ordererId = item.orderer_id;
+                }
+              "
+            >
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
+                {{ usersStore.getNameByID(item.orderer_id) }}
               </div>
             </td>
-            <td id="expected" v-if="!showRequestView" @contextmenu.prevent="() => { filter.expectedDate = item.expected_delivery_date }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
+            <td
+              id="expected"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.expectedDate = item.expected_delivery_date;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
                 <!-- <Datepicker class="datepicker" v-model="pickedExpectedDate" style="width:75px;text-align:center" /> -->
-                <Datepicker class="datepicker" v-model="pickedExpectedDate"
-                  @update:model-value="updateExpectedDeliveryDate" style="width:75px;height:14px;text-align:center" />
+                <Datepicker
+                  class="datepicker"
+                  v-model="pickedExpectedDate"
+                  @update:model-value="updateExpectedDeliveryDate"
+                  style="width: 75px; height: 14px; text-align: center"
+                />
               </div>
               <div v-else>
                 {{ item.expected_delivery_date }}
               </div>
             </td>
-            <td id="delivered" v-if="!showRequestView" @contextmenu.prevent="() => { filter.deliveredDate = item.delivery_date }">{{ item.delivery_date }}</td>
-            <td id="taken-over-by" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.takeOverId = item.taken_over_id }">
-              <div v-bind:class="{ 'fix-height': showFixHeight }">{{
-              //@ts-ignore
-              userById[item.taken_over_id] }}
+            <td
+              id="delivered"
+              v-if="!controlsStore.state.requestView"
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.deliveredDate = item.delivery_date;
+                }
+              "
+            >
+              {{ item.delivery_date }}
+            </td>
+            <td
+              id="taken-over-by"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.takeOverId = item.taken_over_id;
+                }
+              "
+            >
+              <div
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
+                {{ usersStore.getNameByID(item.taken_over_id) }}
               </div>
             </td>
-            <td id="arrival-weeks" v-if="!showUnclutter && !showRequestView">{{
-              calcDiffInWeeksFromToday(item.expected_delivery_date)
-            }}</td>
-            <td id="total-delivery-weeks" v-if="!showUnclutter && !showRequestView">{{
-              calcDiffInWeeks(item.ordered_date, item.delivery_date)
-            }}</td>
-            <td id="storage-place" v-if="!showUnclutter && !showRequestView" @contextmenu.prevent="() => { filter.storagePlace = item.storage_place }">
-              <div v-if="//@ts-ignore
-              currentUser.is_superuser && selectedItemIds.includes(item.id) && showTextOnly == false">
-                <input class="cell-input" v-model="item.storage_place" type="text" placeholder="Storage Place"
+            <td
+              id="arrival-weeks"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              {{ calcDiffInWeeksFromToday(item.expected_delivery_date) }}
+            </td>
+            <td
+              id="total-delivery-weeks"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+            >
+              {{ calcDiffInWeeks(item.ordered_date, item.delivery_date) }}
+            </td>
+            <td
+              id="storage-place"
+              v-if="
+                !controlsStore.state.unclutter &&
+                !controlsStore.state.requestView
+              "
+              @contextmenu.prevent="
+                () => {
+                  filterStore.state.storagePlace = item.storage_place;
+                }
+              "
+            >
+              <div
+                v-if="
+                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  props.selectedItemIds.includes(item.id) &&
+                  controlsStore.state.textOnly == false &&
+                  gtMinWidthTablet
+                "
+              >
+                <input
+                  class="cell-input"
+                  v-model="item.storage_place"
+                  type="text"
                   @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="updateStorage(item.storage_place), pauseFetchBoughtItems(false)"
-                  v-on:keyup.enter="looseFocus($event), pauseFetchBoughtItems(false)">
+                  @focusout="
+                    updateStorage(item.storage_place),
+                      pauseFetchBoughtItems(false)
+                  "
+                  v-on:keyup.enter="
+                    looseFocus($event), pauseFetchBoughtItems(false)
+                  "
+                />
               </div>
-              <div v-else v-bind:class="{ 'fix-height': showFixHeight }">
+              <div
+                v-else
+                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
+              >
                 {{ item.storage_place }}
               </div>
             </td>
@@ -758,32 +1748,37 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/variables.scss";
+@import "@/scss/variables.scss";
 
 .scope {
-  width: 100%;
   height: 100%;
-
-  color: black;
-  background-color: white;
-
+  width: calc(100% - 10px);
+  padding-left: 4px;
+  padding-right: 4px;
   border-radius: 5px;
+
+  overflow: hidden;
 }
 
 .wrapper {
   overflow-x: auto;
   overflow-y: auto;
-  height: 100%;
-
-  border-radius: 5px;
+  height: calc(100% - 20px);
 
   position: relative;
-  // white-space: nowrap;
+
+  background-color: $main-background-color-dark;
+
+  border-style: solid;
+  border-color: $main-background-color-dark;
+  border-width: 10px;
+  border-radius: $main-border-radius;
 }
 
 .bell-icon {
   color: red;
-  transform: scale(0.6);
+  height: 12px;
+  width: 12px;
   vertical-align: middle;
 }
 
@@ -793,14 +1788,13 @@ table {
   border-spacing: 0;
 
   width: 100%;
-  border-radius: 5px;
+  border-radius: $main-border-radius;
+  background-color: $main-background-color-dark;
 }
 
 th {
   z-index: 10;
-  // padding: 8px;
-  // margin: 8px;
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px; //0.9em;
 }
 
@@ -811,65 +1805,110 @@ tr {
 }
 
 tbody tr {
-  border-bottom: solid thin rgb(50, 50, 50);
+  border-bottom: solid thin $main-color;
 }
 
-tr:nth-child(even)>td {
-  background: rgb(230, 230, 230)
-}
-
-tr:nth-child(odd)>td {
-  background: rgb(240, 240, 240)
-}
-
-tr:hover>td {
-  filter: brightness(1.05)
-}
-
-tr.open>td {
-  background: rgb(230, 230, 230)
-}
-
-tr.requested>td {
-  background: rgb(240, 150, 70)
-}
-
-tr.ordered>td {
-  background: rgb(240, 230, 70)
-}
-
-tr.late>td {
-  background: rgb(250, 100, 80)
-}
-
-tr.partial>td {
-  // background: rgb(180, 250, 170);
-  background: rgb(90, 250, 90);
-  background: linear-gradient(0deg, rgba(90, 250, 90, 1) 0%, rgba(240, 230, 70, 1) 50%);
-}
-
-tr.delivered>td {
-  background: rgb(90, 250, 90);
-}
-
-tr.canceled>td {
-  background: rgb(109, 109, 109);
+tr:nth-child(even) > td {
+  // background: rgb(230, 230, 230);
   color: white;
+  background: $table-row-even;
 }
 
-tr.lost>td {
-  background: rgb(80, 30, 30);
+tr:nth-child(odd) > td {
+  // background: rgb(240, 240, 240);
   color: white;
+  background: $table-row-odd;
 }
 
-tr.selected>td {
-  background: rgb(160, 220, 255);
-  color: black;
+tr.open:nth-child(even) > td {
+  // background: rgb(230, 230, 230);
+  background: $table-background-open-even;
+}
+
+tr.open:nth-child(odd) > td {
+  background: $table-background-open-odd;
+}
+
+tr.requested:nth-child(even) > td {
+  background: $table-background-requested-even;
+}
+
+tr.requested:nth-child(odd) > td {
+  background: $table-background-requested-odd;
+}
+
+tr.ordered:nth-child(even) > td {
+  background: $table-background-ordered-even;
+}
+
+tr.ordered:nth-child(odd) > td {
+  background: $table-background-ordered-odd;
+}
+
+tr.late:nth-child(even) > td {
+  background: $table-background-late-even;
+}
+
+tr.late:nth-child(odd) > td {
+  background: $table-background-late-odd;
+}
+
+// tr.partial > td {
+//   background: rgb(90, 250, 90);
+//   background: linear-gradient(
+//     0deg,
+//     rgba(90, 250, 90, 1) 0%,
+//     rgba(240, 230, 70, 1) 50%
+//   );
+// }
+
+tr.partial:nth-child(even) > td {
+  background: $table-background-partial-even;
+}
+
+tr.partial:nth-child(odd) > td {
+  background: $table-background-partial-odd;
+}
+
+tr.delivered:nth-child(even) > td {
+  background: $table-background-delivered-even;
+}
+
+tr.delivered:nth-child(odd) > td {
+  background: $table-background-delivered-odd;
+}
+
+tr.canceled:nth-child(even) > td {
+  background: $table-background-canceled-even;
+}
+
+tr.canceled:nth-child(odd) > td {
+  background: $table-background-canceled-odd;
+}
+
+tr.lost:nth-child(even) > td {
+  background: $table-background-lost-even;
+}
+
+tr.lost:nth-child(odd) > td {
+  background: $table-background-lost-odd;
+}
+
+tr:hover > td {
+  // filter: brightness(1.05);
+  background: $table-row-hover !important;
+}
+
+tr.selected > td {
+  background: $table-row-active !important;
+  // background: rgb(160, 220, 255);
+  // color: black;
   // font-weight: bold;
 }
 
-tr.selected:hover>td {
-  background: rgb(170, 230, 255);
+tr.selected:hover > td {
+  background: $table-row-active-hover !important;
+  // background: rgb(170, 230, 255);
 }
 
 td {
@@ -882,12 +1921,13 @@ td {
   padding: 0;
   // padding-top: 1px;
   // padding-bottom: 1px;
-  // padding-left: 5px;
-  // padding-right: 5px;
+  // margin-left: 2px;
+  // margin-right: 2px;
 
   word-wrap: break-word;
-  border-right: solid thin rgb(220, 220, 220);
+  // border-right: solid thin rgb(220, 220, 220);
   border-bottom: solid thin rgb(100, 100, 100);
+  border-right: solid thin $table-head-background;
 }
 
 .fix-height {
@@ -918,7 +1958,9 @@ td {
   margin-top: 0;
   margin-bottom: 0;
 
-  background: rgb(207, 207, 207);
+  // background: rgb(207, 207, 207);
+  color: white;
+  background: $table-head-background;
 }
 
 .second {
@@ -933,14 +1975,16 @@ td {
   margin-top: 0;
   margin-bottom: 0;
 
-  background: rgb(207, 207, 207);
+  // background: rgb(207, 207, 207);
   border-bottom: solid thin rgb(50, 50, 50);
+
+  color: white;
+  background: $table-head-background;
 }
 
 .sticky-col {
   position: -webkit-sticky;
   position: sticky;
-  // background-color: white;
   z-index: 20;
 }
 
@@ -952,28 +1996,33 @@ td.sticky-col {
   z-index: 30;
 }
 
-
 // columns
 #number {
   width: 35px;
   min-width: 35px;
   max-width: 35px;
-  left: 0px;
   text-align: center;
+}
+#number.sticky-col {
+  left: 0px;
 }
 
 #item-id {
   width: 45px;
   min-width: 45px;
   max-width: 45px;
-  left: 37px;
   text-align: center;
+}
+#item-id.sticky-col {
+  left: 37px;
 }
 
 #status {
   width: 86px;
   min-width: 86px;
   min-width: 86px;
+}
+#status.sticky-col {
   left: 84px;
 }
 
@@ -981,38 +2030,48 @@ td.sticky-col {
   width: 61px;
   min-width: 61px;
   max-width: 61px;
+  // text-align: center;
+}
+#project.sticky-col {
   left: 172px;
-  text-align: center;
 }
 
 #machine {
   width: 61px;
   min-width: 61px;
   max-width: 61px;
+  // text-align: center;
+}
+#machine.sticky-col {
   left: 235px;
-  text-align: center;
 }
 
 #quantity {
   width: 41px;
   min-width: 41px;
   max-width: 41px;
-  left: 298px;
   text-align: center;
+}
+#quantity.sticky-col {
+  left: 298px;
 }
 
 #unit {
   width: 41px;
   min-width: 41px;
   max-width: 41px;
-  left: 341px;
   text-align: center;
+}
+#unit.sticky-col {
+  left: 341px;
 }
 
 #partnumber {
   width: 301px;
   min-width: 301px;
   max-width: 301px;
+}
+#partnumber.sticky-col {
   left: 384px;
 }
 
@@ -1130,6 +2189,8 @@ td.sticky-col {
 select {
   padding: 0;
   margin: 0;
+
+  outline: none;
 }
 
 input {
@@ -1144,20 +2205,29 @@ input {
   -webkit-box-sizing: border-box;
 
   border: none;
+
+  color: white;
   background-color: transparent;
 
   font-size: 12px; //0.9em;
+}
+
+.cell-select > option {
+  color: white;
+  background-color: $main-background-color-dark-2;
 }
 
 .cell-input {
   width: 100%;
   height: 18px;
 
+  box-shadow: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
-  box-shadow: none;
+  color: white;
   background-color: transparent;
+
   outline: none;
   border: none;
   border-color: inherit;
@@ -1179,10 +2249,12 @@ input {
   overflow: hidden;
   resize: none;
 
+  box-shadow: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
-  box-shadow: none;
+  color: white;
+
   background-color: transparent;
   outline: none;
   border: none;
@@ -1196,13 +2268,66 @@ input {
   width: 100%;
   height: 22px;
 
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
+  outline: none;
+
   box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  background-color: $main-background-color-hover;
+}
+
+.filter-select:focus {
+  border-color: $main-color;
+}
+
+.filter-select > option {
+  color: white;
+  background-color: $main-background-color-dark-2;
 }
 
 .filter-input {
   width: 100%;
   height: 22px;
 
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
+  outline: none;
+
   box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.filter-input:hover {
+  background-color: $main-background-color-hover;
+}
+
+.filter-input:focus {
+  border-color: $main-color;
+}
+
+.spinner {
+  z-index: 999;
+  position: absolute;
+  width: auto;
+  height: auto;
+  left: 50vw;
+  top: 260px;
+  transform: translate(-50%, -50%);
 }
 </style>

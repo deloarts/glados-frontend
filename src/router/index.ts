@@ -1,18 +1,27 @@
-import { createRouter, createWebHistory, createWebHashHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHistory,
+  createWebHashHistory,
+} from "vue-router";
 
 import Redirect from "@/components/main/Redirect.vue";
 import RedirectSettings from "@/components/main/RedirectSettings.vue";
-import LoginView from "../views/LoginView.vue";
-import DashboardView from "../views/dashboard/DashboardView.vue";
-import ItemsBoughtView from "../views/items/bought/ItemsBoughtView.vue";
-import ItemsBoughtNewView from "../views/items/bought/ItemsBoughtNewView.vue";
-import ItemsBoughtCopyView from "../views/items/bought/ItemsBoughtCopyView.vue";
-import ItemsBoughtEditView from "../views/items/bought/ItemsBoughtEditView.vue";
-import SettingsHostView from "../views/settings/SettingsHostView.vue";
-import SettingsLogsView from "../views/settings/SettingsLogsView.vue";
-import SettingsUsersView from "../views/settings/SettingsUsersView.vue";
-import SettingsApiKeysView from "../views/settings/SettingsApiKeysView.vue";
-import AccountView from "../views/account/AccountView.vue";
+import RedirectAccount from "@/components/main/RedirectAccount.vue";
+import RedirectTools from "@/components/main/RedirectTools.vue";
+import LoginView from "@/views/LoginView.vue";
+import DashboardView from "@/views/dashboard/DashboardView.vue";
+import ItemsBoughtView from "@/views/items/bought/ItemsBoughtView.vue";
+import ItemsBoughtNewView from "@/views/items/bought/ItemsBoughtNewView.vue";
+import ItemsBoughtCopyView from "@/views/items/bought/ItemsBoughtCopyView.vue";
+import ItemsBoughtEditView from "@/views/items/bought/ItemsBoughtEditView.vue";
+import SettingsHostView from "@/views/settings/SettingsHostView.vue";
+import SettingsLogsView from "@/views/settings/SettingsLogsView.vue";
+import SettingsUsersView from "@/views/settings/SettingsUsersView.vue";
+import SettingsConfigView from "@/views/settings/SettingsConfigView.vue";
+import SettingsApiKeysView from "@/views/settings/SettingsApiKeysView.vue";
+import AccountUpdateView from "@/views/account/AccountUpdateView.vue";
+import AccountPersonalAccessTokenView from "@/views/account/AccountPersonalAccessTokenView.vue";
+import ToolsStockCutView from "@/views/tools/ToolsStockCutView.vue";
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,28 +65,47 @@ const router = createRouter({
     {
       path: "/account",
       name: "Account",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      // component: () => import("../views/account/AccountView.vue"),
-      component: AccountView
+      component: RedirectAccount,
+    },
+    {
+      path: "/account/me",
+      name: "AccountUpdate",
+      component: AccountUpdateView,
+    },
+    {
+      path: "/account/pat",
+      name: "AccountPersonalAccessToken",
+      component: AccountPersonalAccessTokenView,
+    },
+    {
+      path: "/tools",
+      name: "Tools",
+      component: RedirectTools,
+    },
+    {
+      path: "/tools/stock-cut",
+      name: "ToolsStockCut",
+      component: ToolsStockCutView,
     },
     {
       path: "/settings",
       name: "Settings",
-      component: RedirectSettings
+      component: RedirectSettings,
     },
     {
       path: "/settings/host",
       name: "SettingsHost",
-      // component: () => import("../views/settings/SettingsView.vue"),
-      component: SettingsHostView
+      component: SettingsHostView,
+    },
+    {
+      path: "/settings/config",
+      name: "SettingsConfig",
+      component: SettingsConfigView,
     },
     {
       path: "/settings/logs",
       name: "SettingsLogs",
-      // component: () => import("../views/settings/SettingsLogsView.vue"),
-      component: SettingsLogsView
+      component: SettingsLogsView,
     },
     {
       path: "/settings/users",
@@ -95,8 +123,8 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/:pathMatch(.*)*',
-      component: Redirect
+      path: "/:pathMatch(.*)*",
+      component: Redirect,
     },
   ],
 });

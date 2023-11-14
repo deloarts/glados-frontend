@@ -1,14 +1,21 @@
 export default {
-  version: "0.3.4",
-  serverVersion: "0.3.2",
+  version: "0.4.0",
+  serverVersion: "0.4.0",
 
   // Media
-  minWidth: 1450,
-  
+  minWidth: 400,
+  minWidthTablet: 760,
+  minWidthDesktop: 1280,
+
   // Watch intervals
   watchServerConnInterval: 4000,
 
   // Fetch intervals
+  patchUserStoreInterval: 5000,
+  patchUsersStoreInterval: 10000,
+  patchBoughtItemsStoreInterval: 10000,
+  patchServerConfigInterval: 60000,
+
   fetchUsersAfter: 60000,
   fetchBoughtItemsAfter: 5000,
 

@@ -1,6 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { ref, onMounted } from "vue";
 import { baseParticles } from "@/presets/particles";
 import { loadFull } from "tsparticles";
 
@@ -19,9 +18,6 @@ const particlesInit = async (engine) => {
 const particlesLoaded = async (container) => {
   console.log("Particles container loaded", container);
 };
-
-// Routes
-const route = useRoute();
 
 // Stores
 const userStore = useUserStore();
@@ -133,27 +129,27 @@ onMounted(focusUserInput);
   left: 50%;
   top: 50%;
   width: auto;
-  height: auto;
+  height: 350px;
   transform: translate(-50%, -50%);
 
   display: grid;
   grid-gap: 20px;
-  grid-template-rows: 110px 30px 30px 30px 14px;
-  grid-template-columns: 150px 150px;
+  grid-template-rows: auto 30px 30px 30px 15px;
+  grid-template-columns: 280px;
   grid-template-areas:
-    "header header"
-    "ipt1 ipt1"
-    "ipt2 ipt2"
-    "btn1 btn1"
-    "text text";
+    "header"
+    "ipt1"
+    "ipt2"
+    "btn1"
+    "text";
 
   background: $main-color;
   border-radius: 5px;
 
   text-align: center;
-  padding: 30px;
-  padding-top: 0;
-  padding-bottom: 5px;
+  padding: 15px;
+
+  box-shadow: 0px 20px 30px 0px $main-background-color-dark-2;
 }
 
 h1 {
@@ -164,7 +160,7 @@ h1 {
 }
 
 input {
-  width: 100%;
+  width: calc(100% - 4px);
   height: 100%;
   border: none;
   border-radius: 3px;

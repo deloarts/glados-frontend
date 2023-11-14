@@ -107,6 +107,7 @@ function loadFilter() {
 }
 
 function clearFilter() {
+  selectedOptionFilterPreset.value = "";
   filterStore.reset();
   console.log("Cleared filter");
 }

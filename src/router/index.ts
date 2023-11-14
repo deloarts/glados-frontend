@@ -17,6 +17,7 @@ import ItemsBoughtEditView from "@/views/items/bought/ItemsBoughtEditView.vue";
 import SettingsHostView from "@/views/settings/SettingsHostView.vue";
 import SettingsLogsView from "@/views/settings/SettingsLogsView.vue";
 import SettingsUsersView from "@/views/settings/SettingsUsersView.vue";
+import SettingsConfigView from "@/views/settings/SettingsConfigView.vue";
 import SettingsApiKeysView from "@/views/settings/SettingsApiKeysView.vue";
 import AccountUpdateView from "@/views/account/AccountUpdateView.vue";
 import AccountPersonalAccessTokenView from "@/views/account/AccountPersonalAccessTokenView.vue";
@@ -95,6 +96,11 @@ const router = createRouter({
       path: "/settings/host",
       name: "SettingsHost",
       component: SettingsHostView,
+    },
+    {
+      path: "/settings/config",
+      name: "SettingsConfig",
+      component: SettingsConfigView,
     },
     {
       path: "/settings/logs",

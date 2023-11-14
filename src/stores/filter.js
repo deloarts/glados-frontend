@@ -133,20 +133,22 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     }
   }
 
-  function getPresets() {
+  function get() {
     console.log("Filter store is requesting presets ...");
     loading.value = true;
 
-    hostRequest.getConfigItemsBoughtFilters().then((response) => {
+    return hostRequest.getConfigItemsBoughtFilters().then((response) => {
       loading.value = false;
       if (response.status === 200) {
         presets.value = response.data;
         console.log("Filter store got data from server.");
-      } else {
-        console.warn("Filter store could not get user.");
-        logout();
-        router.push({ name: "Login" });
       }
+      return response;
+    });
+  }
+
+  function getPresets() {
+    get().then(() => {
       setTimeout(getPresets.bind(this), constants.patchServerConfigInterval);
     });
   }
@@ -176,6 +178,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
   return {
     state,
     presets,
+    get,
     reset,
     applyPreset,
     saveMy,

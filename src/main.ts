@@ -5,6 +5,7 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import Particles from "vue3-particles";
+import vue3TsJsoneditor from "vue3-ts-jsoneditor";
 
 import "@/scss/main.scss";
 import "typeface-lobster/index.css";
@@ -16,4 +17,10 @@ const app = createApp(App);
 app.use(router);
 app.use(pinia);
 app.use(Particles);
+app.use(vue3TsJsoneditor, {
+  componentName: "JsonEditor",
+  options: {
+    darkTheme: true,
+  },
+});
 app.mount("#app");

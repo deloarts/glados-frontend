@@ -131,7 +131,7 @@ watch(files, () => {
           ></ButtonAbort>
           <ButtonExcel
             class="buttonTemplate"
-            text="Get Template"
+            text="Template"
             v-on:click="onTemplate"
           ></ButtonExcel>
         </div>
@@ -234,8 +234,8 @@ watch(files, () => {
 
 .drop-area .spinner {
   position: absolute;
-  top: 20px;
-  left: 190px;
+  top: 18px;
+  left: 185px;
 }
 
 .warnings {

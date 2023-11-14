@@ -5,6 +5,7 @@ import ButtonServer from "@/components/elements/ButtonServer.vue";
 import ButtonFile from "@/components/elements/ButtonFile.vue";
 import ButtonUsers from "@/components/elements/ButtonUsers.vue";
 import ButtonCloudKey from "@/components/elements/ButtonCloudKey.vue";
+import ButtonConfig from "@/components/elements/ButtonConfig.vue";
 
 // Router
 const route = useRoute();
@@ -31,6 +32,13 @@ function routeIsActive(currentLink) {
           v-bind:class="{ active: routeIsActive('/settings/host') }"
           text="Host"
         ></ButtonServer
+      ></router-link>
+      <router-link :to="'/settings/config'"
+        ><ButtonConfig
+          class="controls-base-element"
+          v-bind:class="{ active: routeIsActive('/settings/config') }"
+          text="Config"
+        ></ButtonConfig
       ></router-link>
       <router-link :to="'/settings/logs'"
         ><ButtonFile

@@ -9,10 +9,6 @@ import SettingsUsersUpdate from "@/components/settings/SettingsUsersUpdate.vue";
 const selectedUserID = ref(0);
 const mode = ref("create");
 
-function onSelect(id) {
-  selectedUserID.value = id;
-}
-
 watch(selectedUserID, () => {
   if (selectedUserID.value == 0) {
     mode.value = "create";
@@ -33,10 +29,6 @@ watch(selectedUserID, () => {
           <SettingsUsersTable
             v-model:selectedUserID="selectedUserID"
           ></SettingsUsersTable>
-        </div>
-
-        <div id="sep">
-          <hr />
         </div>
 
         <div id="user-h1" v-if="mode == 'create'">
@@ -74,11 +66,10 @@ watch(selectedUserID, () => {
 
 #grid {
   grid-template-columns: 100%;
-  grid-template-rows: min-content 400px min-content min-content min-content;
+  grid-template-rows: min-content 400px min-content min-content;
   grid-template-areas:
     "registered-h1"
     "registered"
-    "sep"
     "user-h1"
     "user";
 }
@@ -97,9 +88,5 @@ watch(selectedUserID, () => {
 
 #user-h1 {
   grid-area: user-h1;
-}
-
-#sep {
-  grid-area: sep;
 }
 </style>

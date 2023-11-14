@@ -23,6 +23,12 @@ export class HostRequest {
       requestConfig(null),
     );
   }
+  getConfigItemsBoughtFiltersDefault() {
+    return request.get(
+      "/api/web/v1/host/config/items/bought/filters/default",
+      requestConfig(null),
+    );
+  }
 
   // POST
   postConfigItemsBoughtFilter(name: string, data: object) {

@@ -1,0 +1,100 @@
+@import "@/scss/variables.scss";
+
+.form-base-scope {
+  width: 100%;
+  height: 100%;
+  cursor: default;
+
+  margin: 0;
+  padding: 0;
+
+  font-family: $main-font;
+  font-size: $main-font-size;
+}
+
+.form-base-container {
+  // width: 100%;
+  // height: 100%;
+
+  padding: 10px;
+  margin: 4px;
+
+  // padding: $main-padding;
+  background-color: $main-background-color-dark;
+
+  // border-width: $main-border-width;
+  // border-style: $main-border-style;
+  // border-color: $main-border-color;
+  border-radius: $main-border-radius;
+}
+
+.form-base-text-input {
+  width: 100%;
+  height: 100%;
+
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  margin: 0;
+
+  box-sizing: border-box;
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark-2;
+  border-radius: $main-border-radius;
+  outline: none;
+
+  transition: all 0.2s ease;
+}
+
+.form-base-text-input:hover {
+  background-color: $main-background-color-hover;
+}
+
+.form-base-text-input:focus {
+  border-color: $main-color;
+}
+
+.form-base-text-input-multiline {
+  width: 100%;
+  height: 100%;
+
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  font-size: 1.15em;
+
+  padding: 10px;
+  margin: 0;
+
+  overflow: auto;
+  resize: none;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark-2;
+  border-radius: $main-border-radius;
+  outline: none;
+
+  transition: all 0.2s ease;
+}
+
+.form-base-text-input-multiline:hover {
+  background-color: $main-background-color-hover;
+}
+
+.form-base-text-input-multiline:focus {
+  border-color: $main-color;
+}
+
+.form-base-date-input {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  outline: none;
+}

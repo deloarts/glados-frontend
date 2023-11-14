@@ -1,126 +1,151 @@
-<script lang="ts">
-//@ts-ignore
-import Toggle from "@vueform/toggle";
-import ButtonCreateUser from "@/components/elements/ButtonCreateUser.vue";
-import { usersService } from "@/services/users.service";
+<script setup>
+import { ref, watch } from "vue";
+
+import { useNotificationStore } from "@/stores/notification.js";
 import { usersRequest } from "@/requests/users";
 
-export default {
-  name: 'SettingsUsersCreate',
-  components: {
-    Toggle,
-    ButtonCreateUser
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
+import Toggle from "@vueform/toggle";
+import ButtonUserCreate from "@/components/elements/ButtonUserCreate.vue";
 
-      // Vars
-      formData: {
+// Stores
+const notificationStore = useNotificationStore();
+
+const formData = ref({
+  is_active: false,
+  is_superuser: false,
+  is_adminuser: false,
+  is_guestuser: false,
+  username: "",
+  full_name: "",
+  email: "",
+  password: "",
+});
+
+function createUser() {
+  usersRequest.postUsers(formData.value).then((response) => {
+    if (response.status == 200) {
+      notificationStore.info = `Created user ${formData.value.username}.`;
+      formData.value = {
         is_active: false,
         is_superuser: false,
+        is_adminuser: false,
+        is_guestuser: false,
         username: "",
         full_name: "",
         email: "",
         password: "",
-      }
-    };
-  },
-  methods: {
-    createUser() {
-      usersRequest.postUsers(this.formData).then(response => {
-        if (response.status == 200) {
-          //@ts-ignore
-          this.notificationInfo = `Created user ${this.formData.username}.`
-          this.formData = {
-            is_active: false,
-            is_superuser: false,
-            username: "",
-            full_name: "",
-            email: "",
-            password: "",
-          }
-          usersService.clearCache();
-        } else if (response.status == 406) {
-          //@ts-ignore
-          this.notificationWarning = "User already exists."
-        } else if (response.status == 422) {
-          //@ts-ignore
-          this.notificationWarning = "Data is incomplete."
-        } else {
-          //@ts-ignore
-          this.notificationWarning = "Failed to create new user."
-        }
-      })
+      };
+      // } else if (response.status == 403) {
+      //   notificationStore.warning = "Not enough permission"
+    } else if (response.status == 406) {
+      notificationStore.warning = "User already exists";
+    } else if (response.status == 422) {
+      notificationStore.warning = "Data is incomplete";
+    } else {
+      notificationStore.warning = response.data.detail;
     }
-  },
-  watch: {
-    selectedUserId() {
-    }
-  },
-  mounted() {
-  },
-  beforeMount() {
-  }
-};
+  });
+}
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
+  <div class="form-base-scope">
+    <div class="form-base-container">
       <div id="grid">
+        <div id="guestuser" class="grid-item-center">
+          <Toggle v-model="formData.is_guestuser"></Toggle>
+        </div>
+        <div id="guestuser-text" class="grid-item-left">Guest</div>
         <div id="superuser" class="grid-item-center">
           <Toggle v-model="formData.is_superuser"></Toggle>
         </div>
-        <div id="superuser-text" class="grid-item-left">
-          Superuser
+        <div id="superuser-text" class="grid-item-left">Superuser</div>
+        <div id="adminuser" class="grid-item-center">
+          <Toggle v-model="formData.is_adminuser"></Toggle>
         </div>
+        <div id="adminuser-text" class="grid-item-left">Admin</div>
         <div id="active" class="grid-item-center">
           <Toggle v-model="formData.is_active"></Toggle>
         </div>
-        <div id="active-text" class="grid-item-left">
-          Active
-        </div>
+        <div id="active-text" class="grid-item-left">Active</div>
         <div id="username" class="grid-item-center">
-          <input class="text-input" v-model="formData.username" type="text" placeholder="Username">
+          <input
+            class="form-base-text-input"
+            v-model="formData.username"
+            type="text"
+            placeholder="Username"
+          />
         </div>
         <div id="full-name" class="grid-item-center">
-          <input class="text-input" v-model="formData.full_name" placeholder="Name">
+          <input
+            class="form-base-text-input"
+            v-model="formData.full_name"
+            placeholder="Name"
+          />
         </div>
         <div id="email" class="grid-item-center">
-          <input class="text-input" v-model="formData.email" placeholder="Mail">
+          <input
+            class="form-base-text-input"
+            v-model="formData.email"
+            placeholder="Mail"
+          />
         </div>
         <div id="password" class="grid-item-center">
-          <input class="text-input" v-model="formData.password" placeholder="Password (at least 8 characters)">
+          <input
+            class="form-base-text-input"
+            v-model="formData.password"
+            placeholder="Password (at least 8 characters)"
+          />
         </div>
         <div id="btn">
-          <ButtonCreateUser v-on:click="createUser" text="Create User"></ButtonCreateUser>
+          <ButtonUserCreate
+            v-on:click="createUser"
+            text="Create User"
+          ></ButtonUserCreate>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/form/formBase.scss";
+@import "@/scss/grid/gridBase.scss";
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 25px 25px 40px;
+  grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
-  grid-template-areas: "username username"
+  grid-template-areas:
+    "username username"
     "full-name full-name"
     "email email"
     "password password"
-    "superuser superuser-text"
     "active active-text"
-    "btn btn"
+    "guestuser guestuser-text"
+    "superuser superuser-text"
+    "adminuser adminuser-text"
+    "btn btn";
 }
 
 #btn {
   grid-area: btn;
+}
+
+#active {
+  grid-area: active;
+}
+
+#active-text {
+  grid-area: active-text;
+}
+
+#guestuser {
+  grid-area: guestuser;
+}
+
+#guestuser-text {
+  grid-area: guestuser-text;
 }
 
 #superuser {
@@ -131,12 +156,12 @@ export default {
   grid-area: superuser-text;
 }
 
-#active {
-  grid-area: active;
+#adminuser {
+  grid-area: adminuser;
 }
 
-#active-text {
-  grid-area: active-text;
+#adminuser-text {
+  grid-area: adminuser-text;
 }
 
 #username {

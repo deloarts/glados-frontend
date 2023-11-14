@@ -1,75 +1,62 @@
-<script lang="ts">
-import { boughtItemsRequest } from "@/requests/items";
+<script setup>
 import router from "@/router/index";
+import { boughtItemsRequest } from "@/requests/items";
+import { useNotificationStore } from "@/stores/notification.js";
 
-import ButtonCreate from "@/components/elements/ButtonCreate.vue";
+import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
 import ButtonAbort from "@/components/elements/ButtonAbort.vue";
 
-export default {
-  name: 'ControlsNew',
-  props: ["formData", "header"],
-  emits: [],
-  components: {
-    ButtonCreate,
-    ButtonAbort,
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
-    };
-  },
-  methods: {
-    onCreate() {
-      boughtItemsRequest.postItems(this.formData).then(response => {
-        if (response.status === 200) {
-          // @ts-ignore
-          this.notificationInfo = "Created item."
-          router.push({ name:"BoughtItems"});
-        }
-        if (response.status === 422) {
-          // @ts-ignore
-          this.notificationWarning = "Data is incomplete."
-        }
-      }).catch(error => {
+const props = defineProps(["formData"]);
 
-      })
-    }
-  },
-  watch: {
-  },
-  beforeMount() {
-  }
-};
+// Stores
+const notificationStore = useNotificationStore();
+
+function onCreate() {
+  boughtItemsRequest
+    .postItems(props.formData)
+    .then((response) => {
+      if (response.status === 200) {
+        notificationStore.info = "Created item";
+        router.push({ name: "BoughtItems" });
+      }
+      // else if (response.status === 403) {
+      //   notificationStore.warning = "Not enough permission"
+      // }
+      else if (response.status === 422) {
+        notificationStore.warning = "Data is incomplete";
+      } else {
+        notificationStore.warning = response.data.detail;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      notificationStore.warning = error;
+    });
+}
+
+function onAbort() {
+  router.push({ name: "BoughtItems" });
+}
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
-      <div id="grid">
-        <div id="header" class="grid-item-center">
-          {{ header }}
-        </div>
-        <div id="placeholder-1" class="grid-item-center">
-
-        </div>
-        <div id="placeholder-2" class="grid-item-center">
-          <!-- Data: {{ formData }} -->
-        </div>
-        <div id="btn-1" class="grid-item-center">
-          <ButtonCreate text="Create" v-on:click="onCreate" />
-        </div>
-        <div id="btn-2" class="grid-item-center">
-          <ButtonAbort text="Abort" route-name="BoughtItems" />
-        </div>
-      </div>
+  <div class="controls-base-scope">
+    <div id="item-controls" class="controls-base-container">
+      <ButtonItemCreate
+        class="controls-base-element"
+        text="Create"
+        v-on:click="onCreate"
+      ></ButtonItemCreate>
+      <ButtonAbort
+        class="controls-base-element"
+        text="Cancel"
+        v-on:click="onAbort"
+      ></ButtonAbort>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
-@import '@/assets/gridItemBoughtControlsNewEdit.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/controls/controlsBase.scss";
 </style>

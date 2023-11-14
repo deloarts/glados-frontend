@@ -1,152 +1,129 @@
-<script lang="ts">
-import { inject } from "vue";
+<script setup>
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 
 import router from "@/router/index";
-import config from "@/config";
+import { useUserStore } from "@/stores/user.js";
+import { useResolutionStore } from "@/stores/resolution.js";
 
-import IconDashboard from "../icons/IconDashboard.vue";
-import IconItems from "../icons/IconItems.vue";
-import IconAccount from "../icons/IconAccount.vue";
-import IconSettings from "../icons/IconSettings.vue";
+import IconLogout from "@/components/icons/IconLogout.vue";
+import IconDashboard from "@/components/icons/IconDashboard.vue";
+import IconItems from "@/components/icons/IconItems.vue";
+import IconAccount from "@/components/icons/IconAccount.vue";
+import IconTools from "@/components/icons/IconTools.vue";
+import IconSettings from "@/components/icons/IconSettings.vue";
 
-export default {
-  name: 'Sidebar',
-  props: {
-    title: String
-  },
-  setup() {
-    // const currentUser = inject(currentUserKey); // https://stackoverflow.com/questions/68149678/typescript-vue-3-injecting-mutating-function-causes-typescript-error-object
-    const currentUser =  inject("currentUser");
-    return {
-      currentUser,
-    }
-  },
-  components: {
-    IconDashboard,
-    IconItems,
-    IconAccount,
-    IconSettings
-  },
+const props = defineProps(["title"]);
 
-  data() {
-    return {
-      debug: config.debug,
-      menuItems: [
-        { name: 'Dashboard', link: '/dashboard' },
-        { name: 'Items', link: '/items/bought' },
-        { name: 'Account', link: '/account' },
-      ],
-    };
-  },
-  methods: {
-    routeIsActive(currentLink: string) {
-      let activeRoute = this.$route.path;
-      if (activeRoute != '/login') { localStorage.setItem("gladosActiveRoute", activeRoute); }
-      if (activeRoute.includes(currentLink)) { return true; }
-      else { return false; }
-    },
+// Router
+const route = useRoute();
 
-    rebuildNavigation() {
-      // @ts-ignore
-      if (this.currentUser.is_superuser) {
-        this.menuItems = [
-          { name: 'Dashboard', link: '/dashboard' },
-          { name: 'Items', link: '/items/bought' },
-          { name: 'Account', link: '/account' },
-          { name: 'Settings', link: '/settings' },
-        ];
-      } else {
-        this.menuItems = [
-          { name: 'Dashboard', link: '/dashboard' },
-          { name: 'Items', link: '/items/bought' },
-          { name: 'Account', link: '/account' },
-        ];
-      }
-    },
+// Store
+const userStore = useUserStore();
+const resolutionStore = useResolutionStore();
+const is_adminuser = computed(() => userStore.is_adminuser);
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
 
-    logout() {
-      localStorage.setItem("gladosTokenValue", "");
-      localStorage.setItem("gladosTokenType", "");
-      router.push({name:"Login"});
-    },
-  },
-  watch: {
-    currentUser: {
-      handler: function (newVal, oldVal) {
-        this.rebuildNavigation();
-      },
-      deep: true
-    },
-  },
+// States
+const showLabelLogout = ref(false);
+const showLabelDashboard = ref(false);
+const showLabelBoughtItems = ref(false);
+const showLabelAccount = ref(false);
+const showLabelTools = ref(false);
+const showLabelSettings = ref(false);
 
+function routeIsActive(currentLink) {
+  let activeRoute = route.path;
+  if (activeRoute != "/login") {
+    localStorage.setItem("gladosActiveRoute", activeRoute);
+  }
+  if (activeRoute.includes(currentLink)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function logout() {
+  localStorage.setItem("gladosTokenValue", "");
+  localStorage.setItem("gladosTokenType", "");
+  router.push({ name: "Login" });
 }
 </script>
 
 <template>
   <div class="sidebar">
     <div class="wrapper">
-      <hr v-if="debug" />
-      <div v-if="debug" class="debug">DEVELOPMENT MODE</div>
+      <a
+        ><IconLogout
+          class="logout"
+          v-on:click="logout()"
+          @mouseover="showLabelLogout = true"
+          @mouseleave="showLabelLogout = false"
+        />
+        <Transition>
+          <div v-if="showLabelLogout" class="label">Logout</div>
+        </Transition></a
+      >
       <hr />
-      <div class="user">
-        <div class="full-name">{{
-        //@ts-ignore
-        currentUser.full_name
-        }}</div>
-        <div class="email">{{
-        //@ts-ignore
-        currentUser.email
-        }}</div>
-        <div class="logout" v-on:click="logout()">Logout</div>
-      </div>
-      <hr />
-      <router-link v-for="menuItem in menuItems" :to="menuItem.link" :key="menuItem.name"
-        v-bind:class="{ 'active': routeIsActive(menuItem.link) }">
-        <span class="link-text">{{ menuItem.name }}</span>
+      <router-link
+        :to="'/dashboard'"
+        @mouseover="showLabelDashboard = true"
+        @mouseleave="showLabelDashboard = false"
+      >
+        <IconDashboard v-bind:class="{ active: routeIsActive('/dashboard') }" />
+        <Transition>
+          <div v-if="showLabelDashboard" class="label">Dashboard</div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/items/bought'"
+        @mouseover="showLabelBoughtItems = true"
+        @mouseleave="showLabelBoughtItems = false"
+      >
+        <IconItems v-bind:class="{ active: routeIsActive('/items/bought') }" />
+        <Transition>
+          <div v-if="showLabelBoughtItems" class="label">Bought Items</div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/account'"
+        @mouseover="showLabelAccount = true"
+        @mouseleave="showLabelAccount = false"
+      >
+        <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
+        <Transition>
+          <div v-if="showLabelAccount" class="label">Account</div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/tools'"
+        @mouseover="showLabelTools = true"
+        @mouseleave="showLabelTools = false"
+      >
+        <IconTools v-bind:class="{ active: routeIsActive('/tools') }" />
+        <Transition>
+          <div v-if="showLabelTools" class="label">Tools</div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/settings'"
+        @mouseover="showLabelSettings = true"
+        @mouseleave="showLabelSettings = false"
+      >
+        <IconSettings
+          v-if="is_adminuser && gtMinWidthTablet"
+          v-bind:class="{ active: routeIsActive('/settings') }"
+        />
+        <Transition>
+          <div v-if="showLabelSettings" class="label">Settings</div>
+        </Transition>
       </router-link>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '../../assets/variables.scss';
-@import '../../assets/sidebar.scss';
-
-.sidebar hr {
-  width: 100%;
-  border: none;
-  height: 2px;
-  background-color: $main-color-hover;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar .user {
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  cursor: default;
-  padding: 25px;
-}
-
-.sidebar .user .full-name {
-  font-size: 1.3em;
-}
-
-.sidebar .user .email {
-  font-size: 0.75em;
-}
-
-.sidebar .user .logout {
-  font-size: 0.75em;
-  cursor: pointer;
-  padding-top: 10px;
-}
-
-.sidebar .debug {
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 25px;
-  font-size: 1.3em;
-
-  background-color: red;
-  text-align: center;
-}
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/sidebar.scss";
 </style>

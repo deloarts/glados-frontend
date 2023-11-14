@@ -1,37 +1,47 @@
-<script lang="ts">
-import SettingsSidebar from "@/components/settings/SettingsSidebar.vue";
+<script setup>
+import SettingsControls from "@/components/settings/SettingsControls.vue";
 import SettingsApiKeys from "@/components/settings/SettingsApiKeys.vue";
-
-export default {
-  name: 'SettingsApiKeysView',
-  props: {
-  },
-  components: {
-    SettingsSidebar,
-    SettingsApiKeys
-  },
-  data() {
-    return {
-    };
-  },
-  methods: {
-  },
-}
 </script>
 
 <template>
-  <div id="app">
-    <div class="grid">
-      <div id="sidebar">
-        <SettingsSidebar></SettingsSidebar>
-      </div>
-      <div id="display">
-        <SettingsApiKeys></SettingsApiKeys>
+  <div class="views-scope">
+    <div class="views-content">
+      <div id="grid">
+        <div id="controls">
+          <SettingsControls></SettingsControls>
+        </div>
+        <div id="display">
+          <SettingsApiKeys></SettingsApiKeys>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/settingsView.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/views.scss";
+@import "@/scss/grid/gridBase.scss";
+
+#grid {
+  grid-template-columns: 100%;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "controls"
+    "display";
+}
+
+#controls {
+  grid-area: controls;
+}
+
+#display {
+  grid-area: display;
+  // overflow-x: hidden;
+  // overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
 </style>

@@ -1,0 +1,70 @@
+// Media
+$max-width-tablet: 760px;
+$max-width-desktop: 1280px;
+
+// Colors
+$main-background-color: rgb(50, 50, 50);
+$main-background-color-hover: rgb(50, 50, 50);
+$main-background-color-dark: rgb(40, 40, 40);
+$main-background-color-dark-2: rgb(30, 30, 30);
+$main-background-color-light: rgb(60, 60, 60);
+$main-background-color-light-2: rgb(70, 70, 70);
+
+$light-gray: rgb(40, 40, 40);
+$light-gray-hover: rgb(44, 44, 44);
+
+$main-color: rgb(0, 122, 204);
+$main-color-shade-1: rgb(0, 131, 218);
+$main-color-hover: rgb(5, 140, 230);
+$main-color-active: rgb(7, 155, 253);
+$main-color-active-hover: rgb(20, 161, 255);
+
+$main-green: rgb(99, 219, 99);
+$main-red: red;
+$main-orange: rgb(237, 170, 0);
+
+$log-date: lime;
+$log-module: darkslateblue;
+$log-level: red;
+$log-msg: lightgray;
+
+$table-head-background: rgb(33, 33, 33);
+$table-row-even: rgb(44, 44, 44);
+$table-row-odd: rgb(48, 48, 48);
+$table-row-hover: rgb(5, 140, 230);
+$table-row-active: rgb(0, 122, 204);
+$table-row-active-hover: rgb(20, 161, 255);
+
+$table-background-open-even: rgb(44, 44, 44);
+$table-background-open-odd: rgb(48, 48, 48);
+$table-background-requested-even: rgb(240, 150, 70);
+$table-background-requested-odd: rgb(236, 146, 66);
+$table-background-ordered-even: rgb(206, 192, 0);
+$table-background-ordered-odd: rgb(202, 188, 0);
+$table-background-late-even: rgb(250, 100, 80);
+$table-background-late-odd: rgb(250, 100, 80);
+$table-background-partial-even: rgb(111, 151, 0);
+$table-background-partial-odd: rgb(107, 147, 0);
+$table-background-delivered-even: rgb(56, 169, 56);
+$table-background-delivered-odd: rgb(52, 165, 52);
+$table-background-canceled-even: rgb(109, 109, 109);
+$table-background-canceled-odd: rgb(109, 109, 109);
+$table-background-lost-even: rgb(80, 30, 30);
+$table-background-lost-odd: rgb(80, 30, 30);
+
+// Styling
+$main-padding: 20px;
+$main-margin: 20px;
+
+$main-border-style: solid;
+$main-border-width: 1px;
+$main-border-radius: 5px;
+$main-border-color: $main-color;
+
+// Fonts
+$main-font: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+$main-font-size: 0.9em;
+
+$main-font-2: "Lobster", "Segoe UI", "Arial";
+
+$main-font-neutral: Arial, Helvetica, sans-serif;

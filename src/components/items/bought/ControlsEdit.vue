@@ -1,81 +1,68 @@
-<script lang="ts">
-import { boughtItemsRequest } from "@/requests/items"
-import router from "@/router/index";
+<script setup>
+import { useRoute } from "vue-router";
 
-import ButtonUpdate from "@/components/elements/ButtonUpdate.vue";
+import router from "@/router/index";
+import { boughtItemsRequest } from "@/requests/items";
+import { useNotificationStore } from "@/stores/notification.js";
+
+import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
 import ButtonAbort from "@/components/elements/ButtonAbort.vue";
 
-export default {
-  name: 'ControlsEdit',
-  props: ["formData"],
-  emits: [],
-  components: {
-    ButtonUpdate,
-    ButtonAbort,
-  },
-  data() {
-    return {
-      // Globals
-      notificationWarning: this.$notificationWarning,
-      notificationInfo: this.$notificationInfo,
-    };
-  },
-  methods: {
-    onUpdate() {
-      const itemId = this.$route.params.id;
+const props = defineProps(["formData"]);
 
-      boughtItemsRequest.putItems(Number(itemId), this.formData).then(response => {
-        if (response.status === 200) {
-          // @ts-ignore
-          this.notificationInfo = `Updated item #${itemId}.`;
-          router.push({ name: "BoughtItems" });
-        }
-        else if (response.status === 422) {
-          // @ts-ignore
-          this.notificationWarning = "Data is incomplete.";
-        }
-        else {
-          this.notificationWarning = response.data.detail;
-        }
-      }).catch(error => {
-        console.log(error);
-        this.notificationWarning = error;
-      })
-    }
-  },
-  watch: {
-  },
-  beforeMount() {
-  }
-};
+// Router
+const route = useRoute();
+
+// Stores
+const notificationStore = useNotificationStore();
+
+function onUpdate() {
+  const itemId = route.params.id;
+  boughtItemsRequest
+    .putItems(itemId, props.formData)
+    .then((response) => {
+      if (response.status === 200) {
+        notificationStore.info = `Updated item #${itemId}.`;
+        router.push({ name: "BoughtItems" });
+      }
+      // else if (response.status === 403) {
+      //   notificationStore.warning = "Not enough permission"
+      // }
+      else if (response.status === 422) {
+        notificationStore.warning = "Data is incomplete";
+      } else {
+        notificationStore.warning = response.data.detail;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      notificationStore.warning = error;
+    });
+}
+
+function onAbort() {
+  router.push({ name: "BoughtItems" });
+}
 </script>
 
 <template>
-  <div class="scope">
-    <div class="container">
-      <div id="grid">
-        <div id="header" class="grid-item-center">
-          Edit Item #{{ $route.params.id }}
-        </div>
-        <div id="placeholder-2" class="grid-item-center">
-          <!-- Data: {{ formData }} -->
-        </div>
-        <div id="placeholder-3" class="grid-item-center">
-          <!-- Data: {{ formData }} -->
-        </div>
-        <div id="btn-1" class="grid-item-center">
-          <ButtonUpdate text="Update" v-on:click="onUpdate" />
-        </div>
-        <div id="btn-2" class="grid-item-center">
-          <ButtonAbort text="Abort" route-name="BoughtItems" />
-        </div>
-      </div>
+  <div class="controls-base-scope">
+    <div id="item-controls" class="controls-base-container">
+      <ButtonItemCreate
+        class="controls-base-element"
+        text="Update"
+        v-on:click="onUpdate"
+      ></ButtonItemCreate>
+      <ButtonAbort
+        class="controls-base-element"
+        text="Cancel"
+        v-on:click="onAbort"
+      ></ButtonAbort>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/gridBase.scss';
-@import '@/assets/gridItemBoughtControlsNewEdit.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/controls/controlsBase.scss";
 </style>

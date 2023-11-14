@@ -1,60 +1,27 @@
-<script lang="ts"> 
-import { usersService } from "@/services/users.service";
+<script setup>
+import { useUsersStore } from "@/stores/user.js";
+
 import IconCheckboxBlank from "@/components/icons/IconCheckboxBlank.vue";
 import IconCheckboxMarked from "@/components/icons/IconCheckboxMarked.vue";
 
-export default {
-  name: "SettingsUsersTable",
-  props: ["selectedUserId"],
-  emits: ["update:selectedUserId"],
-  components: {
-    IconCheckboxBlank,
-    IconCheckboxMarked
-  },
-  data() {
-    return {
-      users: [{
-        id: 0,
-        username: "",
-        full_name: "",
-        email: "",
-        is_active: false,
-        is_superuser: false,
-        created: "",
-      }],
-    };
-  },
-  mounted() {
-    usersService.clearCache();
-    this.autoFetchUsers();
-  },
-  beforeMount() {
-    this.users = [];
-  },
-  beforeDestroy() {
-  },
-  methods: {
-    onSelect(id: number) {
-      if (this.selectedUserId == id) {id = 0;}
-      this.$emit("update:selectedUserId", id);
-    },
-    autoFetchUsers() {
-      if (this.$route.path != '/settings/users') {
-        console.info('Stopped updating routine for users: User leaved site.');
-      } else {
-        usersService.getUsers().then(users => {
-          this.users = users.data;
-          setTimeout(this.autoFetchUsers.bind(this), 1000);
-        });
-      }
-    }
-  }, 
+// Props & Emits
+const props = defineProps(["selectedUserID"]);
+const emit = defineEmits(["update:selectedUserID"]);
+
+// Store
+const usersStore = useUsersStore();
+
+function onSelect(id) {
+  if (props.selectedUserID == id) {
+    id = 0;
+  }
+  emit("update:selectedUserID", id);
 }
 </script>
 
 <template>
-  <div class="scope">
-    <div class="table-wrapper">
+  <div class="table-base-scope">
+    <div class="table-base-container">
       <table class="cursor-default">
         <thead>
           <tr>
@@ -64,12 +31,18 @@ export default {
             <th class="first sticky-col" id="mail">Mail</th>
             <th class="first sticky-col" id="active">Active</th>
             <th class="first sticky-col" id="superuser">Superuser</th>
+            <th class="first sticky-col" id="superuser">Admin</th>
+            <th class="first sticky-col" id="superuser">Guest</th>
             <th class="first sticky-col" id="created">Created</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(user, index) in users" :key="user.id" v-on:click="onSelect(user.id)"
-            v-bind:class="{ 'selected': selectedUserId == user.id}">
+          <tr
+            v-for="(user, index) in usersStore.users"
+            :key="user.id"
+            v-on:click="onSelect(user.id)"
+            v-bind:class="{ selected: props.selectedUserID == user.id }"
+          >
             <td id="user-id" class="sticky-col">{{ user.id }}</td>
             <td id="username" class="sticky-col">{{ user.username }}</td>
             <td id="full-name" class="sticky-col">{{ user.full_name }}</td>
@@ -82,6 +55,14 @@ export default {
               <IconCheckboxMarked v-if="user.is_superuser" />
               <IconCheckboxBlank v-else />
             </td>
+            <td id="adminuser" class="sticky-col">
+              <IconCheckboxMarked v-if="user.is_adminuser" />
+              <IconCheckboxBlank v-else />
+            </td>
+            <td id="guestuser" class="sticky-col">
+              <IconCheckboxMarked v-if="user.is_guestuser" />
+              <IconCheckboxBlank v-else />
+            </td>
             <td id="created" class="sticky-col">{{ user.created }}</td>
           </tr>
         </tbody>
@@ -90,9 +71,9 @@ export default {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
-@import '@/assets/tableBase.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/table/tableBase.scss";
 
 #user-id {
   width: 35px;
@@ -130,10 +111,29 @@ export default {
   text-align: center;
 }
 
+#adminuser {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+}
+
+#guestuser {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: center;
+}
+
 #created {
   width: 200px;
   min-width: 200px;
   max-width: 200px;
   text-align: center;
+}
+
+svg {
+  width: 15px;
+  height: 15px;
 }
 </style>

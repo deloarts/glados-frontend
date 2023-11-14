@@ -1,96 +1,175 @@
-<script lang="ts">
+<script setup>
+import { ref, watch, onMounted, onUnmounted } from "vue";
+
 import { boughtItemsRequest } from "@/requests/items";
-import DragAndDrop from "@/components/elements/DragAndDrop.vue";
+import { useNotificationStore } from "@/stores/notification.js";
 
-export default {
-    name: "ExcelImport",
-    props: ["showUploader", "onSuccess"],
-    emits:["update:showUploader"],
-    components: { DragAndDrop },
-    data() {
-      return {
-        // Globals
-        notificationWarning: this.$notificationWarning,
-        notificationInfo: this.$notificationInfo,
+import ButtonExcel from "@/components/elements/ButtonExcel.vue";
+import ButtonAbort from "@/components/elements/ButtonAbort.vue";
+import Spinner from "@/components/spinner/LoadingSpinner.vue";
+import DropZone from "@/components/elements/DropZone.vue";
+import useFileList from "@/compositions/file-list";
 
-        filelist: [],
-        warningsList: [],
-        };
-    },
-    methods: {
-      onAbort() {
-        this.warningsList = [];
-        this.$emit("update:showUploader", false);
-      },
-      onUpload() {
-        let formData = new FormData();
-        formData.append("file", this.filelist[0]);
+// Props & Emits
+const props = defineProps(["showUploader", "onSuccess"]);
+const emit = defineEmits(["update:showUploader"]);
 
-        boughtItemsRequest.postItemsExcel(formData).then(response => {
-          if (response.status == 200) {
-            // @ts-ignore
-            this.notificationInfo = "EXCEL import successful.";
-            this.onSuccess();
-            this.$emit("update:showUploader", false);
-          }
-          else if (response.status == 422) {
-            // @ts-ignore
-            this.notificationWarning = "EXCEL file content is incomplete.";
-            this.warningsList = response.data.detail;
-          }
-          else {
-            // @ts-ignore
-            this.notificationWarning = response.data.detail;
-            this.$emit("update:showUploader", false);
-          }
-        }).catch(error => {
-          // @ts-ignore
-          this.notificationWarning = "Could not process file.";
-          this.$emit("update:showUploader", false);
-        });
-      },
-      onTemplate() {
-        boughtItemsRequest.getItemsExcelTemplate().then(response => {
-          if (response.status == 200) {
-            let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            let url = window.URL.createObjectURL(blob);
+// Stores
+const notificationStore = useNotificationStore();
 
-            window.open(url);
-            this.$emit("update:showUploader", false);
-          } else {
-            // @ts-ignore
-            this.notificationWarning = "Could not download template file.";
-          }
-        });
-      }
-    },
-    mounted() {
-    },
+// Files
+const { files, addFiles, removeFile } = useFileList();
+
+// Handler
+let uploading = ref(false);
+let warningsList = ref([]);
+
+function onInputChange(e) {
+  addFiles(e.target.files);
+  e.target.value = null; // reset so that selecting the same file again will still cause it to fire this change
 }
+
+function onAbort() {
+  uploading.value = false;
+  warningsList.value = [];
+  emit("update:showUploader", false);
+}
+
+function onTemplate() {
+  boughtItemsRequest.getItemsExcelTemplate().then((response) => {
+    if (response.status == 200) {
+      let blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+      emit("update:showUploader", false);
+    } else {
+      notificationStore.warning = "Could not download template file.";
+    }
+  });
+}
+
+function uploadFile() {
+  uploading.value = true;
+
+  let formData = new FormData();
+  formData.append("file", files.value[0].file);
+
+  boughtItemsRequest
+    .postItemsExcel(formData)
+    .then((response) => {
+      uploading.value = false;
+      if (response.status == 200) {
+        notificationStore.info = "EXCEL import successful.";
+        props.onSuccess();
+        emit("update:showUploader", false);
+      } else if (response.status == 422) {
+        notificationStore.warning = "EXCEL file content is incomplete.";
+        warningsList.value = response.data.detail;
+      } else {
+        notificationStore.warning = response.data.detail;
+        emit("update:showUploader", false);
+      }
+    })
+    .catch((error) => {
+      notificationStore.warning = "Could not process file.";
+      emit("update:showUploader", false);
+    });
+}
+
+function textErrorInput(text) {
+  if (text == null) {
+    return "an empty cell";
+  } else {
+    return text;
+  }
+}
+
+watch(files, () => {
+  if (files.value.length > 0) {
+    uploadFile();
+    files.value = [];
+  }
+});
 </script>
 
 <template>
-  <div class="scope" v-if="showUploader">
-    <div class="coat"></div>
+  <div class="scope" v-if="props.showUploader">
+    <div class="coat" v-on:click="onAbort"></div>
     <div class="center">
-      <div v-if="warningsList.length == 0" id="dnd">
-        <drag-and-drop filetype=".xlsx" v-model:filelist="filelist" v-bind:on-upload="onUpload"></drag-and-drop>
-      </div>
-      <div v-else id="warnings">
-        <h1>Errors</h1>
-        <div class="warningsWrapper">
-          <ol><li v-for="(item, index) in warningsList" :key="item">{{ item }}</li></ol>
+      <div v-if="warningsList.length == 0" class="dnd">
+        <DropZone
+          class="drop-area"
+          @files-dropped="addFiles"
+          #default="{ dropZoneActive }"
+        >
+          <label for="file-input">
+            <div v-if="uploading">
+              <Spinner class="spinner"></Spinner>
+            </div>
+            <div v-else-if="dropZoneActive">
+              <span>Drop Them Here</span>
+            </div>
+            <div v-else>
+              <span>Drag Your Files Here</span>
+            </div>
+            <input
+              type="file"
+              id="file-input"
+              :accept="'.xlsx'"
+              multiple
+              @change="onInputChange"
+            />
+          </label>
+        </DropZone>
+        <div>
+          <ButtonAbort
+            class="buttonAbort"
+            text="Abort"
+            v-on:click="onAbort"
+          ></ButtonAbort>
+          <ButtonExcel
+            class="buttonTemplate"
+            text="Template"
+            v-on:click="onTemplate"
+          ></ButtonExcel>
         </div>
       </div>
-      <div><button id="btnTemplate" v-on:click="onTemplate">Get Template</button></div>
-      <div><button id="btnAbort" v-on:click="onAbort">Abort</button></div>
-      
+      <div v-else class="warnings">
+        <h1>Import Validation Errors</h1>
+        <div class="warningsWrapper">
+          <ol>
+            <li
+              class="warningsItem"
+              v-for="(warning, i) in warningsList"
+              :key="i"
+            >
+              <span class="bold bigger">Error in row #{{ warning.row }}:</span>
+              <ul>
+                <li v-for="(error, j) in warningsList[i].errors" :key="j">
+                  <span class="bold">{{ error.loc.join(", ") }}</span
+                  >: {{ error.msg }}, but received
+                  <em>{{ textErrorInput(error.input) }}</em>
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+        <div>
+          <ButtonAbort
+            class="buttonAbort"
+            text="Close"
+            v-on:click="onAbort"
+          ></ButtonAbort>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .scope {
   color: white;
@@ -118,85 +197,94 @@ export default {
   height: auto;
   transform: translate(-50%, -50%);
 
-  // display: grid;
-  // grid-gap: 20px;
-  // grid-template-rows: 80px 30px;
-  // grid-template-columns: 300px;
-  // grid-template-areas: 'dnd'
-  //   'warnings'
-  //   'btnAbort';
-      
+  padding: $main-padding;
+
   background: $main-background-color;
-  border-style: solid;
-  border-color: $main-color;
-  border-width: 1px;
-  border-radius: 5px;
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-border-color;
+  border-radius: $main-border-radius;
 
   text-align: center;
-  padding: 30px;
 }
-
-button {
-  font-family: 'Play', 'Segoe UI', 'Arial';
-  font-weight: 700;
+.dnd {
+  width: 350px;
+  height: 190px;
+  // padding: 30px;
+  // padding-bottom: 30px;
+}
+.drop-area {
   width: 100%;
-  height: 30px;
-  border: none;
-  border-radius: 3px;
+  height: 155px;
+
+  text-align: center;
+
+  border: 1px solid $main-color;
+  border-radius: 0.25em;
+
+  color: white;
+  background: $main-background-color-dark;
+  cursor: move;
   transition: background 0.2s ease;
-  margin-top: 10px;
 }
 
-h1 {
-  font-family: 'Play', 'Segoe UI', 'Arial';
-  font-size: 1.5em;
-  font-weight: thin;
+.drop-area div {
+  padding-top: 70px;
 }
 
-li {
-  padding-bottom: 10px;
+.drop-area .spinner {
+  position: absolute;
+  top: 18px;
+  left: 185px;
 }
 
+.warnings {
+  width: auto;
+  height: auto;
+  padding-bottom: 30px;
+}
+.warningsItem {
+  padding-bottom: 20px;
+  white-space: pre-wrap;
+}
 .warningsWrapper {
-  width: 300px;
+  width: 800px;
   height: 400px;
   overflow: auto;
   font-family: Calibri, Arial, Helvetica, sans-serif;
   text-align: left;
 }
 
-#btnAbort {
-  // grid-area: btnAbort;
-  // width: 150px;
-  // height: 30px;
-  // padding-top: 30px;
-  // padding-bottom: 30px;
-  // padding-right: 5px;
+.bold {
+  font-weight: bold;
 }
 
-#btnTemplate {
-  // grid-area: btnTemplate;
-  // width: auto;
-  // height: auto;
-  // padding-top: 30px;
-  // padding-bottom: 30px;
-  // padding-right: 5px;
+.bigger {
+  font-size: 1.1em;
 }
 
-#warnings {
-  width: auto;
-  height: auto;
-  // padding: 30px;
-  // grid-area: warnings;
-  padding-bottom: 30px;
+button {
+  // width: 135px;
+  // height: 35px;
+  margin-top: 15px;
+  float: right;
 }
 
-#dnd {
-    width: 300px;
-    height: 80px;
-    padding: 0;
-    // padding-top: 30px;
-    padding-bottom: 30px;
-    // grid-area: dnd;
+.buttonAbort {
+  margin-left: 5px;
+}
+
+.buttonTemplate {
+  margin-right: 5px;
+}
+
+input {
+  display: none;
+}
+
+h1 {
+  font-family: "Play", "Segoe UI", "Arial";
+  font-size: 1.5em;
+  font-weight: thin;
 }
 </style>

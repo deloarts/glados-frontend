@@ -1,83 +1,89 @@
-<script lang="ts">
-//@ts-ignore
+<script setup>
+import { ref, nextTick, watch, onMounted, onBeforeUnmount } from "vue";
 import moment from "moment";
+
 import { logsRequest } from "@/requests/logs";
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 
-export default {
-  name: 'SettingsLogs',
-  components: {
-    Spinner
-  },
-  data() {
-    return {
-      windowWidth: window.innerWidth,
-      loading: false,
-      logfiles: [],
-      logfile: '',
-      content: []
-    };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
-    })
-    this.loading = true;
-    this.getLogs();
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize);
-  },
-  methods: {
-    onResize() {
-      this.windowWidth = window.innerWidth
-    },
-    getLogs() {
-      this.loading = true;
-      logsRequest.getLogs()
-        .then(response => {
-          this.logfiles = response.data;
-          this.loading = false;
-        })
-        .catch(() => {
-          console.warn('could not get logs');
-          this.loading = false;
-        })
-    },
+const windowWidth = ref(window.innerWidth);
+const loading = ref(false);
+const logfiles = ref([]);
+const logfile = ref("");
+const content = ref([]);
 
-    getLog(logfile: any) {
-      if (this.logfile == logfile) {
-        this.logfile = '';
-        this.content = [];
-      } else {
-        this.loading = true;
-        this.logfile = logfile;
-        logsRequest.getLogFile(logfile)
-          .then(response => {
-            this.content = response.data;
-            this.loading = false;
-          })
-          .catch(() => {
-            console.warn('could not get logfile');
-            this.loading = false;
-          })
-      }
-    },
-    format(line: string, type: string) {
-      let splitted = line.split('\t');
-      if (type == 'date') { return splitted[0]; }
-      else if (type == 'name') { return splitted[1]; }
-      else if (type == 'level') { return splitted[2]; }
-      else if (type == 'msg') { return splitted[3] }
-      else { return (line); }
-    },
-    isDate(line: any) {
-      let date = moment(line.split('\t')[0]);
-      if (date.isValid()) { return true; }
-      else { return false; }
-    }
+function onResize() {
+  windowWidth.value = window.innerWidth;
+}
+
+function getLogs() {
+  loading.value = true;
+  logsRequest
+    .getLogs()
+    .then((response) => {
+      logfiles.value = response.data;
+      loading.value = false;
+    })
+    .catch(() => {
+      console.warn("could not get logs");
+      loading.value = false;
+    });
+}
+
+function getLog(filename) {
+  if (logfile.value == filename) {
+    logfile.value = "";
+    content.value = [];
+  } else {
+    loading.value = true;
+    logfile.value = filename;
+    logsRequest
+      .getLogFile(logfile.value)
+      .then((response) => {
+        content.value = response.data;
+        loading.value = false;
+      })
+      .catch(() => {
+        console.warn("could not get logfile");
+        loading.value = false;
+      });
   }
 }
+
+function format(line, type) {
+  let splitted = line.split("\t");
+  if (type == "date") {
+    return splitted[0];
+  } else if (type == "name") {
+    return splitted[1];
+  } else if (type == "level") {
+    return splitted[2];
+  } else if (type == "msg") {
+    return splitted[3];
+  } else {
+    return line;
+  }
+}
+
+function isDate(line) {
+  let date = moment(line.split("\t")[0]);
+  if (date.isValid()) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+onMounted(() => {
+  nextTick(() => {
+    window.addEventListener("resize", onResize);
+  });
+  loading.value = true;
+  getLogs();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResize);
+});
 </script>
 
 <template>
@@ -88,8 +94,13 @@ export default {
     <div v-else class="wrapper">
       <div class="files" v-bind:class="{ 'with-content': content.length != 0 }">
         <div id="list" v-if="windowWidth >= 600 || content.length == 0">
-          <div class="list-item" v-bind:class="{ 'active': file == logfile }" v-for="file in logfiles" :key="file"
-            v-on:click="getLog(file)">
+          <div
+            class="list-item"
+            v-bind:class="{ active: file == logfile }"
+            v-for="file in logfiles"
+            :key="file"
+            v-on:click="getLog(file)"
+          >
             <div class="cell">
               <div v-if="loading && file == logfile">
                 <spinner></spinner>
@@ -107,9 +118,11 @@ export default {
           <div class="content-wrapper">
             <div class="item" v-for="line in content" :key="line">
               <div v-if="isDate(line)">
-                <div class="cell format-date center">{{ format(line, 'date') }}</div>
-                <div class="cell format-level">{{ format(line, 'level') }}</div>
-                <div class="cell format-msg">{{ format(line, 'msg') }}</div>
+                <div class="cell format-date center">
+                  {{ format(line, "date") }}
+                </div>
+                <div class="cell format-level">{{ format(line, "level") }}</div>
+                <div class="cell format-msg">{{ format(line, "msg") }}</div>
               </div>
             </div>
           </div>
@@ -119,8 +132,8 @@ export default {
   </div>
 </template>
 
-<style scoped lang='scss'>
-@import '@/assets/variables.scss';
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
 
 .scope {
   width: 100%;
@@ -134,7 +147,7 @@ export default {
 .files {
   display: grid;
   grid-gap: 10px;
-  grid-template-areas: 'list';
+  grid-template-areas: "list";
 
   width: 100%;
   height: 100%;
@@ -148,14 +161,15 @@ export default {
 
 .with-content {
   grid-template-columns: 125px auto;
-  grid-template-areas: 'list content';
+  grid-template-areas: "list content";
 }
 
-@media screen and (max-width: $max-width) {
+@media screen and (max-width: $max-width-desktop) {
   .with-content {
     grid-template-columns: 100%;
-    grid-template-areas: 'list'
-      'content';
+    grid-template-areas:
+      "list"
+      "content";
   }
 }
 
@@ -182,7 +196,7 @@ td {
   width: 100%;
   cursor: pointer;
   display: table;
-  font-family: 'Segoe UI', 'Arial';
+  font-family: "Segoe UI", "Arial";
   font-size: 12px;
   text-align: center;
   color: white;
@@ -244,7 +258,7 @@ td {
   vertical-align: middle;
   text-align: left;
   width: auto;
-  font-family: 'Segoe UI', 'Arial';
+  font-family: "Segoe UI", "Arial";
   font-size: 12px;
   padding: 5px;
 }

@@ -1,132 +1,90 @@
-<script lang="ts">
-import Changelog from "../../../components/items/bought/Changelog.vue";
-import DataTable from "../../../components/items/bought/DataTable.vue";
-import Controls from "../../../components/items/bought/Controls.vue";
+<script setup>
+import { ref } from "vue";
+import { useBoughtItemsControlsStore } from "@/stores/controls.js";
 
-import { boughtItemsFilter } from "@/presets/boughtItemsFilter";
+import Changelog from "@/components/items/bought/Changelog.vue";
+import DataTable from "@/components/items/bought/DataTable.vue";
+import Controls from "@/components/items/bought/Controls.vue";
 
-export default {
-  name: 'Bought Items',
-  components: {
-    Changelog,
-    DataTable,
-    Controls,
-  },
-  data() {
-    return {
-      // Trigger
-      triggerGetNewData: false,
+// Store
+const controlsStore = useBoughtItemsControlsStore();
 
-      // Controls options
-      controlsShowChangelog: localStorage.getItem("gladosBoughtItemControlsShowChangelog") === "true",
-      controlsShowRainbow: localStorage.getItem("gladosBoughtItemControlsShowRainbow") === "true",
-      controlsShowTextOnly: localStorage.getItem("gladosBoughtItemControlsShowTextOnly") === "true",
-      controlsShowFixHeight: localStorage.getItem("gladosBoughtItemControlsShowFixHeight") === "true",
-      controlsShowUnclutter: localStorage.getItem("gladosBoughtItemControlsShowUnclutter") === "true",
-      controlsShowRequestView: localStorage.getItem("gladosBoughtItemControlsShowRequestView") === "true",
-
-      // Items
-      selectedItemIds: [],
-      selectedFilter: JSON.parse(JSON.stringify(boughtItemsFilter)),
-    };
-  },
-  methods: {
-
-  },
-  watch: {
-    selectedFilter: {
-      handler: function (newVal) {
-        localStorage.setItem("gladosBoughtItemDataTableFilter", JSON.stringify(this.selectedFilter));
-        console.log("Saved new filter");
-      },
-      deep: true
-    },
-  },
-  beforeMount() {
-    const filterObject = localStorage.getItem("gladosBoughtItemDataTableFilter");
-    if (filterObject != null) { this.selectedFilter = JSON.parse(filterObject) }
-  },
-  computed: {
-  }
-}
+// Items
+const selectedItemIds = ref([]);
+const triggerGetNewData = ref(false);
 </script>
 
 <template>
-  <div class="scope">
-    <div class="grid" v-bind:class="{ 'show-changelog': controlsShowChangelog }">
-      <div id="controls" class="controls">
-        <Controls v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData"
-          v-model:filter="selectedFilter" v-model:show-changelog="controlsShowChangelog"
-          v-model:show-rainbow="controlsShowRainbow" v-model:show-text-only="controlsShowTextOnly"
-          v-model:showFixHeight="controlsShowFixHeight"
-          v-model:show-unclutter="controlsShowUnclutter" v-model:show-request-view="controlsShowRequestView">
-        </Controls>
-      </div>
-      <div id="data" class="data">
-        <DataTable v-model:selected-item-ids="selectedItemIds" v-model:trigger-get-new-data="triggerGetNewData"
-          v-model:filter="selectedFilter" v-model:show-text-only="controlsShowTextOnly"
-          v-model:show-rainbow="controlsShowRainbow" v-model:showFixHeight="controlsShowFixHeight"
-          v-model:show-unclutter="controlsShowUnclutter"
-          v-model:show-request-view="controlsShowRequestView">
-        </DataTable>
-      </div>
-      <div id="changelog" class="changelog" v-if="controlsShowChangelog">
-        <Changelog v-model:selected-item-ids="selectedItemIds"></Changelog>
+  <div class="views-scope">
+    <div class="views-content">
+      <div
+        class="grid"
+        v-bind:class="{ 'show-changelog': controlsStore.state.changelog }"
+      >
+        <div id="controls" class="controls">
+          <Controls
+            v-model:selected-item-ids="selectedItemIds"
+            v-model:trigger-get-new-data="triggerGetNewData"
+          />
+        </div>
+        <div id="data" class="data">
+          <DataTable
+            v-model:selected-item-ids="selectedItemIds"
+            v-model:trigger-get-new-data="triggerGetNewData"
+          />
+        </div>
+        <div
+          id="changelog"
+          class="changelog"
+          v-if="controlsStore.state.changelog"
+        >
+          <Changelog v-model:selected-item-ids="selectedItemIds"></Changelog>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<style src="@vueform/toggle/themes/default.css">
-
-</style>
+<style src="@vueform/toggle/themes/default.css"></style>
 <style scoped lang="scss">
-@import "../../../assets/variables.scss";
+@import "@/scss/variables.scss";
+@import "@/scss/views.scss";
+@import "@/scss/grid/gridBase.scss";
 
-.scope {
-  width: 100%;
-  height: 100%;
+.views-content {
+  height: calc(100% - 20px); // This is ugly, should be changed...
+  overflow: none;
 }
 
 .grid {
-  // width: 100%;
-  // height: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 250px;
-  right: 0;
+  width: 100%;
+  height: 100%;
 
   display: grid;
 
-  grid-gap: 0;
+  grid-gap: 10px;
   grid-template-columns: 100%;
-  grid-template-rows: 150px auto;
-  grid-template-areas: "controls"
-    "data"
+  grid-template-rows: min-content auto;
+  grid-template-areas:
+    "controls"
+    "data";
 }
 
 .show-changelog {
-  grid-template-rows: 150px auto 200px;
-  grid-template-areas: "controls"
+  grid-template-rows: min-content auto 200px;
+  grid-template-areas:
+    "controls"
     "data"
     "changelog";
 }
 
-.grid .controls {
-  padding: 10px;
-}
-
-.grid .data {
+.controls {
   overflow: auto;
-  padding: 10px;
-  border-radius: 5px;
 }
 
-.grid .changelog {
-  // overflow: auto;
-  padding: 10px;
-  padding-top: 5px;
+.data {
+  overflow: auto;
+  padding-bottom: 2px;
 }
 
 // grid

@@ -40,6 +40,7 @@ function login() {
     if (response.status === 200) {
       fetchCurrentUser();
     } else {
+      form_pw.value = "";
       notificationStore.warning = "Wrong login credentials.";
     }
   });

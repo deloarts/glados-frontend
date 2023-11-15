@@ -12,10 +12,7 @@ const notificationStore = useNotificationStore();
 const solverInput = ref({
   max_length: 1000,
   cut_width: 5,
-  target_sizes: [
-    { length: 100, quantity: 4 },
-    { length: 400, quantity: 6 },
-  ],
+  target_sizes: [{ length: 100, quantity: 4 }],
 });
 
 const solverOutput = ref({

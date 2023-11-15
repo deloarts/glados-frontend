@@ -16,7 +16,6 @@ export default {
   patchBoughtItemsStoreInterval: 10000,
   patchServerConfigInterval: 60000,
 
-  fetchUsersAfter: 60000,
   fetchBoughtItemsAfter: 5000,
 
   // API definition

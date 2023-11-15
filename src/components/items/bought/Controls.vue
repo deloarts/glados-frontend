@@ -183,16 +183,20 @@ function onButtonClear() {
 }
 
 function setupMobileView() {
-  controlsStore.state.unclutter = true;
-  controlsStore.state.requestView = false;
-  controlsStore.state.textOnly = false;
-  controlsStore.state.lockCols = false;
+  if (!gtMinWidthTablet) {
+    controlsStore.state.unclutter = true;
+    controlsStore.state.requestView = false;
+    controlsStore.state.textOnly = false;
+    controlsStore.state.lockCols = false;
+  }
 }
 
 function setupTabletView() {
-  controlsStore.state.requestView = false;
-  controlsStore.state.textOnly = false;
-  controlsStore.state.lockCols = false;
+  if (!gtMinWidthDesktop) {
+    controlsStore.state.requestView = false;
+    controlsStore.state.textOnly = false;
+    controlsStore.state.lockCols = false;
+  }
 }
 
 watch(selectedOptionFilterPreset, () => {

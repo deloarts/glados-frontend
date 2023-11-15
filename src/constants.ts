@@ -1,5 +1,5 @@
 export default {
-  version: "0.4.0",
+  version: "0.4.1",
   serverVersion: "0.4.0",
 
   // Media
@@ -16,7 +16,6 @@ export default {
   patchBoughtItemsStoreInterval: 10000,
   patchServerConfigInterval: 60000,
 
-  fetchUsersAfter: 60000,
   fetchBoughtItemsAfter: 5000,
 
   // API definition

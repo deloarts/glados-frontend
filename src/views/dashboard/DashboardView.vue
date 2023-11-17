@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 import moment from "moment";
 
@@ -23,6 +23,8 @@ const usersStore = useUsersStore();
 const resolutionStore = useResolutionStore();
 const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
 
+const doughnutUserLimit = 8;
+
 const boughtItemsAmount = ref({
   active: 0,
   open: 0,
@@ -45,9 +47,14 @@ const boughtItemsOverviewDataset = ref({
   Lost: 0,
 });
 const boughtItemsUsersDataset = ref({});
-const timelineDataset = ref([{ date: "", type: "", amount: "" }]);
+const timelineDataset = ref({
+  months: [],
+  created: [],
+  ordered: [],
+  delivered: [],
+});
 
-function autoFetchBoughtItems() {
+function autoFetchBoughtItemStatus() {
   if (route.path != "/dashboard") {
     console.info(
       "Stopped updating routine for bought items: User leaved site.",
@@ -132,8 +139,8 @@ function autoFetchBoughtItems() {
           return b[1] - a[1];
         });
 
-        if (sortedUsers.length > 10) {
-          userLimit = 10;
+        if (sortedUsers.length > doughnutUserLimit) {
+          userLimit = doughnutUserLimit;
         } else {
           userLimit = sortedUsers.length;
         }
@@ -159,16 +166,118 @@ function autoFetchBoughtItems() {
         console.error("Failed to fetch data for dashboard.");
       }
       setTimeout(
-        autoFetchBoughtItems.bind(this),
-        constants.fetchBoughtItemsAfter,
+        autoFetchBoughtItemStatus.bind(this),
+        constants.fetchDashboardDataAfter,
       );
     });
   }
 }
 
-onMounted(() => {
-  autoFetchBoughtItems();
-});
+function autoFetchBoughtItemTimeline() {
+  if (route.path != "/dashboard") {
+    console.info(
+      "Stopped updating routine for bought items: User leaved site.",
+    );
+  } else {
+    const currentMonth = moment().month();
+    const currentYear = moment().year();
+
+    let filter = JSON.parse(JSON.stringify(boughtItemsFilter));
+
+    const fromYear = moment().subtract(1, "years").year();
+    const fromMonth = moment().subtract(1, "years").month() + 2;
+    const fromDate = moment(`${fromYear}-${fromMonth}-01`).format("YYYY-MM-DD");
+
+    filter.limit = null;
+    filter.changedDateFrom = fromDate;
+
+    const params = getFilterParams(filter);
+    boughtItemsRequest.getItems(params).then((response) => {
+      if (response.status == 200) {
+        const data = response.data;
+        let dataset = {
+          months: [
+            "JAN",
+            "FEB",
+            "MAR",
+            "APR",
+            "MAY",
+            "JUN",
+            "JUL",
+            "AUG",
+            "SEP",
+            "OCT",
+            "NOV",
+            "DEC",
+          ],
+          created: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          ordered: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          delivered: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        };
+
+        for (var i = 0; i < data.length; i++) {
+          const datum = data[i];
+
+          let createdDate = moment(datum.created, "YYYY-MM-DD");
+          if (createdDate.isValid()) {
+            dataset.created[createdDate.month()] += 1;
+          }
+
+          let orderedDate = moment(datum.ordered_date, "YYYY-MM-DD");
+          if (orderedDate.isValid()) {
+            dataset.ordered[orderedDate.month()] += 1;
+          }
+
+          let deliveredDate = moment(datum.delivery_date, "YYYY-MM-DD");
+          if (deliveredDate.isValid()) {
+            dataset.delivered[deliveredDate.month()] += 1;
+          }
+        }
+
+        // Set year and shift everything
+        for (var i = 0; i < dataset.months.length; i++) {
+          if (i <= currentMonth) {
+            dataset.months[i] += ` ${currentYear - 2000}`;
+          } else {
+            dataset.months[i] += ` ${currentYear - 2001}`;
+          }
+        }
+
+        for (var i = 0; i < currentMonth + 1; i++) {
+          let shiftedMonth = dataset.months.shift();
+          dataset.months.push(shiftedMonth);
+
+          let shiftedCreated = dataset.created.shift();
+          dataset.created.push(shiftedCreated);
+
+          let shiftedOrdered = dataset.ordered.shift();
+          dataset.ordered.push(shiftedOrdered);
+
+          let shiftedDelivered = dataset.delivered.shift();
+          dataset.delivered.push(shiftedDelivered);
+        }
+
+        timelineDataset.value = dataset;
+      } else {
+        console.error("Failed to fetch data for dashboard.");
+      }
+      setTimeout(
+        autoFetchBoughtItemTimeline.bind(this),
+        constants.fetchDashboardDataAfter,
+      );
+    });
+  }
+}
+
+onBeforeMount(() => {
+  boughtItemsUsersDataset.value = null;
+  boughtItemsOverviewDataset.value = null;
+  timelineDataset.value = null;
+}),
+  onMounted(() => {
+    autoFetchBoughtItemStatus();
+    autoFetchBoughtItemTimeline();
+  });
 </script>
 
 <template>
@@ -191,9 +300,13 @@ onMounted(() => {
         >
           <UsersChart v-model:dataset="boughtItemsUsersDataset"></UsersChart>
         </div>
-        <!-- <div id="items-timeline" class="grid-item-center">
-          <TimelineChart v-model:datasets="timelineDatasets"></TimelineChart>
-        </div> -->
+        <div
+          v-if="gtMinWidthTablet"
+          id="items-timeline"
+          class="grid-item-center"
+        >
+          <TimelineChart v-model:dataset="timelineDataset"></TimelineChart>
+        </div>
         <div id="active-items" class="grid-item-center">
           <ItemCount
             text="Active"
@@ -267,12 +380,13 @@ h1 {
 
 #grid {
   grid-gap: 20px;
-  grid-template-rows: 380px 92px 92px auto 50px;
+  grid-template-rows: 330px 92px 92px 330px auto 20px;
   grid-template-columns: 270px 270px 270px 270px;
   grid-template-areas:
     "items-overview items-overview users-overview users-overview"
     "active-items open-items requested-items ordered-items"
     "delivered-items partial-items late-items canceled-items"
+    "items-timeline items-timeline items-timeline items-timeline"
     "placeholder placeholder placeholder placeholder"
     "data-note data-note data-note data-note";
 }
@@ -284,11 +398,12 @@ h1 {
 
   #grid {
     grid-gap: 20px;
-    grid-template-rows: 380px 380px 92px 92px 92px 92px auto 50px;
+    grid-template-rows: 380px 380px 380px 92px 92px 92px 92px auto 50px;
     grid-template-columns: 270px 270px;
     grid-template-areas:
       "items-overview items-overview"
       "users-overview users-overview"
+      "items-timeline items-timeline"
       "active-items open-items"
       "requested-items ordered-items"
       "delivered-items partial-items"

@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted, watch, computed } from "vue";
 import {
   Chart as ChartJS,
   Title,
@@ -9,6 +10,8 @@ import {
   LinearScale,
 } from "chart.js";
 import { Bar } from "vue-chartjs";
+
+import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 
 ChartJS.register(
   CategoryScale,
@@ -22,31 +25,24 @@ ChartJS.register(
 // Props & Emits
 const props = defineProps(["dataset"]);
 
-const chartLabels = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-const chartDataset = ref([0]);
-const chartData = computed(() => {});
+const chartLabels = ref();
+const chartDatasets = ref([0]);
+const chartData = computed(() => {
+  return {
+    labels: chartLabels.value,
+    datasets: chartDatasets.value,
+  };
+});
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
-    x: { ticks: { color: "white", beginAtZero: true } },
-    y: { ticks: { color: "white", beginAtZero: true } },
+    x: { ticks: { display: true, color: "white", beginAtZero: true } },
+    y: { ticks: { display: true, color: "white", beginAtZero: true } },
   },
   plugins: {
     legend: {
+      display: true,
       position: "bottom",
       labels: {
         color: "white",
@@ -60,14 +56,28 @@ const chartOptions = {
 };
 
 function updateChart() {
-  var data = [];
-  var labels = [];
-  for (const key in props.dataset) {
-    labels.push(key);
-    data.push(props.dataset[key]);
+  if (props.dataset != null) {
+    var datasets = [];
+
+    datasets.push({
+      data: props.dataset.created,
+      label: "Created",
+      backgroundColor: "#25CCF7",
+    });
+    datasets.push({
+      data: props.dataset.ordered,
+      label: "Ordered",
+      backgroundColor: "#cec000",
+    });
+    datasets.push({
+      data: props.dataset.delivered,
+      label: "Delivered",
+      backgroundColor: "#38a938",
+    });
+
+    chartLabels.value = props.dataset.months;
+    chartDatasets.value = datasets;
   }
-  chartLabels.value = labels;
-  chartDataset.value = data;
 }
 
 onMounted(() => {
@@ -85,7 +95,10 @@ watch(
   <div class="chart-base-scope">
     <h1>Bought Items Timeline</h1>
     <div class="chart-base-wrapper">
-      <Bar :data="chartData" :options="chartOptions" />
+      <div v-if="props.dataset == null" class="spinner-wrapper">
+        <LoadingSpinner />
+      </div>
+      <Bar v-else :data="chartData" :options="chartOptions" />
     </div>
   </div>
 </template>
@@ -93,4 +106,16 @@ watch(
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
 @import "@/scss/chart/chartBase.scss";
+
+.spinner-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.spinner {
+  position: absolute;
+  top: calc(50% - 20px);
+  left: calc(50% - 15px);
+}
 </style>

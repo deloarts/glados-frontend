@@ -16,7 +16,7 @@ export default {
   patchBoughtItemsStoreInterval: 10000,
   patchServerConfigInterval: 60000,
 
-  fetchBoughtItemsAfter: 5000,
+  fetchDashboardDataAfter: 5000,
 
   // API definition
   apiAccessToken: "/api/web/v1/login/access-token",

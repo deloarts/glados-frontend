@@ -373,7 +373,11 @@ watch(statusStore.$state, () => {
         }"
       >
         <thead>
-          <tr>
+          <tr
+            v-bind:class="{
+              'request-view': controlsStore.state.requestView,
+            }"
+          >
             <th
               class="first"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
@@ -543,7 +547,12 @@ watch(statusStore.$state, () => {
               Storage
             </th>
           </tr>
-          <tr v-if="controlsStore.state.textOnly == false">
+          <tr
+            v-if="controlsStore.state.textOnly == false"
+            v-bind:class="{
+              'request-view': controlsStore.state.requestView,
+            }"
+          >
             <th
               class="second"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
@@ -1071,6 +1080,7 @@ watch(statusStore.$state, () => {
               canceled:
                 controlsStore.state.rainbow && item.status == 'canceled',
               lost: controlsStore.state.rainbow && item.status == 'lost',
+              'request-view': controlsStore.state.requestView,
             }"
           >
             <td
@@ -1909,6 +1919,12 @@ tr.selected > td {
 tr.selected:hover > td {
   background: $table-row-active-hover !important;
   // background: rgb(170, 230, 255);
+}
+
+.request-view > td,
+.request-view > th {
+  color: black !important;
+  background-color: white !important;
 }
 
 td {

@@ -1069,17 +1069,38 @@ watch(statusStore.$state, () => {
             "
             v-bind:class="{
               selected: props.selectedItemIds.includes(item.id),
-              open: controlsStore.state.rainbow && item.status == 'open',
+              open:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'open',
               requested:
-                controlsStore.state.rainbow && item.status == 'requested',
-              ordered: controlsStore.state.rainbow && item.status == 'ordered',
-              late: controlsStore.state.rainbow && item.status == 'late',
-              partial: controlsStore.state.rainbow && item.status == 'partial',
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'requested',
+              ordered:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'ordered',
+              late:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'late',
+              partial:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'partial',
               delivered:
-                controlsStore.state.rainbow && item.status == 'delivered',
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'delivered',
               canceled:
-                controlsStore.state.rainbow && item.status == 'canceled',
-              lost: controlsStore.state.rainbow && item.status == 'lost',
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'canceled',
+              lost:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'lost',
               'request-view': controlsStore.state.requestView,
             }"
           >

@@ -373,7 +373,11 @@ watch(statusStore.$state, () => {
         }"
       >
         <thead>
-          <tr>
+          <tr
+            v-bind:class="{
+              'request-view': controlsStore.state.requestView,
+            }"
+          >
             <th
               class="first"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
@@ -543,7 +547,12 @@ watch(statusStore.$state, () => {
               Storage
             </th>
           </tr>
-          <tr v-if="controlsStore.state.textOnly == false">
+          <tr
+            v-if="controlsStore.state.textOnly == false"
+            v-bind:class="{
+              'request-view': controlsStore.state.requestView,
+            }"
+          >
             <th
               class="second"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
@@ -1060,17 +1069,39 @@ watch(statusStore.$state, () => {
             "
             v-bind:class="{
               selected: props.selectedItemIds.includes(item.id),
-              open: controlsStore.state.rainbow && item.status == 'open',
+              open:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'open',
               requested:
-                controlsStore.state.rainbow && item.status == 'requested',
-              ordered: controlsStore.state.rainbow && item.status == 'ordered',
-              late: controlsStore.state.rainbow && item.status == 'late',
-              partial: controlsStore.state.rainbow && item.status == 'partial',
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'requested',
+              ordered:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'ordered',
+              late:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'late',
+              partial:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'partial',
               delivered:
-                controlsStore.state.rainbow && item.status == 'delivered',
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'delivered',
               canceled:
-                controlsStore.state.rainbow && item.status == 'canceled',
-              lost: controlsStore.state.rainbow && item.status == 'lost',
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'canceled',
+              lost:
+                controlsStore.state.rainbow &&
+                !controlsStore.state.requestView &&
+                item.status == 'lost',
+              'request-view': controlsStore.state.requestView,
             }"
           >
             <td
@@ -1909,6 +1940,12 @@ tr.selected > td {
 tr.selected:hover > td {
   background: $table-row-active-hover !important;
   // background: rgb(170, 230, 255);
+}
+
+.request-view > td,
+.request-view > th {
+  color: black !important;
+  background-color: white !important;
 }
 
 td {

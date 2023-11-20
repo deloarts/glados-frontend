@@ -3,6 +3,8 @@ import { ref, onMounted, watch, computed } from "vue";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "vue-chartjs";
 
+import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // Props & Emits
@@ -51,14 +53,16 @@ const chartOptions = {
 };
 
 function updateChart() {
-  var data = [];
-  var labels = [];
-  for (const key in props.dataset) {
-    labels.push(key);
-    data.push(props.dataset[key]);
+  if (props.dataset != null) {
+    var data = [];
+    var labels = [];
+    for (const key in props.dataset) {
+      labels.push(key);
+      data.push(props.dataset[key]);
+    }
+    chartLabels.value = labels;
+    chartDataset.value = data;
   }
-  chartLabels.value = labels;
-  chartDataset.value = data;
 }
 
 onMounted(() => {
@@ -76,7 +80,10 @@ watch(
   <div class="chart-base-scope">
     <h1>Bought Items Status</h1>
     <div class="chart-base-wrapper">
-      <Doughnut :data="chartData" :options="chartOptions" />
+      <div v-if="props.dataset == null" class="spinner-wrapper">
+        <LoadingSpinner />
+      </div>
+      <Doughnut v-else :data="chartData" :options="chartOptions" />
     </div>
   </div>
 </template>
@@ -84,4 +91,16 @@ watch(
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
 @import "@/scss/chart/chartBase.scss";
+
+.spinner-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.spinner {
+  position: absolute;
+  top: calc(50% - 20px);
+  left: calc(50% - 15px);
+}
 </style>

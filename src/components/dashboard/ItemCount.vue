@@ -51,8 +51,8 @@ function setStart() {
 }
 
 .container {
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
 
   border-width: $main-border-width;
   border-style: $main-border-style;

@@ -87,5 +87,7 @@ h1 {
   padding-top: 2px;
   padding-bottom: 2px;
   padding-left: 20px;
+
+  white-space: pre-wrap;
 }
 </style>

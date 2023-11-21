@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { baseParticles } from "@/presets/particles";
+import { baseParticles, snowParticles } from "@/presets/particles";
 import { loadFull } from "tsparticles";
+import moment from "moment";
 
 import constants from "@/constants";
 import router from "@/router/index";
@@ -30,6 +31,7 @@ const focusUserInput = () => {
     userInput.value.focus();
   }
 };
+const currentMonth = moment().month();
 
 let text = `v${constants.version} (v${constants.serverVersion})`;
 const form_user = ref("");
@@ -76,7 +78,7 @@ onMounted(focusUserInput);
 
 <template>
   <div class="login">
-    <!-- <div class="coat"></div> -->
+    <div class="coat"></div>
     <div class="center">
       <h1 id="header">Glados</h1>
       <input
@@ -98,16 +100,27 @@ onMounted(focusUserInput);
       <span id="text" class="version">{{ text }}</span>
     </div>
   </div>
+
   <Particles
+    v-if="currentMonth > 1 && currentMonth < 11"
     id="tsparticles"
     :particlesInit="particlesInit"
     :particlesLoaded="particlesLoaded"
     :options="baseParticles"
   />
+  <div v-else class="snow"></div>
+  <!-- <Particles
+    v-else
+    id="tsparticles"
+    :particlesInit="particlesInit"
+    :particlesLoaded="particlesLoaded"
+    :options="snowParticles"
+  /> -->
 </template>
 
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
+@import "@/scss/background/snow.scss";
 
 .login {
   color: white;
@@ -121,7 +134,10 @@ onMounted(focusUserInput);
   left: 0;
   right: 0;
 
-  background: $main-background-color;
+  background: linear-gradient(
+    $main-background-color-dark-2 30%,
+    $main-background-color
+  );
 }
 
 .center {
@@ -225,7 +241,6 @@ button:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: $main-background-color;
   z-index: 1001;
 }
 </style>

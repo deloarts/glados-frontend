@@ -179,13 +179,16 @@ function autoFetchBoughtItemTimeline() {
       "Stopped updating routine for bought items: User leaved site.",
     );
   } else {
-    const currentMonth = moment().month();
     const currentYear = moment().year();
+    const currentMonth = moment().month();
 
     let filter = JSON.parse(JSON.stringify(boughtItemsFilter));
 
     const fromYear = moment().subtract(1, "years").year();
-    const fromMonth = moment().subtract(1, "years").month() + 2;
+    let fromMonth = moment().subtract(1, "years").month() + 2;
+    if (fromMonth > 12) {
+      fromMonth = 1;
+    }
     const fromDate = moment(`${fromYear}-${fromMonth}-01`).format("YYYY-MM-DD");
 
     filter.limit = null;

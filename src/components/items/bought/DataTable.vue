@@ -339,7 +339,7 @@ watch(
 watch(
   filterStore.$state,
   () => {
-    emit("update:selectedItemIds", []);
+    // emit("update:selectedItemIds", []);
     boughtItemsStore.get();
   },
   { deep: true },

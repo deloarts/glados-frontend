@@ -6,7 +6,7 @@ Frontend for the glados project.
 ![version](https://img.shields.io/badge/Version-0.4.3-orange.svg?style=for-the-badge)
 ![backend](https://img.shields.io/badge/Backend-0.4.1-orange.svg?style=for-the-badge)
 
-![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
+![node](https://img.shields.io/badge/node-v21-blue.svg?style=for-the-badge)
 ![vue](https://img.shields.io/badge/vue%2Fcli-v4.5-blue.svg?style=for-the-badge)
 ![OS](https://img.shields.io/badge/OS-UNIX-blue.svg?style=for-the-badge)
 

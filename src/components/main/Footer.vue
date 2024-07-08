@@ -3,7 +3,7 @@ import { ref } from "vue";
 import constants from "@/constants";
 
 const hover = ref(false);
-const text = `v${constants.version} (v${constants.serverVersion})`;
+const text = `v${constants.version}`;
 </script>
 
 <template>

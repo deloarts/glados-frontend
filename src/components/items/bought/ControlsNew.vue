@@ -26,7 +26,7 @@ function onCreate() {
       //   notificationStore.warning = "Not enough permission"
       // }
       else if (response.status === 422) {
-        notificationStore.warning = "Data is incomplete";
+        notificationStore.warning = `Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`;
       } else {
         notificationStore.warning = response.data.detail;
       }

@@ -33,7 +33,7 @@ const focusUserInput = () => {
 };
 const currentMonth = moment().month();
 
-let text = `v${constants.version} (v${constants.serverVersion})`;
+let text = `v${constants.version}`;
 const form_user = ref("");
 const form_pw = ref("");
 

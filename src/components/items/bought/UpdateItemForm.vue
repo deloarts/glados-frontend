@@ -125,6 +125,13 @@ watch(pickedDesiredDate, () => {
             placeholder="Group"
           />
         </div>
+        <div id="weblink" class="grid-item-center">
+          <input
+            class="form-base-text-input"
+            v-model="props.formData.weblink"
+            placeholder="Weblink"
+          />
+        </div>
         <div id="desired" class="grid-item-center">
           <Datepicker
             class="form-base-date-input"
@@ -168,7 +175,7 @@ watch(pickedDesiredDate, () => {
 @import "@/scss/grid/gridBase.scss";
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
+  grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
   grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
     "project project project note-general"
@@ -179,6 +186,7 @@ watch(pickedDesiredDate, () => {
     "manufacturer manufacturer manufacturer note-supplier"
     "supplier supplier supplier note-supplier"
     "group group group note-supplier"
+    "weblink weblink weblink note-supplier"
     "desired desired desired note-supplier"
     "notify notify-text notify-text notify-text"
     "priority priority-text priority-text priority-text";
@@ -186,7 +194,7 @@ watch(pickedDesiredDate, () => {
 
 @media screen and (max-width: $max-width-desktop) {
   #grid {
-    grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
+    grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
     grid-template-columns: 50px auto 150px;
     grid-template-areas:
       "project project project"
@@ -197,6 +205,7 @@ watch(pickedDesiredDate, () => {
       "manufacturer manufacturer manufacturer"
       "supplier supplier supplier"
       "group group group"
+      "weblink weblink weblink"
       "desired desired desired"
       "note-general note-general note-general"
       "note-supplier note-supplier note-supplier"
@@ -255,6 +264,10 @@ watch(pickedDesiredDate, () => {
 
 #group {
   grid-area: group;
+}
+
+#weblink {
+  grid-area: weblink;
 }
 
 #desired {

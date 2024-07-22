@@ -17,6 +17,7 @@ import { useResolutionStore } from "@/stores/resolution.js";
 
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
+import IconExternalLink from "@/components/icons/IconExternalLink.vue";
 
 // Props & Emits
 const props = defineProps(["selectedItemIds", "triggerGetNewData"]);
@@ -430,6 +431,13 @@ watch(statusStore.$state, () => {
             <th
               class="first"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="weblink"
+            >
+              Link
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="partnumber"
             >
               Partnumber
@@ -680,6 +688,11 @@ watch(statusStore.$state, () => {
                 </option>
               </select>
             </th>
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+              id="weblink"
+            ></th>
             <th
               class="second"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
@@ -1280,6 +1293,14 @@ watch(statusStore.$state, () => {
               </div>
             </td>
             <td
+              id="weblink"
+              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
+            >
+              <a v-bind:href="item.weblink" target="_blank"
+                ><IconExternalLink v-if="item.weblink" class="weblink-icon"
+              /></a>
+            </td>
+            <td
               id="partnumber"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
@@ -1813,6 +1834,13 @@ watch(statusStore.$state, () => {
   vertical-align: middle;
 }
 
+.weblink-icon {
+  color: white;
+  height: 12px;
+  width: 12px;
+  vertical-align: middle;
+}
+
 table {
   // border-collapse: collapse;
   border-collapse: separate;
@@ -2103,13 +2131,23 @@ td.sticky-col {
   left: 341px;
 }
 
+#weblink {
+  width: 35px;
+  min-width: 35px;
+  max-width: 35px;
+  text-align: center;
+}
+#weblink.sticky-col {
+  left: 384px;
+}
+
 #partnumber {
   width: 301px;
   min-width: 301px;
   max-width: 301px;
 }
 #partnumber.sticky-col {
-  left: 384px;
+  left: 421px;
 }
 
 #definition {

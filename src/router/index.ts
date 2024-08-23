@@ -21,7 +21,8 @@ import SettingsConfigView from "@/views/settings/SettingsConfigView.vue";
 import SettingsApiKeysView from "@/views/settings/SettingsApiKeysView.vue";
 import AccountUpdateView from "@/views/account/AccountUpdateView.vue";
 import AccountPersonalAccessTokenView from "@/views/account/AccountPersonalAccessTokenView.vue";
-import ToolsStockCutView from "@/views/tools/ToolsStockCutView.vue";
+import ToolsStockCut1DView from "@/views/tools/ToolsStockCut1DView.vue";
+import ToolsStockCut2DView from "@/views/tools/ToolsStockCut2DView.vue";
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -83,9 +84,14 @@ const router = createRouter({
       component: RedirectTools,
     },
     {
-      path: "/tools/stock-cut",
-      name: "ToolsStockCut",
-      component: ToolsStockCutView,
+      path: "/tools/stock-cut-1d",
+      name: "ToolsStockCut1D",
+      component: ToolsStockCut1DView,
+    },
+    {
+      path: "/tools/stock-cut-2d",
+      name: "ToolsStockCut2D",
+      component: ToolsStockCut2DView,
     },
     {
       path: "/settings",

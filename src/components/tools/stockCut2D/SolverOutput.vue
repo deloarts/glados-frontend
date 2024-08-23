@@ -1,12 +1,8 @@
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
-import { useResolutionStore } from "@/stores/resolution.js";
+import { onMounted, watch } from "vue";
 
 // Props & Emits
 const props = defineProps(["solverOutput"]);
-
-// Stores
-const resolutionStore = useResolutionStore();
 
 onMounted(() => {});
 watch(
@@ -32,19 +28,19 @@ watch(
         <tbody>
           <tr v-for="(used, index) in solverOutput.used" :key="used">
             <td id="panel-id" class="sticky-col">
-              <input v-model="used.panel.id" />
+              {{ used.panel.id }}
             </td>
             <td id="item-id" class="sticky-col">
-              <input v-model="used.item.id" />
+              {{ used.item.id }}
             </td>
             <td id="start-x" class="sticky-col">
-              <input v-model="used.x" />
+              {{ used.x }}
             </td>
             <td id="start-y" class="sticky-col">
-              <input v-model="used.y" />
+              {{ used.y }}
             </td>
             <td id="rotated" class="sticky-col">
-              <input v-model="used.rotate" />
+              {{ used.rotate }}
             </td>
           </tr>
         </tbody>
@@ -58,12 +54,10 @@ watch(
 @import "@/scss/table/tableBase.scss";
 @import "@/scss/form/formBase.scss";
 
-h2 {
-}
-
 table {
   max-width: 600px;
   border-spacing: 4px 6px;
+  table-layout: fixed;
 }
 
 td,

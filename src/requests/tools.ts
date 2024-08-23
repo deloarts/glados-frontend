@@ -1,6 +1,6 @@
 import { request, requestConfig } from "./index";
 
-export class ToolsStockCutRequest {
+export class ToolsStockCut1DRequest {
   // POST
   postSolver(data: object) {
     return request.post(
@@ -11,4 +11,4 @@ export class ToolsStockCutRequest {
   }
 }
 
-export const stockCutRequest = new ToolsStockCutRequest();
+export const stockCut1DRequest = new ToolsStockCut1DRequest();

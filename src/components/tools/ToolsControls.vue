@@ -22,11 +22,11 @@ function routeIsActive(currentLink) {
 <template>
   <div class="controls-base-scope">
     <div id="settings-controls" class="controls-base-container">
-      <router-link :to="'/tools/stock-cut'"
+      <router-link :to="'/tools/stock-cut-1d'"
         ><ButtonBlade
           class="controls-base-element"
-          v-bind:class="{ active: routeIsActive('/tools/stock-cut') }"
-          text="Stock Cut"
+          v-bind:class="{ active: routeIsActive('/tools/stock-cut-1d') }"
+          text="Stock Cut 1D"
         ></ButtonBlade
       ></router-link>
     </div>

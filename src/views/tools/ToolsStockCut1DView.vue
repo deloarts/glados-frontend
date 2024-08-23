@@ -1,6 +1,6 @@
 <script setup>
 import ToolsControls from "@/components/tools/ToolsControls.vue";
-import StockCut from "@/components/tools/stockCut/StockCut.vue";
+import StockCut1D from "@/components/tools/stockCut1D/StockCut1D.vue";
 </script>
 
 <template>
@@ -8,10 +8,10 @@ import StockCut from "@/components/tools/stockCut/StockCut.vue";
     <div class="views-content">
       <div id="grid">
         <div id="controls">
-          <ToolsControls></ToolsControls>
+          <ToolsControls />
         </div>
         <div id="display">
-          <StockCut></StockCut>
+          <StockCut1D />
         </div>
       </div>
     </div>

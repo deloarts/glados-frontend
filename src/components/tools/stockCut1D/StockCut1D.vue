@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from "vue";
 
-import { stockCutRequest } from "@/requests/tools";
+import { stockCut1DRequest } from "@/requests/tools";
 import { useNotificationStore } from "@/stores/notification.js";
-import SolverInput from "@/components/tools/stockCut/SolverInput.vue";
-import SolverOutput from "@/components/tools/stockCut/SolverOutput.vue";
+import SolverInput from "@/components/tools/stockCut1D/SolverInput.vue";
+import SolverOutput from "@/components/tools/stockCut1D/SolverOutput.vue";
 
 // Stores
 const notificationStore = useNotificationStore();
@@ -33,7 +33,7 @@ const solved = ref(false);
 function onSolve() {
   solving.value = true;
   solved.value = false;
-  stockCutRequest.postSolver(solverInput.value).then((response) => {
+  stockCut1DRequest.postSolver(solverInput.value).then((response) => {
     if (response.status == 200) {
       setTimeout(() => {
         solved.value = true;

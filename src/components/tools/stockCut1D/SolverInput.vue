@@ -26,6 +26,19 @@ function removeAll() {
 <template>
   <div class="form-base-scope">
     <div class="form-base-container">
+      <div id="grid" class="grid-command">
+        <div id="btn-add">
+          <ButtonPlus v-on:click="props.onAdd" text="Add" />
+        </div>
+        <div id="btn-solve">
+          <ButtonLoading v-if="props.solving" text="Solving..." />
+          <ButtonSolve v-else v-on:click="props.onSolve" text="Solve" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-base-container">
+      <div class="form-base-title">Stock</div>
       <div id="grid" class="grid-input">
         <div id="stock-length-text" class="grid-item-left">Stock Length</div>
         <div id="stock-length" class="grid-item-center">
@@ -48,6 +61,7 @@ function removeAll() {
     </div>
 
     <div class="table-base-container">
+      <div class="table-base-title">Items</div>
       <table class="cursor-default">
         <thead>
           <tr>
@@ -72,18 +86,6 @@ function removeAll() {
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="form-base-container">
-      <div id="grid" class="grid-command">
-        <div id="btn-add">
-          <ButtonPlus v-on:click="props.onAdd" text="Add" />
-        </div>
-        <div id="btn-solve">
-          <ButtonLoading v-if="props.solving" text="Solving..." />
-          <ButtonSolve v-else v-on:click="props.onSolve" text="Solve" />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -126,8 +128,16 @@ svg {
   cursor: pointer;
 }
 
+.form-base-container {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .table-base-container {
   padding-bottom: 10px;
+  padding-top: 10px;
   margin-top: 15px;
   margin-bottom: 15px;
 }

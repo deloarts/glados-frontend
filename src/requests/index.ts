@@ -30,6 +30,22 @@ export function requestConfigFileUpload(urlSearchParams: any) {
   };
 }
 
+export function requestConfigPdfDownload(urlSearchParams: any) {
+  const tokenType = localStorage.getItem("gladosTokenType");
+  const tokenValue = localStorage.getItem("gladosTokenValue");
+  return {
+    params: urlSearchParams,
+    responseType: "blob",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "*",
+      Authorization: `${tokenType} ${tokenValue}`,
+      "Content-Disposition": "attachment; filename=cut_solution.pdf",
+      Accept: "application/pdf",
+    },
+  };
+}
+
 export function requestConfigXlsxDownload(urlSearchParams: any) {
   const tokenType = localStorage.getItem("gladosTokenType");
   const tokenValue = localStorage.getItem("gladosTokenValue");
@@ -40,7 +56,7 @@ export function requestConfigXlsxDownload(urlSearchParams: any) {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "*",
       Authorization: `${tokenType} ${tokenValue}`,
-      "Content-Disposition": "attachment filename=glados.xlsx",
+      "Content-Disposition": "attachment; filename=glados.xlsx",
       "Content-Type":
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     },

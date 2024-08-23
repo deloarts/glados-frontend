@@ -202,6 +202,7 @@ watch(
 <template>
   <div class="scope">
     <div class="container">
+      <div class="chart-base-title">Solution</div>
       <div class="wrapper">
         <Bar :data="chartData" :options="chartOptions" />
       </div>
@@ -219,7 +220,7 @@ watch(
 
   margin: 0;
   padding: 0;
-  padding-top: 10px;
+  // padding-top: 10px;
 }
 
 .container {

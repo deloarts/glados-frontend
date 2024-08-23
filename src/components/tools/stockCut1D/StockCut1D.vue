@@ -64,7 +64,7 @@ function onAdd() {
 <template>
   <div class="scope">
     <div class="content">
-      <h1>Stock Cut Solver</h1>
+      <h1>1D Stock Cut Solver</h1>
       <SolverInput
         :solver-input="solverInput"
         :solving="solving"

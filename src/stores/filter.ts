@@ -4,41 +4,47 @@ import { defineStore } from "pinia";
 import constants from "@/constants";
 import { hostRequest } from "@/requests/host";
 
+import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+
+interface Preset {
+  [key: string]: HostConfigBoughtItemsFilterSchema;
+}
+
 export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
-  const loading = ref(false);
-  const presets = ref({});
-  const state = ref({
+  const loading = ref<boolean>(false);
+  const presets = ref<Preset>({});
+  const state = ref<HostConfigBoughtItemsFilterSchema>({
     limit: "100",
     ignoreDelivered: false,
     ignoreCanceled: false,
     ignoreLost: false,
     highPriority: null,
-    creatorId: "",
-    createdDate: "",
-    changedDateFrom: "",
-    desiredDate: "",
-    requesterId: "",
-    requestedDate: "",
-    ordererId: "",
-    orderedDate: "",
-    expectedDate: "",
-    deliveredDate: "",
+    creatorId: null,
+    createdDate: null,
+    changedDateFrom: null,
+    desiredDate: null,
+    requesterId: null,
+    requestedDate: null,
+    ordererId: null,
+    orderedDate: null,
+    expectedDate: null,
+    deliveredDate: null,
     sortBy: "id",
-    id: "",
-    status: "",
-    project: "",
-    machine: "",
-    quantity: "",
-    unit: "",
-    partnumber: "",
-    definition: "",
-    manufacturer: "",
-    supplier: "",
-    group1: "",
-    noteGeneral: "",
-    noteSupplier: "",
-    storagePlace: "",
-    takeOverId: "",
+    id: null,
+    status: null,
+    project: null,
+    machine: null,
+    quantity: null,
+    unit: null,
+    partnumber: null,
+    definition: null,
+    manufacturer: null,
+    supplier: null,
+    group1: null,
+    noteGeneral: null,
+    noteSupplier: null,
+    storagePlace: null,
+    takeOverId: null,
   });
 
   function reset() {
@@ -48,32 +54,32 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
       ignoreCanceled: false,
       ignoreLost: false,
       highPriority: null,
-      creatorId: "",
-      createdDate: "",
-      changedDateFrom: "",
-      desiredDate: "",
-      requesterId: "",
-      requestedDate: "",
-      ordererId: "",
-      orderedDate: "",
-      expectedDate: "",
-      deliveredDate: "",
+      creatorId: null,
+      createdDate: null,
+      changedDateFrom: null,
+      desiredDate: null,
+      requesterId: null,
+      requestedDate: null,
+      ordererId: null,
+      orderedDate: null,
+      expectedDate: null,
+      deliveredDate: null,
       sortBy: "id",
-      id: "",
-      status: "",
-      project: "",
-      machine: "",
-      quantity: "",
-      unit: "",
-      partnumber: "",
-      definition: "",
-      manufacturer: "",
-      supplier: "",
-      group1: "",
-      noteGeneral: "",
-      noteSupplier: "",
-      storagePlace: "",
-      takeOverId: "",
+      id: null,
+      status: null,
+      project: null,
+      machine: null,
+      quantity: null,
+      unit: null,
+      partnumber: null,
+      definition: null,
+      manufacturer: null,
+      supplier: null,
+      group1: null,
+      noteGeneral: null,
+      noteSupplier: null,
+      storagePlace: null,
+      takeOverId: null,
     };
     console.log("Reset bought items filter");
   }
@@ -94,7 +100,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     }
   }
 
-  function applyPreset(name) {
+  function applyPreset(name: string) {
     if (name in presets.value) {
       const p = presets.value[name];
       state.value = {

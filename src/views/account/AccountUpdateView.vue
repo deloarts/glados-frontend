@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AccountControls from "@/components/account/AccountControls.vue";
 import AccountUpdate from "@/components/account/AccountUpdate.vue";
 </script>
@@ -8,10 +8,10 @@ import AccountUpdate from "@/components/account/AccountUpdate.vue";
     <div class="views-content">
       <div id="grid">
         <div id="controls">
-          <AccountControls></AccountControls>
+          <AccountControls />
         </div>
         <div id="display">
-          <AccountUpdate></AccountUpdate>
+          <AccountUpdate />
         </div>
       </div>
     </div>
@@ -37,8 +37,6 @@ import AccountUpdate from "@/components/account/AccountUpdate.vue";
 
 #display {
   grid-area: display;
-  // overflow-x: hidden;
-  // overflow-y: scroll;
 }
 
 ::-webkit-scrollbar {

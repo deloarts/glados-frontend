@@ -1,27 +1,16 @@
-<script setup>
-const props = defineProps(["text"]);
+<script setup lang="ts">
+import ButtonBaseRed from "@/components/elements/ButtonBaseRed.vue";
+
+const props = defineProps<{
+  text?: string;
+}>();
 </script>
 
 <template>
-  <button class="button" v-bind:class="{ text: props.text != '' }">
-    <i class="icon" v-bind:class="{ 'icon-text': props.text != '' }">
-      <svg
-        height="100%"
-        viewBox="0 0 24 24"
-        width="100%"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
-      >
-        <path
-          d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z"
-        ></path>
-      </svg>
-    </i>
-    {{ text }}
-  </button>
+  <ButtonBaseRed
+    :text="props.text"
+    svg-path="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z"
+  />
 </template>
 
-<style scoped lang="scss">
-@import "@/scss/variables.scss";
-@import "@/scss/button/buttonRedOutline.scss";
-</style>
+<style scoped lang="scss"></style>

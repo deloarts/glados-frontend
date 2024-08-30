@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router";
 
 import ButtonBlade from "@/components/elements/ButtonBlade.vue";
@@ -6,7 +6,7 @@ import ButtonBlade from "@/components/elements/ButtonBlade.vue";
 // Router
 const route = useRoute();
 
-function routeIsActive(currentLink) {
+function routeIsActive(currentLink: string) {
   let activeRoute = route.path;
   if (activeRoute != "/login") {
     localStorage.setItem("gladosActiveRoute", activeRoute);
@@ -22,13 +22,19 @@ function routeIsActive(currentLink) {
 <template>
   <div class="controls-base-scope">
     <div id="settings-controls" class="controls-base-container">
-      <router-link :to="'/tools/stock-cut'"
+      <router-link :to="'/tools/stock-cut-1d'"
         ><ButtonBlade
           class="controls-base-element"
-          v-bind:class="{ active: routeIsActive('/tools/stock-cut') }"
-          text="Stock Cut"
-        ></ButtonBlade
-      ></router-link>
+          v-bind:class="{ active: routeIsActive('/tools/stock-cut-1d') }"
+          text="Stock Cut 1D"
+      /></router-link>
+
+      <router-link :to="'/tools/stock-cut-2d'"
+        ><ButtonBlade
+          class="controls-base-element"
+          v-bind:class="{ active: routeIsActive('/tools/stock-cut-2d') }"
+          text="Stock Cut 2D"
+      /></router-link>
     </div>
   </div>
 </template>

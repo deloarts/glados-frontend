@@ -1,27 +1,28 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+
 import { usersRequest } from "@/requests/users";
-import { useNotificationStore } from "@/stores/notification.js";
-import { useUserStore } from "@/stores/user.js";
+import { useNotificationStore } from "@/stores/notification";
+import { useUserStore } from "@/stores/user";
+
+import type { UserUpdateSchema } from "@/schemas/user";
 
 import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
 
-// Stores
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 
-let formData = ref({
-  username: userStore.username,
-  full_name: userStore.full_name,
-  email: userStore.email,
-  password: "",
+let formUserUpdate = ref<UserUpdateSchema>({
+  username: userStore.user.username,
+  full_name: userStore.user.full_name,
+  email: userStore.user.email,
 });
 
 function updateUser() {
-  usersRequest.putUsersMe(formData.value).then((response) => {
+  usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
     if (response.status == 200) {
-      userStore.$patch(response.data);
-      notificationStore.info = `Updated user ${formData.value.username}.`;
+      userStore.user = response.data;
+      notificationStore.info = `Updated user ${formUserUpdate.value.username}.`;
     } else if (response.status == 422) {
       notificationStore.warning = "Data is incomplete.";
     } else {
@@ -38,7 +39,7 @@ function updateUser() {
         <div id="username" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="formData.username"
+            v-model="formUserUpdate.username"
             type="text"
             placeholder="Username"
             readonly
@@ -47,29 +48,26 @@ function updateUser() {
         <div id="full-name" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="formData.full_name"
+            v-model="formUserUpdate.full_name"
             placeholder="Name"
           />
         </div>
         <div id="email" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="formData.email"
+            v-model="formUserUpdate.email"
             placeholder="Mail"
           />
         </div>
         <div id="password" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="formData.password"
+            v-model="formUserUpdate.password"
             placeholder="Password"
           />
         </div>
         <div id="btn">
-          <ButtonUserUpdate
-            v-on:click="updateUser"
-            text="Save"
-          ></ButtonUserUpdate>
+          <ButtonUserUpdate v-on:click="updateUser" text="Save" />
         </div>
       </div>
     </div>

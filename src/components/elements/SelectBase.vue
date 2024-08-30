@@ -1,8 +1,12 @@
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+const props = defineProps<{
+  selection: string;
+  options: Array<string>;
+}>();
 
-const props = defineProps(["selection", "options"]);
-const emit = defineEmits(["update:selection"]);
+const emit = defineEmits<{
+  (e: "update:selection", v: string): void;
+}>();
 
 function onChange(event) {
   emit("update:selection", event.target.value);

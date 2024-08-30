@@ -1,26 +1,34 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 
 import { hostRequest } from "@/requests/host";
-import { useNotificationStore } from "@/stores/notification.js";
-import { useBoughtItemFilterStore } from "@/stores/filter.js";
+import { useNotificationStore } from "@/stores/notification";
+import { useBoughtItemFilterStore } from "@/stores/filter";
+
+import type { AvailableOption } from "@/models/controls";
+import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+
 import ButtonSave from "@/components/elements/ButtonSave.vue";
-import SelectControls from "@/components/elements/SelectControls.vue";
+import SelectPreText from "@/components/elements/SelectPreText.vue";
 
 // Props & Emits
-const props = defineProps(["selectedConfigName"]);
-const emit = defineEmits(["update:selectedConfigName"]);
+const props = defineProps<{
+  selectedConfigName: string;
+}>();
+const emit = defineEmits<{
+  (e: "update:selectedConfigName", v: string): void;
+}>();
 
 // Stores
 const notificationStore = useNotificationStore();
 const boughtItemsFilterStore = useBoughtItemFilterStore();
 
-const availableOptionsCategory = [
+const availableOptionsCategory: Array<AvailableOption> = [
   { text: "Bought Item Filter Preset", value: "boughItemFilterPreset" },
 ];
-const selectedOptionCategory = ref("");
-const newConfigName = ref("");
-const defaultJson = ref({});
+const selectedOptionCategory = ref<string>("");
+const newConfigName = ref<string>("");
+const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(null);
 
 function createConfig() {
   if (selectedOptionCategory.value == "") {
@@ -67,12 +75,12 @@ watch(selectedOptionCategory, () => {
     <div class="form-base-container controls">
       <div id="grid" class="grid-command">
         <div id="select-category">
-          <SelectControls
+          <SelectPreText
             class="controls-base-element"
             text="Category"
             v-model:selection="selectedOptionCategory"
             :options="availableOptionsCategory"
-          ></SelectControls>
+          />
         </div>
         <div id="config-name" class="grid-item-center">
           <input

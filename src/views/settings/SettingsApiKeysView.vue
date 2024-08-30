@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SettingsControls from "@/components/settings/SettingsControls.vue";
 import SettingsApiKeys from "@/components/settings/SettingsApiKeys.vue";
 </script>
@@ -8,10 +8,10 @@ import SettingsApiKeys from "@/components/settings/SettingsApiKeys.vue";
     <div class="views-content">
       <div id="grid">
         <div id="controls">
-          <SettingsControls></SettingsControls>
+          <SettingsControls />
         </div>
         <div id="display">
-          <SettingsApiKeys></SettingsApiKeys>
+          <SettingsApiKeys />
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
-<script setup>
-// Props & Emits
-const props = defineProps(["title", "text"]);
+<script setup lang="ts">
+const props = defineProps<{
+  title: string;
+  text: string;
+}>();
 </script>
 
 <template>
@@ -11,10 +13,10 @@ const props = defineProps(["title", "text"]);
           <slot></slot>
         </div>
         <div id="title" class="grid-item-left">
-          {{ title }}
+          {{ props.title }}
         </div>
         <div id="text" class="grid-item-left">
-          {{ text }}
+          {{ props.text }}
         </div>
       </div>
     </div>

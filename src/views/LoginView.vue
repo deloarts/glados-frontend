@@ -1,15 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { baseParticles, snowParticles } from "@/presets/particles";
+import { baseParticles } from "@/presets/particles";
 import { loadFull } from "tsparticles";
+//@ts-ignore
 import moment from "moment";
 
 import constants from "@/constants";
 import router from "@/router/index";
 import { request } from "@/requests/index";
 import { usersRequest } from "@/requests/users";
-import { useUserStore } from "@/stores/user.js";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useUserStore } from "@/stores/user";
+import { useNotificationStore } from "@/stores/notification";
 
 // Particles
 const particlesInit = async (engine) => {
@@ -34,8 +35,8 @@ const focusUserInput = () => {
 const currentMonth = moment().month();
 
 let text = `v${constants.version}`;
-const form_user = ref("");
-const form_pw = ref("");
+const form_user = ref<string>("");
+const form_pw = ref<string>("");
 
 function login() {
   request.login(form_user.value, form_pw.value).then((response) => {
@@ -52,16 +53,7 @@ function fetchCurrentUser() {
   usersRequest.getUsersMe().then((response) => {
     if (response.status === 200) {
       console.log("Getting user from login.");
-
-      userStore.$patch({
-        username: response.data.username,
-        full_name: response.data.full_name,
-        email: response.data.email,
-        is_active: response.data.is_active,
-        is_superuser: response.data.is_superuser,
-        id: response.data.id,
-        created: response.data.created,
-      });
+      userStore.user = response.data;
       notificationStore.info = `Welcome ${response.data.full_name}`;
 
       var previousRoute = localStorage.getItem("gladosActiveRoute");

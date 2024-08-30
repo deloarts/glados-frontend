@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 
@@ -6,7 +6,7 @@ import config from "@/config";
 import constants from "@/constants";
 import router from "@/router/index";
 import { request, requestConfig } from "@/requests/index";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
 
 import FullScreenWarning from "@/components/main/FullScreenWarning.vue";
 
@@ -16,8 +16,8 @@ const route = useRoute();
 // Store
 const notificationStore = useNotificationStore();
 
-const showBox = ref(false);
-const text = ref("");
+const showBox = ref<boolean>(false);
+const text = ref<string>("");
 
 function onReconnection() {
   showBox.value = false;

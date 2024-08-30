@@ -20,6 +20,12 @@
   border-radius: $main-border-radius;
 }
 
+.table-base-title {
+  font-size: 1.25em;
+  padding-left: 10px;
+  padding-bottom: 15px;
+}
+
 table {
   width: 100%;
   margin-top: -6px; // Remove border-spacing from top
@@ -101,3 +107,4 @@ td:last-child {
   border-bottom-right-radius: $main-border-radius;
   border-top-right-radius: $main-border-radius;
 }
+

@@ -1,24 +1,33 @@
-<script setup>
-import { ref, watch } from "vue";
+<script setup lang="ts">
+import { ref, watch, onMounted } from "vue";
+//@ts-ignore
 import moment from "moment";
-
-import { useUnitsStore } from "@/stores/units.js";
-
-import SelectNewUpdate from "@/components/elements/SelectNewUpdate.vue";
-import Toggle from "@vueform/toggle";
+//@ts-ignore
+import Toggle from "@vueform/toggle/dist/toggle.js";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
+import { useUnitsStore } from "@/stores/units";
+
+import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
+
+import SelectBase from "@/components/elements/SelectBase.vue";
+
 // Props & Emits
-const props = defineProps(["formData"]);
-const emit = defineEmits(["update:formData"]);
+const props = defineProps<{
+  formData: BoughtItemCreateSchema;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:formData", v: BoughtItemCreateSchema): void;
+}>();
 
 // Stores
 const unitStore = useUnitsStore();
 
 // Dates
-const pickedDesiredDate = ref();
-const formatDesiredDate = (pickedDesiredDate) => {
+const pickedDesiredDate = ref<Date>(null);
+const formatDesiredDate = (pickedDesiredDate: Date) => {
   const day = pickedDesiredDate.getDate();
   const month = pickedDesiredDate.getMonth() + 1;
   const year = pickedDesiredDate.getFullYear();
@@ -27,7 +36,6 @@ const formatDesiredDate = (pickedDesiredDate) => {
 
 // Form stuff
 const name = ref("");
-let highPriority = false;
 
 function buildPartnumber() {
   const partnumber =
@@ -37,13 +45,13 @@ function buildPartnumber() {
     " - " +
     props.formData.manufacturer;
   let data = props.formData;
-  data["partnumber"] = partnumber;
+  data.partnumber = partnumber;
   emit("update:formData", data);
 }
 
 watch(
-  props.formData,
-  () => {
+  () => props.formData,
+  (current, previous) => {
     let data = props.formData;
     if (
       data.desired_delivery_date != null &&
@@ -72,6 +80,10 @@ watch(pickedDesiredDate, () => {
     data.desired_delivery_date = null;
   }
   emit("update:formData", data);
+});
+
+onMounted(() => {
+  props.formData.unit = unitStore.boughtItemUnits.default;
 });
 </script>
 
@@ -102,7 +114,7 @@ watch(pickedDesiredDate, () => {
           />
         </div>
         <div id="unit" class="grid-item-center">
-          <SelectNewUpdate
+          <SelectBase
             v-model:selection="props.formData.unit"
             :options="unitStore.boughtItemUnits.values"
           />

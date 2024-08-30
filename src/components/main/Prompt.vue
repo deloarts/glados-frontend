@@ -18,8 +18,8 @@ const props = withDefaults(defineProps<Props>(), {
   yesIsDanger: false,
 });
 
-const x = ref("");
-const y = ref("");
+const x = ref<string>("");
+const y = ref<string>("");
 
 function eventMouseMove(event) {
   if (props.atMouse) {

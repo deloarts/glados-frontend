@@ -1,15 +1,23 @@
-<script setup>
-import { ref, computed } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
+
+import type { StockCut1DJobSchema } from "@/schemas/stockCut1d";
+
 import ButtonPlus from "@/components/elements/ButtonPlus.vue";
 import ButtonSolve from "@/components/elements/ButtonSolve.vue";
 import ButtonLoading from "@/components/elements/ButtonLoading.vue";
 import IconDelete from "@/components/icons/IconDelete.vue";
-import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 
-const props = defineProps(["solverInput", "solving", "onSolve", "onAdd"]);
-const solverInput = computed(() => props.solverInput);
+const props = defineProps<{
+  solverInput: StockCut1DJobSchema;
+  solving: boolean;
+  onSolve: Function;
+  onAdd: Function;
+}>();
 
-function removeRow(index) {
+const solverInput = computed<StockCut1DJobSchema>(() => props.solverInput);
+
+function removeRow(index: number) {
   let target_sizes = [];
   for (var i = 0; i < solverInput.value.target_sizes.length; i++) {
     if (i != index) {
@@ -26,6 +34,19 @@ function removeAll() {
 <template>
   <div class="form-base-scope">
     <div class="form-base-container">
+      <div id="grid" class="grid-command">
+        <div id="btn-add">
+          <ButtonPlus v-on:click="props.onAdd()" text="Add" />
+        </div>
+        <div id="btn-solve">
+          <ButtonLoading v-if="props.solving" text="Solving..." />
+          <ButtonSolve v-else v-on:click="props.onSolve()" text="Solve" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-base-container">
+      <div class="form-base-title">Stock</div>
       <div id="grid" class="grid-input">
         <div id="stock-length-text" class="grid-item-left">Stock Length</div>
         <div id="stock-length" class="grid-item-center">
@@ -48,6 +69,7 @@ function removeAll() {
     </div>
 
     <div class="table-base-container">
+      <div class="table-base-title">Items</div>
       <table class="cursor-default">
         <thead>
           <tr>
@@ -59,7 +81,7 @@ function removeAll() {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in solverInput.target_sizes" :key="item">
+          <tr v-for="(item, index) in solverInput.target_sizes" :key="index">
             <td id="cut-length" class="sticky-col">
               <input v-model="item.length" />
             </td>
@@ -72,18 +94,6 @@ function removeAll() {
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="form-base-container">
-      <div id="grid" class="grid-command">
-        <div id="btn-add">
-          <ButtonPlus v-on:click="props.onAdd" text="Add" />
-        </div>
-        <div id="btn-solve">
-          <ButtonLoading v-if="props.solving" text="Solving..." />
-          <ButtonSolve v-else v-on:click="props.onSolve" text="Solve" />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -126,8 +136,16 @@ svg {
   cursor: pointer;
 }
 
+.form-base-container {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .table-base-container {
   padding-bottom: 10px;
+  padding-top: 10px;
   margin-top: 15px;
   margin-bottom: 15px;
 }

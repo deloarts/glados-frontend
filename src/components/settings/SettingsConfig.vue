@@ -1,7 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 
-import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import SettingsConfigTable from "@/components/settings/SettingsConfigTable.vue";
 import SettingsConfigCreate from "@/components/settings/SettingsConfigCreate.vue";
 import SettingsConfigUpdate from "@/components/settings/SettingsConfigUpdate.vue";
@@ -34,7 +33,7 @@ watch(selectedConfigName, () => {
             v-model:selectedConfigValue="selectedConfigValue"
             v-model:selectedConfigCategory="selectedConfigCategory"
             v-model:selectedConfigName="selectedConfigName"
-          ></SettingsConfigTable>
+          />
         </div>
 
         <div id="config-h1" v-if="mode == 'create'">
@@ -43,7 +42,7 @@ watch(selectedConfigName, () => {
         <div id="config" v-if="mode == 'create'">
           <SettingsConfigCreate
             v-model:selectedConfigName="selectedConfigName"
-          ></SettingsConfigCreate>
+          />
         </div>
 
         <div id="config-h1" v-if="mode == 'update'">
@@ -54,7 +53,7 @@ watch(selectedConfigName, () => {
             v-model:selectedConfigValue="selectedConfigValue"
             v-model:selectedConfigCategory="selectedConfigCategory"
             v-model:selectedConfigName="selectedConfigName"
-          ></SettingsConfigUpdate>
+          />
         </div>
       </div>
     </div>

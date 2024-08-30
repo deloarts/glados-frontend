@@ -1,13 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router";
 
 import ButtonUserEdit from "@/components/elements/ButtonUserEdit.vue";
 import ButtonCloudKey from "@/components/elements/ButtonCloudKey.vue";
 
-// Router
 const route = useRoute();
 
-function routeIsActive(currentLink) {
+function routeIsActive(currentLink: string) {
   let activeRoute = route.path;
   if (activeRoute != "/login") {
     localStorage.setItem("gladosActiveRoute", activeRoute);
@@ -26,17 +25,15 @@ function routeIsActive(currentLink) {
       <router-link :to="'/account/me'"
         ><ButtonUserEdit
           class="controls-base-element"
-          v-bind:class="{ active: routeIsActive('/account/me') }"
+          :class="{ active: routeIsActive('/account/me') }"
           text="My Account"
-        ></ButtonUserEdit
-      ></router-link>
+      /></router-link>
       <router-link :to="'/account/pat'"
         ><ButtonCloudKey
           class="controls-base-element"
-          v-bind:class="{ active: routeIsActive('/account/pat') }"
+          :class="{ active: routeIsActive('/account/pat') }"
           text="Access Token"
-        ></ButtonCloudKey
-      ></router-link>
+      /></router-link>
     </div>
   </div>
 </template>

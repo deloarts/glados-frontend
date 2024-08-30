@@ -1,12 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 
-const selectedKeyID = ref(0);
-const mode = ref("create");
-
-function onSelect(id) {
-  selectedKeyID.value = id;
-}
+const selectedKeyID = ref<number>(0);
+const mode = ref<string>("create");
 
 watch(selectedKeyID, () => {
   if (selectedKeyID.value == 0) {
@@ -42,10 +38,6 @@ watch(selectedKeyID, () => {
   width: 100%;
   height: 100%;
 }
-
-// .content {
-//   padding: $main-padding;
-// }
 
 .gray {
   color: gray;

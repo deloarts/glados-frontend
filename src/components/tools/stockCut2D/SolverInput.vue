@@ -1,0 +1,291 @@
+<script setup lang="ts">
+import { computed } from "vue";
+
+import type { StockCut2DJobSchema } from "@/schemas/stockCut2D";
+
+import ButtonPlus from "@/components/elements/ButtonPlus.vue";
+import ButtonSolve from "@/components/elements/ButtonSolve.vue";
+import ButtonLoading from "@/components/elements/ButtonLoading.vue";
+import ButtonDownload from "@/components/elements/ButtonDownload.vue";
+import IconDelete from "@/components/icons/IconDelete.vue";
+import SelectBase from "@/components/elements/SelectBase.vue";
+import Toggle from "@vueform/toggle/dist/toggle.js";
+
+const props = defineProps<{
+  solverInput: StockCut2DJobSchema;
+  solving: boolean;
+  solved: boolean;
+  onSolve: Function;
+  onAddItem: Function;
+  onAddPanel: Function;
+  onExportPdf: Function;
+}>();
+const solverInput = computed<StockCut2DJobSchema>(() => props.solverInput);
+const solverMethods = ["greedy", "forward_greedy"];
+
+function removePanelRow(index: number) {
+  let panels = [];
+  for (var i = 0; i < solverInput.value.params.panels.length; i++) {
+    if (i != index) {
+      panels.push(solverInput.value.params.panels[i]);
+    }
+  }
+  solverInput.value.params.panels = panels;
+}
+function removeAllPanels() {
+  solverInput.value.params.panels = [
+    { id: "Panel 1", width: 100, height: 100 },
+  ];
+}
+function removeItemRow(index: number) {
+  let items = [];
+  for (var i = 0; i < solverInput.value.params.items.length; i++) {
+    if (i != index) {
+      items.push(solverInput.value.params.items[i]);
+    }
+  }
+  solverInput.value.params.items = items;
+}
+function removeAllItems() {
+  solverInput.value.params.items = [
+    { id: "Item 1", width: 100, height: 100, can_rotate: true },
+  ];
+}
+</script>
+
+<template>
+  <div class="form-base-scope">
+    <div class="form-base-container">
+      <div id="grid" class="grid-command">
+        <div id="btn-add-panel">
+          <ButtonPlus v-on:click="props.onAddPanel()" text="Add Panel" />
+        </div>
+        <div id="btn-add-item">
+          <ButtonPlus v-on:click="props.onAddItem()" text="Add Item" />
+        </div>
+        <div id="btn-solve">
+          <ButtonLoading v-if="props.solving" text="Solving..." />
+          <ButtonSolve v-else v-on:click="props.onSolve()" text="Solve" />
+        </div>
+        <div id="btn-export-pdf">
+          <ButtonDownload v-on:click="props.onExportPdf()" text="Export PDF" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-base-container">
+      <div class="form-base-title">Basic Definitions</div>
+      <div id="grid" class="grid-input">
+        <div id="method-text" class="grid-item-left">Method</div>
+        <div id="method" class="grid-item-left">
+          <SelectBase
+            v-model:selection="solverInput.method"
+            :options="solverMethods"
+          />
+        </div>
+
+        <div id="cut-width-text" class="grid-item-left">Cut Width</div>
+        <div id="cut-width" class="grid-item-center">
+          <input
+            class="form-base-text-input"
+            type="number"
+            v-model="solverInput.params.cut_width"
+          />
+        </div>
+
+        <div id="min-usage-text" class="grid-item-left">Minimum</div>
+        <div id="min-usage" class="grid-item-left">
+          <Toggle v-model="solverInput.params.min_initial_usage"></Toggle>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-base-container">
+      <div class="table-base-title">Panels</div>
+      <table class="cursor-default">
+        <thead>
+          <tr>
+            <th id="panel-id" class="first sticky-col">Panel ID</th>
+            <th id="panel-width" class="first sticky-col">Panel Width</th>
+            <th id="panel-height" class="first sticky-col">Panel Height</th>
+            <th id="clear" class="first sticky-col">
+              <IconDelete v-on:click="removeAllPanels()" />
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(panel, index) in solverInput.params.panels" :key="index">
+            <td id="panel-id" class="sticky-col">
+              <input v-model="panel.id" />
+            </td>
+            <td id="panel-width" class="sticky-col">
+              <input v-model="panel.width" />
+            </td>
+            <td id="panel-height" class="sticky-col">
+              <input v-model="panel.height" />
+            </td>
+            <td id="clear" class="sticky-col">
+              <IconDelete v-on:click="removePanelRow(index)" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-base-container">
+      <div class="table-base-title">Items</div>
+      <table class="cursor-default">
+        <thead>
+          <tr>
+            <th id="item-id" class="first sticky-col">Item ID</th>
+            <th id="item-width" class="first sticky-col">Item Width</th>
+            <th id="item-height" class="first sticky-col">Item Height</th>
+            <th id="item-rotate" class="first sticky-col">Rotate</th>
+            <th id="clear" class="first sticky-col">
+              <IconDelete v-on:click="removeAllItems()" />
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in solverInput.params.items" :key="index">
+            <td id="item-id" class="sticky-col">
+              <input v-model="item.id" />
+            </td>
+            <td id="item-width" class="sticky-col">
+              <input v-model="item.width" />
+            </td>
+            <td id="item-height" class="sticky-col">
+              <input v-model="item.height" />
+            </td>
+            <td id="item-rotate" class="sticky-col">
+              <Toggle v-model="item.can_rotate"></Toggle>
+            </td>
+            <td id="clear" class="sticky-col">
+              <IconDelete v-on:click="removeItemRow(index)" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+@import "@/scss/variables.scss";
+@import "@/scss/table/tableBase.scss";
+@import "@/scss/form/formBase.scss";
+@import "@/scss/grid/gridBase.scss";
+
+table {
+  max-width: 600px;
+  border-spacing: 4px 6px;
+}
+
+td,
+th {
+  text-align: left;
+  border-radius: $main-border-radius;
+}
+
+input {
+  width: 100%;
+
+  box-shadow: none;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+
+  color: white;
+  background-color: transparent;
+
+  outline: none;
+  border: none;
+  border-color: inherit;
+}
+
+svg {
+  height: 18px;
+  width: 18px;
+  cursor: pointer;
+}
+
+.form-base-container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.table-base-container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.grid-command {
+  grid-template-rows: 32px;
+  grid-template-columns: min-content min-content min-content min-content;
+  grid-template-areas: "btn-add-panel btn-add-item btn-solve btn-export-pdf";
+}
+
+.grid-input {
+  grid-template-rows: 40px 40px 40px;
+  grid-template-columns: 130px auto;
+  grid-template-areas:
+    "method-text method"
+    "cut-width-text cut-width"
+    "min-usage-text min-usage";
+}
+
+#btn-solve {
+  grid-area: btn-solve;
+}
+
+#btn-export-pdf {
+  grid-area: btn-export-pdf;
+}
+
+#btn-add-panel {
+  grid-area: btn-add-panel;
+}
+
+#btn-add-item {
+  grid-area: btn-add-item;
+}
+
+#clear {
+  width: 35px;
+  min-width: 35px;
+  max-width: 35px;
+
+  text-align: center;
+}
+
+#method {
+  grid-area: method;
+}
+
+#method-text {
+  padding-left: 10px;
+  grid-area: method-text;
+}
+
+#cut-width {
+  grid-area: cut-width;
+  width: 150px;
+}
+
+#cut-width-text {
+  padding-left: 10px;
+  grid-area: cut-width-text;
+}
+
+#min-usage {
+  grid-area: min-usage;
+}
+
+#min-usage-text {
+  padding-left: 10px;
+  grid-area: min-usage-text;
+}
+</style>

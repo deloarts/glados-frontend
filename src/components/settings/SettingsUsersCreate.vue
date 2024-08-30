@@ -1,16 +1,18 @@
-<script setup>
-import { ref, watch } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
 import { usersRequest } from "@/requests/users";
 
-import Toggle from "@vueform/toggle";
+import type { UserCreateSchema } from "@/schemas/user";
+
+import Toggle from "@vueform/toggle/dist/toggle.js";
 import ButtonUserCreate from "@/components/elements/ButtonUserCreate.vue";
 
 // Stores
 const notificationStore = useNotificationStore();
 
-const formData = ref({
+const formData = ref<UserCreateSchema>({
   is_active: false,
   is_superuser: false,
   is_adminuser: false,
@@ -53,19 +55,19 @@ function createUser() {
     <div class="form-base-container">
       <div id="grid">
         <div id="guestuser" class="grid-item-center">
-          <Toggle v-model="formData.is_guestuser"></Toggle>
+          <Toggle v-model="formData.is_guestuser" />
         </div>
         <div id="guestuser-text" class="grid-item-left">Guest</div>
         <div id="superuser" class="grid-item-center">
-          <Toggle v-model="formData.is_superuser"></Toggle>
+          <Toggle v-model="formData.is_superuser" />
         </div>
         <div id="superuser-text" class="grid-item-left">Superuser</div>
         <div id="adminuser" class="grid-item-center">
-          <Toggle v-model="formData.is_adminuser"></Toggle>
+          <Toggle v-model="formData.is_adminuser" />
         </div>
         <div id="adminuser-text" class="grid-item-left">Admin</div>
         <div id="active" class="grid-item-center">
-          <Toggle v-model="formData.is_active"></Toggle>
+          <Toggle v-model="formData.is_active" />
         </div>
         <div id="active-text" class="grid-item-left">Active</div>
         <div id="username" class="grid-item-center">
@@ -98,10 +100,7 @@ function createUser() {
           />
         </div>
         <div id="btn">
-          <ButtonUserCreate
-            v-on:click="createUser"
-            text="Create User"
-          ></ButtonUserCreate>
+          <ButtonUserCreate v-on:click="createUser" text="Create User" />
         </div>
       </div>
     </div>

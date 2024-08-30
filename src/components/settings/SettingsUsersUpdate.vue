@@ -1,20 +1,23 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
 import { usersRequest } from "@/requests/users";
 
-import Toggle from "@vueform/toggle";
+import type { UserUpdateSchema } from "@/schemas/user";
+
+import Toggle from "@vueform/toggle/dist/toggle.js";
 import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
 
 // Props & Emits
-const props = defineProps(["selectedUserID"]);
+const props = defineProps<{
+  selectedUserID: number;
+}>();
 
 // Stores
 const notificationStore = useNotificationStore();
 
-const formData = ref({
-  id: 0,
+const formData = ref<UserUpdateSchema>({
   is_active: false,
   is_superuser: false,
   is_adminuser: false,
@@ -24,14 +27,21 @@ const formData = ref({
   email: "",
   password: "",
 });
+const isSystemuser = ref<boolean>(false);
 
 function getUser() {
   usersRequest.getUsersId(props.selectedUserID).then((response) => {
     formData.value = response.data;
+    isSystemuser.value = response.data.is_systemuser;
   });
 }
 
 function updateUser() {
+  if (isSystemuser.value) {
+    notificationStore.info = "Systemuser cannot be updated";
+    return;
+  }
+
   usersRequest
     .putUsers(props.selectedUserID, formData.value)
     .then((response) => {
@@ -55,7 +65,6 @@ watch(
   () => {
     if (props.selectedUserID == 0) {
       formData.value = {
-        id: 0,
         is_active: false,
         is_superuser: false,
         is_adminuser: false,
@@ -100,7 +109,7 @@ onMounted(() => getUser());
             v-model="formData.username"
             type="text"
             placeholder="Username"
-            :disabled="formData.is_systemuser"
+            :disabled="isSystemuser"
           />
         </div>
         <div id="full-name" class="grid-item-center">
@@ -122,14 +131,11 @@ onMounted(() => getUser());
             class="form-base-text-input"
             v-model="formData.password"
             placeholder="Password"
-            :disabled="formData.is_systemuser"
+            :disabled="isSystemuser"
           />
         </div>
         <div id="btn">
-          <ButtonUserUpdate
-            v-on:click="updateUser"
-            text="Update User"
-          ></ButtonUserUpdate>
+          <ButtonUserUpdate v-on:click="updateUser" text="Update User" />
         </div>
       </div>
     </div>

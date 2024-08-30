@@ -1,27 +1,33 @@
-<script setup>
-import { useBoughtItemFilterStore } from "@/stores/filter.js";
+<script setup lang="ts">
+import { useBoughtItemFilterStore } from "@/stores/filter";
+
+import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
 
 // Props & Emits
-const props = defineProps([
-  "selectedConfigValue",
-  "selectedConfigName",
-  "selectedConfigCategory",
-]);
-const emit = defineEmits([
-  "update:selectedConfigValue",
-  "update:selectedConfigName",
-  "update:selectedConfigCategory",
-]);
+const props = defineProps<{
+  selectedConfigValue: HostConfigBoughtItemsFilterSchema;
+  selectedConfigName: string;
+  selectedConfigCategory: string;
+}>();
+const emit = defineEmits<{
+  (e: "update:selectedConfigValue", v: HostConfigBoughtItemsFilterSchema): void;
+  (e: "update:selectedConfigName", v: string): void;
+  (e: "update:selectedConfigCategory", v: string): void;
+}>();
 
 // Store
 const boughtItemsFilterStore = useBoughtItemFilterStore();
 
-function onSelect(name, category, value) {
-  if (props.selectedConfigName == name) {
+function onSelect(
+  name: string | number,
+  category: string,
+  value: HostConfigBoughtItemsFilterSchema,
+) {
+  if (props.selectedConfigName == String(name)) {
     name = null;
   }
   emit("update:selectedConfigValue", value);
-  emit("update:selectedConfigName", name);
+  emit("update:selectedConfigName", String(name));
   emit("update:selectedConfigCategory", category);
 }
 </script>

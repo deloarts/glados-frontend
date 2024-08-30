@@ -1,18 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch, computed } from "vue";
 
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
 
 import IconWarning from "@/components/icons/IconWarning.vue";
 import IconInfo from "@/components/icons/IconInfo.vue";
 
 const notificationStore = useNotificationStore();
 
-const info = computed(() => notificationStore.info);
-const warning = computed(() => notificationStore.warning);
+const info = computed<string>(() => notificationStore.info);
+const warning = computed<string>(() => notificationStore.warning);
 
-const showInfo = ref(false);
-const showWarning = ref(false);
+const showInfo = ref<boolean>(false);
+const showWarning = ref<boolean>(false);
 
 function hideSlider() {
   showInfo.value = false;
@@ -54,7 +54,7 @@ watch(warning, () => {
     >
       <div id="grid">
         <div id="icon">
-          <IconWarning></IconWarning>
+          <IconWarning />
         </div>
         <div id="text">
           {{ warning }}
@@ -69,7 +69,7 @@ watch(warning, () => {
     >
       <div id="grid">
         <div id="icon">
-          <IconInfo></IconInfo>
+          <IconInfo />
         </div>
         <div id="text">
           {{ info }}

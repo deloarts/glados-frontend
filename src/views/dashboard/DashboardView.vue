@@ -4,8 +4,8 @@ import { useRoute } from "vue-router";
 import moment from "moment";
 
 import constants from "@/constants";
-import { useResolutionStore } from "@/stores/resolution.js";
-import { useUsersStore } from "@/stores/user.js";
+import { useResolutionStore } from "@/stores/resolution";
+import { useUsersStore } from "@/stores/user";
 import { getFilterParams } from "@/requests/params";
 import { boughtItemsRequest } from "@/requests/items";
 import { boughtItemsFilter } from "@/presets/boughtItemsFilter";

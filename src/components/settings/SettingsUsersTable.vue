@@ -1,17 +1,21 @@
-<script setup>
-import { useUsersStore } from "@/stores/user.js";
+<script setup lang="ts">
+import { useUsersStore } from "@/stores/user";
 
 import IconCheckboxBlank from "@/components/icons/IconCheckboxBlank.vue";
 import IconCheckboxMarked from "@/components/icons/IconCheckboxMarked.vue";
 
 // Props & Emits
-const props = defineProps(["selectedUserID"]);
-const emit = defineEmits(["update:selectedUserID"]);
+const props = defineProps<{
+  selectedUserID: number;
+}>();
+const emit = defineEmits<{
+  (e: "update:selectedUserID", v: number): void;
+}>();
 
 // Store
 const usersStore = useUsersStore();
 
-function onSelect(id) {
+function onSelect(id: number) {
   if (props.selectedUserID == id) {
     id = 0;
   }

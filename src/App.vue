@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Resolution from "@/components/main/Resolution.vue";
 import Connection from "@/components/main/Connection.vue";
 import Notification from "@/components/main/Notification.vue";

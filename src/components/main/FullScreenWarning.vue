@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { baseParticles } from "@/presets/particles";
 import { loadFull } from "tsparticles";
 

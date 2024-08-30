@@ -1,15 +1,18 @@
-<script setup>
-import { ref, computed, watch } from "vue";
+<script setup lang="ts">
+import { computed, watch } from "vue";
 import Typed from "typed.js";
 
 import config from "@/config";
-import { useUserStore } from "@/stores/user.js";
-// Store
+import { useUserStore } from "@/stores/user";
+
 const userStore = useUserStore();
-const full_name = computed(() => userStore.full_name);
-const email = computed(() => userStore.email);
+const full_name = computed<string>(() => userStore.user.full_name);
+const email = computed<string>(() => userStore.user.email);
 
 function typeFullName() {
+  if (full_name.value.length <= 0) {
+    return;
+  }
   new Typed(".full-name", {
     strings: [full_name.value],
     typeSpeed: 4,
@@ -21,6 +24,9 @@ function typeFullName() {
 }
 
 function typeMail() {
+  if (email.value.length <= 0) {
+    return;
+  }
   new Typed(".email", {
     strings: [email.value],
     typeSpeed: 3,

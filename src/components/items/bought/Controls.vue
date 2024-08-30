@@ -1,14 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch, computed, onBeforeMount } from "vue";
-import Toggle from "@vueform/toggle";
+import Toggle from "@vueform/toggle/dist/toggle.js";
 
 import router from "@/router/index";
-import { useBoughtItemsControlsStore } from "@/stores/controls.js";
-import { useBoughtItemFilterStore } from "@/stores/filter.js";
-import { useBoughtItemsStore } from "@/stores/boughtItems.js";
-import { useNotificationStore } from "@/stores/notification.js";
-import { useUserStore } from "@/stores/user.js";
-import { useResolutionStore } from "@/stores/resolution.js";
+import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { useBoughtItemFilterStore } from "@/stores/filter";
+import { useBoughtItemsStore } from "@/stores/boughtItems";
+import { useNotificationStore } from "@/stores/notification";
+import { useUserStore } from "@/stores/user";
+import { useResolutionStore } from "@/stores/resolution";
 import { boughtItemsRequest } from "@/requests/items";
 import { getFilterParams } from "@/requests/params";
 import { capitalizeFirstLetter } from "@/helper/string.helper";
@@ -27,14 +27,18 @@ import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue";
 import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue";
 import ButtonClear from "@/components/elements/ButtonClear.vue";
 import DropDownTableView from "@/components/elements/DropDownTableView.vue";
-import SelectControls from "@/components/elements/SelectControls.vue";
+import SelectPreText from "@/components/elements/SelectPreText.vue";
 
-// Props & Emits
-const props = defineProps(["selectedItemIds"]);
-const emit = defineEmits([
-  "update:selectedItemIds",
-  "update:triggerGetNewData",
-]);
+import type { AvailableOption } from "@/models/controls";
+
+const props = defineProps<{
+  selectedItemIds: Array<number>;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:selectedItemIds", v: Array<number>): void;
+  (e: "update:triggerGetNewData", v: boolean): void;
+}>();
 
 // Stores
 const boughtItemsStore = useBoughtItemsStore();
@@ -44,42 +48,46 @@ const notificationStore = useNotificationStore();
 const resolutionStore = useResolutionStore();
 const userStore = useUserStore();
 
-const is_guestuser = computed(() => userStore.is_guestuser);
-const gtMinWidthDesktop = computed(() => resolutionStore.gtMinWidthDesktop);
-const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
+const is_guestuser = computed<boolean>(() => userStore.user.is_guestuser);
+const gtMinWidthDesktop = computed<boolean>(
+  () => resolutionStore.gtMinWidthDesktop,
+);
+const gtMinWidthTablet = computed<boolean>(
+  () => resolutionStore.gtMinWidthTablet,
+);
 
 // Shows
-const showDeletePrompt = ref(false);
-const showExcelImport = ref(false);
+const showDeletePrompt = ref<boolean>(false);
+const showExcelImport = ref<boolean>(false);
 
 // Buttons
-const buttonItemCreateText = computed(() => {
+const buttonItemCreateText = computed<string>(() => {
   return gtMinWidthTablet.value ? "New Item" : "";
 });
-const buttonItemEditText = computed(() => {
+const buttonItemEditText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Edit Item" : "";
 });
-const buttonItemCopyText = computed(() => {
+const buttonItemCopyText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Copy Item" : "";
 });
-const buttonSyncText = computed(() => {
+const buttonSyncText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Sync" : "";
 });
-const buttonViewsText = computed(() => {
+const buttonViewsText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Views" : "";
 });
-const buttonClearFilterText = computed(() => {
+const buttonClearFilterText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Clear Filter" : "";
 });
 
 // Selections
-const availableOptionsLimit = [
+const availableOptionsLimit: Array<AvailableOption> = [
+  { text: "50", value: "50" },
   { text: "100", value: "100" },
+  { text: "250", value: "250" },
   { text: "500", value: "500" },
-  { text: "1000", value: "1000" },
-  { text: "All", value: "" },
 ];
-const availableOptionsOrderBy = [
+const availableOptionsOrderBy: Array<AvailableOption> = [
   { text: "ID", value: "id" },
   { text: "Created", value: "created" },
   { text: "Project", value: "project" },
@@ -88,14 +96,14 @@ const availableOptionsOrderBy = [
   { text: "Manufacturer", value: "manufacturer" },
   { text: "Supplier", value: "supplier" },
 ];
-const availableOptionsFilterPresets = computed(() => {
+const availableOptionsFilterPresets = computed<Array<AvailableOption>>(() => {
   let presets = [];
   for (const key in filterStore.presets) {
     presets.push({ text: capitalizeFirstLetter(key), value: key });
   }
   return presets;
 });
-const selectedOptionFilterPreset = ref("");
+const selectedOptionFilterPreset = ref<string>("");
 
 function saveFilter() {
   filterStore.saveMy();
@@ -342,26 +350,26 @@ onBeforeMount(setupTabletView);
         v-on:click="clearFilter"
       ></ButtonFilterClear>
 
-      <SelectControls
+      <SelectPreText
         v-if="gtMinWidthDesktop"
         class="controls-base-element"
         text="Limit"
         v-model:selection="filterStore.state.limit"
         :options="availableOptionsLimit"
-      ></SelectControls>
-      <SelectControls
+      ></SelectPreText>
+      <SelectPreText
         v-if="gtMinWidthTablet"
         class="controls-base-element"
         text="Sort By"
         v-model:selection="filterStore.state.sortBy"
         :options="availableOptionsOrderBy"
-      ></SelectControls>
-      <SelectControls
+      ></SelectPreText>
+      <SelectPreText
         class="controls-base-element"
         text="Preset"
         v-model:selection="selectedOptionFilterPreset"
         :options="availableOptionsFilterPresets"
-      ></SelectControls>
+      ></SelectPreText>
     </div>
   </div>
 

@@ -68,6 +68,7 @@ function updateChart() {
 onMounted(() => {
   updateChart();
 });
+
 watch(
   () => props.dataset,
   () => {

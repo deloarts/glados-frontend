@@ -1,15 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch, computed } from "vue";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "vue-chartjs";
 
+import type { DiscSpace } from "@/models/host";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // Props & Emits
-const props = defineProps(["dataset"]);
+const props = defineProps<{
+  dataset: DiscSpace;
+}>();
 
-const chartLabels = ref([""]);
-const chartDataset = ref([0]);
+const chartLabels = ref<Array<string>>([""]);
+const chartDataset = ref<Array<number>>([0]);
 const chartData = computed(() => {
   return {
     labels: chartLabels.value,

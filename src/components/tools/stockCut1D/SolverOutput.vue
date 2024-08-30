@@ -12,7 +12,7 @@ import {
 import { Bar } from "vue-chartjs";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
-import { useResolutionStore } from "@/stores/resolution.js";
+import { useResolutionStore } from "@/stores/resolution";
 
 ChartJS.register(
   Title,

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-// Props & Emits
 interface Props {
   text?: string;
   hideWhenClicked?: boolean;

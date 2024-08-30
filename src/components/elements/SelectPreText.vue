@@ -1,8 +1,18 @@
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+interface Option {
+  text: string;
+  value: string | number | null;
+}
 
-const props = defineProps(["selection", "options", "text"]);
-const emit = defineEmits(["update:selection"]);
+const props = defineProps<{
+  selection: string;
+  options: Array<Option>;
+  text: string;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:selection", v: string): void;
+}>();
 
 function onChange(event) {
   emit("update:selection", event.target.value);

@@ -1,12 +1,10 @@
-<script lang="ts">
+<script setup lang="ts">
+import { onBeforeMount } from "vue";
 import router from "@/router/index";
 
-export default {
-  name: "RedirectTools",
-  created() {
-    router.push({ name: "ToolsStockCut1D" });
-  },
-};
+onBeforeMount(() => {
+  router.push({ name: "ToolsStockCut1D" });
+});
 </script>
 
 <template></template>

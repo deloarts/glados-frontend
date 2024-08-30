@@ -2,52 +2,24 @@ import { ref, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
 import constants from "@/constants";
-import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
-import { useBoughtItemFilterStore } from "@/stores/filter.js";
+import { useBoughtItemFilterStore } from "@/stores/filter";
 import { getFilterParams } from "@/requests/params";
+
+import type { BoughtItemSchema } from "@/schemas/boughtItem";
 
 export const useBoughtItemsStore = defineStore("boughtItems", () => {
   const _filterStore = useBoughtItemFilterStore();
 
-  const paused = ref(false);
-  const loading = ref(false);
-  const items = ref([
-    {
-      id: 0,
-      status: "",
-      group_1: "",
-      created: "",
-      creator_id: "",
-      high_priority: "",
-      notify_on_delivery: "",
-      project: "",
-      machine: "",
-      quantity: "",
-      unit: "",
-      partnumber: "",
-      definition: "",
-      supplier: "",
-      manufacturer: "",
-      note_general: "",
-      note_supplier: "",
-      desired_delivery_date: "",
-      requester_id: "",
-      requested_date: "",
-      orderer_id: "",
-      ordered_date: "",
-      expected_delivery_date: ref(new Date()),
-      taken_over_id: "",
-      delivery_date: "",
-      storage_place: "",
-    },
-  ]);
+  const paused = ref<boolean>(false);
+  const loading = ref<boolean>(false);
+  const items = ref<Array<BoughtItemSchema>>([]);
 
   function clear() {
     items.value = [];
   }
 
-  function pause(state) {
+  function pause(state: boolean) {
     paused.value = state;
   }
 

@@ -1,10 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
+
+import { BoughtItemUpdateSchema } from "@/schemas/boughtItem";
 
 import ControlsEdit from "@/components/items/bought/ControlsEdit.vue";
 import UpdateItemForm from "@/components/items/bought/UpdateItemForm.vue";
@@ -16,7 +18,7 @@ const route = useRoute();
 const notificationStore = useNotificationStore();
 
 // Form stuff
-const formData = ref({
+const formData = ref<BoughtItemUpdateSchema>({
   high_priority: false,
   notify_on_delivery: false,
   project: null,
@@ -37,7 +39,7 @@ const formData = ref({
 onMounted(() => {
   const itemId = route.params.id;
   boughtItemsRequest
-    .getItemsId(itemId)
+    .getItemsId(Number(itemId))
     .then((response) => {
       if (response.status === 200) {
         formData.value = response.data;

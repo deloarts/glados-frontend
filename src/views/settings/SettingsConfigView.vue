@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SettingsControls from "@/components/settings/SettingsControls.vue";
 import SettingsConfig from "@/components/settings/SettingsConfig.vue";
 </script>
@@ -8,10 +8,10 @@ import SettingsConfig from "@/components/settings/SettingsConfig.vue";
     <div class="views-content">
       <div id="grid">
         <div id="controls">
-          <SettingsControls></SettingsControls>
+          <SettingsControls />
         </div>
         <div id="display">
-          <SettingsConfig></SettingsConfig>
+          <SettingsConfig />
         </div>
       </div>
     </div>

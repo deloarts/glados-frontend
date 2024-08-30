@@ -1,8 +1,10 @@
-<script setup>
-import { ref, watch, onMounted, onUnmounted } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
 import { boughtItemsRequest } from "@/requests/items";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
+
+import { ErrorDetails } from "@/models/errors";
 
 import ButtonExcel from "@/components/elements/ButtonExcel.vue";
 import ButtonAbort from "@/components/elements/ButtonAbort.vue";
@@ -10,9 +12,20 @@ import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import DropZone from "@/components/elements/DropZone.vue";
 import useFileList from "@/compositions/file-list";
 
+interface ResponseWarning {
+  row: number;
+  errors: Array<ErrorDetails>;
+}
+
 // Props & Emits
-const props = defineProps(["showUploader", "onSuccess"]);
-const emit = defineEmits(["update:showUploader"]);
+const props = defineProps<{
+  showUploader: boolean;
+  onSuccess: Function;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:showUploader", v: boolean): void;
+}>();
 
 // Stores
 const notificationStore = useNotificationStore();
@@ -21,10 +34,10 @@ const notificationStore = useNotificationStore();
 const { files, addFiles, removeFile } = useFileList();
 
 // Handler
-let uploading = ref(false);
-let warningsList = ref([]);
+let uploading = ref<boolean>(false);
+let warningsList = ref<Array<ResponseWarning>>([]);
 
-function onInputChange(e) {
+function onInputChange(e: any) {
   addFiles(e.target.files);
   e.target.value = null; // reset so that selecting the same file again will still cause it to fire this change
 }

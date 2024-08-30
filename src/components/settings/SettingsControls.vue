@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router";
 
 import ButtonServer from "@/components/elements/ButtonServer.vue";
@@ -10,7 +10,7 @@ import ButtonConfig from "@/components/elements/ButtonConfig.vue";
 // Router
 const route = useRoute();
 
-function routeIsActive(currentLink) {
+function routeIsActive(currentLink: string) {
   let activeRoute = route.path;
   if (activeRoute != "/login") {
     localStorage.setItem("gladosActiveRoute", activeRoute);
@@ -31,36 +31,32 @@ function routeIsActive(currentLink) {
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/host') }"
           text="Host"
-        ></ButtonServer
-      ></router-link>
+        />
+      </router-link>
       <router-link :to="'/settings/config'"
         ><ButtonConfig
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/config') }"
           text="Config"
-        ></ButtonConfig
-      ></router-link>
+      /></router-link>
       <router-link :to="'/settings/logs'"
         ><ButtonFile
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/logs') }"
           text="Logs"
-        ></ButtonFile
-      ></router-link>
+      /></router-link>
       <router-link :to="'/settings/users'"
         ><ButtonUsers
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/users') }"
           text="Users"
-        ></ButtonUsers
-      ></router-link>
+      /></router-link>
       <router-link :to="'/settings/api-keys'"
         ><ButtonCloudKey
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/api-keys') }"
           text="API Keys"
-        ></ButtonCloudKey
-      ></router-link>
+      /></router-link>
     </div>
   </div>
 </template>

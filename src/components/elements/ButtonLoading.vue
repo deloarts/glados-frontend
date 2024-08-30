@@ -1,6 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
-const props = defineProps(["text"]);
+const props = defineProps<{
+  text: string;
+}>();
 </script>
 
 <template>

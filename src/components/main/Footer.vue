@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import constants from "@/constants";
 
-const hover = ref(false);
+const hover = ref<boolean>(false);
 const text = `v${constants.version}`;
 </script>
 

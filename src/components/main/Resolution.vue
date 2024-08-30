@@ -1,21 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 
-import { useResolutionStore } from "@/stores/resolution.js";
+import { useResolutionStore } from "@/stores/resolution";
 import FullScreenWarning from "@/components/main/FullScreenWarning.vue";
 
-// Stores
 const resolutionStore = useResolutionStore();
-const gtMinWidth = computed(() => resolutionStore.gtMinWidth);
+const gtMinWidth = computed<boolean>(() => resolutionStore.gtMinWidth);
 
-const text = ref("Screen Resolution Not Supported");
+const text = ref<string>("Screen Resolution Not Supported");
 </script>
 
 <template>
-  <FullScreenWarning
-    v-bind:show="!gtMinWidth"
-    v-model:text="text"
-  ></FullScreenWarning>
+  <FullScreenWarning v-bind:show="!gtMinWidth" v-model:text="text" />
 </template>
 
 <style scoped lang="scss"></style>

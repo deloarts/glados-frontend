@@ -1,41 +1,16 @@
-<script setup>
-const props = defineProps(["text"]);
+<script setup lang="ts">
+import ButtonBaseDanger from "@/components/elements/ButtonBaseDanger.vue";
+
+const props = defineProps<{
+  text?: string;
+}>();
 </script>
 
 <template>
-  <button class="button" v-bind:class="{ text: props.text != '' }">
-    <i class="icon" v-bind:class="{ 'icon-text': props.text != '' }">
-      <svg
-        height="100%"
-        viewBox="0 0 24 24"
-        width="100%"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
-      >
-        <path
-          d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"
-        ></path>
-      </svg>
-    </i>
-    {{ props.text }}
-  </button>
+  <ButtonBaseDanger
+    :text="props.text"
+    svg-path="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"
+  />
 </template>
 
-<style scoped lang="scss">
-@import "@/scss/variables.scss";
-@import "@/scss/button/buttonBase.scss";
-
-.button {
-  background-color: $main-red;
-}
-
-.button:hover {
-  background-color: $main-red;
-  border: 1px solid $main-background-color-dark;
-  filter: brightness(1.2);
-}
-
-.icon {
-  color: white;
-}
-</style>
+<style scoped lang="scss"></style>

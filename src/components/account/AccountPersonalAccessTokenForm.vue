@@ -1,15 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { usersRequest } from "@/requests/users";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
 
-import Toggle from "@vueform/toggle";
 import ButtonNewPersonalAccessToken from "@/components/elements/ButtonNewPersonalAccessToken.vue";
 
-// Stores
 const notificationStore = useNotificationStore();
 
-let personalAccessToken = ref("");
+let personalAccessToken = ref<string>("");
 
 function newToken() {
   usersRequest.putUsersMePAT().then((response) => {
@@ -40,7 +38,7 @@ function newToken() {
           <ButtonNewPersonalAccessToken
             v-on:click="newToken"
             text="New Token"
-          ></ButtonNewPersonalAccessToken>
+          />
         </div>
       </div>
     </div>

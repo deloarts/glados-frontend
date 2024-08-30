@@ -1,11 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
+
+import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
 
 import ControlsNew from "@/components/items/bought/ControlsNew.vue";
 import CreateItemForm from "@/components/items/bought/CreateItemForm.vue";
 
 // Form stuff
-const formData = ref({
+const formData = ref<BoughtItemCreateSchema>({
   high_priority: false,
   notify_on_delivery: false,
   project: null,

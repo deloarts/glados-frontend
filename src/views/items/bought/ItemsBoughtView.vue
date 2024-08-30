@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-import { useBoughtItemsControlsStore } from "@/stores/controls.js";
+import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 import Changelog from "@/components/items/bought/Changelog.vue";
 import DataTable from "@/components/items/bought/DataTable.vue";
@@ -10,8 +10,8 @@ import Controls from "@/components/items/bought/Controls.vue";
 const controlsStore = useBoughtItemsControlsStore();
 
 // Items
-const selectedItemIds = ref([]);
-const triggerGetNewData = ref(false);
+const selectedItemIds = ref<Array<number>>([]);
+const triggerGetNewData = ref<boolean>(false);
 </script>
 
 <template>
@@ -38,7 +38,7 @@ const triggerGetNewData = ref(false);
           class="changelog"
           v-if="controlsStore.state.changelog"
         >
-          <Changelog v-model:selected-item-ids="selectedItemIds"></Changelog>
+          <Changelog v-model:selected-item-ids="selectedItemIds" />
         </div>
       </div>
     </div>

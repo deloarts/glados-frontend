@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AccountPersonalAccessTokenForm from "@/components/account/AccountPersonalAccessTokenForm.vue";
 </script>
 
@@ -6,7 +6,7 @@ import AccountPersonalAccessTokenForm from "@/components/account/AccountPersonal
   <div class="scope">
     <div class="content">
       <h1>Personal Access Token</h1>
-      <AccountPersonalAccessTokenForm></AccountPersonalAccessTokenForm>
+      <AccountPersonalAccessTokenForm />
     </div>
   </div>
 </template>
@@ -18,9 +18,4 @@ import AccountPersonalAccessTokenForm from "@/components/account/AccountPersonal
   width: 100%;
   height: 100%;
 }
-
-// h1 {
-//   padding-left: 10px;
-//   padding-top: 10px;
-// }
 </style>

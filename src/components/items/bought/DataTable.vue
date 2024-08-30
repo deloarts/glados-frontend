@@ -1,30 +1,37 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch, computed, onBeforeMount, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
+// @ts-ignore
 import moment from "moment";
 import Datepicker from "vue3-datepicker";
 
-import { useBoughtItemsStore } from "@/stores/boughtItems.js";
-import { useUnitsStore } from "@/stores/units.js";
-import { useStatusStore } from "@/stores/status.js";
-import { useBoughtItemsControlsStore } from "@/stores/controls.js";
-import { useBoughtItemFilterStore } from "@/stores/filter.js";
+import { useBoughtItemsStore } from "@/stores/boughtItems";
+import { useUnitsStore } from "@/stores/units";
+import { useStatusStore } from "@/stores/status";
+import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { useBoughtItemFilterStore } from "@/stores/filter";
 import { boughtItemsRequest } from "@/requests/items";
 import { capitalizeFirstLetter } from "@/helper/string.helper";
-import { useUserStore, useUsersStore } from "@/stores/user.js";
-import { useNotificationStore } from "@/stores/notification.js";
-import { useResolutionStore } from "@/stores/resolution.js";
+import { useUserStore, useUsersStore } from "@/stores/user";
+import { useNotificationStore } from "@/stores/notification";
+import { useResolutionStore } from "@/stores/resolution";
+
+import type { AvailableOption } from "@/models/controls";
 
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
 import IconExternalLink from "@/components/icons/IconExternalLink.vue";
 
 // Props & Emits
-const props = defineProps(["selectedItemIds", "triggerGetNewData"]);
-const emit = defineEmits([
-  "update:selectedItemIds",
-  "update:triggerGetNewData",
-]);
+const props = defineProps<{
+  selectedItemIds: Array<number>;
+  triggerGetNewData: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:selectedItemIds", v: Array<number>): void;
+  (e: "update:triggerGetNewData", v: boolean): void;
+}>();
 
 // Router
 const route = useRoute();
@@ -40,20 +47,28 @@ const unitsStore = useUnitsStore();
 const statusStore = useStatusStore();
 const resolutionStore = useResolutionStore();
 
-const gtMinWidthDesktop = computed(() => resolutionStore.gtMinWidthDesktop);
-const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
+const gtMinWidthDesktop = computed<boolean>(
+  () => resolutionStore.gtMinWidthDesktop,
+);
+const gtMinWidthTablet = computed<boolean>(
+  () => resolutionStore.gtMinWidthTablet,
+);
 
 // Select options
-let availableOptionsStatus = [{ text: "All", value: "" }];
-let availableOptionsUnit = [{ text: "All", value: "" }];
-let availableOptionsUsers = [{ text: "All", value: "" }];
+let availableOptionsStatus: Array<AvailableOption> = [
+  { text: "All", value: "" },
+];
+let availableOptionsUnit: Array<AvailableOption> = [{ text: "All", value: "" }];
+let availableOptionsUsers: Array<AvailableOption> = [
+  { text: "All", value: "" },
+];
 
 // Items
-const lineIndex = ref(0);
+const lineIndex = ref<number>(0);
 
 // Dates
-let pickedExpectedDate = ref(new Date());
-let pickedDesiredDate = ref(new Date());
+let pickedExpectedDate = ref<Date>(new Date());
+let pickedDesiredDate = ref<Date>(new Date());
 
 function setOptionsStatus() {
   var tempAvailableOptions = [{ text: "All", value: "" }];
@@ -82,13 +97,13 @@ function setOptionsUsers() {
   for (let i = 0; i < usersStore.users.length; i++) {
     tempAvailableOptions.push({
       text: usersStore.users[i].full_name,
-      value: usersStore.users[i].id,
+      value: String(usersStore.users[i].id),
     });
   }
   availableOptionsUsers = tempAvailableOptions;
 }
 
-function pauseFetchBoughtItems(state) {
+function pauseFetchBoughtItems(state: boolean) {
   if (state) {
     // Wait 100ms before stopping the auto fetch routine because if the user sets the focus on another
     // element it could be possible, that the pause is reset by another element before it's set by the
@@ -101,7 +116,7 @@ function pauseFetchBoughtItems(state) {
   }
 }
 
-function multiSelect(event, id, index) {
+function multiSelect(event: any, id: number, index: number) {
   var tempSelectedItemIds = props.selectedItemIds;
 
   if (event.ctrlKey) {
@@ -142,11 +157,11 @@ function removeSelection() {
   emit("update:selectedItemIds", []);
 }
 
-function looseFocus(event) {
+function looseFocus(event: any) {
   event.target.blur();
 }
 
-function updateItemHandler(requestFn, value, desc) {
+function updateItemHandler(requestFn: Function, value: string, desc: string) {
   var c = 0;
   var confirmation = true;
   const ids = props.selectedItemIds;
@@ -179,27 +194,31 @@ function updateItemHandler(requestFn, value, desc) {
   }
 }
 
-function updateStatus(status) {
+function updateStatus(status: string) {
   updateItemHandler(boughtItemsRequest.putItemsStatus, status, "Status");
 }
 
-function updateGroup1(group) {
+function updateGroup1(group: string) {
   updateItemHandler(boughtItemsRequest.putItemsGroup1, group, "Group");
 }
 
-function updateProject(project) {
+function updateProject(project: string) {
   updateItemHandler(boughtItemsRequest.putItemsProject, project, "Project");
 }
 
-function updateMachine(machine) {
+function updateMachine(machine: string) {
   updateItemHandler(boughtItemsRequest.putItemsMachine, machine, "Machine");
 }
 
-function updateQuantity(qty) {
-  updateItemHandler(boughtItemsRequest.putItemsQuantity, qty, "Quantity");
+function updateQuantity(qty: number) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsQuantity,
+    String(qty),
+    "Quantity",
+  );
 }
 
-function updatePartnumber(partnumber) {
+function updatePartnumber(partnumber: string) {
   updateItemHandler(
     boughtItemsRequest.putItemsPartnumber,
     partnumber,
@@ -207,7 +226,7 @@ function updatePartnumber(partnumber) {
   );
 }
 
-function updateDefinition(definition) {
+function updateDefinition(definition: string) {
   updateItemHandler(
     boughtItemsRequest.putItemsDefinition,
     definition,
@@ -215,7 +234,7 @@ function updateDefinition(definition) {
   );
 }
 
-function updateManufacturer(manufacturer) {
+function updateManufacturer(manufacturer: string) {
   updateItemHandler(
     boughtItemsRequest.putItemsManufacturer,
     manufacturer,
@@ -223,11 +242,11 @@ function updateManufacturer(manufacturer) {
   );
 }
 
-function updateSupplier(supplier) {
+function updateSupplier(supplier: string) {
   updateItemHandler(boughtItemsRequest.putItemsSupplier, supplier, "Supplier");
 }
 
-function updateNoteGeneral(note) {
+function updateNoteGeneral(note: string) {
   updateItemHandler(
     boughtItemsRequest.putItemsNoteGeneral,
     note,
@@ -235,7 +254,7 @@ function updateNoteGeneral(note) {
   );
 }
 
-function updateNoteSupplier(note) {
+function updateNoteSupplier(note: string) {
   updateItemHandler(
     boughtItemsRequest.putItemsNoteSupplier,
     note,
@@ -261,7 +280,7 @@ function updateExpectedDeliveryDate() {
   );
 }
 
-function updateStorage(storage) {
+function updateStorage(storage: string) {
   updateItemHandler(
     boughtItemsRequest.putItemsStorage,
     storage,
@@ -269,23 +288,23 @@ function updateStorage(storage) {
   );
 }
 
-function setDesiredDeliveryDate(date) {
+function setDesiredDeliveryDate(date: Date) {
   if (date != null && date != undefined) {
-    pickedDesiredDate = new Date(date);
+    pickedDesiredDate.value = new Date(date);
   } else {
-    pickedDesiredDate = null;
+    pickedDesiredDate.value = null;
   }
 }
 
-function setExpectedDeliveryDate(date) {
+function setExpectedDeliveryDate(date: Date) {
   if (date != null && date != undefined) {
-    pickedExpectedDate = new Date(date);
+    pickedExpectedDate.value = new Date(date);
   } else {
-    pickedExpectedDate = null;
+    pickedExpectedDate.value = null;
   }
 }
 
-function calcDiffInWeeks(fromDate, toDate) {
+function calcDiffInWeeks(fromDate: Date, toDate: Date) {
   if (fromDate == null || toDate == null) {
     return "";
   }
@@ -294,7 +313,7 @@ function calcDiffInWeeks(fromDate, toDate) {
   return to.diff(from, "week");
 }
 
-function calcDiffInWeeksFromToday(toDate) {
+function calcDiffInWeeksFromToday(toDate: Date) {
   if (toDate == null) {
     return "";
   }
@@ -302,14 +321,14 @@ function calcDiffInWeeksFromToday(toDate) {
   return to.diff(moment(), "week");
 }
 
-function resizeTextarea(event) {
+function resizeTextarea(event: any) {
   var textarea = event.target;
   textarea.style.width = "252px";
   textarea.style.height = "20px";
   textarea.style.height = textarea.scrollHeight + "px";
 }
 
-function eventKeyUp(event) {
+function eventKeyUp(event: any) {
   if (event.key === "Escape") {
     removeSelection();
   }
@@ -338,25 +357,33 @@ watch(
 );
 
 watch(
-  filterStore.$state,
+  () => filterStore.$state,
   () => {
-    // emit("update:selectedItemIds", []);
     boughtItemsStore.get();
   },
   { deep: true },
 );
 
-watch(usersStore.$state, () => {
-  setOptionsUsers();
-});
+watch(
+  () => usersStore.$state,
+  () => {
+    setOptionsUsers();
+  },
+);
 
-watch(unitsStore.$state, () => {
-  setOptionsUnits();
-});
+watch(
+  () => unitsStore.$state,
+  () => {
+    setOptionsUnits();
+  },
+);
 
-watch(statusStore.$state, () => {
-  setOptionsStatus();
-});
+watch(
+  () => statusStore.$state,
+  () => {
+    setOptionsStatus();
+  },
+);
 </script>
 
 <template>
@@ -574,7 +601,7 @@ watch(statusStore.$state, () => {
               id="item-id"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.id = '';
+                  filterStore.state.id = null;
                 }
               "
             >
@@ -592,7 +619,7 @@ watch(statusStore.$state, () => {
               id="status"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.status = '';
+                  filterStore.state.status = null;
                 }
               "
             >
@@ -602,8 +629,8 @@ watch(statusStore.$state, () => {
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="option in availableOptionsStatus"
-                  :key="option"
+                  v-for="(option, index) in availableOptionsStatus"
+                  :key="index"
                   :value="option.value"
                 >
                   {{ option.text }}
@@ -616,7 +643,7 @@ watch(statusStore.$state, () => {
               id="project"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.project = '';
+                  filterStore.state.project = null;
                 }
               "
             >
@@ -634,7 +661,7 @@ watch(statusStore.$state, () => {
               id="machine"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.machine = '';
+                  filterStore.state.machine = null;
                 }
               "
             >
@@ -652,7 +679,7 @@ watch(statusStore.$state, () => {
               id="quantity"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.quantity = '';
+                  filterStore.state.quantity = null;
                 }
               "
             >
@@ -670,7 +697,7 @@ watch(statusStore.$state, () => {
               id="unit"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.unit = '';
+                  filterStore.state.unit = null;
                 }
               "
             >
@@ -680,8 +707,8 @@ watch(statusStore.$state, () => {
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="option in availableOptionsUnit"
-                  :key="option"
+                  v-for="(option, index) in availableOptionsUnit"
+                  :key="index"
                   :value="option.value"
                 >
                   {{ option.text }}
@@ -699,7 +726,7 @@ watch(statusStore.$state, () => {
               id="partnumber"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.partnumber = '';
+                  filterStore.state.partnumber = null;
                 }
               "
             >
@@ -716,7 +743,7 @@ watch(statusStore.$state, () => {
               id="definition"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.definition = '';
+                  filterStore.state.definition = null;
                 }
               "
             >
@@ -733,7 +760,7 @@ watch(statusStore.$state, () => {
               id="manufacturer"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.manufacturer = '';
+                  filterStore.state.manufacturer = null;
                 }
               "
             >
@@ -750,7 +777,7 @@ watch(statusStore.$state, () => {
               id="supplier"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.supplier = '';
+                  filterStore.state.supplier = null;
                 }
               "
             >
@@ -767,7 +794,7 @@ watch(statusStore.$state, () => {
               id="group"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.group1 = '';
+                  filterStore.state.group1 = null;
                 }
               "
             >
@@ -784,7 +811,7 @@ watch(statusStore.$state, () => {
               id="note-general"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.noteGeneral = '';
+                  filterStore.state.noteGeneral = null;
                 }
               "
             >
@@ -801,7 +828,7 @@ watch(statusStore.$state, () => {
               id="note-supplier"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.noteSupplier = '';
+                  filterStore.state.noteSupplier = null;
                 }
               "
             >
@@ -819,7 +846,7 @@ watch(statusStore.$state, () => {
               v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.createdDate = '';
+                  filterStore.state.createdDate = null;
                 }
               "
             >
@@ -840,7 +867,7 @@ watch(statusStore.$state, () => {
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.creatorId = '';
+                  filterStore.state.creatorId = null;
                 }
               "
             >
@@ -850,8 +877,8 @@ watch(statusStore.$state, () => {
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="option in availableOptionsUsers"
-                  :key="option"
+                  v-for="(option, index) in availableOptionsUsers"
+                  :key="index"
                   :value="option.value"
                 >
                   {{ option.text }}
@@ -863,7 +890,7 @@ watch(statusStore.$state, () => {
               id="desired"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.desiredDate = '';
+                  filterStore.state.desiredDate = null;
                 }
               "
             >
@@ -881,7 +908,7 @@ watch(statusStore.$state, () => {
               v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.requestedDate = '';
+                  filterStore.state.requestedDate = null;
                 }
               "
             >
@@ -902,7 +929,7 @@ watch(statusStore.$state, () => {
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.requesterId = '';
+                  filterStore.state.requesterId = null;
                 }
               "
             >
@@ -912,8 +939,8 @@ watch(statusStore.$state, () => {
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="option in availableOptionsUsers"
-                  :key="option"
+                  v-for="(option, index) in availableOptionsUsers"
+                  :key="index"
                   :value="option.value"
                 >
                   {{ option.text }}
@@ -926,7 +953,7 @@ watch(statusStore.$state, () => {
               v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.orderedDate = '';
+                  filterStore.state.orderedDate = null;
                 }
               "
             >
@@ -947,7 +974,7 @@ watch(statusStore.$state, () => {
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.ordererId = '';
+                  filterStore.state.ordererId = null;
                 }
               "
             >
@@ -957,8 +984,8 @@ watch(statusStore.$state, () => {
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="option in availableOptionsUsers"
-                  :key="option"
+                  v-for="(option, index) in availableOptionsUsers"
+                  :key="index"
                   :value="option.value"
                 >
                   {{ option.text }}
@@ -971,7 +998,7 @@ watch(statusStore.$state, () => {
               v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.expectedDate = '';
+                  filterStore.state.expectedDate = null;
                 }
               "
             >
@@ -989,7 +1016,7 @@ watch(statusStore.$state, () => {
               v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.deliveredDate = '';
+                  filterStore.state.deliveredDate = null;
                 }
               "
             >
@@ -1010,7 +1037,7 @@ watch(statusStore.$state, () => {
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.takeOverId = '';
+                  filterStore.state.takeOverId = null;
                 }
               "
             >
@@ -1020,8 +1047,8 @@ watch(statusStore.$state, () => {
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="option in availableOptionsUsers"
-                  :key="option"
+                  v-for="(option, index) in availableOptionsUsers"
+                  :key="index"
                   :value="option.value"
                 >
                   {{ option.text }}
@@ -1057,7 +1084,7 @@ watch(statusStore.$state, () => {
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.storagePlace = '';
+                  filterStore.state.storagePlace = null;
                 }
               "
             >
@@ -1140,14 +1167,15 @@ watch(statusStore.$state, () => {
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
-                  filterStore.status = item.status;
+                  filterStore.state.status = item.status;
                 }
               "
             >
               <Spinner v-if="statusStore.loading" />
               <select
                 v-else-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   controlsStore.state.textOnly == false
                 "
                 class="cell-select"
@@ -1155,8 +1183,8 @@ watch(statusStore.$state, () => {
                 @change="updateStatus(item.status)"
               >
                 <option
-                  v-for="option in availableOptionsStatus"
-                  :key="option"
+                  v-for="(option, index) in availableOptionsStatus"
+                  :key="index"
                   :value="option.value"
                 >
                   {{ option.text }}
@@ -1177,7 +1205,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1214,7 +1243,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1251,7 +1281,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1311,7 +1342,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1348,7 +1380,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1385,7 +1418,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1422,7 +1456,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1458,7 +1493,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1494,7 +1530,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1532,7 +1569,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1599,7 +1637,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1686,7 +1725,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
@@ -1765,7 +1805,8 @@ watch(statusStore.$state, () => {
             >
               <div
                 v-if="
-                  (userStore.is_superuser || userStore.is_adminuser) &&
+                  (userStore.user.is_superuser ||
+                    userStore.user.is_adminuser) &&
                   props.selectedItemIds.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet

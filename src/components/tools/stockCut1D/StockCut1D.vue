@@ -1,22 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 
 import { stockCut1DRequest } from "@/requests/tools";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
+
 import SolverInput from "@/components/tools/stockCut1D/SolverInput.vue";
 import SolverOutput from "@/components/tools/stockCut1D/SolverOutput.vue";
+
+import type {
+  StockCut1DResultSchema,
+  StockCut1DJobSchema,
+} from "@/schemas/stockCut1d";
 
 // Stores
 const notificationStore = useNotificationStore();
 
-const solverInput = ref({
+const solverInput = ref<StockCut1DJobSchema>({
   max_length: 1000,
   cut_width: 5,
   target_sizes: [{ length: 100, quantity: 4 }],
 });
 
-const solverOutput = ref({
-  solved: false,
+const solverOutput = ref<StockCut1DResultSchema>({
   job: {
     max_length: 0,
     cut_width: 0,
@@ -27,8 +32,8 @@ const solverOutput = ref({
   lengths: [[]],
 });
 
-const solving = ref(false);
-const solved = ref(false);
+const solving = ref<boolean>(false);
+const solved = ref<boolean>(false);
 
 function onSolve() {
   solving.value = true;

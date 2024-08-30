@@ -1,10 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
+
+import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
 
 import ControlsNew from "@/components/items/bought/ControlsNew.vue";
 import UpdateItemForm from "@/components/items/bought/UpdateItemForm.vue";
@@ -15,7 +17,7 @@ const route = useRoute();
 // Stores
 const notificationStore = useNotificationStore();
 
-const formData = ref({
+const formData = ref<BoughtItemCreateSchema>({
   high_priority: null,
   notify_on_delivery: false,
   project: null,

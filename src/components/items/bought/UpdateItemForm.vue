@@ -1,36 +1,40 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
+//@ts-ignore
 import moment from "moment";
-
-import { useUnitsStore } from "@/stores/units.js";
-
-import SelectNewUpdate from "@/components/elements/SelectNewUpdate.vue";
-
-import Toggle from "@vueform/toggle";
+import Toggle from "@vueform/toggle/dist/toggle.js";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
+import { useUnitsStore } from "@/stores/units";
+
+import type { BoughtItemUpdateSchema } from "@/schemas/boughtItem";
+
+import SelectBase from "@/components/elements/SelectBase.vue";
+
 // Props & Emits
-const props = defineProps(["formData"]);
-const emit = defineEmits(["update:formData"]);
+const props = defineProps<{
+  formData: BoughtItemUpdateSchema;
+}>();
+
+const emit = defineEmits<{
+  (e: "update:formData", v: BoughtItemUpdateSchema): void;
+}>();
 
 // Stores
 const unitStore = useUnitsStore();
 
 // Dates
-const pickedDesiredDate = ref();
-const formatDesiredDate = (pickedDesiredDate) => {
+const pickedDesiredDate = ref<Date>(null);
+const formatDesiredDate = (pickedDesiredDate: Date) => {
   const day = pickedDesiredDate.getDate();
   const month = pickedDesiredDate.getMonth() + 1;
   const year = pickedDesiredDate.getFullYear();
   return `${day}.${month}.${year}`;
 };
 
-// Form stuff
-let highPriority = false;
-
 watch(
-  props.formData,
+  () => props.formData,
   () => {
     let data = props.formData;
     if (
@@ -85,8 +89,8 @@ watch(pickedDesiredDate, () => {
           />
         </div>
         <div id="unit" class="grid-item-center">
-          <SelectNewUpdate
-            v-model:selection="formData.unit"
+          <SelectBase
+            v-model:selection="props.formData.unit"
             :options="unitStore.boughtItemUnits.values"
           />
         </div>

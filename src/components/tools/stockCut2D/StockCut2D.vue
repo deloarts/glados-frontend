@@ -1,15 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 
 import { stockCut2DRequest } from "@/requests/tools";
-import { useNotificationStore } from "@/stores/notification.js";
+import { useNotificationStore } from "@/stores/notification";
+
+import type {
+  StockCut2DJobSchema,
+  StockCut2DResultSchema,
+} from "@/schemas/stockCut2D";
+
 import SolverInput from "@/components/tools/stockCut2D/SolverInput.vue";
 import SolverOutput from "@/components/tools/stockCut2D/SolverOutput.vue";
 
 // Stores
 const notificationStore = useNotificationStore();
 
-const solverInput = ref({
+const solverInput = ref<StockCut2DJobSchema>({
   params: {
     items: [
       {
@@ -32,62 +38,10 @@ const solverInput = ref({
   method: "greedy",
 });
 
-const solverOutput = ref({
-  params: {
-    items: [
-      {
-        id: "",
-        width: 0,
-        height: 0,
-        can_rotate: true,
-      },
-    ],
-    panels: [
-      {
-        id: "",
-        width: 0,
-        height: 0,
-      },
-    ],
-    cut_width: 0,
-    min_initial_usage: true,
-  },
-  used: [
-    {
-      panel: {
-        id: "",
-        width: 0,
-        height: 0,
-      },
-      item: {
-        id: "",
-        width: 0,
-        height: 0,
-        can_rotate: true,
-      },
-      x: 0,
-      y: 0,
-      rotate: true,
-    },
-  ],
-  unused: [
-    {
-      panel: {
-        id: "",
-        width: 0,
-        height: 0,
-      },
-      x: 0,
-      y: 0,
-      width: 0,
-      height: 0,
-    },
-  ],
-  cuts: [],
-});
+const solverOutput = ref<StockCut2DResultSchema>();
 
-const solving = ref(false);
-const solved = ref(false);
+const solving = ref<boolean>(false);
+const solved = ref<boolean>(false);
 
 function onSolve() {
   solving.value = true;

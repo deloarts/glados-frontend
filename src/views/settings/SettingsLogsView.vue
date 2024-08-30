@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SettingsControls from "@/components/settings/SettingsControls.vue";
 import SettingsLogs from "@/components/settings/SettingsLogs.vue";
 </script>
@@ -8,10 +8,10 @@ import SettingsLogs from "@/components/settings/SettingsLogs.vue";
     <div class="views-content">
       <div id="grid">
         <div id="controls">
-          <SettingsControls></SettingsControls>
+          <SettingsControls />
         </div>
         <div id="display">
-          <SettingsLogs></SettingsLogs>
+          <SettingsLogs />
         </div>
       </div>
     </div>

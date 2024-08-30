@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
-// Props & Emits
 interface Props {
   text?: string;
   rotate?: boolean;

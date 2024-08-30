@@ -1,10 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
-import { useUserStore } from "@/stores/user.js";
-import { useResolutionStore } from "@/stores/resolution.js";
+import { useUserStore } from "@/stores/user";
+import { useResolutionStore } from "@/stores/resolution";
 
 import IconLogout from "@/components/icons/IconLogout.vue";
 import IconDashboard from "@/components/icons/IconDashboard.vue";
@@ -13,24 +13,25 @@ import IconAccount from "@/components/icons/IconAccount.vue";
 import IconTools from "@/components/icons/IconTools.vue";
 import IconSettings from "@/components/icons/IconSettings.vue";
 
-const props = defineProps(["title"]);
-
 // Router
 const route = useRoute();
 
 // Store
 const userStore = useUserStore();
 const resolutionStore = useResolutionStore();
-const is_adminuser = computed(() => userStore.is_adminuser);
-const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet);
+
+const is_adminuser = computed<boolean>(() => userStore.user.is_adminuser);
+const gtMinWidthTablet = computed<boolean>(
+  () => resolutionStore.gtMinWidthTablet,
+);
 
 // States
-const showLabelLogout = ref(false);
-const showLabelDashboard = ref(false);
-const showLabelBoughtItems = ref(false);
-const showLabelAccount = ref(false);
-const showLabelTools = ref(false);
-const showLabelSettings = ref(false);
+const showLabelLogout = ref<boolean>(false);
+const showLabelDashboard = ref<boolean>(false);
+const showLabelBoughtItems = ref<boolean>(false);
+const showLabelAccount = ref<boolean>(false);
+const showLabelTools = ref<boolean>(false);
+const showLabelSettings = ref<boolean>(false);
 
 function routeIsActive(currentLink) {
   let activeRoute = route.path;

@@ -1,30 +1,33 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from "vue";
 
-import { hostRequest } from "@/requests/host";
 import HostInformationItem from "@/components/settings/HostInformationItem.vue";
 import DiscSpaceChart from "@/components/settings/DiscSpaceChart.vue";
 import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
+
+import { hostRequest } from "@/requests/host";
+
+import type { DiscSpace } from "@/models/host";
 
 import IconServer from "@/components/icons/IconServer.vue";
 import IconComputer from "@/components/icons/IconComputer.vue";
 import IconWarning from "@/components/icons/IconWarning.vue";
 
-const discSpaceDatabaseDataset = ref({
+const discSpaceDatabaseDataset = ref<DiscSpace>({
   used: 1,
   free: 0,
 });
 
-const discSpaceBackupDataset = ref({
+const discSpaceBackupDataset = ref<DiscSpace>({
   used: 1,
   free: 0,
 });
 
-const os = ref("-");
-const hostname = ref("-");
-const databaseSpace = ref("-");
-const backupSpace = ref("-");
-const backupNotMounted = ref(false);
+const os = ref<string>("-");
+const hostname = ref<string>("-");
+const databaseSpace = ref<string>("-");
+const backupSpace = ref<string>("-");
+const backupNotMounted = ref<boolean>(false);
 
 function getDiscSpace() {
   hostRequest.getHostInfo().then((response) => {
@@ -117,10 +120,6 @@ onMounted(getDiscSpace);
 .scope {
   width: 100%;
   height: 100%;
-}
-
-.content {
-  // padding: 10px;
 }
 
 .wrapper {

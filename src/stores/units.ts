@@ -4,9 +4,14 @@ import { defineStore } from "pinia";
 import constants from "@/constants";
 import { hostRequest } from "@/requests/host";
 
+import type { HostConfigBoughtItemsUnitsSchema } from "@/schemas/host";
+
 export const useUnitsStore = defineStore("units", () => {
-  const loading = ref(false);
-  const boughtItemUnits = ref({ default: "", values: [] });
+  const loading = ref<boolean>(false);
+  const boughtItemUnits = ref<HostConfigBoughtItemsUnitsSchema>({
+    default: null,
+    values: [],
+  });
 
   function get() {
     console.log("Units store requesting data ...");

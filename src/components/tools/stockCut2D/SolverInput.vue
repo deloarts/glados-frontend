@@ -1,27 +1,29 @@
-<script setup>
-import { ref, computed } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
+
+import type { StockCut2DJobSchema } from "@/schemas/stockCut2D";
+
 import ButtonPlus from "@/components/elements/ButtonPlus.vue";
 import ButtonSolve from "@/components/elements/ButtonSolve.vue";
 import ButtonLoading from "@/components/elements/ButtonLoading.vue";
 import ButtonDownload from "@/components/elements/ButtonDownload.vue";
 import IconDelete from "@/components/icons/IconDelete.vue";
-import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 import SelectBase from "@/components/elements/SelectBase.vue";
-import Toggle from "@vueform/toggle";
+import Toggle from "@vueform/toggle/dist/toggle.js";
 
-const props = defineProps([
-  "solverInput",
-  "solving",
-  "solved",
-  "onSolve",
-  "onAddItem",
-  "onAddPanel",
-  "onExportPdf",
-]);
-const solverInput = computed(() => props.solverInput);
+const props = defineProps<{
+  solverInput: StockCut2DJobSchema;
+  solving: boolean;
+  solved: boolean;
+  onSolve: Function;
+  onAddItem: Function;
+  onAddPanel: Function;
+  onExportPdf: Function;
+}>();
+const solverInput = computed<StockCut2DJobSchema>(() => props.solverInput);
 const solverMethods = ["greedy", "forward_greedy"];
 
-function removePanelRow(index) {
+function removePanelRow(index: number) {
   let panels = [];
   for (var i = 0; i < solverInput.value.params.panels.length; i++) {
     if (i != index) {
@@ -35,7 +37,7 @@ function removeAllPanels() {
     { id: "Panel 1", width: 100, height: 100 },
   ];
 }
-function removeItemRow(index) {
+function removeItemRow(index: number) {
   let items = [];
   for (var i = 0; i < solverInput.value.params.items.length; i++) {
     if (i != index) {
@@ -56,17 +58,17 @@ function removeAllItems() {
     <div class="form-base-container">
       <div id="grid" class="grid-command">
         <div id="btn-add-panel">
-          <ButtonPlus v-on:click="props.onAddPanel" text="Add Panel" />
+          <ButtonPlus v-on:click="props.onAddPanel()" text="Add Panel" />
         </div>
         <div id="btn-add-item">
-          <ButtonPlus v-on:click="props.onAddItem" text="Add Item" />
+          <ButtonPlus v-on:click="props.onAddItem()" text="Add Item" />
         </div>
         <div id="btn-solve">
           <ButtonLoading v-if="props.solving" text="Solving..." />
-          <ButtonSolve v-else v-on:click="props.onSolve" text="Solve" />
+          <ButtonSolve v-else v-on:click="props.onSolve()" text="Solve" />
         </div>
         <div id="btn-export-pdf">
-          <ButtonDownload v-on:click="props.onExportPdf" text="Export PDF" />
+          <ButtonDownload v-on:click="props.onExportPdf()" text="Export PDF" />
         </div>
       </div>
     </div>
@@ -112,7 +114,7 @@ function removeAllItems() {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(panel, index) in solverInput.params.panels" :key="panel">
+          <tr v-for="(panel, index) in solverInput.params.panels" :key="index">
             <td id="panel-id" class="sticky-col">
               <input v-model="panel.id" />
             </td>
@@ -145,7 +147,7 @@ function removeAllItems() {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in solverInput.params.items" :key="item">
+          <tr v-for="(item, index) in solverInput.params.items" :key="index">
             <td id="item-id" class="sticky-col">
               <input v-model="item.id" />
             </td>

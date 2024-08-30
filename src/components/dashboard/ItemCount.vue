@@ -1,9 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import Vue3Autocounter from "vue3-autocounter";
 
 // Props & Emits
-const props = defineProps(["text", "count"]);
+const props = defineProps<{
+  text: string;
+  count: number;
+}>();
 
 let start = ref(0);
 
@@ -22,7 +25,7 @@ function setStart() {
             :endAmount="props.count"
             :duration="1"
             @finished="setStart"
-          ></Vue3Autocounter>
+          />
         </div>
         <div id="text" class="grid-item-left">
           {{ text }}

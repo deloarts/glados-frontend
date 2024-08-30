@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import ToolsControls from "@/components/tools/ToolsControls.vue";
 import StockCut1D from "@/components/tools/stockCut1D/StockCut1D.vue";
 </script>

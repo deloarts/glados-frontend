@@ -1,13 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 
-import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import SettingsUsersTable from "@/components/settings/SettingsUsersTable.vue";
 import SettingsUsersCreate from "@/components/settings/SettingsUsersCreate.vue";
 import SettingsUsersUpdate from "@/components/settings/SettingsUsersUpdate.vue";
 
-const selectedUserID = ref(0);
-const mode = ref("create");
+const selectedUserID = ref<number>(0);
+const mode = ref<string>("create");
 
 watch(selectedUserID, () => {
   if (selectedUserID.value == 0) {

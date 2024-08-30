@@ -1,15 +1,16 @@
-<script setup>
-import { ref, nextTick, watch, onMounted, onBeforeUnmount } from "vue";
+<script setup lang="ts">
+import { ref, nextTick, onMounted, onBeforeUnmount } from "vue";
+// @ts-ignore
 import moment from "moment";
 
 import { logsRequest } from "@/requests/logs";
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 
-const windowWidth = ref(window.innerWidth);
-const loading = ref(false);
-const logfiles = ref([]);
-const logfile = ref("");
-const content = ref([]);
+const windowWidth = ref<number>(window.innerWidth);
+const loading = ref<boolean>(false);
+const logfiles = ref<Array<string>>([]);
+const logfile = ref<string>("");
+const content = ref<Array<string>>([]);
 
 function onResize() {
   windowWidth.value = window.innerWidth;
@@ -29,7 +30,7 @@ function getLogs() {
     });
 }
 
-function getLog(filename) {
+function getLog(filename: string) {
   if (logfile.value == filename) {
     logfile.value = "";
     content.value = [];
@@ -49,7 +50,7 @@ function getLog(filename) {
   }
 }
 
-function format(line, type) {
+function format(line: string, type: string) {
   let splitted = line.split("\t");
   if (type == "date") {
     return splitted[0];
@@ -64,7 +65,7 @@ function format(line, type) {
   }
 }
 
-function isDate(line) {
+function isDate(line: string) {
   let date = moment(line.split("\t")[0]);
   if (date.isValid()) {
     return true;

@@ -1,10 +1,12 @@
 import { ref, watch, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
+import type { BoughtItemControls } from "@/models/controls";
+
 export const useBoughtItemsControlsStore = defineStore(
   "boughtItemsControls",
   () => {
-    const state = ref({
+    const state = ref<BoughtItemControls>({
       changelog: false,
       rainbow: false,
       textOnly: false,

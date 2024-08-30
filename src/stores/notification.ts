@@ -2,8 +2,8 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useNotificationStore = defineStore("notification", () => {
-  const info = ref("");
-  const warning = ref("");
+  const info = ref<string>("");
+  const warning = ref<string>("");
 
   function clearInfo() {
     info.value = "";

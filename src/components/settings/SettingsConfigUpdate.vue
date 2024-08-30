@@ -1,30 +1,36 @@
-<script setup>
-import { ref, computed, watch, onMounted } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
 import { hostRequest } from "@/requests/host";
-import { useNotificationStore } from "@/stores/notification.js";
-import { useBoughtItemFilterStore } from "@/stores/filter.js";
+import { useNotificationStore } from "@/stores/notification";
+import { useBoughtItemFilterStore } from "@/stores/filter";
+
+import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+
 import Prompt from "@/components/main/Prompt.vue";
 import ButtonSave from "@/components/elements/ButtonSave.vue";
 import ButtonDelete from "@/components/elements/ButtonDelete.vue";
 
 // Props & Emits
-const props = defineProps([
-  "selectedConfigValue",
-  "selectedConfigName",
-  "selectedConfigCategory",
-]);
-const emit = defineEmits([
-  "update:selectedConfigName",
-  "update:selectedConfigCategory",
-]);
+const props = defineProps<{
+  selectedConfigValue: HostConfigBoughtItemsFilterSchema;
+  selectedConfigName: string;
+  selectedConfigCategory: string;
+}>();
+const emit = defineEmits<{
+  (e: "update:selectedConfigValue", v: HostConfigBoughtItemsFilterSchema): void;
+  (e: "update:selectedConfigName", v: string): void;
+  (e: "update:selectedConfigCategory", v: string): void;
+}>();
 
 // Stores
 const notificationStore = useNotificationStore();
 const boughtItemsFilterStore = useBoughtItemFilterStore();
 
-const showDeletePrompt = ref(false);
-const defaultJson = ref(props.selectedConfigValue);
+const showDeletePrompt = ref<boolean>(false);
+const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(
+  props.selectedConfigValue,
+);
 
 function updateConfig() {
   let data = defaultJson.value;
@@ -81,14 +87,7 @@ watch(
           <ButtonSave v-on:click="updateConfig" text="Update" />
         </div>
         <div id="btn-delete">
-          <ButtonDelete
-            v-on:click="
-              {
-                showDeletePrompt = 'true';
-              }
-            "
-            text="Delete"
-          />
+          <ButtonDelete v-on:click="showDeletePrompt = true" text="Delete" />
         </div>
       </div>
     </div>

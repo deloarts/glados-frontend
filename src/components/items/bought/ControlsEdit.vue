@@ -1,15 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
-import { useNotificationStore } from "@/stores/notification.js";
-import { useBoughtItemsStore } from "@/stores/boughtItems.js";
+import { useNotificationStore } from "@/stores/notification";
+import { useBoughtItemsStore } from "@/stores/boughtItems";
+
+import type { BoughtItemUpdateSchema } from "@/schemas/boughtItem";
 
 import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
 import ButtonAbort from "@/components/elements/ButtonAbort.vue";
 
-const props = defineProps(["formData"]);
+const props = defineProps<{
+  formData: BoughtItemUpdateSchema;
+}>();
 
 // Router
 const route = useRoute();
@@ -19,7 +23,7 @@ const notificationStore = useNotificationStore();
 const boughtItemsStore = useBoughtItemsStore();
 
 function onUpdate() {
-  const itemId = route.params.id;
+  const itemId = Number(route.params.id);
   boughtItemsRequest
     .putItems(itemId, props.formData)
     .then((response) => {

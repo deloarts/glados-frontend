@@ -4,9 +4,9 @@ import { defineStore } from "pinia";
 import constants from "@/constants";
 
 export const useResolutionStore = defineStore("resolution", () => {
-  const gtMinWidth = ref(false);
-  const gtMinWidthTablet = ref(false);
-  const gtMinWidthDesktop = ref(false);
+  const gtMinWidth = ref<boolean>(false);
+  const gtMinWidthTablet = ref<boolean>(false);
+  const gtMinWidthDesktop = ref<boolean>(false);
 
   function onResize() {
     if (window.innerWidth >= constants.minWidth) {

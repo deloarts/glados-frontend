@@ -1,8 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, watch } from "vue";
 
+import type { StockCut2DResultSchema } from "@/schemas/stockCut2D";
+
 // Props & Emits
-const props = defineProps(["solverOutput"]);
+const props = defineProps<{
+  solverOutput: StockCut2DResultSchema;
+}>();
 
 onMounted(() => {});
 watch(
@@ -26,7 +30,7 @@ watch(
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(used, index) in solverOutput.used" :key="used">
+          <tr v-for="(used, index) in solverOutput.used" :key="index">
             <td id="panel-id" class="sticky-col">
               {{ used.panel.id }}
             </td>

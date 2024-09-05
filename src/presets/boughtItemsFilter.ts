@@ -29,5 +29,5 @@ export const boughtItemsFilter = {
   noteGeneral: "",
   noteSupplier: "",
   storagePlace: "",
-  takeOverId: "",
+  receiverId: "",
 };

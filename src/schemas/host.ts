@@ -45,5 +45,5 @@ export interface HostConfigBoughtItemsFilterSchema {
   noteGeneral: string;
   noteSupplier: string;
   storagePlace: string;
-  takeOverId: number;
+  receiverId: number;
 }

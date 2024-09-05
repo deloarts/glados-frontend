@@ -44,7 +44,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     noteGeneral: null,
     noteSupplier: null,
     storagePlace: null,
-    takeOverId: null,
+    receiverId: null,
   });
 
   function reset() {
@@ -79,7 +79,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
       noteGeneral: null,
       noteSupplier: null,
       storagePlace: null,
-      takeOverId: null,
+      receiverId: null,
     };
     console.log("Reset bought items filter");
   }
@@ -134,7 +134,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
         noteGeneral: p.noteGeneral,
         noteSupplier: p.noteSupplier,
         storagePlace: p.storagePlace,
-        takeOverId: p.takeOverId,
+        receiverId: p.receiverId,
       };
     }
   }

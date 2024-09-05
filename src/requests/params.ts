@@ -97,8 +97,8 @@ export function getFilterParams(filter: any) {
   if (filter.storagePlace != "" && filter.storagePlace != undefined) {
     params.append("storage_place", filter.storagePlace);
   }
-  if (filter.takeOverId != "" && filter.takeOverId != undefined) {
-    params.append("taken_over_id", filter.takeOverId);
+  if (filter.receiverId != "" && filter.receiverId != undefined) {
+    params.append("receiver_id", filter.receiverId);
   }
 
   return params;

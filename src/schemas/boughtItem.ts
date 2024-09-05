@@ -23,7 +23,7 @@ export interface BoughtItemSchema {
   orderer_id: number | null;
   ordered_date: Date | null;
   expected_delivery_date: Date | null;
-  taken_over_id: number | null;
+  receiver_id: number | null;
   delivery_date: Date | null;
   storage_place: string | null;
 }

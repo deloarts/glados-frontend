@@ -549,7 +549,7 @@ watch(
                 !controlsStore.state.requestView
               "
             >
-              Taken by
+              Receiver
             </th>
             <th
               class="first"
@@ -1037,13 +1037,13 @@ watch(
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.takeOverId = null;
+                  filterStore.state.receiverId = null;
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.state.takeOverId"
+                v-model="filterStore.state.receiverId"
                 @change="boughtItemsStore.get()"
               >
                 <option
@@ -1763,14 +1763,14 @@ watch(
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.takeOverId = item.taken_over_id;
+                  filterStore.state.receiverId = item.receiver_id;
                 }
               "
             >
               <div
                 v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
-                {{ usersStore.getNameByID(item.taken_over_id) }}
+                {{ usersStore.getNameByID(item.receiver_id) }}
               </div>
             </td>
             <td

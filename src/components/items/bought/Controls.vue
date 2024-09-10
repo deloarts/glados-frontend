@@ -10,7 +10,7 @@ import { useNotificationStore } from "@/stores/notification";
 import { useUserStore } from "@/stores/user";
 import { useResolutionStore } from "@/stores/resolution";
 import { boughtItemsRequest } from "@/requests/items";
-import { getFilterParams } from "@/requests/params";
+import { getBoughtItemsFilterParams } from "@/requests/params";
 import { capitalizeFirstLetter } from "@/helper/string.helper";
 
 import ExcelImport from "@/components/items/bought/ExcelImport.vue";
@@ -155,7 +155,7 @@ function onButtonDelete() {
 }
 
 function onButtonDownloadExcel() {
-  const params = getFilterParams(filterStore.state);
+  const params = getBoughtItemsFilterParams(filterStore.state);
   boughtItemsRequest.getItemsExcel(params).then((response) => {
     let blob = new Blob([response.data], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -191,7 +191,7 @@ function onButtonClear() {
 }
 
 function setupMobileView() {
-  if (!gtMinWidthTablet) {
+  if (!gtMinWidthTablet.value) {
     controlsStore.state.unclutter = true;
     controlsStore.state.requestView = false;
     controlsStore.state.textOnly = false;
@@ -200,7 +200,7 @@ function setupMobileView() {
 }
 
 function setupTabletView() {
-  if (!gtMinWidthDesktop) {
+  if (!gtMinWidthDesktop.value) {
     controlsStore.state.requestView = false;
     controlsStore.state.textOnly = false;
     controlsStore.state.lockCols = false;

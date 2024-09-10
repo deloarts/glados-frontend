@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed, onBeforeMount } from "vue";
 //@ts-ignore
 import moment from "moment";
 import Toggle from "@vueform/toggle/dist/toggle.js";
@@ -7,10 +7,13 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
 import { useUnitsStore } from "@/stores/units";
+import { useProjectsStore } from "@/stores/projects";
 
 import type { BoughtItemUpdateSchema } from "@/schemas/boughtItem";
+import type { AvailableOption } from "@/models/controls";
 
 import SelectBase from "@/components/elements/SelectBase.vue";
+import SelectProject from "@/components/elements/SelectProject.vue";
 
 // Props & Emits
 const props = defineProps<{
@@ -21,8 +24,15 @@ const emit = defineEmits<{
   (e: "update:formData", v: BoughtItemUpdateSchema): void;
 }>();
 
+// Computed
+const updateFormData = computed<BoughtItemUpdateSchema>(() => props.formData);
+
 // Stores
 const unitStore = useUnitsStore();
+const projectsStore = useProjectsStore();
+
+// Options
+let availableOptionsProjects: Array<AvailableOption> = [];
 
 // Dates
 const pickedDesiredDate = ref<Date>(null);
@@ -33,10 +43,28 @@ const formatDesiredDate = (pickedDesiredDate: Date) => {
   return `${day}.${month}.${year}`;
 };
 
+function setOptionsProjects() {
+  var temp = [];
+  for (let i = 0; i < projectsStore.projects.length; i++) {
+    if (projectsStore.projects[i].is_active) {
+      temp.push({
+        text: `${projectsStore.projects[i].number} - ${projectsStore.projects[i].customer} - ${projectsStore.projects[i].description}`,
+        value: projectsStore.projects[i].id,
+      });
+    } else if (projectsStore.projects[i].id == props.formData.project_id) {
+      temp.push({
+        text: `(INACTIVE) ${projectsStore.projects[i].number} - ${projectsStore.projects[i].customer} - ${projectsStore.projects[i].description}`,
+        value: projectsStore.projects[i].id,
+      });
+    }
+  }
+  availableOptionsProjects = temp;
+}
+
 watch(
-  () => props.formData,
+  () => updateFormData,
   () => {
-    let data = props.formData;
+    let data = updateFormData.value;
     if (
       data.desired_delivery_date != null &&
       data.desired_delivery_date != undefined
@@ -50,7 +78,7 @@ watch(
 );
 
 watch(pickedDesiredDate, () => {
-  let data = props.formData;
+  let data = updateFormData.value;
   if (pickedDesiredDate.value instanceof Date) {
     data.desired_delivery_date = moment(pickedDesiredDate.value).format(
       "YYYY-MM-DD",
@@ -60,6 +88,16 @@ watch(pickedDesiredDate, () => {
   }
   emit("update:formData", data);
 });
+
+watch(
+  () => projectsStore.$state,
+  () => {
+    setOptionsProjects();
+  },
+  { deep: true },
+);
+
+onBeforeMount(setOptionsProjects);
 </script>
 
 <template>
@@ -67,72 +105,72 @@ watch(pickedDesiredDate, () => {
     <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="props.formData.project"
-            placeholder="Project *"
+          <SelectProject
+            v-model:selection="updateFormData.project_id"
+            :options="availableOptionsProjects"
           />
         </div>
         <div id="machine" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.machine"
+            v-bind:value="projectsStore.getMachine(updateFormData.project_id)"
             placeholder="Machine"
+            readonly
           />
         </div>
         <div id="quantity" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.quantity"
+            v-model="updateFormData.quantity"
             type="number"
             placeholder="Quantity *"
           />
         </div>
         <div id="unit" class="grid-item-center">
           <SelectBase
-            v-model:selection="props.formData.unit"
+            v-model:selection="updateFormData.unit"
             :options="unitStore.boughtItemUnits.values"
           />
         </div>
         <div id="partnumber" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.partnumber"
+            v-model="updateFormData.partnumber"
             placeholder="Partnumber *"
           />
         </div>
         <div id="definition" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.definition"
+            v-model="updateFormData.definition"
             placeholder="Definition *"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.manufacturer"
+            v-model="updateFormData.manufacturer"
             placeholder="Manufacturer *"
           />
         </div>
         <div id="supplier" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.supplier"
+            v-model="updateFormData.supplier"
             placeholder="Supplier"
           />
         </div>
         <div id="group" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.group_1"
+            v-model="updateFormData.group_1"
             placeholder="Group"
           />
         </div>
         <div id="weblink" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="props.formData.weblink"
+            v-model="updateFormData.weblink"
             placeholder="Weblink"
           />
         </div>
@@ -149,23 +187,23 @@ watch(pickedDesiredDate, () => {
         <div id="note-general" class="grid-item-center">
           <textarea
             class="form-base-text-input-multiline"
-            v-model="props.formData.note_general"
+            v-model="updateFormData.note_general"
             placeholder="Note"
           ></textarea>
         </div>
         <div id="note-supplier" class="grid-item-center">
           <textarea
             class="form-base-text-input-multiline"
-            v-model="props.formData.note_supplier"
+            v-model="updateFormData.note_supplier"
             placeholder="Note Supplier"
           ></textarea>
         </div>
         <div id="notify" class="grid-item-center">
-          <Toggle v-model="props.formData.notify_on_delivery"></Toggle>
+          <Toggle v-model="updateFormData.notify_on_delivery"></Toggle>
         </div>
         <div id="notify-text" class="grid-item-left">Notify me on delivery</div>
         <div id="priority" class="grid-item-center">
-          <Toggle v-model="props.formData.high_priority"></Toggle>
+          <Toggle v-model="updateFormData.high_priority"></Toggle>
         </div>
         <div id="priority-text" class="grid-item-left">High priority</div>
       </div>

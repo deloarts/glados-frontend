@@ -17,7 +17,7 @@ export const boughtItemsFilter = {
   sortBy: "id",
   id: "",
   status: "",
-  project: "",
+  projectNumber: "",
   machine: "",
   quantity: "",
   unit: "",

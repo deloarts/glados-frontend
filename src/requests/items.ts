@@ -70,20 +70,11 @@ export class BoughtItemsRequest {
       null,
     );
   }
-  putItemsProject(id: Number, project: any) {
+  putItemsProject(id: Number, project_number: string) {
     const params = new URLSearchParams();
-    params.append("project", project);
+    params.append("project_number", project_number);
     return request.put(
       `/api/web/v1/items/bought/${id}/project/`,
-      requestConfig(params),
-      null,
-    );
-  }
-  putItemsMachine(id: Number, machine: any) {
-    const params = new URLSearchParams();
-    params.append("machine", machine);
-    return request.put(
-      `/api/web/v1/items/bought/${id}/machine/`,
       requestConfig(params),
       null,
     );

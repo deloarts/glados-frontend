@@ -5,7 +5,9 @@ export interface BoughtItemSchema {
   creator_id: number;
   high_priority: boolean;
   notify_on_delivery: boolean;
-  project: string;
+  project_id: number;
+  project_number: string;
+  project_is_active: boolean;
   machine: string | null;
   quantity: number;
   unit: string;
@@ -29,13 +31,12 @@ export interface BoughtItemSchema {
 }
 
 export interface BoughtItemCreateSchema {
-  project: string;
+  project_id: number;
   partnumber: string;
   definition: string;
   manufacturer: string;
   quantity: number;
   unit: string;
-  machine?: string;
   supplier?: string;
   group_1?: string;
   weblink?: string;
@@ -47,13 +48,12 @@ export interface BoughtItemCreateSchema {
 }
 
 export interface BoughtItemUpdateSchema {
-  project: string;
+  project_id: number;
   partnumber: string;
   definition: string;
   manufacturer: string;
   quantity: number;
   unit: string;
-  machine?: string;
   supplier?: string;
   group_1?: string;
   weblink?: string;

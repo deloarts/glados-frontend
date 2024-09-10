@@ -1,74 +1,78 @@
-export function getFilterParams(filter: any) {
+import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+
+export function getBoughtItemsFilterParams(
+  filter: HostConfigBoughtItemsFilterSchema,
+) {
   const params = new URLSearchParams();
 
   if (filter.limit != "" && filter.limit != undefined) {
     params.append("limit", filter.limit);
   }
   if (filter.ignoreDelivered) {
-    params.append("ignore_delivered", filter.ignoreDelivered);
+    params.append("ignore_delivered", String(filter.ignoreDelivered));
   }
   if (filter.ignoreCanceled) {
-    params.append("ignore_canceled", filter.ignoreCanceled);
+    params.append("ignore_canceled", String(filter.ignoreCanceled));
   }
   if (filter.ignoreLost) {
-    params.append("ignore_lost", filter.ignoreLost);
+    params.append("ignore_lost", String(filter.ignoreLost));
   }
   if (filter.highPriority) {
-    params.append("high_priority", filter.highPriority);
+    params.append("high_priority", String(filter.highPriority));
   }
-  if (filter.creatorId != "" && filter.creatorId != undefined) {
-    params.append("creator_id", filter.creatorId);
+  if (String(filter.creatorId) != "" && filter.creatorId != undefined) {
+    params.append("creator_id", String(filter.creatorId));
   }
   if (filter.createdDate) {
-    params.append("created_from", filter.createdDate);
-    params.append("created_to", filter.createdDate);
+    params.append("created_from", String(filter.createdDate));
+    params.append("created_to", String(filter.createdDate));
   }
   if (filter.changedDateFrom) {
-    params.append("changed_from", filter.changedDateFrom);
+    params.append("changed_from", String(filter.changedDateFrom));
   }
   if (filter.desiredDate) {
-    params.append("desired_from", filter.desiredDate);
-    params.append("desired_to", filter.desiredDate);
+    params.append("desired_from", String(filter.desiredDate));
+    params.append("desired_to", String(filter.desiredDate));
   }
-  if (filter.requesterId != "" && filter.requesterId != undefined) {
-    params.append("requester_id", filter.requesterId);
+  if (String(filter.requesterId) != "" && filter.requesterId != undefined) {
+    params.append("requester_id", String(filter.requesterId));
   }
   if (filter.requestedDate) {
-    params.append("requested_from", filter.requestedDate);
-    params.append("requested_to", filter.requestedDate);
+    params.append("requested_from", String(filter.requestedDate));
+    params.append("requested_to", String(filter.requestedDate));
   }
-  if (filter.ordererId != "" && filter.ordererId != undefined) {
-    params.append("orderer_id", filter.ordererId);
+  if (String(filter.ordererId) != "" && filter.ordererId != undefined) {
+    params.append("orderer_id", String(filter.ordererId));
   }
   if (filter.orderedDate) {
-    params.append("ordered_from", filter.orderedDate);
-    params.append("ordered_to", filter.orderedDate);
+    params.append("ordered_from", String(filter.orderedDate));
+    params.append("ordered_to", String(filter.orderedDate));
   }
   if (filter.expectedDate) {
-    params.append("expected_from", filter.expectedDate);
-    params.append("expected_to", filter.expectedDate);
+    params.append("expected_from", String(filter.expectedDate));
+    params.append("expected_to", String(filter.expectedDate));
   }
   if (filter.deliveredDate) {
-    params.append("delivered_from", filter.deliveredDate);
-    params.append("delivered_to", filter.deliveredDate);
+    params.append("delivered_from", String(filter.deliveredDate));
+    params.append("delivered_to", String(filter.deliveredDate));
   }
   if (filter.sortBy != "" && filter.sortBy != undefined) {
     params.append("sort_by", filter.sortBy);
   }
-  if (filter.id != "" && filter.id != undefined) {
-    params.append("id", filter.id);
+  if (String(filter.id) != "" && filter.id != undefined) {
+    params.append("id", String(filter.id));
   }
   if (filter.status != "" && filter.status != undefined) {
     params.append("status", filter.status);
   }
-  if (filter.project != "" && filter.project != undefined) {
-    params.append("project", filter.project);
+  if (filter.projectNumber != "" && filter.projectNumber != undefined) {
+    params.append("project_number", filter.projectNumber);
   }
   if (filter.machine != "" && filter.machine != undefined) {
     params.append("machine", filter.machine);
   }
-  if (filter.quantity != "" && filter.quantity != undefined) {
-    params.append("quantity", filter.quantity);
+  if (String(filter.quantity) != "" && filter.quantity != undefined) {
+    params.append("quantity", String(filter.quantity));
   }
   if (filter.unit != "" && filter.unit != undefined) {
     params.append("unit", filter.unit);
@@ -97,8 +101,8 @@ export function getFilterParams(filter: any) {
   if (filter.storagePlace != "" && filter.storagePlace != undefined) {
     params.append("storage_place", filter.storagePlace);
   }
-  if (filter.receiverId != "" && filter.receiverId != undefined) {
-    params.append("receiver_id", filter.receiverId);
+  if (String(filter.receiverId) != "" && filter.receiverId != undefined) {
+    params.append("receiver_id", String(filter.receiverId));
   }
 
   return params;

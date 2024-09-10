@@ -1,27 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
+import type { ProjectCreateSchema } from "@/schemas/project";
 
-import ControlsNew from "@/components/items/bought/ControlsNew.vue";
-import CreateItemForm from "@/components/items/bought/CreateItemForm.vue";
+import ControlsNew from "@/components/projects/ControlsNew.vue";
+import CreateForm from "@/components/projects/CreateForm.vue";
 
-// Form stuff
-const formData = ref<BoughtItemCreateSchema>({
-  high_priority: false,
-  notify_on_delivery: false,
-  project_id: null,
-  quantity: null,
-  unit: null,
-  partnumber: null,
-  definition: null,
-  supplier: null,
-  manufacturer: null,
-  group_1: null,
-  weblink: null,
-  note_general: null,
-  note_supplier: null,
-  desired_delivery_date: null,
+const formData = ref<ProjectCreateSchema>({
+  number: null,
+  machine: null,
+  customer: null,
+  description: null,
+  designated_user_id: null,
+  is_active: true,
 });
 </script>
 
@@ -33,7 +24,7 @@ const formData = ref<BoughtItemCreateSchema>({
           <ControlsNew v-model:form-data="formData" />
         </div>
         <div id="data">
-          <CreateItemForm v-model:form-data="formData" />
+          <CreateForm v-model:form-data="formData" />
         </div>
       </div>
     </div>

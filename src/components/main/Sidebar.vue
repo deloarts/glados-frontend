@@ -8,6 +8,7 @@ import { useResolutionStore } from "@/stores/resolution";
 
 import IconLogout from "@/components/icons/IconLogout.vue";
 import IconDashboard from "@/components/icons/IconDashboard.vue";
+import IconProject from "@/components/icons/IconProject.vue";
 import IconItems from "@/components/icons/IconItems.vue";
 import IconAccount from "@/components/icons/IconAccount.vue";
 import IconTools from "@/components/icons/IconTools.vue";
@@ -28,6 +29,7 @@ const gtMinWidthTablet = computed<boolean>(
 // States
 const showLabelLogout = ref<boolean>(false);
 const showLabelDashboard = ref<boolean>(false);
+const showLabelProjects = ref<boolean>(false);
 const showLabelBoughtItems = ref<boolean>(false);
 const showLabelAccount = ref<boolean>(false);
 const showLabelTools = ref<boolean>(false);
@@ -75,6 +77,16 @@ function logout() {
         <IconDashboard v-bind:class="{ active: routeIsActive('/dashboard') }" />
         <Transition>
           <div v-if="showLabelDashboard" class="label">Dashboard</div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/projects'"
+        @mouseover="showLabelProjects = true"
+        @mouseleave="showLabelProjects = false"
+      >
+        <IconProject v-bind:class="{ active: routeIsActive('/projects') }" />
+        <Transition>
+          <div v-if="showLabelProjects" class="label">Projects</div>
         </Transition>
       </router-link>
       <router-link

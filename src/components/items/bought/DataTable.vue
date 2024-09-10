@@ -264,7 +264,7 @@ function updateNoteSupplier(note: string) {
 }
 
 function updateDesiredDeliveryDate() {
-  const formattedDate = moment(pickedDesiredDate).format("YYYY-MM-DD");
+  const formattedDate = moment(pickedDesiredDate.value).format("YYYY-MM-DD");
   updateItemHandler(
     boughtItemsRequest.putItemsDesiredDeliveryDate,
     formattedDate,
@@ -273,7 +273,7 @@ function updateDesiredDeliveryDate() {
 }
 
 function updateExpectedDeliveryDate() {
-  const formattedDate = moment(pickedExpectedDate).format("YYYY-MM-DD");
+  const formattedDate = moment(pickedExpectedDate.value).format("YYYY-MM-DD");
   updateItemHandler(
     boughtItemsRequest.putItemsExpectedDeliveryDate,
     formattedDate,

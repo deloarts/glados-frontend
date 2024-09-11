@@ -127,7 +127,8 @@ onMounted(() => {
         <div id="project" class="grid-item-center">
           <SelectProject
             v-model:selection="createFormData.project_id"
-            :options="availableOptionsProjects"
+            :options-active="availableOptionsProjects"
+            :options-inactive="[]"
           />
         </div>
         <div id="machine" class="grid-item-center">

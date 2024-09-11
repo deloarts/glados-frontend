@@ -31,9 +31,7 @@ const notificationStore = useNotificationStore();
 const resolutionStore = useResolutionStore();
 const userStore = useUserStore();
 
-const enableControls = computed<boolean>(
-  () => userStore.user.is_systemuser || userStore.user.is_adminuser,
-);
+const enableControls = computed<boolean>(() => !userStore.user.is_guestuser);
 const gtMinWidthDesktop = computed<boolean>(
   () => resolutionStore.gtMinWidthDesktop,
 );

@@ -32,7 +32,8 @@ const unitStore = useUnitsStore();
 const projectsStore = useProjectsStore();
 
 // Options
-let availableOptionsProjects: Array<AvailableOption> = [];
+let availableOptionsProjectsActive: Array<AvailableOption> = [];
+let availableOptionsProjectsInactive: Array<AvailableOption> = [];
 
 // Dates
 const pickedDesiredDate = ref<Date>(null);
@@ -44,21 +45,23 @@ const formatDesiredDate = (pickedDesiredDate: Date) => {
 };
 
 function setOptionsProjects() {
-  var temp = [];
+  var tempActive = [];
+  var tempInactive = [];
   for (let i = 0; i < projectsStore.projects.length; i++) {
     if (projectsStore.projects[i].is_active) {
-      temp.push({
+      tempActive.push({
         text: `${projectsStore.projects[i].number} - ${projectsStore.projects[i].customer} - ${projectsStore.projects[i].description}`,
         value: projectsStore.projects[i].id,
       });
-    } else if (projectsStore.projects[i].id == props.formData.project_id) {
-      temp.push({
-        text: `(INACTIVE) ${projectsStore.projects[i].number} - ${projectsStore.projects[i].customer} - ${projectsStore.projects[i].description}`,
+    } else {
+      tempInactive.push({
+        text: `${projectsStore.projects[i].number} - ${projectsStore.projects[i].customer} - ${projectsStore.projects[i].description}`,
         value: projectsStore.projects[i].id,
       });
     }
   }
-  availableOptionsProjects = temp;
+  availableOptionsProjectsActive = tempActive;
+  availableOptionsProjectsInactive = tempInactive;
 }
 
 watch(
@@ -107,7 +110,8 @@ onBeforeMount(setOptionsProjects);
         <div id="project" class="grid-item-center">
           <SelectProject
             v-model:selection="updateFormData.project_id"
-            :options="availableOptionsProjects"
+            :options-active="availableOptionsProjectsActive"
+            v-bind:options-inactive="availableOptionsProjectsInactive"
           />
         </div>
         <div id="machine" class="grid-item-center">

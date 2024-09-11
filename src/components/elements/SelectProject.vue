@@ -3,7 +3,8 @@ import type { AvailableOption } from "@/models/controls";
 
 const props = defineProps<{
   selection: number;
-  options: Array<AvailableOption>;
+  optionsActive: Array<AvailableOption>;
+  optionsInactive: Array<AvailableOption>;
 }>();
 
 const emit = defineEmits<{
@@ -20,7 +21,16 @@ function onChange(event) {
     <select v-model="props.selection" @change="onChange">
       <option value="null" disabled selected hidden>Project</option>
       <option
-        v-for="option in props.options"
+        v-for="option in props.optionsActive"
+        :key="option.text"
+        :value="option.value"
+      >
+        {{ option.text }}
+      </option>
+      <option
+        hidden
+        disabled
+        v-for="option in props.optionsInactive"
         :key="option.text"
         :value="option.value"
       >

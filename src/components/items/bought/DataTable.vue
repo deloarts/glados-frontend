@@ -182,7 +182,7 @@ function updateItemHandler(requestFn: Function, value: string, desc: string) {
       const id = ids[i];
       requestFn(id, value).then((response) => {
         c++;
-        if (response.status == 403) {
+        if (response.status != 200) {
           notificationStore.warning = response.data.detail;
         }
         if (c == ids.length) {

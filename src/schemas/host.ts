@@ -33,7 +33,7 @@ export interface HostConfigBoughtItemsFilterSchema {
   sortBy: string;
   id: number;
   status: string;
-  project: string;
+  projectNumber: string;
   machine: string;
   quantity: number;
   unit: string;
@@ -45,5 +45,5 @@ export interface HostConfigBoughtItemsFilterSchema {
   noteGeneral: string;
   noteSupplier: string;
   storagePlace: string;
-  takeOverId: number;
+  receiverId: number;
 }

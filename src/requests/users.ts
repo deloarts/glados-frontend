@@ -1,4 +1,5 @@
-import { request, requestConfig, requestConfigXlsxDownload } from "./index";
+import { request, requestConfig } from "./index";
+import type { UserCreateSchema, UserUpdateSchema } from "@/schemas/user";
 import config from "@/config";
 
 export class UsersRequest {
@@ -14,15 +15,15 @@ export class UsersRequest {
   }
 
   // POST
-  postUsers(data: object) {
+  postUsers(data: UserCreateSchema) {
     return request.post("/api/web/v1/users/", requestConfig(null), data);
   }
 
   // PUT
-  putUsers(id: Number, data: any) {
+  putUsers(id: Number, data: UserUpdateSchema) {
     return request.put(`/api/web/v1/users/${id}/`, requestConfig(null), data);
   }
-  putUsersMe(data: any) {
+  putUsersMe(data: UserUpdateSchema) {
     return request.put(`/api/web/v1/users/me/`, requestConfig(null), data);
   }
   putUsersMePAT() {

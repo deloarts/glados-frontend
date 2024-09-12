@@ -10,6 +10,10 @@ import RedirectAccount from "@/components/main/RedirectAccount.vue";
 import RedirectTools from "@/components/main/RedirectTools.vue";
 import LoginView from "@/views/LoginView.vue";
 import DashboardView from "@/views/dashboard/DashboardView.vue";
+import ProjectsView from "@/views/projectsView/ProjectsView.vue";
+import ProjectsNewView from "@/views/projectsView/ProjectsNewView.vue";
+import ProjectsEditView from "@/views/projectsView/ProjectsEditView.vue";
+import ProjectsCopyView from "@/views/projectsView/ProjectsCopyView.vue";
 import ItemsBoughtView from "@/views/items/bought/ItemsBoughtView.vue";
 import ItemsBoughtNewView from "@/views/items/bought/ItemsBoughtNewView.vue";
 import ItemsBoughtCopyView from "@/views/items/bought/ItemsBoughtCopyView.vue";
@@ -37,6 +41,26 @@ const router = createRouter({
       path: "/dashboard",
       name: "Dashboard",
       component: DashboardView,
+    },
+    {
+      path: "/projects",
+      name: "Projects",
+      component: ProjectsView,
+    },
+    {
+      path: "/projects/new",
+      name: "NewProject",
+      component: ProjectsNewView,
+    },
+    {
+      path: "/projects/edit/:id",
+      name: "EditProject",
+      component: ProjectsEditView,
+    },
+    {
+      path: "/projects/copy/:id",
+      name: "CopyProject",
+      component: ProjectsCopyView,
     },
     {
       path: "/items",

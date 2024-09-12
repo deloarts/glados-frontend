@@ -42,7 +42,7 @@ function onSelect(id: number) {
         </thead>
         <tbody>
           <tr
-            v-for="(user, index) in usersStore.users"
+            v-for="user in usersStore.users"
             :key="user.id"
             v-on:click="onSelect(user.id)"
             v-bind:class="{ selected: props.selectedUserID == user.id }"

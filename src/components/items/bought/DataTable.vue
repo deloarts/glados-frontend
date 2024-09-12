@@ -20,6 +20,7 @@ import type { AvailableOption } from "@/models/controls";
 
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
+import IconLocked from "@/components/icons/IconLocked.vue";
 import IconExternalLink from "@/components/icons/IconExternalLink.vue";
 
 // Props & Emits
@@ -181,7 +182,7 @@ function updateItemHandler(requestFn: Function, value: string, desc: string) {
       const id = ids[i];
       requestFn(id, value).then((response) => {
         c++;
-        if (response.status == 403) {
+        if (response.status != 200) {
           notificationStore.warning = response.data.detail;
         }
         if (c == ids.length) {
@@ -202,12 +203,12 @@ function updateGroup1(group: string) {
   updateItemHandler(boughtItemsRequest.putItemsGroup1, group, "Group");
 }
 
-function updateProject(project: string) {
-  updateItemHandler(boughtItemsRequest.putItemsProject, project, "Project");
-}
-
-function updateMachine(machine: string) {
-  updateItemHandler(boughtItemsRequest.putItemsMachine, machine, "Machine");
+function updateProject(project_number: string) {
+  updateItemHandler(
+    boughtItemsRequest.putItemsProject,
+    project_number,
+    "Project",
+  );
 }
 
 function updateQuantity(qty: number) {
@@ -263,7 +264,7 @@ function updateNoteSupplier(note: string) {
 }
 
 function updateDesiredDeliveryDate() {
-  const formattedDate = moment(pickedDesiredDate).format("YYYY-MM-DD");
+  const formattedDate = moment(pickedDesiredDate.value).format("YYYY-MM-DD");
   updateItemHandler(
     boughtItemsRequest.putItemsDesiredDeliveryDate,
     formattedDate,
@@ -272,7 +273,7 @@ function updateDesiredDeliveryDate() {
 }
 
 function updateExpectedDeliveryDate() {
-  const formattedDate = moment(pickedExpectedDate).format("YYYY-MM-DD");
+  const formattedDate = moment(pickedExpectedDate.value).format("YYYY-MM-DD");
   updateItemHandler(
     boughtItemsRequest.putItemsExpectedDeliveryDate,
     formattedDate,
@@ -369,6 +370,7 @@ watch(
   () => {
     setOptionsUsers();
   },
+  { deep: true },
 );
 
 watch(
@@ -376,6 +378,7 @@ watch(
   () => {
     setOptionsUnits();
   },
+  { deep: true },
 );
 
 watch(
@@ -383,6 +386,7 @@ watch(
   () => {
     setOptionsStatus();
   },
+  { deep: true },
 );
 </script>
 
@@ -549,7 +553,7 @@ watch(
                 !controlsStore.state.requestView
               "
             >
-              Taken by
+              Receiver
             </th>
             <th
               class="first"
@@ -643,13 +647,13 @@ watch(
               id="project"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.project = null;
+                  filterStore.state.projectNumber = null;
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.state.project"
+                v-model="filterStore.state.projectNumber"
                 v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
@@ -1037,13 +1041,13 @@ watch(
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.takeOverId = null;
+                  filterStore.state.receiverId = null;
                 }
               "
             >
               <select
                 class="filter-select"
-                v-model="filterStore.state.takeOverId"
+                v-model="filterStore.state.receiverId"
                 @change="boughtItemsStore.get()"
               >
                 <option
@@ -1148,7 +1152,8 @@ watch(
               id="number"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
             >
-              <IconBellRing v-if="item.high_priority" class="bell-icon" />
+              <IconLocked v-if="!item.project_is_active" class="locked-icon" />
+              <IconBellRing v-else-if="item.high_priority" class="bell-icon" />
               <span v-else>{{ index + 1 }}</span>
             </td>
             <td
@@ -1199,7 +1204,7 @@ watch(
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.project = item.project;
+                  filterStore.state.projectNumber = item.project_number;
                 }
               "
             >
@@ -1214,11 +1219,12 @@ watch(
               >
                 <input
                   class="cell-input"
-                  v-model="item.project"
+                  v-model="item.project_number"
                   type="text"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
-                    updateProject(item.project), pauseFetchBoughtItems(false)
+                    updateProject(item.project_number),
+                      pauseFetchBoughtItems(false)
                   "
                   v-on:keyup.enter="
                     looseFocus($event), pauseFetchBoughtItems(false)
@@ -1229,7 +1235,7 @@ watch(
                 v-else
                 v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
-                {{ item.project }}
+                {{ item.project_number }}
               </div>
             </td>
             <td
@@ -1242,29 +1248,6 @@ watch(
               "
             >
               <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.machine"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateMachine(item.machine), pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
                 v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
                 {{ item.machine }}
@@ -1763,14 +1746,14 @@ watch(
               "
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.takeOverId = item.taken_over_id;
+                  filterStore.state.receiverId = item.receiver_id;
                 }
               "
             >
               <div
                 v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
-                {{ usersStore.getNameByID(item.taken_over_id) }}
+                {{ usersStore.getNameByID(item.receiver_id) }}
               </div>
             </td>
             <td
@@ -1870,6 +1853,13 @@ watch(
 
 .bell-icon {
   color: red;
+  height: 12px;
+  width: 12px;
+  vertical-align: middle;
+}
+
+.locked-icon {
+  color: orange;
   height: 12px;
   width: 12px;
   vertical-align: middle;

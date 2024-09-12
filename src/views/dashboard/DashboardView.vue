@@ -6,7 +6,7 @@ import moment from "moment";
 import constants from "@/constants";
 import { useResolutionStore } from "@/stores/resolution";
 import { useUsersStore } from "@/stores/user";
-import { getFilterParams } from "@/requests/params";
+import { getBoughtItemsFilterParams } from "@/requests/params";
 import { boughtItemsRequest } from "@/requests/items";
 import { boughtItemsFilter } from "@/presets/boughtItemsFilter";
 
@@ -66,7 +66,7 @@ function autoFetchBoughtItemStatus() {
     filter.limit = null;
     filter.changedDateFrom = fromDate;
 
-    const params = getFilterParams(filter);
+    const params = getBoughtItemsFilterParams(filter);
     boughtItemsRequest.getItems(params).then((response) => {
       if (response.status == 200) {
         const data = response.data;
@@ -194,7 +194,7 @@ function autoFetchBoughtItemTimeline() {
     filter.limit = null;
     filter.changedDateFrom = fromDate;
 
-    const params = getFilterParams(filter);
+    const params = getBoughtItemsFilterParams(filter);
     boughtItemsRequest.getItems(params).then((response) => {
       if (response.status == 200) {
         const data = response.data;

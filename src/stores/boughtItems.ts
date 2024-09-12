@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 import constants from "@/constants";
 import { boughtItemsRequest } from "@/requests/items";
 import { useBoughtItemFilterStore } from "@/stores/filter";
-import { getFilterParams } from "@/requests/params";
+import { getBoughtItemsFilterParams } from "@/requests/params";
 
 import type { BoughtItemSchema } from "@/schemas/boughtItem";
 
@@ -27,7 +27,7 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
     console.log("Bought Items store requesting data ...");
     loading.value = true;
 
-    const params = getFilterParams(_filterStore.state);
+    const params = getBoughtItemsFilterParams(_filterStore.state);
     return boughtItemsRequest.getItems(params).then((response) => {
       loading.value = false;
       if (response.status === 200) {

@@ -1,6 +1,6 @@
 export default {
-  version: "0.6.0",
-  serverVersion: "0.6.0",
+  version: "0.7.0",
+  serverVersion: "0.7.0",
 
   // Media
   minWidth: 400,
@@ -13,6 +13,7 @@ export default {
   // Fetch intervals
   patchUserStoreInterval: 5000,
   patchUsersStoreInterval: 10000,
+  patchProjectsStoreInterval: 10000,
   patchBoughtItemsStoreInterval: 10000,
   patchServerConfigInterval: 60000,
 

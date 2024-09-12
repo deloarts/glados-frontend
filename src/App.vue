@@ -6,6 +6,11 @@ import Header from "@/components/main/Header.vue";
 import Footer from "@/components/main/Footer.vue";
 import Sidebar from "@/components/main/Sidebar.vue";
 import RouterDisplay from "@/components/main/RouterDisplay.vue";
+
+import { useProjectsStore } from "@/stores/projects";
+
+const projectsStore = useProjectsStore();
+projectsStore.get();
 </script>
 <template>
   <div id="app">

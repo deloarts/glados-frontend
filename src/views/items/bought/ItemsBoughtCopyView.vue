@@ -20,8 +20,7 @@ const notificationStore = useNotificationStore();
 const formData = ref<BoughtItemCreateSchema>({
   high_priority: null,
   notify_on_delivery: false,
-  project: null,
-  machine: null,
+  project_id: null,
   quantity: null,
   unit: null,
   partnumber: null,

@@ -1,6 +1,6 @@
 export default {
-  version: "0.6.0",
-  serverVersion: "0.6.0",
+  version: "0.7.0",
+  serverVersion: "0.7.0",
 
   // Media
   minWidth: 400,

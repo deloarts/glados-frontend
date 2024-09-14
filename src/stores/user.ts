@@ -23,6 +23,8 @@ export const useUserStore = defineStore("user", () => {
   });
 
   function logout() {
+    localStorage.setItem("gladosTokenValue", "");
+    localStorage.setItem("gladosTokenType", "");
     user.value = {
       id: null,
       created: null,

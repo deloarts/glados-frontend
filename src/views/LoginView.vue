@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeMount, computed, watch } from "vue";
 import { baseParticles } from "@/presets/particles";
 import { loadFull } from "tsparticles";
 //@ts-ignore
 import moment from "moment";
-
-import constants from "@/constants";
 import router from "@/router/index";
+
 import { request } from "@/requests/index";
-import { usersRequest } from "@/requests/users";
-import { useUserStore } from "@/stores/user";
 import { useNotificationStore } from "@/stores/notification";
+import { useProjectsStore } from "@/stores/projects";
+import { useUsersStore, useUserStore } from "@/stores/user";
+
+import LoadingBar from "@/components/spinner/LoadingBar.vue";
 
 // Particles
 const particlesInit = async (engine) => {
@@ -23,9 +24,20 @@ const particlesLoaded = async (container) => {
 
 // Stores
 const userStore = useUserStore();
+const usersStore = useUsersStore();
+const projectsStore = useProjectsStore();
 const notificationStore = useNotificationStore();
 
-// Refs
+const expandBox = ref<boolean>(false);
+const expandFull = ref<boolean>(false);
+const showLoadingBar = ref<boolean>(true);
+const showInputUsername = ref<boolean>(false);
+const showInputPassword = ref<boolean>(false);
+const showButtonLogin = ref<boolean>(false);
+
+const hasRequiredData = computed<boolean>(() => {
+  return usersStore.users.length > 0 && userStore.user.id != null;
+});
 const userInput = ref(null);
 const focusUserInput = () => {
   if (userInput.value) {
@@ -34,62 +46,115 @@ const focusUserInput = () => {
 };
 const currentMonth = moment().month();
 
-let text = `v${constants.version}`;
 const form_user = ref<string>("");
 const form_pw = ref<string>("");
 
 function login() {
+  showLoadingBar.value = true;
   request.login(form_user.value, form_pw.value).then((response) => {
     if (response.status === 200) {
-      fetchCurrentUser();
+      setTimeout(userStore.get, 1200);
+      usersStore.get();
+      projectsStore.get();
     } else {
+      showLoadingBar.value = false;
       form_pw.value = "";
       notificationStore.warning = "Wrong login credentials.";
     }
   });
 }
 
-function fetchCurrentUser() {
-  usersRequest.getUsersMe().then((response) => {
-    if (response.status === 200) {
-      console.log("Getting user from login.");
-      userStore.user = response.data;
-      notificationStore.info = `Welcome ${response.data.full_name}`;
-
-      var previousRoute = localStorage.getItem("gladosActiveRoute");
-      if (previousRoute == "/login" || previousRoute == null) {
-        previousRoute = "/";
-      }
-      router.push(previousRoute);
-    }
-  });
+function enterApp() {
+  showLoadingBar.value = false;
+  notificationStore.info = `Welcome ${userStore.user.full_name}`;
+  var previousRoute = localStorage.getItem("gladosActiveRoute");
+  if (previousRoute == "/login" || previousRoute == null) {
+    previousRoute = "/";
+  }
+  router.push(previousRoute);
 }
 
+watch(hasRequiredData, () => {
+  if (hasRequiredData.value) {
+    showInputUsername.value = false;
+    showInputPassword.value = false;
+    showButtonLogin.value = false;
+    setTimeout(() => {
+      expandFull.value = true;
+    }, 250);
+    setTimeout(enterApp.bind(this), 590);
+  }
+});
+
+onBeforeMount(userStore.logout);
+onBeforeMount(usersStore.clear);
+onBeforeMount(projectsStore.clear);
+
 onMounted(focusUserInput);
+onMounted(() =>
+  setTimeout(() => {
+    showLoadingBar.value = false;
+    expandBox.value = true;
+    setTimeout(() => {
+      showInputUsername.value = expandBox.value;
+    }, 100);
+    setTimeout(() => {
+      showInputPassword.value = expandBox.value;
+    }, 220);
+    setTimeout(() => {
+      showButtonLogin.value = expandBox.value;
+    }, 340);
+    setTimeout(focusUserInput.bind(this), 1000);
+  }, 1500),
+);
 </script>
 
 <template>
   <div class="login">
     <div class="coat"></div>
-    <div class="center">
-      <h1 id="header">Glados</h1>
-      <input
-        id="ipt1"
-        v-model="form_user"
-        v-on:keyup.enter="login()"
-        type="text"
-        placeholder="user"
-        ref="userInput"
-      />
-      <input
-        id="ipt2"
-        v-model="form_pw"
-        v-on:keyup.enter="login()"
-        type="password"
-        placeholder="password"
-      />
-      <button id="btn1" v-on:click="login()">Login</button>
-      <span id="text" class="version">{{ text }}</span>
+    <div
+      class="login-box"
+      v-bind:class="{ expanded: expandBox, full: expandFull }"
+    >
+      <h1 v-if="!expandFull" v-bind:class="{ expanded: expandBox }">Glados</h1>
+      <Transition name="fade-move">
+        <input
+          key="inputUsername"
+          v-if="showInputUsername && !expandFull"
+          v-model="form_user"
+          v-on:keyup.enter="login()"
+          class="input-username"
+          type="text"
+          placeholder="Username"
+          ref="userInput"
+      /></Transition>
+      <Transition name="fade-move">
+        <input
+          key="inputPassword"
+          v-if="showInputPassword && !expandFull"
+          v-model="form_pw"
+          v-on:keyup.enter="login()"
+          class="input-password"
+          type="password"
+          placeholder="Password"
+      /></Transition>
+      <Transition name="fade-move">
+        <button
+          key="buttonLogin"
+          v-if="showButtonLogin && !expandFull"
+          v-on:click="login()"
+          class="button-login"
+        >
+          Login
+        </button>
+      </Transition>
+      <Transition name="fade">
+        <LoadingBar
+          key="loadingBar"
+          v-if="showLoadingBar && !hasRequiredData && !expandFull"
+          class="loading-bar"
+        />
+      </Transition>
     </div>
   </div>
 
@@ -101,13 +166,6 @@ onMounted(focusUserInput);
     :options="baseParticles"
   />
   <div v-else class="snow"></div>
-  <!-- <Particles
-    v-else
-    id="tsparticles"
-    :particlesInit="particlesInit"
-    :particlesLoaded="particlesLoaded"
-    :options="snowParticles"
-  /> -->
 </template>
 
 <style scoped lang="scss">
@@ -132,47 +190,72 @@ onMounted(focusUserInput);
   );
 }
 
-.center {
+.login-box {
   z-index: 1002;
   position: absolute;
   left: 50%;
   top: 50%;
-  width: auto;
-  height: 350px;
+  width: 300px;
+  height: 85px;
   transform: translate(-50%, -50%);
-
-  display: grid;
-  grid-gap: 20px;
-  grid-template-rows: auto 30px 30px 30px 15px;
-  grid-template-columns: 280px;
-  grid-template-areas:
-    "header"
-    "ipt1"
-    "ipt2"
-    "btn1"
-    "text";
 
   background: $main-color;
   border-radius: 5px;
 
   text-align: center;
   padding: 15px;
+  padding-top: 30px;
 
   box-shadow: 0px 20px 30px 0px $main-background-color-dark-2;
+
+  transition: all 0.2s ease-out;
+
+  &.expanded {
+    height: 290px;
+  }
+
+  &.full {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border-radius: 1000;
+    background-color: $main-background-color;
+  }
+}
+
+.loading-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }
 
 h1 {
   font-family: "Lobster", "Segoe UI", "Arial";
   font-size: 3em;
   font-weight: thin;
-  padding-top: 20px;
+  padding: 0;
+  // padding-bottom: 30px;
+  margin: 0;
+
+  transition: all 0.2s ease-out;
+
+  &.expanded {
+    padding-top: 35px;
+  }
 }
 
 input {
-  width: calc(100% - 4px);
-  height: 100%;
+  position: absolute;
+  left: 25px;
+  right: 25px;
+
+  // width: 280px;
+  height: 30px;
+
   border: none;
   border-radius: 3px;
+
   transition: background 0.2s ease;
 }
 
@@ -181,19 +264,36 @@ input:hover {
 }
 
 button {
+  position: absolute;
+  left: 25px;
+  right: 25px;
+
   font-family: "Play", "Segoe UI", "Arial";
   font-weight: 700;
-  width: 100%;
-  height: 100%;
+
+  height: 30px;
+
   border: none;
   border-radius: 3px;
+
   transition: background 0.2s ease;
 }
 
 button:focus,
 button:hover {
   background: lightgray;
-  /* outline: 0; */
+}
+
+.input-username {
+  bottom: 115px;
+}
+
+.input-password {
+  bottom: 75px;
+}
+
+.button-login {
+  bottom: 25px;
 }
 
 .version {
@@ -203,30 +303,6 @@ button:hover {
   color: white;
 }
 
-#header {
-  grid-area: header;
-}
-
-#ipt1 {
-  grid-area: ipt1;
-}
-
-#ipt2 {
-  grid-area: ipt2;
-}
-
-#btn1 {
-  grid-area: btn1;
-}
-
-#btn2 {
-  grid-area: btn2;
-}
-
-#text {
-  grid-area: text;
-}
-
 #tsparticles {
   position: absolute;
   top: 0;
@@ -234,5 +310,28 @@ button:hover {
   right: 0;
   bottom: 0;
   z-index: 1001;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-move-enter-active {
+  transition: all 0.35s ease-in-out;
+}
+.fade-move-leave-active {
+  transition: all 0.1s ease-in-out;
+}
+
+.fade-move-enter-from,
+.fade-move-leave-to {
+  opacity: 0;
+  transform: translateY(-5px);
 }
 </style>

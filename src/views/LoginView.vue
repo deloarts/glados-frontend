@@ -7,7 +7,6 @@ import moment from "moment";
 import router from "@/router/index";
 
 import { request } from "@/requests/index";
-import { usersRequest } from "@/requests/users";
 import { useNotificationStore } from "@/stores/notification";
 import { useProjectsStore } from "@/stores/projects";
 import { useUsersStore, useUserStore } from "@/stores/user";
@@ -30,6 +29,7 @@ const projectsStore = useProjectsStore();
 const notificationStore = useNotificationStore();
 
 const expandBox = ref<boolean>(false);
+const expandFull = ref<boolean>(false);
 const showLoadingBar = ref<boolean>(true);
 const showInputUsername = ref<boolean>(false);
 const showInputPassword = ref<boolean>(false);
@@ -64,15 +64,25 @@ function login() {
   });
 }
 
+function enterApp() {
+  showLoadingBar.value = false;
+  notificationStore.info = `Welcome ${userStore.user.full_name}`;
+  var previousRoute = localStorage.getItem("gladosActiveRoute");
+  if (previousRoute == "/login" || previousRoute == null) {
+    previousRoute = "/";
+  }
+  router.push(previousRoute);
+}
+
 watch(hasRequiredData, () => {
   if (hasRequiredData.value) {
-    showLoadingBar.value = false;
-    notificationStore.info = `Welcome ${userStore.user.full_name}`;
-    var previousRoute = localStorage.getItem("gladosActiveRoute");
-    if (previousRoute == "/login" || previousRoute == null) {
-      previousRoute = "/";
-    }
-    router.push(previousRoute);
+    showInputUsername.value = false;
+    showInputPassword.value = false;
+    showButtonLogin.value = false;
+    setTimeout(() => {
+      expandFull.value = true;
+    }, 250);
+    setTimeout(enterApp.bind(this), 590);
   }
 });
 
@@ -102,12 +112,15 @@ onMounted(() =>
 <template>
   <div class="login">
     <div class="coat"></div>
-    <div class="login-box" v-bind:class="{ expanded: expandBox }">
-      <h1 v-bind:class="{ expanded: expandBox }">Glados</h1>
+    <div
+      class="login-box"
+      v-bind:class="{ expanded: expandBox, full: expandFull }"
+    >
+      <h1 v-if="!expandFull" v-bind:class="{ expanded: expandBox }">Glados</h1>
       <Transition name="fade-move">
         <input
           key="inputUsername"
-          v-if="showInputUsername"
+          v-if="showInputUsername && !expandFull"
           v-model="form_user"
           v-on:keyup.enter="login()"
           class="input-username"
@@ -118,7 +131,7 @@ onMounted(() =>
       <Transition name="fade-move">
         <input
           key="inputPassword"
-          v-if="showInputPassword"
+          v-if="showInputPassword && !expandFull"
           v-model="form_pw"
           v-on:keyup.enter="login()"
           class="input-password"
@@ -128,7 +141,7 @@ onMounted(() =>
       <Transition name="fade-move">
         <button
           key="buttonLogin"
-          v-if="showButtonLogin"
+          v-if="showButtonLogin && !expandFull"
           v-on:click="login()"
           class="button-login"
         >
@@ -138,7 +151,7 @@ onMounted(() =>
       <Transition name="fade">
         <LoadingBar
           key="loadingBar"
-          v-if="showLoadingBar && !hasRequiredData"
+          v-if="showLoadingBar && !hasRequiredData && !expandFull"
           class="loading-bar"
         />
       </Transition>
@@ -183,7 +196,7 @@ onMounted(() =>
   left: 50%;
   top: 50%;
   width: 300px;
-  height: 90px;
+  height: 85px;
   transform: translate(-50%, -50%);
 
   background: $main-color;
@@ -195,10 +208,19 @@ onMounted(() =>
 
   box-shadow: 0px 20px 30px 0px $main-background-color-dark-2;
 
-  transition: height 0.2s ease-out;
+  transition: all 0.2s ease-out;
 
   &.expanded {
     height: 290px;
+  }
+
+  &.full {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border-radius: 1000;
+    background-color: $main-background-color;
   }
 }
 
@@ -249,7 +271,6 @@ button {
   font-family: "Play", "Segoe UI", "Arial";
   font-weight: 700;
 
-  // width: 280px;
   height: 30px;
 
   border: none;
@@ -301,9 +322,11 @@ button:hover {
   opacity: 0;
 }
 
-.fade-move-enter-active,
-.fade-move-leave-active {
+.fade-move-enter-active {
   transition: all 0.35s ease-in-out;
+}
+.fade-move-leave-active {
+  transition: all 0.1s ease-in-out;
 }
 
 .fade-move-enter-from,

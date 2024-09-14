@@ -23,6 +23,8 @@ export const useUserStore = defineStore("user", () => {
   });
 
   function logout() {
+    localStorage.setItem("gladosTokenValue", "");
+    localStorage.setItem("gladosTokenType", "");
     user.value = {
       id: null,
       created: null,
@@ -38,10 +40,22 @@ export const useUserStore = defineStore("user", () => {
     console.log("Logged out user");
   }
 
-  function getUser() {
-    console.log("User store is requesting user ...");
+  function get() {
     loading.value = true;
 
+    usersRequest.getUsersMe().then((response) => {
+      loading.value = false;
+      if (response.status === 200) {
+        user.value = response.data;
+      } else {
+        logout();
+        router.push({ name: "Login" });
+      }
+    });
+  }
+  function fetch() {
+    console.log("User store is requesting user ...");
+    loading.value = true;
     usersRequest.getUsersMe().then((response) => {
       loading.value = false;
       if (response.status === 200) {
@@ -52,17 +66,19 @@ export const useUserStore = defineStore("user", () => {
         logout();
         router.push({ name: "Login" });
       }
-      setTimeout(getUser.bind(this), constants.patchUserStoreInterval);
+      setTimeout(fetch.bind(this), constants.patchUserStoreInterval);
     });
   }
 
   onBeforeMount(() => {
-    getUser();
+    get();
   });
 
   return {
     loading,
     user,
+    get,
+    fetch,
     logout,
   };
 });
@@ -71,11 +87,14 @@ export const useUsersStore = defineStore("users", () => {
   const loading = ref<boolean>(false);
   const users = ref<UserSchema[]>([]);
 
+  function clear() {
+    users.value = [];
+  }
+
   function getNameByID(userID: number) {
     if (userID == null) {
       return "";
     }
-
     for (let i = 0; i < users.value.length; i++) {
       if (users.value[i].id == userID) {
         return users.value[i].full_name;
@@ -84,7 +103,17 @@ export const useUsersStore = defineStore("users", () => {
     return "Unknown User";
   }
 
-  function getUsers() {
+  function get() {
+    loading.value = true;
+    usersRequest.getUsers().then((response) => {
+      loading.value = false;
+      if (response.status === 200) {
+        users.value = response.data;
+      }
+    });
+  }
+
+  function fetch() {
     console.log("Users store requesting users ...");
     loading.value = true;
 
@@ -94,13 +123,13 @@ export const useUsersStore = defineStore("users", () => {
         users.value = response.data;
         console.log("Users store got data from server.");
       }
-      setTimeout(getUsers.bind(this), constants.patchUsersStoreInterval);
+      setTimeout(fetch.bind(this), constants.patchUsersStoreInterval);
     });
   }
 
   onBeforeMount(() => {
-    getUsers();
+    get();
   });
 
-  return { loading, users, getNameByID };
+  return { loading, users, get, clear, fetch, getNameByID };
 });

@@ -15,36 +15,32 @@ export const useProjectsStore = defineStore("projects", () => {
   }
 
   function get() {
-    console.log("Projects store requesting data ...");
     loading.value = true;
-
-    return projectsRequest.getProjects().then((response) => {
+    projectsRequest.getProjects().then((response) => {
       loading.value = false;
       if (response.status === 200) {
         projects.value = response.data;
-        console.log("Projects store got data from server.");
       }
-      return response;
     });
   }
 
-  function getProjects() {
-    console.log("Projects store requesting projects ...");
+  function fetch() {
+    console.log("Projects store requesting projects (interval) ...");
     loading.value = true;
 
     projectsRequest.getProjects().then((response) => {
       loading.value = false;
       if (response.status === 200) {
         projects.value = response.data;
-        console.log("Projects store got data from server.");
+        console.log("Projects store got data from server (interval).");
       }
-      setTimeout(getProjects.bind(this), constants.patchProjectsStoreInterval);
+      setTimeout(fetch.bind(this), constants.patchProjectsStoreInterval);
     });
   }
 
-  function getMachine(id: number) {
+  function getMachine(project_id: number) {
     for (let i = 0; i < projects.value.length; i++) {
-      if (projects.value[i].id == id) {
+      if (projects.value[i].id == project_id) {
         return projects.value[i].machine;
       }
     }
@@ -52,8 +48,8 @@ export const useProjectsStore = defineStore("projects", () => {
   }
 
   onBeforeMount(() => {
-    getProjects();
+    get();
   });
 
-  return { loading, projects, get, clear, getMachine };
+  return { loading, projects, get, clear, fetch, getMachine };
 });

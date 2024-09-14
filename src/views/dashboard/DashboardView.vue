@@ -114,7 +114,6 @@ function autoFetchBoughtItemStatus() {
           }
 
           // USER ITEMS COUNT
-          // if (datum.creator_id in usersStore.getByID()) {
           let fullName = usersStore.getNameByID(datum.creator_id);
           if (fullName in usersDataset) {
             let value = parseInt(usersDataset[fullName]);

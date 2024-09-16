@@ -70,6 +70,8 @@ onBeforeMount(() => {
 
 onUnmounted(() => {
   document.removeEventListener("keyup", eventKeyUp);
+  projectFilterStore.reset();
+  projectsStore.get();
 });
 
 watch(

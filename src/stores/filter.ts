@@ -220,21 +220,8 @@ export const useProjectFilterStore = defineStore("projectFilter", () => {
     };
   }
 
-  watch(
-    state,
-    () => {
-      localStorage.setItem("gladosProjectFilter", JSON.stringify(state.value));
-      console.log("Saved project filter to local storage.");
-    },
-    { deep: true },
-  );
-
   onBeforeMount(() => {
-    const ls = localStorage.getItem("gladosProjectFilter");
-    if (ls != null) {
-      state.value = JSON.parse(ls);
-      console.log("Got project filter from local storage.");
-    }
+    reset();
   });
 
   return { state, reset };

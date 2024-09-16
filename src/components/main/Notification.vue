@@ -1,81 +1,42 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
-
-import { useNotificationStore } from "@/stores/notification";
+import {
+  infoType,
+  useNotificationStore,
+  warningType,
+} from "@/stores/notification";
 
 import IconWarning from "@/components/icons/IconWarning.vue";
 import IconInfo from "@/components/icons/IconInfo.vue";
 
 const notificationStore = useNotificationStore();
-
-const info = computed<string>(() => notificationStore.info);
-const warning = computed<string>(() => notificationStore.warning);
-
-const showInfo = ref<boolean>(false);
-const showWarning = ref<boolean>(false);
-
-function hideSlider() {
-  showInfo.value = false;
-  showWarning.value = false;
-}
-
-function clearWarning() {
-  notificationStore.clearWarning();
-  setTimeout(hideSlider.bind(this), 500);
-}
-
-function clearInfo() {
-  notificationStore.clearInfo();
-  setTimeout(hideSlider.bind(this), 500);
-}
-
-watch(info, () => {
-  if (info.value != "") {
-    showInfo.value = true;
-    setTimeout(clearInfo.bind(this), 5000);
-  }
-});
-
-watch(warning, () => {
-  if (warning.value != "") {
-    showWarning.value = true;
-    setTimeout(clearWarning.bind(this), 5000);
-  }
-});
 </script>
 
 <template>
   <div class="scope">
-    <div
-      class="container warning"
-      v-if="showWarning"
-      v-on:click="clearWarning"
-      v-bind:class="{ 'slide-in': showWarning, 'slide-out': warning == '' }"
-    >
-      <div id="grid">
-        <div id="icon">
-          <IconWarning />
-        </div>
-        <div id="text">
-          {{ warning }}
-        </div>
-      </div>
-    </div>
-    <div
-      class="container info"
-      v-if="showInfo"
-      v-on:click="clearInfo"
-      v-bind:class="{ 'slide-in': showInfo, 'slide-out': info == '' }"
-    >
-      <div id="grid">
-        <div id="icon">
-          <IconInfo />
-        </div>
-        <div id="text">
-          {{ info }}
+    <TransitionGroup name="fade-move">
+      <div
+        v-for="(notification, index) in notificationStore.notifications"
+        :key="String(notification.destroy)"
+        class="container"
+        v-bind:class="{
+          warning: notification.type == warningType,
+          info: notification.type == infoType,
+        }"
+        v-bind:style="{
+          top: `${
+            -20 + (notificationStore.notifications.length - index) * 80
+          }px`,
+        }"
+      >
+        <div id="grid">
+          <div id="icon">
+            <IconWarning v-if="notification.type == warningType" />
+            <IconInfo v-else />
+          </div>
+          <div id="text">{{ notification.message }}</div>
         </div>
       </div>
-    </div>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -92,7 +53,6 @@ watch(warning, () => {
 
   position: fixed;
   right: 10px;
-  top: 60px;
   width: 350px;
   height: 70px;
 
@@ -112,8 +72,7 @@ watch(warning, () => {
     0 41.8px 33.4px rgba(0, 0, 0, 0.086),
     0 100px 80px rgba(0, 0, 0, 0.3);
 
-  animation: fade 1s linear;
-  transform: translateX(400px);
+  transition: all 0.2s ease-out;
 }
 
 .warning {
@@ -126,33 +85,10 @@ watch(warning, () => {
   border-color: $main-color;
 }
 
-.slide-in {
-  animation: slide-in 0.3s forwards;
-}
-
-.slide-out {
-  animation: slide-out 0.2s forwards;
-}
-
-@keyframes slide-in {
-  100% {
-    transform: translateX(0%);
-  }
-}
-
-@keyframes slide-out {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(400px);
-  }
-}
-
 #grid {
-  // grid-gap: 5px;
+  gap: 0;
   grid-template-rows: 70px;
-  grid-template-columns: 60px auto;
+  grid-template-columns: 70px auto;
   grid-template-areas: "icon text";
 }
 
@@ -176,13 +112,16 @@ svg {
   height: 30px;
 }
 
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
+.fade-move-enter-active {
+  transition: all 0.2s ease-in-out;
+}
+.fade-move-leave-active {
+  transition: all 0.1s ease-in-out;
+}
 
-  100% {
-    opacity: 1;
-  }
+.fade-move-enter-from,
+.fade-move-leave-to {
+  opacity: 0;
+  transform: translateX(400px);
 }
 </style>

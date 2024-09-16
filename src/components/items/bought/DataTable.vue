@@ -183,7 +183,7 @@ function updateItemHandler(requestFn: Function, value: string, desc: string) {
       requestFn(id, value).then((response) => {
         c++;
         if (response.status != 200) {
-          notificationStore.warning = response.data.detail;
+          notificationStore.addWarn(response.data.detail);
         }
         if (c == ids.length) {
           boughtItemsStore.get();

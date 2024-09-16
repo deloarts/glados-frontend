@@ -59,14 +59,14 @@ function login() {
     } else {
       showLoadingBar.value = false;
       form_pw.value = "";
-      notificationStore.warning = "Wrong login credentials.";
+      notificationStore.addWarn("Wrong login credentials.");
     }
   });
 }
 
 function enterApp() {
   showLoadingBar.value = false;
-  notificationStore.info = `Welcome ${userStore.user.full_name}`;
+  notificationStore.addInfo(`Welcome ${userStore.user.full_name}`);
   var previousRoute = localStorage.getItem("gladosActiveRoute");
   if (previousRoute == "/login" || previousRoute == null) {
     previousRoute = "/";

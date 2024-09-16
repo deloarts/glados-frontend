@@ -27,15 +27,17 @@ const formData = ref<ProjectUpdateSchema>({
 });
 
 onMounted(() => {
-  const itemId = route.params.id;
+  const projectId = route.params.id;
 
   projectsRequest
-    .getProjectsId(Number(itemId))
+    .getProjectsId(Number(projectId))
     .then((response) => {
       if (response.status === 200) {
         formData.value = response.data;
       } else {
-        notificationStore.warning = `Could not fetch a project with the ID ${itemId}.`;
+        notificationStore.addWarn(
+          `Could not fetch a project with the ID ${projectId}.`,
+        );
         setTimeout(function () {
           router.push({ name: "Projects" });
         }, 4000);

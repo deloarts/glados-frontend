@@ -65,7 +65,7 @@ function onButtonNew() {
 
 function onButtonEdit() {
   if (props.selectedProjectId == null) {
-    notificationStore.warning = "Select a project first.";
+    notificationStore.addWarn("Select a project first.");
   } else {
     router.push(`/projects/edit/${props.selectedProjectId}`);
   }
@@ -73,7 +73,7 @@ function onButtonEdit() {
 
 function onButtonDelete() {
   if (props.selectedProjectId == null) {
-    notificationStore.warning = "Select a project first.";
+    notificationStore.addWarn("Select a project first.");
   } else {
     showDeletePrompt.value = true;
   }
@@ -87,10 +87,10 @@ function deleteItem() {
   const projectId = props.selectedProjectId;
   projectsRequest.deleteProjects(projectId).then((response) => {
     if (response.status === 200) {
-      notificationStore.info = `Deleted project #${projectId}`;
+      notificationStore.addInfo(`Deleted project #${projectId}`);
       getNewData();
     } else {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     }
   });
   showDeletePrompt.value = false;

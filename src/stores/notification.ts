@@ -1,17 +1,53 @@
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { defineStore } from "pinia";
+// @ts-ignore
+import moment from "moment";
+
+export const warningType = "warning";
+export const infoType = "info";
+
+interface notificationItem {
+  create: Date;
+  destroy: Date;
+  type: string;
+  message: string;
+}
 
 export const useNotificationStore = defineStore("notification", () => {
-  const info = ref<string>("");
-  const warning = ref<string>("");
+  const notifications = ref<Array<notificationItem>>([]);
 
-  function clearInfo() {
-    info.value = "";
+  function add(type: string, message: string) {
+    notifications.value.push({
+      create: moment(),
+      destroy: moment().add(4, "seconds"),
+      type: type,
+      message: message,
+    });
   }
 
-  function clearWarning() {
-    warning.value = "";
+  function addInfo(message: string) {
+    add(infoType, message);
   }
 
-  return { info, warning, clearInfo, clearWarning };
+  function addWarn(message: string) {
+    add(warningType, message);
+  }
+
+  function clear() {
+    notifications.value = [];
+  }
+
+  onMounted(() => {
+    setInterval(() => {
+      const items: Array<notificationItem> = [];
+      for (let i = 0; i < notifications.value.length; i++) {
+        if (notifications.value[i].destroy > moment()) {
+          items.push(notifications.value[i]);
+        }
+      }
+      notifications.value = items;
+    }, 1000);
+  });
+
+  return { notifications, addInfo, addWarn, clear };
 });

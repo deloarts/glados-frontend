@@ -38,7 +38,7 @@ function getUser() {
 
 function updateUser() {
   if (isSystemuser.value) {
-    notificationStore.info = "Systemuser cannot be updated";
+    notificationStore.addInfo("Systemuser cannot be updated");
     return;
   }
 
@@ -47,15 +47,15 @@ function updateUser() {
     .then((response) => {
       getUser();
       if (response.status == 200) {
-        notificationStore.info = `Updated user ${formData.value.username}`;
+        notificationStore.addInfo(`Updated user ${formData.value.username}`);
         // } else if (response.status == 403) {
-        //   notificationStore.warning = "Not enough permission"
+        //   notificationStore.addWarn("Not enough permission"
       } else if (response.status == 404) {
-        notificationStore.warning = "User not found";
+        notificationStore.addWarn("User not found");
       } else if (response.status == 422) {
-        notificationStore.warning = "Data is incomplete";
+        notificationStore.addWarn("Data is incomplete");
       } else {
-        notificationStore.warning = response.data.detail;
+        notificationStore.addWarn(response.data.detail);
       }
     });
 }

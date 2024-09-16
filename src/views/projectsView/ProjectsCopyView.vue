@@ -35,7 +35,7 @@ onMounted(() => {
       if (response.status === 200) {
         formData.value = response.data;
       } else {
-        notificationStore.warning = `Could not fetch a project with the ID ${itemId}.`;
+        notificationStore.addWarn(`Could not fetch a project with the ID ${itemId}.`);
         setTimeout(function () {
           router.push({ name: "Projects" });
         }, 4000);

@@ -54,15 +54,15 @@ function onSolve() {
       }, 250);
       solverOutput.value = response.data;
       solverInput.value.params = response.data.params;
-      notificationStore.info = `Solved using ${solverOutput.value.cuts.length} cuts.`;
+      notificationStore.addInfo(`Solved using ${solverOutput.value.cuts.length} cuts.`);
     } else if (response.status == 406) {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     } else if (response.status == 422) {
-      notificationStore.warning = "Input is incomplete";
+      notificationStore.addWarn("Input is incomplete");
     } else if (response.status == 507) {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     } else {
-      notificationStore.warning = "Something went really wrong";
+      notificationStore.addWarn("Something went really wrong");
     }
     setTimeout(() => {
       solving.value = false;
@@ -89,7 +89,7 @@ function onAddPanel() {
 
 function onExportPDF() {
   if (!solved.value) {
-    notificationStore.info = "Problem must first be solved";
+    notificationStore.addInfo("Problem must first be solved");
   } else {
     stockCut2DRequest
       .postGenerate(solverOutput.value, "pdf")
@@ -101,11 +101,11 @@ function onExportPDF() {
             url = window.URL.createObjectURL(blob);
           window.open(url);
         } else if (response.status == 422) {
-          notificationStore.warning = "Input is incomplete";
+          notificationStore.addWarn("Input is incomplete");
         } else if (response.status == 501) {
-          notificationStore.warning = "Output format not supported";
+          notificationStore.addWarn("Output format not supported");
         } else if (response.status == 507) {
-          notificationStore.warning = response.data.detail;
+          notificationStore.addWarn(response.data.detail);
         }
       });
   }

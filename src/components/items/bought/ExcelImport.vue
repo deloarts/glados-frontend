@@ -58,7 +58,7 @@ function onTemplate() {
       window.open(url);
       emit("update:showUploader", false);
     } else {
-      notificationStore.warning = "Could not download template file.";
+      notificationStore.addWarn("Could not download template file.");
     }
   });
 }
@@ -74,19 +74,19 @@ function uploadFile() {
     .then((response) => {
       uploading.value = false;
       if (response.status == 200) {
-        notificationStore.info = "EXCEL import successful.";
+        notificationStore.addInfo("EXCEL import successful.");
         props.onSuccess();
         emit("update:showUploader", false);
       } else if (response.status == 422) {
-        notificationStore.warning = "EXCEL file content is incomplete.";
+        notificationStore.addWarn("EXCEL file content is incomplete.");
         warningsList.value = response.data.detail;
       } else {
-        notificationStore.warning = response.data.detail;
+        notificationStore.addWarn(response.data.detail);
         emit("update:showUploader", false);
       }
     })
     .catch((error) => {
-      notificationStore.warning = "Could not process file.";
+      notificationStore.addWarn("Could not process file.");
       emit("update:showUploader", false);
     });
 }

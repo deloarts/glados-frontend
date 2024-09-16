@@ -43,7 +43,7 @@ onMounted(() => {
       if (response.status === 200) {
         formData.value = response.data;
       } else {
-        notificationStore.warning = `Could not fetch an item with the ID ${itemId}.`;
+        notificationStore.addWarn(`Could not fetch an item with the ID ${itemId}.`);
         setTimeout(function () {
           router.push({ name: "BoughtItems" });
         }, 4000);
@@ -51,7 +51,7 @@ onMounted(() => {
     })
     .catch((error) => {
       console.error(error);
-      notificationStore.warning = error;
+      notificationStore.addWarn(error);
     });
 });
 </script>

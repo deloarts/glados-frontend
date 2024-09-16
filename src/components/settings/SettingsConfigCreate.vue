@@ -32,9 +32,9 @@ const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(null);
 
 function createConfig() {
   if (selectedOptionCategory.value == "") {
-    notificationStore.warning = "Select a category first";
+    notificationStore.addWarn("Select a category first");
   } else if (newConfigName.value == "") {
-    notificationStore.warning = "Choose a name for the configuration first";
+    notificationStore.addWarn("Choose a name for the configuration first");
   } else {
     let data = defaultJson.value;
     if (typeof data == "string") data = JSON.parse(data);
@@ -44,15 +44,15 @@ function createConfig() {
         .postConfigItemsBoughtFilter(newConfigName.value, data)
         .then((response) => {
           if (response.status === 200) {
-            notificationStore.info = "Created new config";
+            notificationStore.addInfo("Created new config");
             boughtItemsFilterStore.get();
             emit("update:selectedConfigName", newConfigName.value);
           } else {
-            notificationStore.warning = response.data.detail;
+            notificationStore.addWarn(response.data.detail);
           }
         });
     } else {
-      notificationStore.warning = "Category not available";
+      notificationStore.addWarn("Category not available");
     }
   }
 }
@@ -63,7 +63,7 @@ watch(selectedOptionCategory, () => {
       if (response.status === 200) {
         defaultJson.value = response.data;
       } else {
-        notificationStore.warning = "Failed to load default data";
+        notificationStore.addWarn("Failed to load default data");
       }
     });
   }

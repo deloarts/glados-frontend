@@ -28,18 +28,18 @@ function onUpdate() {
     .putProjects(itemId, props.formData)
     .then((response) => {
       if (response.status === 200) {
-        notificationStore.info = `Updated project #${itemId}.`;
+        notificationStore.addInfo(`Updated project #${itemId}.`);
         projectsStore.get();
         router.push({ name: "Projects" });
       } else if (response.status === 422) {
-        notificationStore.warning = `Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`;
+        notificationStore.addWarn(`Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`);
       } else {
-        notificationStore.warning = response.data.detail;
+        notificationStore.addWarn(response.data.detail);
       }
     })
     .catch((error) => {
       console.log(error);
-      notificationStore.warning = error;
+      notificationStore.addWarn(error);
     });
 }
 

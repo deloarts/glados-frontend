@@ -6,8 +6,8 @@ import type {
 
 export class ProjectsRequest {
   // GET
-  getProjects() {
-    return request.get("/api/web/v1/projects/", requestConfig(null));
+  getProjects(params: URLSearchParams) {
+    return request.get("/api/web/v1/projects/", requestConfig(params));
   }
   getProjectsMy() {
     return request.get("/api/web/v1/projects/my/", requestConfig(null));

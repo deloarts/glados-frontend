@@ -7,10 +7,10 @@ import {
 
 export class BoughtItemsRequest {
   // GET
-  getItems(params: any) {
+  getItems(params: URLSearchParams) {
     return request.get("/api/web/v1/items/bought/", requestConfig(params));
   }
-  getItemsExcel(params: any) {
+  getItemsExcel(params: URLSearchParams) {
     return request.get(
       "/api/web/v1/items/bought/excel/",
       requestConfigXlsxDownload(params),

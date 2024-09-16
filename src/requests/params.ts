@@ -1,4 +1,7 @@
-import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+import type {
+  HostConfigBoughtItemsFilterSchema,
+  HostConfigProjectFilterSchema,
+} from "@/schemas/host";
 
 export function getBoughtItemsFilterParams(
   filter: HostConfigBoughtItemsFilterSchema,
@@ -103,6 +106,40 @@ export function getBoughtItemsFilterParams(
   }
   if (String(filter.receiverId) != "" && filter.receiverId != undefined) {
     params.append("receiver_id", String(filter.receiverId));
+  }
+
+  return params;
+}
+
+export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
+  const params = new URLSearchParams();
+
+  if (filter.skip != null && filter.skip != undefined) {
+    params.append("skip", String(filter.skip));
+  }
+  if (filter.limit != null && filter.limit != undefined) {
+    params.append("limit", String(filter.limit));
+  }
+  if (filter.number != "" && filter.number != undefined) {
+    params.append("number", filter.number);
+  }
+  if (filter.machine != "" && filter.machine != undefined) {
+    params.append("machine", filter.machine);
+  }
+  if (filter.customer != "" && filter.customer != undefined) {
+    params.append("customer", filter.customer);
+  }
+  if (filter.description != "" && filter.description != undefined) {
+    params.append("description", filter.description);
+  }
+  if (filter.isActive) {
+    params.append("is_active", String(filter.isActive));
+  }
+  if (
+    String(filter.designatedUserId) != "" &&
+    filter.designatedUserId != undefined
+  ) {
+    params.append("designated_user_id", String(filter.designatedUserId));
   }
 
   return params;

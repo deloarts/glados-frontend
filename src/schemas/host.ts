@@ -47,3 +47,14 @@ export interface HostConfigBoughtItemsFilterSchema {
   storagePlace: string;
   receiverId: number;
 }
+
+export interface HostConfigProjectFilterSchema {
+  skip: number;
+  limit: number;
+  number: string;
+  machine: string;
+  customer: string;
+  description: string;
+  isActive: boolean;
+  designatedUserId: number;
+}

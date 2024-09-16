@@ -1825,6 +1825,7 @@ watch(
 
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
+@import "@/scss/dataTable/filter.scss";
 
 .scope {
   height: 100%;
@@ -1891,7 +1892,7 @@ th {
 tr {
   margin: 0;
   padding: 0;
-  height: 20px;
+  height: 24px;
 }
 
 tbody tr {
@@ -2009,7 +2010,7 @@ tr.selected:hover > td {
 
 td {
   z-index: 0;
-  height: 22px;
+  height: 24px;
 
   font-size: 14px; //0.8em;
 
@@ -2123,9 +2124,9 @@ td.sticky-col {
 }
 
 #project {
-  width: 61px;
-  min-width: 61px;
-  max-width: 61px;
+  width: 85px;
+  min-width: 85px;
+  max-width: 85px;
   // text-align: center;
 }
 #project.sticky-col {
@@ -2133,13 +2134,13 @@ td.sticky-col {
 }
 
 #machine {
-  width: 61px;
-  min-width: 61px;
-  max-width: 61px;
+  width: 85px;
+  min-width: 85px;
+  max-width: 85px;
   // text-align: center;
 }
 #machine.sticky-col {
-  left: 235px;
+  left: 259px;
 }
 
 #quantity {
@@ -2149,7 +2150,7 @@ td.sticky-col {
   text-align: center;
 }
 #quantity.sticky-col {
-  left: 298px;
+  left: 346px;
 }
 
 #unit {
@@ -2159,7 +2160,7 @@ td.sticky-col {
   text-align: center;
 }
 #unit.sticky-col {
-  left: 341px;
+  left: 389px;
 }
 
 #weblink {
@@ -2169,52 +2170,52 @@ td.sticky-col {
   text-align: center;
 }
 #weblink.sticky-col {
-  left: 384px;
+  left: 432px;
 }
 
 #partnumber {
-  width: 301px;
-  min-width: 301px;
-  max-width: 301px;
+  width: auto;
+  min-width: 150px;
+  max-width: 400px;
 }
 #partnumber.sticky-col {
-  left: 421px;
+  left: 469px;
 }
 
 #definition {
-  width: 200px;
-  min-width: 200px;
-  max-width: 200px;
+  width: auto;
+  min-width: 150px;
+  max-width: 250px;
 }
 
 #manufacturer {
-  width: 150px;
-  min-width: 150px;
-  max-width: 150px;
+  width: auto;
+  min-width: 100px;
+  max-width: 200px;
 }
 
 #supplier {
-  width: 150px;
-  min-width: 150px;
-  max-width: 150px;
+  width: auto;
+  min-width: 100px;
+  max-width: 200px;
 }
 
 #group {
-  width: 150px;
-  min-width: 150px;
+  width: auto;
+  min-width: 100px;
   max-width: 150px;
 }
 
 #note-general {
   width: auto;
-  min-width: 152px;
-  max-width: 252px;
+  min-width: 150px;
+  max-width: 300px;
 }
 
 #note-supplier {
   width: auto;
-  min-width: 152px;
-  max-width: 252px;
+  min-width: 150px;
+  max-width: 300px;
 }
 
 #created {
@@ -2368,63 +2369,6 @@ input {
 
   font-family: Calibri, Arial, Helvetica, sans-serif;
   font-size: 13.5px; //1em;
-}
-
-.filter-select {
-  width: 100%;
-  height: 22px;
-
-  color: white;
-  background-color: $main-background-color-dark-2;
-
-  border-width: $main-border-width;
-  border-style: $main-border-style;
-  border-color: $main-background-color-dark;
-  border-radius: $main-border-radius;
-  outline: none;
-
-  box-sizing: border-box;
-
-  transition: all 0.2s ease;
-}
-
-.filter-select:hover {
-  background-color: $main-background-color-hover;
-}
-
-.filter-select:focus {
-  border-color: $main-color;
-}
-
-.filter-select > option {
-  color: white;
-  background-color: $main-background-color-dark-2;
-}
-
-.filter-input {
-  width: 100%;
-  height: 22px;
-
-  color: white;
-  background-color: $main-background-color-dark-2;
-
-  border-width: $main-border-width;
-  border-style: $main-border-style;
-  border-color: $main-background-color-dark;
-  border-radius: $main-border-radius;
-  outline: none;
-
-  box-sizing: border-box;
-
-  transition: all 0.2s ease;
-}
-
-.filter-input:hover {
-  background-color: $main-background-color-hover;
-}
-
-.filter-input:focus {
-  border-color: $main-color;
 }
 
 .spinner {

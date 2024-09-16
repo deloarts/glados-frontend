@@ -3,10 +3,14 @@ import { defineStore } from "pinia";
 
 import constants from "@/constants";
 import { projectsRequest } from "@/requests/projects";
+import { useProjectFilterStore } from "@/stores/filter";
+import { getProjectFilterParams } from "@/requests/params";
 
 import type { ProjectSchema } from "@/schemas/project";
 
 export const useProjectsStore = defineStore("projects", () => {
+  const _filterStore = useProjectFilterStore();
+
   const loading = ref<boolean>(false);
   const projects = ref<ProjectSchema[]>([]);
 
@@ -16,7 +20,8 @@ export const useProjectsStore = defineStore("projects", () => {
 
   function get() {
     loading.value = true;
-    projectsRequest.getProjects().then((response) => {
+    const params = getProjectFilterParams(_filterStore.state);
+    projectsRequest.getProjects(params).then((response) => {
       loading.value = false;
       if (response.status === 200) {
         projects.value = response.data;
@@ -27,8 +32,8 @@ export const useProjectsStore = defineStore("projects", () => {
   function fetch() {
     console.log("Projects store requesting projects (interval) ...");
     loading.value = true;
-
-    projectsRequest.getProjects().then((response) => {
+    const params = getProjectFilterParams(_filterStore.state);
+    projectsRequest.getProjects(params).then((response) => {
       loading.value = false;
       if (response.status === 200) {
         projects.value = response.data;

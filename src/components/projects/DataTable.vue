@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import { watch, onBeforeMount, onUnmounted } from "vue";
 
+// @ts-ignore
+import moment from "moment";
+
+import { useProjectFilterStore } from "@/stores/filter";
 import { useUsersStore } from "@/stores/user";
 import { useProjectsStore } from "@/stores/projects";
+
+import type { AvailableOption } from "@/models/controls";
 
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 
@@ -20,6 +26,17 @@ const emit = defineEmits<{
 // Store
 const usersStore = useUsersStore();
 const projectsStore = useProjectsStore();
+const projectFilterStore = useProjectFilterStore();
+
+// Select options
+let availableOptionsState: Array<AvailableOption> = [
+  { text: "All", value: "" },
+  { text: "Active", value: String(true) },
+  { text: "Inactive", value: String(false) },
+];
+let availableOptionsUsers: Array<AvailableOption> = [
+  { text: "All", value: "" },
+];
 
 function removeSelection() {
   emit("update:selectedProjectId", null);
@@ -35,12 +52,26 @@ function eventKeyUp(event: any) {
   }
 }
 
+function setOptionsUsers() {
+  var tempAvailableOptions = [{ text: "All", value: "" }];
+  for (let i = 0; i < usersStore.users.length; i++) {
+    tempAvailableOptions.push({
+      text: usersStore.users[i].full_name,
+      value: String(usersStore.users[i].id),
+    });
+  }
+  availableOptionsUsers = tempAvailableOptions;
+}
+
 onBeforeMount(() => {
   document.addEventListener("keyup", eventKeyUp);
+  setOptionsUsers();
 });
 
 onUnmounted(() => {
   document.removeEventListener("keyup", eventKeyUp);
+  projectFilterStore.reset();
+  projectsStore.get();
 });
 
 watch(
@@ -52,6 +83,22 @@ watch(
       emit("update:selectedProjectId", null);
     }
   },
+);
+
+watch(
+  () => projectFilterStore.$state,
+  () => {
+    projectsStore.get();
+  },
+  { deep: true },
+);
+
+watch(
+  () => usersStore.$state,
+  () => {
+    setOptionsUsers();
+  },
+  { deep: true },
 );
 </script>
 
@@ -67,13 +114,126 @@ watch(
           <tr>
             <th class="first sticky-col" id="number">#</th>
             <th class="first sticky-col" id="project-id">ID</th>
-            <th class="first sticky-col" id="project">Project Number</th>
-            <th class="first sticky-col" id="machine">Machine Number</th>
+            <th class="first sticky-col" id="project">Project</th>
+            <th class="first sticky-col" id="machine">Machine</th>
             <th class="first" id="customer">Customer</th>
             <th class="first" id="description">Description</th>
             <th class="first" id="designated">Designated User</th>
             <th class="first" id="created">Created</th>
             <th class="first" id="is-active">State</th>
+          </tr>
+          <tr>
+            <th class="second sticky-col" id="number"></th>
+            <th class="second sticky-col" id="project-id"></th>
+            <th
+              class="second sticky-col"
+              id="project"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.number = null;
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="projectFilterStore.state.number"
+                type="text"
+                placeholder="Filter"
+              />
+            </th>
+            <th
+              class="second sticky-col"
+              id="machine"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.machine = null;
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="projectFilterStore.state.machine"
+                type="text"
+                placeholder="Filter"
+              />
+            </th>
+            <th
+              class="second sticky-col"
+              id="customer"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.customer = null;
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="projectFilterStore.state.customer"
+                type="text"
+                placeholder="Filter"
+              />
+            </th>
+            <th
+              class="second sticky-col"
+              id="description"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.description = null;
+                }
+              "
+            >
+              <input
+                class="filter-input"
+                v-model="projectFilterStore.state.description"
+                type="text"
+                placeholder="Filter"
+              />
+            </th>
+            <th
+              class="second sticky-col"
+              id="designated"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.designatedUserId = null;
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="projectFilterStore.state.designatedUserId"
+              >
+                <option
+                  v-for="(option, index) in availableOptionsUsers"
+                  :key="index"
+                  :value="option.value"
+                >
+                  {{ option.text }}
+                </option>
+              </select>
+            </th>
+            <th class="second sticky-col" id="created"></th>
+            <th
+              class="second sticky-col"
+              id="is-active"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.isActive = null;
+                }
+              "
+            >
+              <select
+                class="filter-select"
+                v-model="projectFilterStore.state.isActive"
+              >
+                <option
+                  v-for="(option, index) in availableOptionsState"
+                  :key="index"
+                  :value="option.value"
+                >
+                  {{ option.text }}
+                </option>
+              </select>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -89,23 +249,61 @@ watch(
             <td class="sticky-col" id="project-id">
               {{ project.id }}
             </td>
-            <td class="sticky-col" id="project">
+            <td
+              class="sticky-col"
+              id="project"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.number = project.number;
+                }
+              "
+            >
               {{ project.number }}
             </td>
-            <td class="sticky-col" id="machine">
+            <td
+              class="sticky-col"
+              id="machine"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.machine = project.machine;
+                }
+              "
+            >
               {{ project.machine }}
             </td>
-            <td id="customer">
+            <td
+              id="customer"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.customer = project.customer;
+                }
+              "
+            >
               {{ project.customer }}
             </td>
-            <td id="description">
+            <td
+              id="description"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.description = project.description;
+                }
+              "
+            >
               {{ project.description }}
             </td>
-            <td id="designated">
+            <td
+              id="designated"
+              @contextmenu.prevent="
+                () => {
+                  projectFilterStore.state.designatedUserId =
+                    project.designated_user_id;
+                }
+              "
+            >
               {{ usersStore.getNameByID(project.designated_user_id) }}
             </td>
             <td id="created">
-              {{ project.created }}
+              {{ moment(project.created).format("YYYY-MM-DD") }}
             </td>
             <td id="is-active">
               <span v-if="project.is_active" class="green">Active</span>
@@ -120,6 +318,7 @@ watch(
 
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
+@import "@/scss/dataTable/filter.scss";
 
 .scope {
   height: 100%;
@@ -170,6 +369,7 @@ table {
   border-collapse: separate;
   border-spacing: 0;
 
+  table-layout: fixed;
   width: 100%;
   border-radius: $main-border-radius;
   background-color: $main-background-color-dark;
@@ -184,7 +384,7 @@ th {
 tr {
   margin: 0;
   padding: 0;
-  height: 20px;
+  height: 24px;
 }
 
 tbody tr {
@@ -215,14 +415,17 @@ tr.selected:hover > td {
 
 td {
   z-index: 0;
-  height: 22px;
+  height: 24px;
 
   font-size: 14px;
 
   margin: 0;
   padding: 0;
 
-  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   border-bottom: solid thin rgb(100, 100, 100);
   border-right: solid thin $table-head-background;
 }
@@ -299,21 +502,21 @@ td.sticky-col {
 }
 
 #project {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
+  width: 90px;
+  min-width: 90px;
+  max-width: 90px;
 }
 #project.sticky-col {
   left: 84px;
 }
 
 #machine {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
+  width: 90px;
+  min-width: 90px;
+  max-width: 90px;
 }
 #machine.sticky-col {
-  left: 166px;
+  left: 176px;
 }
 
 #customer {
@@ -323,9 +526,9 @@ td.sticky-col {
 }
 
 #description {
-  width: 200px;
-  min-width: 200px;
-  // max-width: 150px;
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
 }
 
 #designated {
@@ -335,9 +538,9 @@ td.sticky-col {
 }
 
 #created {
-  width: 220px;
-  min-width: 220px;
-  max-width: 220px;
+  width: 90px;
+  min-width: 90px;
+  max-width: 90px;
   text-align: center;
 }
 

@@ -4,15 +4,18 @@ import { defineStore } from "pinia";
 import constants from "@/constants";
 import { hostRequest } from "@/requests/host";
 
-import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+import type {
+  HostConfigBoughtItemsFilterSchema,
+  HostConfigProjectFilterSchema,
+} from "@/schemas/host";
 
-interface Preset {
+interface BoughtItemPreset {
   [key: string]: HostConfigBoughtItemsFilterSchema;
 }
 
 export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
   const loading = ref<boolean>(false);
-  const presets = ref<Preset>({});
+  const presets = ref<BoughtItemPreset>({});
   const state = ref<HostConfigBoughtItemsFilterSchema>({
     limit: "100",
     ignoreDelivered: false,
@@ -190,4 +193,36 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     saveMy,
     loadMy,
   };
+});
+
+export const useProjectFilterStore = defineStore("projectFilter", () => {
+  const state = ref<HostConfigProjectFilterSchema>({
+    skip: null,
+    limit: null,
+    number: null,
+    machine: null,
+    customer: null,
+    description: null,
+    isActive: null,
+    designatedUserId: null,
+  });
+
+  function reset() {
+    state.value = {
+      skip: null,
+      limit: null,
+      number: null,
+      machine: null,
+      customer: null,
+      description: null,
+      isActive: null,
+      designatedUserId: null,
+    };
+  }
+
+  onBeforeMount(() => {
+    reset();
+  });
+
+  return { state, reset };
 });

@@ -107,7 +107,7 @@ const selectedOptionFilterPreset = ref<string>("");
 
 function saveFilter() {
   filterStore.saveMy();
-  notificationStore.info = "Saved new filter.";
+  notificationStore.addInfo("Saved new filter.");
 }
 
 function loadFilter() {
@@ -126,9 +126,9 @@ function onButtonNewItem() {
 
 function onButtonEdit() {
   if (props.selectedItemIds.length == 0) {
-    notificationStore.warning = "Select an item first.";
+    notificationStore.addWarn("Select an item first.");
   } else if (props.selectedItemIds.length != 1) {
-    notificationStore.warning = "You can only edit one item.";
+    notificationStore.addWarn("You can only edit one item.");
   } else {
     router.push(`/items/bought/edit/${props.selectedItemIds[0]}`);
   }
@@ -136,9 +136,9 @@ function onButtonEdit() {
 
 function onButtonCopy() {
   if (props.selectedItemIds.length == 0) {
-    notificationStore.warning = "Select an item first.";
+    notificationStore.addWarn("Select an item first.");
   } else if (props.selectedItemIds.length != 1) {
-    notificationStore.warning = "You can only edit one item.";
+    notificationStore.addWarn("You can only edit one item.");
   } else {
     router.push(`/items/bought/copy/${props.selectedItemIds[0]}`);
   }
@@ -146,9 +146,9 @@ function onButtonCopy() {
 
 function onButtonDelete() {
   if (props.selectedItemIds.length == 0) {
-    notificationStore.warning = "Select an item first.";
+    notificationStore.addWarn("Select an item first.");
   } else if (props.selectedItemIds.length != 1) {
-    notificationStore.warning = "You can only delete one item.";
+    notificationStore.addWarn("You can only delete one item.");
   } else {
     showDeletePrompt.value = true;
   }
@@ -177,10 +177,10 @@ function deleteItem() {
   const itemId = props.selectedItemIds[0];
   boughtItemsRequest.deleteItemsId(itemId).then((response) => {
     if (response.status === 200) {
-      notificationStore.info = `Deleted item #${itemId}`;
+      notificationStore.addInfo(`Deleted item #${itemId}`);
       getNewData();
     } else {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     }
   });
   showDeletePrompt.value = false;

@@ -12,10 +12,10 @@ let personalAccessToken = ref<string>("");
 function newToken() {
   usersRequest.putUsersMePAT().then((response) => {
     if (response.status == 200) {
-      notificationStore.info = `Created new token.`;
+      notificationStore.addInfo(`Created new token.`);
       personalAccessToken.value = response.data;
     } else {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     }
   });
 }

@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 
 import router from "@/router/index";
 import { useProjectsStore } from "@/stores/projects";
+import { useProjectFilterStore } from "@/stores/filter";
 import { useNotificationStore } from "@/stores/notification";
 import { useUserStore } from "@/stores/user";
 import { useResolutionStore } from "@/stores/resolution";
@@ -11,6 +12,7 @@ import { projectsRequest } from "@/requests/projects";
 
 import Prompt from "@/components/main/Prompt.vue";
 import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
+import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue";
 import ButtonEdit from "@/components/elements/ButtonEdit.vue";
 import ButtonDelete from "@/components/elements/ButtonDelete.vue";
 import ButtonSync from "@/components/elements/ButtonSync.vue";
@@ -27,6 +29,7 @@ const emit = defineEmits<{
 
 // Stores
 const projectStore = useProjectsStore();
+const projectFilterStore = useProjectFilterStore();
 const notificationStore = useNotificationStore();
 const resolutionStore = useResolutionStore();
 const userStore = useUserStore();
@@ -52,6 +55,9 @@ const buttonEditText = computed<string>(() => {
 const buttonSyncText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Sync" : "";
 });
+const buttonClearFilterText = computed<string>(() => {
+  return gtMinWidthTablet.value ? "Clear Filter" : "";
+});
 
 function onButtonNew() {
   router.push({ name: "NewProject" });
@@ -59,7 +65,7 @@ function onButtonNew() {
 
 function onButtonEdit() {
   if (props.selectedProjectId == null) {
-    notificationStore.warning = "Select a project first.";
+    notificationStore.addWarn("Select a project first.");
   } else {
     router.push(`/projects/edit/${props.selectedProjectId}`);
   }
@@ -67,7 +73,7 @@ function onButtonEdit() {
 
 function onButtonDelete() {
   if (props.selectedProjectId == null) {
-    notificationStore.warning = "Select a project first.";
+    notificationStore.addWarn("Select a project first.");
   } else {
     showDeletePrompt.value = true;
   }
@@ -81,10 +87,10 @@ function deleteItem() {
   const projectId = props.selectedProjectId;
   projectsRequest.deleteProjects(projectId).then((response) => {
     if (response.status === 200) {
-      notificationStore.info = `Deleted project #${projectId}`;
+      notificationStore.addInfo(`Deleted project #${projectId}`);
       getNewData();
     } else {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     }
   });
   showDeletePrompt.value = false;
@@ -92,6 +98,10 @@ function deleteItem() {
 
 function onButtonClear() {
   emit("update:selectedProjectId", null);
+}
+
+function clearFilter() {
+  projectFilterStore.reset();
 }
 </script>
 
@@ -131,6 +141,11 @@ function onButtonClear() {
         v-model:rotate="projectStore.loading"
         v-on:click="projectStore.get()"
       ></ButtonSync>
+      <ButtonFilterClear
+        class="controls-base-element"
+        v-model:text="buttonClearFilterText"
+        v-on:click="clearFilter"
+      ></ButtonFilterClear>
     </div>
   </div>
 

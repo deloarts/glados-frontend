@@ -22,11 +22,13 @@ function updateUser() {
   usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
     if (response.status == 200) {
       userStore.user = response.data;
-      notificationStore.info = `Updated user ${formUserUpdate.value.username}.`;
+      notificationStore.addInfo(
+        `Updated user ${formUserUpdate.value.username}.`,
+      );
     } else if (response.status == 422) {
-      notificationStore.warning = "Data is incomplete.";
+      notificationStore.addWarn("Data is incomplete.");
     } else {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     }
   });
 }

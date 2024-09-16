@@ -26,7 +26,7 @@ const formData = ref<UserCreateSchema>({
 function createUser() {
   usersRequest.postUsers(formData.value).then((response) => {
     if (response.status == 200) {
-      notificationStore.info = `Created user ${formData.value.username}.`;
+      notificationStore.addInfo(`Created user ${formData.value.username}.`);
       formData.value = {
         is_active: false,
         is_superuser: false,
@@ -38,13 +38,13 @@ function createUser() {
         password: "",
       };
       // } else if (response.status == 403) {
-      //   notificationStore.warning = "Not enough permission"
+      //   notificationStore.addWarn("Not enough permission");
     } else if (response.status == 406) {
-      notificationStore.warning = "User already exists";
+      notificationStore.addWarn("User already exists");
     } else if (response.status == 422) {
-      notificationStore.warning = "Data is incomplete";
+      notificationStore.addWarn("Data is incomplete");
     } else {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     }
   });
 }

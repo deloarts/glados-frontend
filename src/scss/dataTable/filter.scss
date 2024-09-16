@@ -1,0 +1,57 @@
+@import "@/scss/variables.scss";
+.filter-input {
+  width: 100%;
+  height: 22px;
+
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.filter-input:hover {
+  background-color: $main-background-color-hover;
+}
+
+.filter-input:focus {
+  border-color: $main-color;
+}
+
+.filter-select {
+  width: 100%;
+  height: 22px;
+
+  color: white;
+  background-color: $main-background-color-dark-2;
+
+  border-width: $main-border-width;
+  border-style: $main-border-style;
+  border-color: $main-background-color-dark;
+  border-radius: $main-border-radius;
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  background-color: $main-background-color-hover;
+}
+
+.filter-select:focus {
+  border-color: $main-color;
+}
+
+.filter-select > option {
+  color: white;
+  background-color: $main-background-color-dark-2;
+}

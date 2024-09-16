@@ -59,14 +59,14 @@ function login() {
     } else {
       showLoadingBar.value = false;
       form_pw.value = "";
-      notificationStore.warning = "Wrong login credentials.";
+      notificationStore.addWarn("Wrong login credentials.");
     }
   });
 }
 
 function enterApp() {
   showLoadingBar.value = false;
-  notificationStore.info = `Welcome ${userStore.user.full_name}`;
+  notificationStore.addInfo(`Welcome ${userStore.user.full_name}`);
   var previousRoute = localStorage.getItem("gladosActiveRoute");
   if (previousRoute == "/login" || previousRoute == null) {
     previousRoute = "/";
@@ -86,10 +86,11 @@ watch(hasRequiredData, () => {
   }
 });
 
-onBeforeMount(userStore.logout);
-onBeforeMount(usersStore.clear);
-onBeforeMount(projectsStore.clear);
-
+onBeforeMount(() => {
+  userStore.logout();
+  usersStore.clear();
+  projectsStore.clear();
+});
 onMounted(focusUserInput);
 onMounted(() =>
   setTimeout(() => {

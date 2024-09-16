@@ -21,7 +21,7 @@ const text = ref<string>("");
 
 function onReconnection() {
   showBox.value = false;
-  notificationStore.info = "Reconnected to the server.";
+  notificationStore.addInfo("Reconnected to the server.");
 
   if (!config.debug) {
     localStorage.setItem("gladosTokenValue", "");

@@ -41,15 +41,15 @@ function updateConfig() {
       .putConfigItemsBoughtFilter(props.selectedConfigName, data)
       .then((response) => {
         if (response.status === 200) {
-          notificationStore.info = "Updated config";
+          notificationStore.addInfo("Updated config");
           boughtItemsFilterStore.get();
           emit("update:selectedConfigName", null);
         } else {
-          notificationStore.warning = response.data.detail;
+          notificationStore.addWarn(response.data.detail);
         }
       });
   } else {
-    notificationStore.warning = "Category not available";
+    notificationStore.addWarn("Category not available");
   }
 }
 
@@ -61,13 +61,13 @@ function deleteConfig() {
         if (response.status === 200) {
           emit("update:selectedConfigName", null);
           boughtItemsFilterStore.get();
-          notificationStore.info = "Deleted config";
+          notificationStore.addInfo("Deleted config");
         } else {
-          notificationStore.warning = response.data.detail;
+          notificationStore.addWarn(response.data.detail);
         }
       });
   } else {
-    notificationStore.warning = "Category not available";
+    notificationStore.addWarn("Category not available");
   }
 }
 

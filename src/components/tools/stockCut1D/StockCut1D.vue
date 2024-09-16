@@ -45,15 +45,15 @@ function onSolve() {
       }, 250);
       solverOutput.value = response.data;
       solverInput.value = response.data.job;
-      notificationStore.info = `Solved in ${response.data.time_us}ms using ${response.data.solver_type}`;
+      notificationStore.addInfo(`Solved in ${response.data.time_us}ms using ${response.data.solver_type}`);
     } else if (response.status == 406) {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     } else if (response.status == 422) {
-      notificationStore.warning = "Input is incomplete";
+      notificationStore.addWarn("Input is incomplete");
     } else if (response.status == 507) {
-      notificationStore.warning = response.data.detail;
+      notificationStore.addWarn(response.data.detail);
     } else {
-      notificationStore.warning = "Something went really wrong";
+      notificationStore.addWarn("Something went really wrong");
     }
     setTimeout(() => {
       solving.value = false;

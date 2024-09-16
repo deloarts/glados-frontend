@@ -86,10 +86,11 @@ watch(hasRequiredData, () => {
   }
 });
 
-onBeforeMount(userStore.logout);
-onBeforeMount(usersStore.clear);
-onBeforeMount(projectsStore.clear);
-
+onBeforeMount(() => {
+  userStore.logout();
+  usersStore.clear();
+  projectsStore.clear();
+});
 onMounted(focusUserInput);
 onMounted(() =>
   setTimeout(() => {

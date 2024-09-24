@@ -64,7 +64,7 @@ function buildPartnumber() {
   const partnumber =
     name.value +
     " - " +
-    createFormData.value.definition +
+    createFormData.value.order_number +
     " - " +
     createFormData.value.manufacturer;
   let data = createFormData.value;
@@ -160,11 +160,11 @@ onMounted(() => {
             placeholder="Name *"
           />
         </div>
-        <div id="definition" class="grid-item-center">
+        <div id="order-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="createFormData.definition"
-            placeholder="Definition *"
+            v-model="createFormData.order_number"
+            placeholder="Order Number *"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
@@ -245,7 +245,7 @@ onMounted(() => {
     "machine machine machine note-general"
     "quantity quantity unit note-general"
     "name name name note-general"
-    "definition definition definition note-general"
+    "order-number order-number order-number note-general"
     "manufacturer manufacturer manufacturer note-supplier"
     "supplier supplier supplier note-supplier"
     "group group group note-supplier"
@@ -264,7 +264,7 @@ onMounted(() => {
       "machine machine machine"
       "quantity quantity unit"
       "name name name"
-      "definition definition definition"
+      "order-number order-number order-number"
       "manufacturer manufacturer manufacturer"
       "supplier supplier supplier"
       "group group group"
@@ -313,8 +313,8 @@ onMounted(() => {
   grid-area: name;
 }
 
-#definition {
-  grid-area: definition;
+#order-number {
+  grid-area: order-number;
 }
 
 #manufacturer {

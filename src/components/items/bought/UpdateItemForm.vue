@@ -143,11 +143,11 @@ onBeforeMount(setOptionsProjects);
             placeholder="Partnumber *"
           />
         </div>
-        <div id="definition" class="grid-item-center">
+        <div id="order-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="updateFormData.definition"
-            placeholder="Definition *"
+            v-model="updateFormData.order_number"
+            placeholder="Order Number *"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
@@ -228,7 +228,7 @@ onBeforeMount(setOptionsProjects);
     "machine machine machine note-general"
     "quantity quantity unit note-general"
     "partnumber partnumber partnumber note-general"
-    "definition definition definition note-general"
+    "order-number order-number order-number note-general"
     "manufacturer manufacturer manufacturer note-supplier"
     "supplier supplier supplier note-supplier"
     "group group group note-supplier"
@@ -247,7 +247,7 @@ onBeforeMount(setOptionsProjects);
       "machine machine machine"
       "quantity quantity unit"
       "partnumber partnumber partnumber"
-      "definition definition definition"
+      "order-number order-number order-number"
       "manufacturer manufacturer manufacturer"
       "supplier supplier supplier"
       "group group group"
@@ -296,8 +296,8 @@ onBeforeMount(setOptionsProjects);
   grid-area: partnumber;
 }
 
-#definition {
-  grid-area: definition;
+#order-number {
+  grid-area: order-number;
 }
 
 #manufacturer {

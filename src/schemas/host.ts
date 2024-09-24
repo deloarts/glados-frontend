@@ -38,7 +38,7 @@ export interface HostConfigBoughtItemsFilterSchema {
   quantity: number;
   unit: string;
   partnumber: string;
-  definition: string;
+  orderNumber: string;
   manufacturer: string;
   supplier: string;
   group1: string;

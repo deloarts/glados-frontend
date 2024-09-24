@@ -22,7 +22,7 @@ export const boughtItemsFilter = {
   quantity: "",
   unit: "",
   partnumber: "",
-  definition: "",
+  orderNumber: "",
   manufacturer: "",
   supplier: "",
   group1: "",

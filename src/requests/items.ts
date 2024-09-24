@@ -97,11 +97,11 @@ export class BoughtItemsRequest {
       null,
     );
   }
-  putItemsDefinition(id: Number, definition: any) {
+  putItemsOrderNumber(id: Number, orderNumber: any) {
     const params = new URLSearchParams();
-    params.append("definition", definition);
+    params.append("order_number", orderNumber);
     return request.put(
-      `/api/web/v1/items/bought/${id}/definition/`,
+      `/api/web/v1/items/bought/${id}/order-number/`,
       requestConfig(params),
       null,
     );

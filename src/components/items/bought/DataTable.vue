@@ -227,11 +227,11 @@ function updatePartnumber(partnumber: string) {
   );
 }
 
-function updateDefinition(definition: string) {
+function updateOrderNumber(orderNumber: string) {
   updateItemHandler(
-    boughtItemsRequest.putItemsDefinition,
-    definition,
-    "Definition",
+    boughtItemsRequest.putItemsOrderNumber,
+    orderNumber,
+    "Order Number",
   );
 }
 
@@ -471,9 +471,9 @@ watch(
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               id="partnumber"
             >
-              Partnumber
+              Part Number
             </th>
-            <th class="first" id="definition">Definition</th>
+            <th class="first" id="order-number">Order Number</th>
             <th class="first" id="manufacturer">Manufacturer</th>
             <th class="first" id="supplier">Supplier</th>
             <th class="first" id="group">Group</th>
@@ -744,16 +744,16 @@ watch(
             </th>
             <th
               class="second"
-              id="definition"
+              id="order-number"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.definition = null;
+                  filterStore.state.orderNumber = null;
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.state.definition"
+                v-model="filterStore.state.orderNumber"
                 v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
@@ -1354,10 +1354,10 @@ watch(
               </div>
             </td>
             <td
-              id="definition"
+              id="order-number"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.definition = item.definition;
+                  filterStore.state.orderNumber = item.order_number;
                 }
               "
             >
@@ -1372,11 +1372,11 @@ watch(
               >
                 <input
                   class="cell-input"
-                  v-model="item.definition"
+                  v-model="item.order_number"
                   type="text"
                   @focusin="pauseFetchBoughtItems(true)"
                   @focusout="
-                    updateDefinition(item.definition),
+                    updateOrderNumber(item.order_number),
                       pauseFetchBoughtItems(false)
                   "
                   v-on:keyup.enter="
@@ -1388,7 +1388,7 @@ watch(
                 v-else
                 v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
-                {{ item.definition }}
+                {{ item.order_number }}
               </div>
             </td>
             <td
@@ -2182,7 +2182,7 @@ td.sticky-col {
   left: 469px;
 }
 
-#definition {
+#order-number {
   width: auto;
   min-width: 150px;
   max-width: 250px;

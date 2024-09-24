@@ -25,7 +25,7 @@ const formData = ref<BoughtItemUpdateSchema>({
   quantity: null,
   unit: null,
   partnumber: null,
-  definition: null,
+  order_number: null,
   supplier: null,
   manufacturer: null,
   group_1: null,

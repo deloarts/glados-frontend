@@ -83,8 +83,8 @@ export function getBoughtItemsFilterParams(
   if (filter.partnumber != "" && filter.partnumber != undefined) {
     params.append("partnumber", filter.partnumber);
   }
-  if (filter.definition != "" && filter.definition != undefined) {
-    params.append("definition", filter.definition);
+  if (filter.orderNumber != "" && filter.orderNumber != undefined) {
+    params.append("order_number", filter.orderNumber);
   }
   if (filter.manufacturer != "" && filter.manufacturer != undefined) {
     params.append("manufacturer", filter.manufacturer);

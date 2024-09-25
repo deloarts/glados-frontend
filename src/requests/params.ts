@@ -71,8 +71,8 @@ export function getBoughtItemsFilterParams(
   if (filter.projectNumber != "" && filter.projectNumber != undefined) {
     params.append("project_number", filter.projectNumber);
   }
-  if (filter.machine != "" && filter.machine != undefined) {
-    params.append("machine", filter.machine);
+  if (filter.productNumber != "" && filter.productNumber != undefined) {
+    params.append("product_number", filter.productNumber);
   }
   if (String(filter.quantity) != "" && filter.quantity != undefined) {
     params.append("quantity", String(filter.quantity));
@@ -123,8 +123,8 @@ export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
   if (filter.number != "" && filter.number != undefined) {
     params.append("number", filter.number);
   }
-  if (filter.machine != "" && filter.machine != undefined) {
-    params.append("machine", filter.machine);
+  if (filter.productNumber != "" && filter.productNumber != undefined) {
+    params.append("product_number", filter.productNumber);
   }
   if (filter.customer != "" && filter.customer != undefined) {
     params.append("customer", filter.customer);

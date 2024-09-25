@@ -19,7 +19,7 @@ const notificationStore = useNotificationStore();
 
 const formData = ref<ProjectUpdateSchema>({
   number: null,
-  machine: null,
+  product_number: null,
   customer: null,
   description: null,
   designated_user_id: null,

@@ -91,7 +91,7 @@ const availableOptionsOrderBy: Array<AvailableOption> = [
   { text: "ID", value: "id" },
   { text: "Created", value: "created" },
   { text: "Project", value: "project" },
-  { text: "Machine", value: "machine" },
+  { text: "Product", value: "productNumber" },
   { text: "Group", value: "group1" },
   { text: "Manufacturer", value: "manufacturer" },
   { text: "Supplier", value: "supplier" },

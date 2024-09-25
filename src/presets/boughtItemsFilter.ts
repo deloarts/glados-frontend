@@ -18,7 +18,7 @@ export const boughtItemsFilter = {
   id: "",
   status: "",
   projectNumber: "",
-  machine: "",
+  productNumber: "",
   quantity: "",
   unit: "",
   partnumber: "",

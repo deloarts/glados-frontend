@@ -131,11 +131,13 @@ onMounted(() => {
             :options-inactive="[]"
           />
         </div>
-        <div id="machine" class="grid-item-center">
+        <div id="product-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-bind:value="projectsStore.getMachine(createFormData.project_id)"
-            placeholder="Machine"
+            v-bind:value="
+              projectsStore.getProductNumber(createFormData.project_id)
+            "
+            placeholder="Product Number"
             readonly
           />
         </div>
@@ -242,7 +244,7 @@ onMounted(() => {
   grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
     "project project project note-general"
-    "machine machine machine note-general"
+    "product-number product-number product-number note-general"
     "quantity quantity unit note-general"
     "name name name note-general"
     "order-number order-number order-number note-general"
@@ -261,7 +263,7 @@ onMounted(() => {
     grid-template-columns: 50px auto 150px;
     grid-template-areas:
       "project project project"
-      "machine machine machine"
+      "product-number product-number product-number"
       "quantity quantity unit"
       "name name name"
       "order-number order-number order-number"
@@ -297,8 +299,8 @@ onMounted(() => {
   grid-area: project;
 }
 
-#machine {
-  grid-area: machine;
+#product-number {
+  grid-area: product-number;
 }
 
 #quantity {

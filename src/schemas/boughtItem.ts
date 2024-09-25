@@ -8,7 +8,7 @@ export interface BoughtItemSchema {
   project_id: number;
   project_number: string;
   project_is_active: boolean;
-  machine: string | null;
+  product_number: string | null;
   quantity: number;
   unit: string;
   partnumber: string;

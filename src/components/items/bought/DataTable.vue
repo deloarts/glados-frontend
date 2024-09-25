@@ -441,9 +441,9 @@ watch(
             <th
               class="first"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              id="machine"
+              id="product-number"
             >
-              Machine
+              Product
             </th>
             <th
               class="first"
@@ -662,16 +662,16 @@ watch(
             <th
               class="second"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              id="machine"
+              id="product-number"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.machine = null;
+                  filterStore.state.productNumber = null;
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="filterStore.state.machine"
+                v-model="filterStore.state.productNumber"
                 v-on:keyup.enter="boughtItemsStore.get()"
                 type="text"
                 placeholder="Filter"
@@ -1239,18 +1239,18 @@ watch(
               </div>
             </td>
             <td
-              id="machine"
+              id="product-number"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
               @contextmenu.prevent="
                 () => {
-                  filterStore.state.machine = item.machine;
+                  filterStore.state.productNumber = item.product_number;
                 }
               "
             >
               <div
                 v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
               >
-                {{ item.machine }}
+                {{ item.product_number }}
               </div>
             </td>
             <td
@@ -2133,13 +2133,13 @@ td.sticky-col {
   left: 172px;
 }
 
-#machine {
+#product-number {
   width: 85px;
   min-width: 85px;
   max-width: 85px;
   // text-align: center;
 }
-#machine.sticky-col {
+#product-number.sticky-col {
   left: 259px;
 }
 

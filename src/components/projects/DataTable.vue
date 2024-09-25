@@ -115,7 +115,7 @@ watch(
             <th class="first sticky-col" id="number">#</th>
             <th class="first sticky-col" id="project-id">ID</th>
             <th class="first sticky-col" id="project">Project</th>
-            <th class="first sticky-col" id="machine">Machine</th>
+            <th class="first sticky-col" id="product-number">Product</th>
             <th class="first" id="customer">Customer</th>
             <th class="first" id="description">Description</th>
             <th class="first" id="designated">Designated User</th>
@@ -143,16 +143,16 @@ watch(
             </th>
             <th
               class="second sticky-col"
-              id="machine"
+              id="product-number"
               @contextmenu.prevent="
                 () => {
-                  projectFilterStore.state.machine = null;
+                  projectFilterStore.state.productNumber = null;
                 }
               "
             >
               <input
                 class="filter-input"
-                v-model="projectFilterStore.state.machine"
+                v-model="projectFilterStore.state.productNumber"
                 type="text"
                 placeholder="Filter"
               />
@@ -262,14 +262,14 @@ watch(
             </td>
             <td
               class="sticky-col"
-              id="machine"
+              id="product-number"
               @contextmenu.prevent="
                 () => {
-                  projectFilterStore.state.machine = project.machine;
+                  projectFilterStore.state.productNumber = project.product_number;
                 }
               "
             >
-              {{ project.machine }}
+              {{ project.product_number }}
             </td>
             <td
               id="customer"
@@ -510,12 +510,12 @@ td.sticky-col {
   left: 84px;
 }
 
-#machine {
+#product-number {
   width: 90px;
   min-width: 90px;
   max-width: 90px;
 }
-#machine.sticky-col {
+#product-number.sticky-col {
   left: 176px;
 }
 

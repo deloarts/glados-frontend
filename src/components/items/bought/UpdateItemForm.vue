@@ -114,11 +114,11 @@ onBeforeMount(setOptionsProjects);
             v-bind:options-inactive="availableOptionsProjectsInactive"
           />
         </div>
-        <div id="machine" class="grid-item-center">
+        <div id="product-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-bind:value="projectsStore.getMachine(updateFormData.project_id)"
-            placeholder="Machine"
+            v-bind:value="projectsStore.getProductNumber(updateFormData.project_id)"
+            placeholder="Product Number"
             readonly
           />
         </div>
@@ -143,11 +143,11 @@ onBeforeMount(setOptionsProjects);
             placeholder="Partnumber *"
           />
         </div>
-        <div id="definition" class="grid-item-center">
+        <div id="order-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="updateFormData.definition"
-            placeholder="Definition *"
+            v-model="updateFormData.order_number"
+            placeholder="Order Number *"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
@@ -225,10 +225,10 @@ onBeforeMount(setOptionsProjects);
   grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
     "project project project note-general"
-    "machine machine machine note-general"
+    "product-number product-number product-number note-general"
     "quantity quantity unit note-general"
     "partnumber partnumber partnumber note-general"
-    "definition definition definition note-general"
+    "order-number order-number order-number note-general"
     "manufacturer manufacturer manufacturer note-supplier"
     "supplier supplier supplier note-supplier"
     "group group group note-supplier"
@@ -244,10 +244,10 @@ onBeforeMount(setOptionsProjects);
     grid-template-columns: 50px auto 150px;
     grid-template-areas:
       "project project project"
-      "machine machine machine"
+      "product-number product-number product-number"
       "quantity quantity unit"
       "partnumber partnumber partnumber"
-      "definition definition definition"
+      "order-number order-number order-number"
       "manufacturer manufacturer manufacturer"
       "supplier supplier supplier"
       "group group group"
@@ -280,8 +280,8 @@ onBeforeMount(setOptionsProjects);
   grid-area: project;
 }
 
-#machine {
-  grid-area: machine;
+#product-number {
+  grid-area: product-number;
 }
 
 #quantity {
@@ -296,8 +296,8 @@ onBeforeMount(setOptionsProjects);
   grid-area: partnumber;
 }
 
-#definition {
-  grid-area: definition;
+#order-number {
+  grid-area: order-number;
 }
 
 #manufacturer {

@@ -2,7 +2,7 @@ export interface ProjectSchema {
   id: number;
   created: Date;
   number: string;
-  machine: string;
+  product_number: string;
   customer: string;
   description: string;
   designated_user_id: number;
@@ -11,7 +11,7 @@ export interface ProjectSchema {
 
 export interface ProjectCreateSchema {
   number: string;
-  machine?: string;
+  product_number?: string;
   customer: string;
   description: string;
   designated_user_id: number;
@@ -20,7 +20,7 @@ export interface ProjectCreateSchema {
 
 export interface ProjectUpdateSchema {
   number: string;
-  machine?: string;
+  product_number?: string;
   customer: string;
   description: string;
   designated_user_id: number;

@@ -34,11 +34,11 @@ export interface HostConfigBoughtItemsFilterSchema {
   id: number;
   status: string;
   projectNumber: string;
-  machine: string;
+  productNumber: string;
   quantity: number;
   unit: string;
   partnumber: string;
-  definition: string;
+  orderNumber: string;
   manufacturer: string;
   supplier: string;
   group1: string;
@@ -52,7 +52,7 @@ export interface HostConfigProjectFilterSchema {
   skip: number;
   limit: number;
   number: string;
-  machine: string;
+  productNumber: string;
   customer: string;
   description: string;
   isActive: boolean;

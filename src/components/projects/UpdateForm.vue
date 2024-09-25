@@ -44,11 +44,11 @@ watch(
             placeholder="Number *"
           />
         </div>
-        <div id="machine" class="grid-item-center">
+        <div id="product-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-model="updateFormData.machine"
-            placeholder="Machine"
+            v-model="updateFormData.product_number"
+            placeholder="Product Number"
           />
         </div>
         <div id="customer" class="grid-item-center">
@@ -90,7 +90,7 @@ watch(
   grid-template-columns: 50px auto 150px;
   grid-template-areas:
     "project project project"
-    "machine machine machine"
+    "product-number product-number product-number"
     "customer customer customer"
     "description description description"
     "designated designated designated"
@@ -101,8 +101,8 @@ watch(
   grid-area: project;
 }
 
-#machine {
-  grid-area: machine;
+#product-number {
+  grid-area: product-number;
 }
 
 #customer {

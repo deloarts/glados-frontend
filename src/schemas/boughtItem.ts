@@ -8,11 +8,11 @@ export interface BoughtItemSchema {
   project_id: number;
   project_number: string;
   project_is_active: boolean;
-  machine: string | null;
+  product_number: string | null;
   quantity: number;
   unit: string;
   partnumber: string;
-  definition: string;
+  order_number: string;
   manufacturer: string;
   supplier: string | null;
   weblink: string | null;
@@ -33,7 +33,7 @@ export interface BoughtItemSchema {
 export interface BoughtItemCreateSchema {
   project_id: number;
   partnumber: string;
-  definition: string;
+  order_number: string;
   manufacturer: string;
   quantity: number;
   unit: string;
@@ -50,7 +50,7 @@ export interface BoughtItemCreateSchema {
 export interface BoughtItemUpdateSchema {
   project_id: number;
   partnumber: string;
-  definition: string;
+  order_number: string;
   manufacturer: string;
   quantity: number;
   unit: string;

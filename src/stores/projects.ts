@@ -43,10 +43,10 @@ export const useProjectsStore = defineStore("projects", () => {
     });
   }
 
-  function getMachine(project_id: number) {
+  function getProductNumber(project_id: number) {
     for (let i = 0; i < projects.value.length; i++) {
       if (projects.value[i].id == project_id) {
-        return projects.value[i].machine;
+        return projects.value[i].product_number;
       }
     }
     return null;
@@ -56,5 +56,5 @@ export const useProjectsStore = defineStore("projects", () => {
     get();
   });
 
-  return { loading, projects, get, clear, fetch, getMachine };
+  return { loading, projects, get, clear, fetch, getProductNumber };
 });

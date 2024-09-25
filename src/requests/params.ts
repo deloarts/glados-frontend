@@ -71,8 +71,8 @@ export function getBoughtItemsFilterParams(
   if (filter.projectNumber != "" && filter.projectNumber != undefined) {
     params.append("project_number", filter.projectNumber);
   }
-  if (filter.machine != "" && filter.machine != undefined) {
-    params.append("machine", filter.machine);
+  if (filter.productNumber != "" && filter.productNumber != undefined) {
+    params.append("product_number", filter.productNumber);
   }
   if (String(filter.quantity) != "" && filter.quantity != undefined) {
     params.append("quantity", String(filter.quantity));
@@ -83,8 +83,8 @@ export function getBoughtItemsFilterParams(
   if (filter.partnumber != "" && filter.partnumber != undefined) {
     params.append("partnumber", filter.partnumber);
   }
-  if (filter.definition != "" && filter.definition != undefined) {
-    params.append("definition", filter.definition);
+  if (filter.orderNumber != "" && filter.orderNumber != undefined) {
+    params.append("order_number", filter.orderNumber);
   }
   if (filter.manufacturer != "" && filter.manufacturer != undefined) {
     params.append("manufacturer", filter.manufacturer);
@@ -123,8 +123,8 @@ export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
   if (filter.number != "" && filter.number != undefined) {
     params.append("number", filter.number);
   }
-  if (filter.machine != "" && filter.machine != undefined) {
-    params.append("machine", filter.machine);
+  if (filter.productNumber != "" && filter.productNumber != undefined) {
+    params.append("product_number", filter.productNumber);
   }
   if (filter.customer != "" && filter.customer != undefined) {
     params.append("customer", filter.customer);

@@ -24,7 +24,7 @@ const formData = ref<BoughtItemCreateSchema>({
   quantity: null,
   unit: null,
   partnumber: null,
-  definition: null,
+  order_number: null,
   supplier: null,
   manufacturer: null,
   note_general: null,

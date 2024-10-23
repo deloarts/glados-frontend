@@ -3,15 +3,21 @@ import { ref } from "vue";
 
 import type { ProjectCreateSchema } from "@/schemas/project";
 
+import { useUserStore } from "@/stores/user";
+
 import ControlsNew from "@/components/projects/ControlsNew.vue";
 import CreateForm from "@/components/projects/CreateForm.vue";
 
+// Stores
+const userStore = useUserStore();
+
+// Form stuff
 const formData = ref<ProjectCreateSchema>({
   number: null,
   product_number: null,
   customer: null,
   description: null,
-  designated_user_id: null,
+  designated_user_id: userStore.user.id,
   is_active: true,
 });
 </script>

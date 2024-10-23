@@ -3,7 +3,7 @@ import { watch, computed } from "vue";
 //@ts-ignore
 import Toggle from "@vueform/toggle/dist/toggle.js";
 
-import { useUsersStore } from "@/stores/user";
+import { useUsersStore, useUserStore } from "@/stores/user";
 
 import type { ProjectCreateSchema } from "@/schemas/project";
 
@@ -22,6 +22,7 @@ const emit = defineEmits<{
 const createFormData = computed<ProjectCreateSchema>(() => props.formData);
 
 // Stores
+const userStore = useUserStore();
 const usersStore = useUsersStore();
 
 watch(
@@ -67,8 +68,19 @@ watch(
         </div>
         <div id="designated" class="grid-item-center">
           <SelectUser
+            v-if="
+              userStore.user.is_superuser ||
+              userStore.user.is_adminuser ||
+              userStore.user.is_systemuser
+            "
             v-model:selection="createFormData.designated_user_id"
             :options="usersStore.users"
+          />
+          <input
+            v-else
+            class="form-base-text-input"
+            :value="userStore.user.full_name"
+            disabled
           />
         </div>
         <div id="active" class="grid-item-center">
@@ -78,6 +90,7 @@ watch(
       </div>
     </div>
   </div>
+  {{ createFormData }}
 </template>
 
 <style scoped lang="scss">

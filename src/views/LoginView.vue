@@ -28,6 +28,7 @@ const usersStore = useUsersStore();
 const projectsStore = useProjectsStore();
 const notificationStore = useNotificationStore();
 
+const logoutCooldown = ref<boolean>(false);
 const expandBox = ref<boolean>(false);
 const expandFull = ref<boolean>(false);
 const showLoadingBar = ref<boolean>(true);
@@ -36,14 +37,13 @@ const showInputPassword = ref<boolean>(false);
 const showButtonLogin = ref<boolean>(false);
 
 const hasRequiredData = computed<boolean>(() => {
-  return usersStore.users.length > 0 && userStore.user.id != null;
+  return (
+    logoutCooldown.value &&
+    usersStore.users.length > 0 &&
+    userStore.user.id != null
+  );
 });
 const userInput = ref(null);
-const focusUserInput = () => {
-  if (userInput.value) {
-    userInput.value.focus();
-  }
-};
 const currentMonth = moment().month();
 
 const form_user = ref<string>("");
@@ -91,8 +91,11 @@ onBeforeMount(() => {
   usersStore.clear();
   projectsStore.clear();
 });
-onMounted(focusUserInput);
-onMounted(() =>
+onMounted(() => {
+  setTimeout(() => {
+    logoutCooldown.value = true;
+  }, 100);
+
   setTimeout(() => {
     showLoadingBar.value = false;
     expandBox.value = true;
@@ -105,9 +108,8 @@ onMounted(() =>
     setTimeout(() => {
       showButtonLogin.value = expandBox.value;
     }, 340);
-    setTimeout(focusUserInput.bind(this), 1000);
-  }, 1500),
-);
+  }, 1500);
+});
 </script>
 
 <template>

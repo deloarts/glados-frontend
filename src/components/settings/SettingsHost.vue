@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import constants from "@/constants";
 
 import HostInformationItem from "@/components/settings/HostInformationItem.vue";
 import DiscSpaceChart from "@/components/settings/DiscSpaceChart.vue";
@@ -9,6 +10,7 @@ import { hostRequest } from "@/requests/host";
 
 import type { DiscSpace } from "@/models/host";
 
+import IconTagText from "@/components/icons/IconTagText.vue";
 import IconServer from "@/components/icons/IconServer.vue";
 import IconComputer from "@/components/icons/IconComputer.vue";
 import IconWarning from "@/components/icons/IconWarning.vue";
@@ -24,15 +26,17 @@ const discSpaceBackupDataset = ref<DiscSpace>({
 });
 
 const os = ref<string>("-");
+const version = ref<string>("-");
 const hostname = ref<string>("-");
 const databaseSpace = ref<string>("-");
 const backupSpace = ref<string>("-");
 const backupNotMounted = ref<boolean>(false);
 
-function getDiscSpace() {
+function getHostInformation() {
   hostRequest.getHostInfo().then((response) => {
     console.log(JSON.stringify(response.data));
     if (response.status === 200) {
+      version.value = `App v${constants.version}  //  Server v${response.data.version}`;
       hostname.value = response.data.hostname;
       os.value = response.data.os;
       databaseSpace.value =
@@ -65,13 +69,19 @@ function getDiscSpace() {
   });
 }
 
-onMounted(getDiscSpace);
+onMounted(getHostInformation);
 </script>
 
 <template>
   <div class="scope">
     <div class="content">
       <h1>Host Information</h1>
+      <div class="wrapper">
+        <HostInformationItem title="VERSION" v-model:text="version">
+          <IconTagText v-if="version != '-'" />
+          <LoadingSpinner v-else />
+        </HostInformationItem>
+      </div>
       <div class="wrapper">
         <HostInformationItem title="HOSTNAME" v-model:text="hostname">
           <IconComputer v-if="hostname != '-'" />

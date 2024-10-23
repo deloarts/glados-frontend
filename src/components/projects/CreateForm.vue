@@ -90,7 +90,6 @@ watch(
       </div>
     </div>
   </div>
-  {{ createFormData }}
 </template>
 
 <style scoped lang="scss">

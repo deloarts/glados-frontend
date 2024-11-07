@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, onBeforeMount, onUnmounted } from "vue";
+import { watch, computed, onBeforeMount, onUnmounted } from "vue";
 
 // @ts-ignore
 import moment from "moment";
@@ -7,6 +7,7 @@ import moment from "moment";
 import { useProjectFilterStore } from "@/stores/filter";
 import { useUsersStore } from "@/stores/user";
 import { useProjectsStore } from "@/stores/projects";
+import { useResolutionStore } from "@/stores/resolution";
 
 import type { AvailableOption } from "@/models/controls";
 
@@ -27,6 +28,14 @@ const emit = defineEmits<{
 const usersStore = useUsersStore();
 const projectsStore = useProjectsStore();
 const projectFilterStore = useProjectFilterStore();
+const resolutionStore = useResolutionStore();
+
+const gtMinWidthDesktop = computed<boolean>(
+  () => resolutionStore.gtMinWidthDesktop,
+);
+const gtMinWidthTablet = computed<boolean>(
+  () => resolutionStore.gtMinWidthTablet,
+);
 
 // Select options
 let availableOptionsState: Array<AvailableOption> = [
@@ -112,10 +121,34 @@ watch(
       <table class="cursor-default">
         <thead>
           <tr>
-            <th class="first sticky-col" id="number">#</th>
-            <th class="first sticky-col" id="project-id">ID</th>
-            <th class="first sticky-col" id="project">Project</th>
-            <th class="first sticky-col" id="product-number">Product</th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="number"
+            >
+              #
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="project-id"
+            >
+              ID
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="project"
+            >
+              Project
+            </th>
+            <th
+              class="first"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="product-number"
+            >
+              Product
+            </th>
             <th class="first" id="customer">Customer</th>
             <th class="first" id="description">Description</th>
             <th class="first" id="designated">Designated User</th>
@@ -123,10 +156,19 @@ watch(
             <th class="first" id="is-active">State</th>
           </tr>
           <tr>
-            <th class="second sticky-col" id="number"></th>
-            <th class="second sticky-col" id="project-id"></th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="number"
+            ></th>
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="project-id"
+            ></th>
+            <th
+              class="second"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
               id="project"
               @contextmenu.prevent="
                 () => {
@@ -142,7 +184,8 @@ watch(
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
               id="product-number"
               @contextmenu.prevent="
                 () => {
@@ -158,7 +201,7 @@ watch(
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
               id="customer"
               @contextmenu.prevent="
                 () => {
@@ -174,7 +217,7 @@ watch(
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
               id="description"
               @contextmenu.prevent="
                 () => {
@@ -190,7 +233,7 @@ watch(
               />
             </th>
             <th
-              class="second sticky-col"
+              class="second"
               id="designated"
               @contextmenu.prevent="
                 () => {
@@ -211,9 +254,9 @@ watch(
                 </option>
               </select>
             </th>
-            <th class="second sticky-col" id="created"></th>
+            <th class="second" id="created"></th>
             <th
-              class="second sticky-col"
+              class="second"
               id="is-active"
               @contextmenu.prevent="
                 () => {
@@ -243,14 +286,23 @@ watch(
             v-bind:class="{ selected: props.selectedProjectId == project.id }"
             v-on:click="addSelection(project.id)"
           >
-            <td class="sticky-col" id="number">
+            <td
+              class=""
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="number"
+            >
               {{ index + 1 }}
             </td>
-            <td class="sticky-col" id="project-id">
+            <td
+              class=""
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
+              id="project-id"
+            >
               {{ project.id }}
             </td>
             <td
-              class="sticky-col"
+              class=""
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
               id="project"
               @contextmenu.prevent="
                 () => {
@@ -261,11 +313,13 @@ watch(
               {{ project.number }}
             </td>
             <td
-              class="sticky-col"
+              class=""
+              v-bind:class="{ 'sticky-col': gtMinWidthTablet }"
               id="product-number"
               @contextmenu.prevent="
                 () => {
-                  projectFilterStore.state.productNumber = project.product_number;
+                  projectFilterStore.state.productNumber =
+                    project.product_number;
                 }
               "
             >

@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 
+import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { boughtItemsRequest } from "@/requests/items";
 
-const props = defineProps<{
-  selectedItemIds: Array<number>;
-}>();
+const boughtItemsStore = useBoughtItemsStore();
 
 const changelog = ref<Array<string>>([""]);
 
 function fetchChangelog() {
-  if (props.selectedItemIds.length > 0) {
+  if (boughtItemsStore.selectedIDs.length > 0) {
     boughtItemsRequest
-      .getItemsIdChangelog(props.selectedItemIds[0])
+      .getItemsIdChangelog(boughtItemsStore.selectedIDs[0])
       .then((response) => {
         changelog.value = response.data;
       });
@@ -22,7 +21,7 @@ function fetchChangelog() {
 onMounted(() => fetchChangelog());
 
 watch(
-  () => props.selectedItemIds,
+  () => boughtItemsStore.selectedIDs,
   (newSelection: Array<number>, oldSelection: Array<number>) => {
     if (newSelection != oldSelection) {
       changelog.value = [];
@@ -34,8 +33,8 @@ watch(
 
 <template>
   <div class="scope">
-    <div v-if="props.selectedItemIds.length > 0" class="container">
-      <h1>Changelog of item #{{ props.selectedItemIds[0] }}</h1>
+    <div v-if="boughtItemsStore.selectedIDs.length > 0" class="container">
+      <h1>Changelog of item #{{ boughtItemsStore.selectedIDs[0] }}</h1>
       <div v-for="log in changelog" class="changelog-item">{{ log }}</div>
     </div>
     <div v-else class="container">

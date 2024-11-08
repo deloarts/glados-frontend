@@ -3,15 +3,11 @@ import { ref } from "vue";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 import Changelog from "@/components/items/bought/Changelog.vue";
-import DataTable from "@/components/items/bought/DataTable.vue";
+import DataTable from "@/components/items/bought/table/DataTable.vue";
 import Controls from "@/components/items/bought/Controls.vue";
 
 // Store
 const controlsStore = useBoughtItemsControlsStore();
-
-// Items
-const selectedItemIds = ref<Array<number>>([]);
-const triggerGetNewData = ref<boolean>(false);
 </script>
 
 <template>
@@ -22,23 +18,17 @@ const triggerGetNewData = ref<boolean>(false);
         v-bind:class="{ 'show-changelog': controlsStore.state.changelog }"
       >
         <div id="controls" class="controls">
-          <Controls
-            v-model:selected-item-ids="selectedItemIds"
-            v-model:trigger-get-new-data="triggerGetNewData"
-          />
+          <Controls />
         </div>
         <div id="data" class="data">
-          <DataTable
-            v-model:selected-item-ids="selectedItemIds"
-            v-model:trigger-get-new-data="triggerGetNewData"
-          />
+          <DataTable />
         </div>
         <div
           id="changelog"
           class="changelog"
           v-if="controlsStore.state.changelog"
         >
-          <Changelog v-model:selected-item-ids="selectedItemIds" />
+          <Changelog />
         </div>
       </div>
     </div>

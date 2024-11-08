@@ -14,9 +14,14 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
   const paused = ref<boolean>(false);
   const loading = ref<boolean>(false);
   const items = ref<Array<BoughtItemSchema>>([]);
+  const selectedIDs = ref<Array<number>>([]);
 
   function clear() {
     items.value = [];
+  }
+
+  function clearSelection() {
+    selectedIDs.value = [];
   }
 
   function pause(state: boolean) {
@@ -57,5 +62,14 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
     getItems();
   });
 
-  return { loading, paused, items, get, clear, pause };
+  return {
+    loading,
+    paused,
+    items,
+    selectedIDs,
+    get,
+    clear,
+    pause,
+    clearSelection,
+  };
 });

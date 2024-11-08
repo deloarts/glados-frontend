@@ -31,15 +31,6 @@ import SelectPreText from "@/components/elements/SelectPreText.vue";
 
 import type { AvailableOption } from "@/models/controls";
 
-const props = defineProps<{
-  selectedItemIds: Array<number>;
-}>();
-
-const emit = defineEmits<{
-  (e: "update:selectedItemIds", v: Array<number>): void;
-  (e: "update:triggerGetNewData", v: boolean): void;
-}>();
-
 // Stores
 const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
@@ -125,29 +116,29 @@ function onButtonNewItem() {
 }
 
 function onButtonEdit() {
-  if (props.selectedItemIds.length == 0) {
+  if (boughtItemsStore.selectedIDs.length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (props.selectedItemIds.length != 1) {
+  } else if (boughtItemsStore.selectedIDs.length != 1) {
     notificationStore.addWarn("You can only edit one item.");
   } else {
-    router.push(`/items/bought/edit/${props.selectedItemIds[0]}`);
+    router.push(`/items/bought/edit/${boughtItemsStore.selectedIDs[0]}`);
   }
 }
 
 function onButtonCopy() {
-  if (props.selectedItemIds.length == 0) {
+  if (boughtItemsStore.selectedIDs.length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (props.selectedItemIds.length != 1) {
+  } else if (boughtItemsStore.selectedIDs.length != 1) {
     notificationStore.addWarn("You can only edit one item.");
   } else {
-    router.push(`/items/bought/copy/${props.selectedItemIds[0]}`);
+    router.push(`/items/bought/copy/${boughtItemsStore.selectedIDs[0]}`);
   }
 }
 
 function onButtonDelete() {
-  if (props.selectedItemIds.length == 0) {
+  if (boughtItemsStore.selectedIDs.length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (props.selectedItemIds.length != 1) {
+  } else if (boughtItemsStore.selectedIDs.length != 1) {
     notificationStore.addWarn("You can only delete one item.");
   } else {
     showDeletePrompt.value = true;
@@ -169,16 +160,12 @@ function onButtonUploadExcel() {
   showExcelImport.value = true;
 }
 
-function getNewData() {
-  emit("update:triggerGetNewData", true);
-}
-
 function deleteItem() {
-  const itemId = props.selectedItemIds[0];
+  const itemId = boughtItemsStore.selectedIDs[0];
   boughtItemsRequest.deleteItemsId(itemId).then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(`Deleted item #${itemId}`);
-      getNewData();
+      boughtItemsStore.get();
     } else {
       notificationStore.addWarn(response.data.detail);
     }
@@ -187,7 +174,7 @@ function deleteItem() {
 }
 
 function onButtonClear() {
-  emit("update:selectedItemIds", []);
+  boughtItemsStore.clearSelection();
 }
 
 function setupMobileView() {
@@ -386,7 +373,7 @@ onBeforeMount(setupTabletView);
     "
   />
   <ExcelImport
-    v-bind:on-success="getNewData"
+    v-bind:on-success="boughtItemsStore.get"
     v-model:show-uploader="showExcelImport"
   />
 </template>

@@ -23,16 +23,7 @@ import IconBellRing from "@/components/icons/IconBellRing.vue";
 import IconLocked from "@/components/icons/IconLocked.vue";
 import IconExternalLink from "@/components/icons/IconExternalLink.vue";
 
-// Props & Emits
-const props = defineProps<{
-  selectedItemIds: Array<number>;
-  triggerGetNewData: boolean;
-}>();
-
-const emit = defineEmits<{
-  (e: "update:selectedItemIds", v: Array<number>): void;
-  (e: "update:triggerGetNewData", v: boolean): void;
-}>();
+import TableItemInput from "./TableItemInput.vue";
 
 // Router
 const route = useRoute();
@@ -118,7 +109,7 @@ function pauseFetchBoughtItems(state: boolean) {
 }
 
 function multiSelect(event: any, id: number, index: number) {
-  var tempSelectedItemIds = props.selectedItemIds;
+  var tempSelectedItemIds = boughtItemsStore.selectedIDs;
 
   if (event.ctrlKey) {
     if (tempSelectedItemIds.includes(id)) {
@@ -151,11 +142,11 @@ function multiSelect(event: any, id: number, index: number) {
   }
 
   lineIndex.value = index;
-  emit("update:selectedItemIds", tempSelectedItemIds);
+  boughtItemsStore.selectedIDs = tempSelectedItemIds;
 }
 
 function removeSelection() {
-  emit("update:selectedItemIds", []);
+  boughtItemsStore.clearSelection();
 }
 
 function looseFocus(event: any) {
@@ -165,7 +156,7 @@ function looseFocus(event: any) {
 function updateItemHandler(requestFn: Function, value: string, desc: string) {
   var c = 0;
   var confirmation = true;
-  const ids = props.selectedItemIds;
+  const ids = boughtItemsStore.selectedIDs;
   if (value == null) {
     return;
   }
@@ -345,17 +336,6 @@ onBeforeMount(() => {
 onUnmounted(() => {
   document.removeEventListener("keyup", eventKeyUp);
 });
-
-watch(
-  () => props.triggerGetNewData,
-  () => {
-    if (props.triggerGetNewData) {
-      boughtItemsStore.get();
-      emit("update:triggerGetNewData", false);
-      emit("update:selectedItemIds", []);
-    }
-  },
-);
 
 watch(
   () => filterStore.$state,
@@ -1112,7 +1092,7 @@ watch(
                 setDesiredDeliveryDate(item.desired_delivery_date)
             "
             v-bind:class="{
-              selected: props.selectedItemIds.includes(item.id),
+              selected: boughtItemsStore.selectedIDs.includes(item.id),
               open:
                 controlsStore.state.rainbow &&
                 !controlsStore.state.requestView &&
@@ -1212,7 +1192,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1266,7 +1246,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1327,7 +1307,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1365,7 +1345,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1403,7 +1383,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1429,43 +1409,12 @@ watch(
                 {{ item.manufacturer }}
               </div>
             </td>
-            <td
-              id="supplier"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.supplier = item.supplier;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.supplier"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateSupplier(item.supplier), pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.supplier }}
-              </div>
-            </td>
+            <TableItemInput
+              name="Supplier"
+              :value="item.supplier"
+              :update-method="boughtItemsRequest.putItemsSupplier"
+              :edit-mode="true"
+            />
             <td
               id="group"
               @contextmenu.prevent="
@@ -1478,7 +1427,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1515,7 +1464,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1554,7 +1503,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1622,7 +1571,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1710,7 +1659,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "
@@ -1790,7 +1739,7 @@ watch(
                 v-if="
                   (userStore.user.is_superuser ||
                     userStore.user.is_adminuser) &&
-                  props.selectedItemIds.includes(item.id) &&
+                  boughtItemsStore.selectedIDs.includes(item.id) &&
                   controlsStore.state.textOnly == false &&
                   gtMinWidthTablet
                 "

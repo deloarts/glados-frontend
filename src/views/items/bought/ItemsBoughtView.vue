@@ -1,13 +1,28 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
 import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { useBoughtItemFilterStore } from "@/stores/filter";
 
 import Changelog from "@/components/items/bought/Changelog.vue";
 import DataTable from "@/components/items/bought/table/DataTable.vue";
 import Controls from "@/components/items/bought/Controls.vue";
 
-// Store
+const router = useRouter();
+const route = useRoute();
+
 const controlsStore = useBoughtItemsControlsStore();
+const boughtItemFilterStore = useBoughtItemFilterStore();
+
+onMounted(() => {
+  if (isNaN(Number(route.query.id))) {
+    boughtItemFilterStore.reset();
+  } else if (route.query.id != null) {
+    boughtItemFilterStore.state.id = Number(route.query.id);
+  }
+  router.replace({ query: null });
+});
 </script>
 
 <template>

@@ -1,23 +1,22 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { computed } from "vue";
 
-import { useBoughtItemsStore } from "@/stores/boughtItems";
+import type { AvailableOption } from "@/models/controls";
+
 import { useUserStore } from "@/stores/user";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
-import { useResolutionStore } from "@/stores/resolution";
 
 import { updateSelectedTableElement } from "@/helper/selection.helper";
 
-const boughtItemsStore = useBoughtItemsStore();
 const userStore = useUserStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
-const resolutionStore = useResolutionStore();
 
 interface Props {
   name: string;
   value: string | number | Date | null;
+  options: Array<AvailableOption>;
   updateMethod: Function;
   filterStoreKey?: string;
   type?: string;
@@ -32,12 +31,6 @@ const props = withDefaults(defineProps<Props>(), {
   editMode: false,
 });
 
-const gtMinWidthTablet = computed<boolean>(
-  () => resolutionStore.gtMinWidthTablet,
-);
-
-const hasFocus = ref<boolean>(false);
-const inputModel = ref<string | number | Date | null>();
 const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
 });
@@ -52,39 +45,16 @@ function onEscape() {
   blur();
 }
 
-function onEnter() {
+function onChange(eventTarget: EventTarget) {
   blur();
   updateSelectedTableElement(
     props.name,
-    inputModel.value,
+    //@ts-ignore
+    eventTarget.value,
     props.value,
     props.updateMethod,
   );
 }
-
-onMounted(() => {
-  inputModel.value = props.value;
-});
-
-watch(
-  () => props.value,
-  () => {
-    if (!hasFocus.value) {
-      inputModel.value = props.value;
-    }
-  },
-);
-
-watch(
-  () => hasFocus.value,
-  () => {
-    if (hasFocus.value) {
-      inputModel.value = JSON.parse(JSON.stringify(props.value));
-    } else {
-      inputModel.value = props.value;
-    }
-  },
-);
 </script>
 
 <template>
@@ -97,28 +67,26 @@ watch(
       }
     "
   >
-    <div
+    <select
       v-if="
         props.editMode &&
         (userStore.user.is_superuser || userStore.user.is_adminuser) &&
-        !controlsStore.state.textOnly &&
-        gtMinWidthTablet
+        !controlsStore.state.textOnly
       "
+      :value="props.value"
+      v-on:keyup.escape="onEscape()"
+      v-on:change="onChange($event.target)"
     >
-      <input
-        :type="props.type"
-        v-model="inputModel"
-        v-on:keyup.escape="onEscape()"
-        v-on:keyup.enter="onEnter()"
-        @focusin="boughtItemsStore.pause(true), (hasFocus = true)"
-        @focusout="boughtItemsStore.pause(false), (hasFocus = false)"
-      />
-    </div>
-    <div
-      v-else
-      v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-    >
-      {{ props.value }}
+      <option
+        v-for="(option, index) in props.options"
+        :key="index"
+        :value="option.value"
+      >
+        {{ option.text }}
+      </option>
+    </select>
+    <div v-else>
+      {{ String(props.value).toUpperCase() }}
     </div>
   </td>
 </template>
@@ -133,22 +101,24 @@ td {
   max-width: v-bind(cssWidth);
 }
 
-input {
+select {
   width: 100%;
   height: 18px;
-
-  box-shadow: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
+
+  border: none;
+  outline: none;
 
   color: white;
   background-color: transparent;
 
-  outline: none;
-  border: none;
-  border-color: inherit;
+  font-size: 12px;
+}
 
-  font-size: 12.25px;
+select > option {
+  color: white;
+  background-color: $main-background-color-dark-2;
 }
 
 .fix-height {

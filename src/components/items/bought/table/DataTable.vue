@@ -23,7 +23,11 @@ import IconBellRing from "@/components/icons/IconBellRing.vue";
 import IconLocked from "@/components/icons/IconLocked.vue";
 import IconExternalLink from "@/components/icons/IconExternalLink.vue";
 
+import TableItemRowNumber from "./TableItemRowNumber.vue";
 import TableItemInput from "./TableItemInput.vue";
+import TableItemSelect from "./TableItemSelect.vue";
+import TableItemText from "./TableItemText.vue";
+import TableItemDate from "./TableItemDate.vue";
 
 // Router
 const route = useRoute();
@@ -47,10 +51,14 @@ const gtMinWidthTablet = computed<boolean>(
 );
 
 // Select options
-let availableOptionsStatus: Array<AvailableOption> = [
+let availableOptionsStatusFilter: Array<AvailableOption> = [
   { text: "All", value: "" },
 ];
-let availableOptionsUnit: Array<AvailableOption> = [{ text: "All", value: "" }];
+let availableOptionsStatus: Array<AvailableOption> = [];
+let availableOptionsUnitFilter: Array<AvailableOption> = [
+  { text: "All", value: "" },
+];
+let availableOptionsUnit: Array<AvailableOption> = [];
 let availableOptionsUsers: Array<AvailableOption> = [
   { text: "All", value: "" },
 ];
@@ -62,8 +70,19 @@ const lineIndex = ref<number>(0);
 let pickedExpectedDate = ref<Date>(new Date());
 let pickedDesiredDate = ref<Date>(new Date());
 
-function setOptionsStatus() {
+function setOptionsStatusFilter() {
   var tempAvailableOptions = [{ text: "All", value: "" }];
+  for (const property in statusStore.boughtItemStatus) {
+    tempAvailableOptions.push({
+      text: capitalizeFirstLetter(property),
+      value: statusStore.boughtItemStatus[property],
+    });
+  }
+  availableOptionsStatusFilter = tempAvailableOptions;
+}
+
+function setOptionsStatus() {
+  var tempAvailableOptions = [];
   for (const property in statusStore.boughtItemStatus) {
     tempAvailableOptions.push({
       text: capitalizeFirstLetter(property),
@@ -73,8 +92,19 @@ function setOptionsStatus() {
   availableOptionsStatus = tempAvailableOptions;
 }
 
-function setOptionsUnits() {
+function setOptionsUnitsFilter() {
   var tempAvailableOptions = [{ text: "All", value: "" }];
+  for (let i = 0; i < unitsStore.boughtItemUnits.values.length; i++) {
+    tempAvailableOptions.push({
+      text: unitsStore.boughtItemUnits.values[i],
+      value: unitsStore.boughtItemUnits.values[i],
+    });
+  }
+  availableOptionsUnitFilter = tempAvailableOptions;
+}
+
+function setOptionsUnits() {
+  var tempAvailableOptions = [];
   for (let i = 0; i < unitsStore.boughtItemUnits.values.length; i++) {
     tempAvailableOptions.push({
       text: unitsStore.boughtItemUnits.values[i],
@@ -329,7 +359,9 @@ function eventKeyUp(event: any) {
 onBeforeMount(() => {
   document.addEventListener("keyup", eventKeyUp);
   setOptionsUsers();
+  setOptionsStatusFilter();
   setOptionsStatus();
+  setOptionsUnitsFilter();
   setOptionsUnits();
 });
 
@@ -558,10 +590,7 @@ watch(
             <th
               class="first"
               id="storage-place"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
+              v-if="!controlsStore.state.requestView"
             >
               Storage
             </th>
@@ -613,7 +642,7 @@ watch(
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="(option, index) in availableOptionsStatus"
+                  v-for="(option, index) in availableOptionsStatusFilter"
                   :key="index"
                   :value="option.value"
                 >
@@ -691,7 +720,7 @@ watch(
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="(option, index) in availableOptionsUnit"
+                  v-for="(option, index) in availableOptionsUnitFilter"
                   :key="index"
                   :value="option.value"
                 >
@@ -1062,10 +1091,7 @@ watch(
             <th
               class="second"
               id="storage-place"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
+              v-if="!controlsStore.state.requestView"
               @contextmenu.prevent="
                 () => {
                   filterStore.state.storagePlace = null;
@@ -1128,164 +1154,62 @@ watch(
               'request-view': controlsStore.state.requestView,
             }"
           >
-            <td
-              id="number"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-            >
-              <IconLocked v-if="!item.project_is_active" class="locked-icon" />
-              <IconBellRing v-else-if="item.high_priority" class="bell-icon" />
-              <span v-else>{{ index + 1 }}</span>
-            </td>
-            <td
-              id="item-id"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.id = item.id;
-                }
-              "
-            >
-              {{ item.id }}
-            </td>
-            <td
-              id="status"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.status = item.status;
-                }
-              "
-            >
-              <Spinner v-if="statusStore.loading" />
-              <select
-                v-else-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  controlsStore.state.textOnly == false
-                "
-                class="cell-select"
-                v-model="item.status"
-                @change="updateStatus(item.status)"
-              >
-                <option
-                  v-for="(option, index) in availableOptionsStatus"
-                  :key="index"
-                  :value="option.value"
-                >
-                  {{ option.text }}
-                </option>
-              </select>
-              <div v-else>
-                {{ item.status.toUpperCase() }}
-              </div>
-            </td>
-            <td
-              id="project"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.projectNumber = item.project_number;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.project_number"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateProject(item.project_number),
-                      pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.project_number }}
-              </div>
-            </td>
-            <td
-              id="product-number"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.productNumber = item.product_number;
-                }
-              "
-            >
-              <div
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.product_number }}
-              </div>
-            </td>
-            <td
-              id="quantity"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.quantity = item.quantity;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.quantity"
-                  type="number"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateQuantity(item.quantity), pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.quantity }}
-              </div>
-            </td>
-            <td
-              id="unit"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.unit = item.unit;
-                }
-              "
-            >
-              <div
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.unit }}
-              </div>
-            </td>
+            <TableItemRowNumber
+              :number="index + 1"
+              :locked-icon="!item.project_is_active"
+              :bell-icon="item.high_priority"
+            />
+            <TableItemText
+              name="ID"
+              filter-store-key="id"
+              :value="item.id"
+              :width="45"
+              :center="true"
+            />
+            <TableItemSelect
+              name="Status"
+              filter-store-key="status"
+              :value="item.status"
+              :options="availableOptionsStatus"
+              :update-method="boughtItemsRequest.putItemsStatus"
+              :width="85"
+              :edit-mode="true"
+            />
+            <TableItemInput
+              name="Project Number"
+              filter-store-key="projectNumber"
+              :value="item.project_number"
+              :update-method="boughtItemsRequest.putItemsProject"
+              :width="85"
+              :edit-mode="true"
+            />
+            <TableItemText
+              name="Product Number"
+              filter-store-key="productNumber"
+              :value="item.product_number"
+              :width="85"
+            />
+            <TableItemInput
+              name="Quantity"
+              type="number"
+              filter-store-key="quantity"
+              :value="item.quantity"
+              :update-method="boughtItemsRequest.putItemsQuantity"
+              :width="41"
+              :edit-mode="true"
+            />
+
+            <!-- UNIT ENDPOINT NOT AVAILABLE IN BACKEND -->
+            <TableItemSelect
+              name="Unit"
+              filter-store-key="unit"
+              :value="item.unit"
+              :options="availableOptionsUnit"
+              :update-method="boughtItemsRequest.putItemsUnit"
+              :width="41"
+              :edit-mode="false"
+            />
+
             <td
               id="weblink"
               v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
@@ -1294,164 +1218,46 @@ watch(
                 ><IconExternalLink v-if="item.weblink" class="weblink-icon"
               /></a>
             </td>
-            <td
-              id="partnumber"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.partnumber = item.partnumber;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.partnumber"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updatePartnumber(item.partnumber),
-                      pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.partnumber }}
-              </div>
-            </td>
-            <td
-              id="order-number"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.orderNumber = item.order_number;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.order_number"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateOrderNumber(item.order_number),
-                      pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.order_number }}
-              </div>
-            </td>
-            <td
-              id="manufacturer"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.manufacturer = item.manufacturer;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.manufacturer"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateManufacturer(item.manufacturer),
-                      pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.manufacturer }}
-              </div>
-            </td>
             <TableItemInput
-              name="Supplier"
-              :value="item.supplier"
-              :update-method="boughtItemsRequest.putItemsSupplier"
+              name="Part Number"
+              filter-store-key="partnumber"
+              :value="item.partnumber"
+              :update-method="boughtItemsRequest.putItemsPartnumber"
+              :width="250"
               :edit-mode="true"
             />
-            <td
-              id="group"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.group1 = item.group_1;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.group_1"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateGroup1(item.group_1), pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.group_1 }}
-              </div>
-            </td>
+            <TableItemInput
+              name="Order Number"
+              filter-store-key="orderNumber"
+              :value="item.order_number"
+              :update-method="boughtItemsRequest.putItemsOrderNumber"
+              :width="200"
+              :edit-mode="true"
+            />
+            <TableItemInput
+              name="Manufacturer"
+              filter-store-key="manufacturer"
+              :value="item.manufacturer"
+              :update-method="boughtItemsRequest.putItemsManufacturer"
+              :width="150"
+              :edit-mode="true"
+            />
+            <TableItemInput
+              name="Supplier"
+              filter-store-key="supplier"
+              :value="item.supplier"
+              :update-method="boughtItemsRequest.putItemsSupplier"
+              :width="150"
+              :edit-mode="true"
+            />
+            <TableItemInput
+              name="Group"
+              filter-store-key="group1"
+              :value="item.group_1"
+              :update-method="boughtItemsRequest.putItemsGroup1"
+              :width="170"
+              :edit-mode="true"
+            />
             <td
               id="note-general"
               @contextmenu.prevent="
@@ -1530,241 +1336,100 @@ watch(
                 {{ item.note_supplier }}
               </div>
             </td>
-            <td
-              id="created"
-              v-if="!controlsStore.state.requestView"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.createdDate = item.created;
-                }
-              "
-            >
-              {{ item.created }}
-            </td>
-            <td
-              id="creator"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.creatorId = item.creator_id;
-                }
-              "
-            >
-              <div
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ usersStore.getNameByID(item.creator_id) }}
-              </div>
-            </td>
-            <td
-              id="desired"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.desiredDate = item.desired_delivery_date;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <!-- <Datepicker class="datepicker" v-model="pickedDesiredDate" style="width:75px;text-align:center" /> -->
-                <Datepicker
-                  class="datepicker"
-                  v-model="pickedDesiredDate"
-                  @update:model-value="updateDesiredDeliveryDate"
-                  style="width: 75px; height: 14px; text-align: center"
-                />
-              </div>
-              <div v-else>
-                {{ item.desired_delivery_date }}
-              </div>
-            </td>
-            <td
-              id="requested"
-              v-if="!controlsStore.state.requestView"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.requestedDate = item.requested_date;
-                }
-              "
-            >
-              {{ item.requested_date }}
-            </td>
-            <td
-              id="requester"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.requesterId = item.requester_id;
-                }
-              "
-            >
-              <div
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ usersStore.getNameByID(item.requester_id) }}
-              </div>
-            </td>
-            <td
-              id="ordered"
-              v-if="!controlsStore.state.requestView"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.orderedDate = item.ordered_date;
-                }
-              "
-            >
-              {{ item.ordered_date }}
-            </td>
-            <td
-              id="orderer"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.ordererId = item.orderer_id;
-                }
-              "
-            >
-              <div
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ usersStore.getNameByID(item.orderer_id) }}
-              </div>
-            </td>
-            <td
-              id="expected"
-              v-if="!controlsStore.state.requestView"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.expectedDate = item.expected_delivery_date;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <!-- <Datepicker class="datepicker" v-model="pickedExpectedDate" style="width:75px;text-align:center" /> -->
-                <Datepicker
-                  class="datepicker"
-                  v-model="pickedExpectedDate"
-                  @update:model-value="updateExpectedDeliveryDate"
-                  style="width: 75px; height: 14px; text-align: center"
-                />
-              </div>
-              <div v-else>
-                {{ item.expected_delivery_date }}
-              </div>
-            </td>
-            <td
-              id="delivered"
-              v-if="!controlsStore.state.requestView"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.deliveredDate = item.delivery_date;
-                }
-              "
-            >
-              {{ item.delivery_date }}
-            </td>
-            <td
-              id="taken-over-by"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.receiverId = item.receiver_id;
-                }
-              "
-            >
-              <div
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ usersStore.getNameByID(item.receiver_id) }}
-              </div>
-            </td>
-            <td
-              id="arrival-weeks"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
-            >
-              {{ calcDiffInWeeksFromToday(item.expected_delivery_date) }}
-            </td>
-            <td
-              id="total-delivery-weeks"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
-            >
-              {{ calcDiffInWeeks(item.ordered_date, item.delivery_date) }}
-            </td>
-            <td
-              id="storage-place"
-              v-if="
-                !controlsStore.state.unclutter &&
-                !controlsStore.state.requestView
-              "
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.storagePlace = item.storage_place;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <input
-                  class="cell-input"
-                  v-model="item.storage_place"
-                  type="text"
-                  @focusin="pauseFetchBoughtItems(true)"
-                  @focusout="
-                    updateStorage(item.storage_place),
-                      pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                />
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.storage_place }}
-              </div>
-            </td>
+            <TableItemText
+              name="Created"
+              filter-store-key="createdDate"
+              :value="item.created"
+              :width="81"
+              :center="true"
+            />
+            <TableItemText
+              v-if="!controlsStore.state.unclutter"
+              name="Creator"
+              filter-store-key="creatorId"
+              :value="item.creator_id"
+              :display-value="usersStore.getNameByID(item.creator_id)"
+              :width="121"
+            />
+            <TableItemDate
+              name="Desired Delivery Date"
+              filter-store-key="desiredDate"
+              :value="item.desired_delivery_date"
+              :update-method="boughtItemsRequest.putItemsDesiredDeliveryDate"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
+            />
+            <TableItemText
+              name="Requested Delivery Date"
+              filter-store-key="requestedDate"
+              :value="item.requested_date"
+              :width="81"
+              :center="true"
+            />
+            <TableItemText
+              v-if="!controlsStore.state.unclutter"
+              name="Requester"
+              filter-store-key="requesterId"
+              :value="item.requester_id"
+              :display-value="usersStore.getNameByID(item.requester_id)"
+              :width="121"
+            />
+            <TableItemText
+              name="Ordered"
+              filter-store-key="orderedDate"
+              :value="item.ordered_date"
+              :width="81"
+              :center="true"
+            />
+            <TableItemText
+              v-if="!controlsStore.state.unclutter"
+              name="Orderer"
+              filter-store-key="ordererId"
+              :value="item.orderer_id"
+              :display-value="usersStore.getNameByID(item.orderer_id)"
+              :width="121"
+            />
+            <TableItemDate
+              name="Expected Delivery Date"
+              filter-store-key="expectedDate"
+              :value="item.expected_delivery_date"
+              :update-method="boughtItemsRequest.putItemsExpectedDeliveryDate"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
+            />
+            <TableItemText
+              name="Delivered"
+              filter-store-key="deliveredDate"
+              :value="item.delivery_date"
+              :width="81"
+              :center="true"
+            />
+            <TableItemText
+              v-if="!controlsStore.state.unclutter"
+              name="Receiver"
+              filter-store-key="receiverId"
+              :value="item.receiver_id"
+              :display-value="usersStore.getNameByID(item.receiver_id)"
+              :width="121"
+            />
+            <TableItemText
+              v-if="!controlsStore.state.unclutter"
+              name="Arrival Weeks"
+              :value="calcDiffInWeeksFromToday(item.expected_delivery_date)"
+              :width="61"
+            />
+            <TableItemText
+              v-if="!controlsStore.state.unclutter"
+              name="Total Weeks"
+              :value="calcDiffInWeeks(item.ordered_date, item.delivery_date)"
+              :width="61"
+            />
+            <TableItemInput
+              name="Storage Place"
+              filter-store-key="storagePlace"
+              :value="item.storage_place"
+              :update-method="boughtItemsRequest.putItemsStorage"
+              :width="300"
+              :edit-mode="true"
+            />
           </tr>
         </tbody>
       </table>

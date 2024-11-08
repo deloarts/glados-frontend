@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, computed, watch } from "vue";
+// @ts-ignore
+import moment from "moment";
+import Datepicker from "vue3-datepicker";
 
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useUserStore } from "@/stores/user";
@@ -20,26 +23,29 @@ interface Props {
   value: string | number | Date | null;
   updateMethod: Function;
   filterStoreKey?: string;
-  type?: string;
   width?: number;
+  center?: boolean;
   editMode?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   filterStoreKey: null,
-  type: "text",
-  width: 100,
+  width: 85,
+  center: false,
   editMode: false,
 });
+
+const pickedDate = ref<Date>(new Date());
 
 const gtMinWidthTablet = computed<boolean>(
   () => resolutionStore.gtMinWidthTablet,
 );
 
-const hasFocus = ref<boolean>(false);
-const inputModel = ref<string | number | Date | null>();
 const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
+});
+const cssCenter = computed<string>(() => {
+  return props.center ? "center" : "left";
 });
 
 function blur() {
@@ -52,36 +58,25 @@ function onEscape() {
   blur();
 }
 
-function onEnter() {
+function onUpdate() {
   blur();
+  const formattedDate = moment(pickedDate.value).format("YYYY-MM-DD");
+
   updateSelectedTableElement(
     props.name,
-    inputModel.value,
+    formattedDate,
     props.value,
     props.updateMethod,
   );
 }
 
-onMounted(() => {
-  inputModel.value = props.value;
-});
-
 watch(
-  () => props.value,
+  () => props.editMode,
   () => {
-    if (!hasFocus.value) {
-      inputModel.value = props.value;
-    }
-  },
-);
-
-watch(
-  () => hasFocus.value,
-  () => {
-    if (hasFocus.value) {
-      inputModel.value = JSON.parse(JSON.stringify(props.value));
+    if (props.value != null && props.value != undefined) {
+      pickedDate.value = new Date(props.value);
     } else {
-      inputModel.value = props.value;
+      pickedDate.value = null;
     }
   },
 );
@@ -105,13 +100,12 @@ watch(
         gtMinWidthTablet
       "
     >
-      <input
-        :type="props.type"
-        v-model="inputModel"
-        v-on:keyup.escape="onEscape()"
-        v-on:keyup.enter="onEnter()"
-        @focusin="boughtItemsStore.pause(true), (hasFocus = true)"
-        @focusout="boughtItemsStore.pause(false), (hasFocus = false)"
+      <Datepicker
+        class="datepicker"
+        v-model="pickedDate"
+        v-on:escape="onEscape"
+        @update:model-value="onUpdate"
+        style="width: 75px; height: 14px; text-align: center"
       />
     </div>
     <div
@@ -131,24 +125,7 @@ td {
   width: auto;
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
-}
-
-input {
-  width: 100%;
-  height: 18px;
-
-  box-shadow: none;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-
-  color: white;
-  background-color: transparent;
-
-  outline: none;
-  border: none;
-  border-color: inherit;
-
-  font-size: 12.25px;
+  text-align: v-bind(cssCenter);
 }
 
 .fix-height {

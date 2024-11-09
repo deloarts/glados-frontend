@@ -34,19 +34,19 @@ const boughtItemsStore = useBoughtItemsStore();
 const usersStore = useUsersStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
-const notificationStore = useNotificationStore();
+// const notificationStore = useNotificationStore();
 const unitsStore = useUnitsStore();
 const statusStore = useStatusStore();
 
 // Select options
-let availableOptionsStatusFilter: Array<AvailableOption> = [
-  { text: "All", value: "" },
-];
-let availableOptionsStatus: Array<AvailableOption> = [];
-let availableOptionsUnitFilter: Array<AvailableOption> = [
-  { text: "All", value: "" },
-];
-let availableOptionsUnit: Array<AvailableOption> = [];
+// let availableOptionsStatusFilter: Array<AvailableOption> = [
+//   { text: "All", value: "" },
+// ];
+// let availableOptionsStatus: Array<AvailableOption> = [];
+// let availableOptionsUnitFilter: Array<AvailableOption> = [
+//   { text: "All", value: "" },
+// ];
+// let availableOptionsUnit: Array<AvailableOption> = [];
 let availableOptionsUsers: Array<AvailableOption> = [
   { text: "All", value: "" },
 ];
@@ -58,49 +58,49 @@ const lineIndex = ref<number>(0);
 // let pickedExpectedDate = ref<Date>(new Date());
 // let pickedDesiredDate = ref<Date>(new Date());
 
-function setOptionsStatusFilter() {
-  var tempAvailableOptions = [{ text: "All", value: "" }];
-  for (const property in statusStore.boughtItemStatus) {
-    tempAvailableOptions.push({
-      text: capitalizeFirstLetter(property),
-      value: statusStore.boughtItemStatus[property],
-    });
-  }
-  availableOptionsStatusFilter = tempAvailableOptions;
-}
+// function setOptionsStatusFilter() {
+//   var tempAvailableOptions = [{ text: "All", value: "" }];
+//   for (const property in statusStore.boughtItemStatus) {
+//     tempAvailableOptions.push({
+//       text: capitalizeFirstLetter(property),
+//       value: statusStore.boughtItemStatus[property],
+//     });
+//   }
+//   availableOptionsStatusFilter = tempAvailableOptions;
+// }
 
-function setOptionsStatus() {
-  var tempAvailableOptions = [];
-  for (const property in statusStore.boughtItemStatus) {
-    tempAvailableOptions.push({
-      text: capitalizeFirstLetter(property),
-      value: statusStore.boughtItemStatus[property],
-    });
-  }
-  availableOptionsStatus = tempAvailableOptions;
-}
+// function setOptionsStatus() {
+//   var tempAvailableOptions = [];
+//   for (const property in statusStore.boughtItemStatus) {
+//     tempAvailableOptions.push({
+//       text: capitalizeFirstLetter(property),
+//       value: statusStore.boughtItemStatus[property],
+//     });
+//   }
+//   availableOptionsStatus = tempAvailableOptions;
+// }
 
-function setOptionsUnitsFilter() {
-  var tempAvailableOptions = [{ text: "All", value: "" }];
-  for (let i = 0; i < unitsStore.boughtItemUnits.values.length; i++) {
-    tempAvailableOptions.push({
-      text: unitsStore.boughtItemUnits.values[i],
-      value: unitsStore.boughtItemUnits.values[i],
-    });
-  }
-  availableOptionsUnitFilter = tempAvailableOptions;
-}
+// function setOptionsUnitsFilter() {
+//   var tempAvailableOptions = [{ text: "All", value: "" }];
+//   for (let i = 0; i < unitsStore.boughtItemUnits.values.length; i++) {
+//     tempAvailableOptions.push({
+//       text: unitsStore.boughtItemUnits.values[i],
+//       value: unitsStore.boughtItemUnits.values[i],
+//     });
+//   }
+//   availableOptionsUnitFilter = tempAvailableOptions;
+// }
 
-function setOptionsUnits() {
-  var tempAvailableOptions = [];
-  for (let i = 0; i < unitsStore.boughtItemUnits.values.length; i++) {
-    tempAvailableOptions.push({
-      text: unitsStore.boughtItemUnits.values[i],
-      value: unitsStore.boughtItemUnits.values[i],
-    });
-  }
-  availableOptionsUnit = tempAvailableOptions;
-}
+// function setOptionsUnits() {
+//   var tempAvailableOptions = [];
+//   for (let i = 0; i < unitsStore.boughtItemUnits.values.length; i++) {
+//     tempAvailableOptions.push({
+//       text: unitsStore.boughtItemUnits.values[i],
+//       value: unitsStore.boughtItemUnits.values[i],
+//     });
+//   }
+//   availableOptionsUnit = tempAvailableOptions;
+// }
 
 function setOptionsUsers() {
   var tempAvailableOptions = [{ text: "All", value: "" }];
@@ -347,10 +347,10 @@ function eventKeyUp(event: any) {
 onBeforeMount(() => {
   document.addEventListener("keyup", eventKeyUp);
   setOptionsUsers();
-  setOptionsStatusFilter();
-  setOptionsStatus();
-  setOptionsUnitsFilter();
-  setOptionsUnits();
+  // setOptionsStatusFilter();
+  // setOptionsStatus();
+  // setOptionsUnitsFilter();
+  // setOptionsUnits();
 });
 
 onUnmounted(() => {
@@ -373,21 +373,21 @@ watch(
   { deep: true },
 );
 
-watch(
-  () => unitsStore.$state,
-  () => {
-    setOptionsUnits();
-  },
-  { deep: true },
-);
+// watch(
+//   () => unitsStore.$state,
+//   () => {
+//     setOptionsUnits();
+//   },
+//   { deep: true },
+// );
 
-watch(
-  () => statusStore.$state,
-  () => {
-    setOptionsStatus();
-  },
-  { deep: true },
-);
+// watch(
+//   () => statusStore.$state,
+//   () => {
+//     setOptionsStatus();
+//   },
+//   { deep: true },
+// );
 </script>
 
 <template>
@@ -630,7 +630,9 @@ watch(
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="(option, index) in availableOptionsStatusFilter"
+                  v-for="(
+                    option, index
+                  ) in statusStore.boughtItemStatusOptionFilter"
                   :key="index"
                   :value="option.value"
                 >
@@ -708,7 +710,9 @@ watch(
                 @change="boughtItemsStore.get()"
               >
                 <option
-                  v-for="(option, index) in availableOptionsUnitFilter"
+                  v-for="(
+                    option, index
+                  ) in unitsStore.boughtItemUnitsOptionFilter"
                   :key="index"
                   :value="option.value"
                 >
@@ -1154,7 +1158,7 @@ watch(
               name="Status"
               filter-store-key="status"
               :value="item.status"
-              :options="availableOptionsStatus"
+              :options="statusStore.boughtItemStatusOption"
               :update-method="boughtItemsRequest.putItemsStatus"
               :width="85"
               :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
@@ -1179,7 +1183,7 @@ watch(
               filter-store-key="quantity"
               :value="item.quantity"
               :update-method="boughtItemsRequest.putItemsQuantity"
-              :width="41"
+              :width="51"
               :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
             <!-- UNIT ENDPOINT NOT AVAILABLE IN BACKEND -->
@@ -1187,9 +1191,9 @@ watch(
               name="Unit"
               filter-store-key="unit"
               :value="item.unit"
-              :options="availableOptionsUnit"
+              :options="unitsStore.boughtItemUnitsOption"
               :update-method="boughtItemsRequest.putItemsUnit"
-              :width="41"
+              :width="51"
               :edit-mode="false"
             />
             <TableItemLink

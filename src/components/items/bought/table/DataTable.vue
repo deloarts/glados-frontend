@@ -1,54 +1,42 @@
 <script setup lang="ts">
-import { ref, watch, computed, onBeforeMount, onUnmounted } from "vue";
-import { useRoute } from "vue-router";
-// @ts-ignore
-import moment from "moment";
-import Datepicker from "vue3-datepicker";
+import { ref, watch, onBeforeMount, onUnmounted } from "vue";
 
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useUnitsStore } from "@/stores/units";
 import { useStatusStore } from "@/stores/status";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
-import { boughtItemsRequest } from "@/requests/items";
-import { capitalizeFirstLetter } from "@/helper/string.helper";
-import { useUserStore, useUsersStore } from "@/stores/user";
+import { useUsersStore } from "@/stores/user";
 import { useNotificationStore } from "@/stores/notification";
-import { useResolutionStore } from "@/stores/resolution";
+
+import { boughtItemsRequest } from "@/requests/items";
+
+import { capitalizeFirstLetter } from "@/helper/string.helper";
+import {
+  calcDiffInWeeks,
+  calcDiffInWeeksFromToday,
+} from "@/helper/date.helper";
 
 import type { AvailableOption } from "@/models/controls";
 
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
-import IconBellRing from "@/components/icons/IconBellRing.vue";
-import IconLocked from "@/components/icons/IconLocked.vue";
-import IconExternalLink from "@/components/icons/IconExternalLink.vue";
 
 import TableItemRowNumber from "./TableItemRowNumber.vue";
 import TableItemInput from "./TableItemInput.vue";
+import TableItemTextarea from "./TableItemTextarea.vue";
 import TableItemSelect from "./TableItemSelect.vue";
 import TableItemText from "./TableItemText.vue";
+import TableItemLink from "./TableItemLink.vue";
 import TableItemDate from "./TableItemDate.vue";
-
-// Router
-const route = useRoute();
 
 // Store
 const boughtItemsStore = useBoughtItemsStore();
-const userStore = useUserStore();
 const usersStore = useUsersStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
 const notificationStore = useNotificationStore();
 const unitsStore = useUnitsStore();
 const statusStore = useStatusStore();
-const resolutionStore = useResolutionStore();
-
-const gtMinWidthDesktop = computed<boolean>(
-  () => resolutionStore.gtMinWidthDesktop,
-);
-const gtMinWidthTablet = computed<boolean>(
-  () => resolutionStore.gtMinWidthTablet,
-);
 
 // Select options
 let availableOptionsStatusFilter: Array<AvailableOption> = [
@@ -67,8 +55,8 @@ let availableOptionsUsers: Array<AvailableOption> = [
 const lineIndex = ref<number>(0);
 
 // Dates
-let pickedExpectedDate = ref<Date>(new Date());
-let pickedDesiredDate = ref<Date>(new Date());
+// let pickedExpectedDate = ref<Date>(new Date());
+// let pickedDesiredDate = ref<Date>(new Date());
 
 function setOptionsStatusFilter() {
   var tempAvailableOptions = [{ text: "All", value: "" }];
@@ -125,18 +113,18 @@ function setOptionsUsers() {
   availableOptionsUsers = tempAvailableOptions;
 }
 
-function pauseFetchBoughtItems(state: boolean) {
-  if (state) {
-    // Wait 100ms before stopping the auto fetch routine because if the user sets the focus on another
-    // element it could be possible, that the pause is reset by another element before it's set by the
-    // current element.
-    setTimeout(() => {
-      boughtItemsStore.pause(true);
-    }, 100);
-  } else {
-    boughtItemsStore.pause(false);
-  }
-}
+// function pauseFetchBoughtItems(state: boolean) {
+//   if (state) {
+//     // Wait 100ms before stopping the auto fetch routine because if the user sets the focus on another
+//     // element it could be possible, that the pause is reset by another element before it's set by the
+//     // current element.
+//     setTimeout(() => {
+//       boughtItemsStore.pause(true);
+//     }, 100);
+//   } else {
+//     boughtItemsStore.pause(false);
+//   }
+// }
 
 function multiSelect(event: any, id: number, index: number) {
   var tempSelectedItemIds = boughtItemsStore.selectedIDs;
@@ -179,176 +167,176 @@ function removeSelection() {
   boughtItemsStore.clearSelection();
 }
 
-function looseFocus(event: any) {
-  event.target.blur();
-}
+// function looseFocus(event: any) {
+//   event.target.blur();
+// }
 
-function updateItemHandler(requestFn: Function, value: string, desc: string) {
-  var c = 0;
-  var confirmation = true;
-  const ids = boughtItemsStore.selectedIDs;
-  if (value == null) {
-    return;
-  }
+// function updateItemHandler(requestFn: Function, value: string, desc: string) {
+//   var c = 0;
+//   var confirmation = true;
+//   const ids = boughtItemsStore.selectedIDs;
+//   if (value == null) {
+//     return;
+//   }
 
-  if (ids.length > 1) {
-    confirmation = confirm(
-      `Do you want to change the ${desc.toLowerCase()} of ${
-        ids.length
-      } items to '${value}'?`,
-    );
-  }
-  if (confirmation) {
-    for (var i = 0; i < ids.length; i++) {
-      const id = ids[i];
-      requestFn(id, value).then((response) => {
-        c++;
-        if (response.status != 200) {
-          notificationStore.addWarn(response.data.detail);
-        }
-        if (c == ids.length) {
-          boughtItemsStore.get();
-        }
-      });
-    }
-  } else {
-    boughtItemsStore.get();
-  }
-}
+//   if (ids.length > 1) {
+//     confirmation = confirm(
+//       `Do you want to change the ${desc.toLowerCase()} of ${
+//         ids.length
+//       } items to '${value}'?`,
+//     );
+//   }
+//   if (confirmation) {
+//     for (var i = 0; i < ids.length; i++) {
+//       const id = ids[i];
+//       requestFn(id, value).then((response) => {
+//         c++;
+//         if (response.status != 200) {
+//           notificationStore.addWarn(response.data.detail);
+//         }
+//         if (c == ids.length) {
+//           boughtItemsStore.get();
+//         }
+//       });
+//     }
+//   } else {
+//     boughtItemsStore.get();
+//   }
+// }
 
-function updateStatus(status: string) {
-  updateItemHandler(boughtItemsRequest.putItemsStatus, status, "Status");
-}
+// function updateStatus(status: string) {
+//   updateItemHandler(boughtItemsRequest.putItemsStatus, status, "Status");
+// }
 
-function updateGroup1(group: string) {
-  updateItemHandler(boughtItemsRequest.putItemsGroup1, group, "Group");
-}
+// function updateGroup1(group: string) {
+//   updateItemHandler(boughtItemsRequest.putItemsGroup1, group, "Group");
+// }
 
-function updateProject(project_number: string) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsProject,
-    project_number,
-    "Project",
-  );
-}
+// function updateProject(project_number: string) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsProject,
+//     project_number,
+//     "Project",
+//   );
+// }
 
-function updateQuantity(qty: number) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsQuantity,
-    String(qty),
-    "Quantity",
-  );
-}
+// function updateQuantity(qty: number) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsQuantity,
+//     String(qty),
+//     "Quantity",
+//   );
+// }
 
-function updatePartnumber(partnumber: string) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsPartnumber,
-    partnumber,
-    "Partnumber",
-  );
-}
+// function updatePartnumber(partnumber: string) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsPartnumber,
+//     partnumber,
+//     "Partnumber",
+//   );
+// }
 
-function updateOrderNumber(orderNumber: string) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsOrderNumber,
-    orderNumber,
-    "Order Number",
-  );
-}
+// function updateOrderNumber(orderNumber: string) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsOrderNumber,
+//     orderNumber,
+//     "Order Number",
+//   );
+// }
 
-function updateManufacturer(manufacturer: string) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsManufacturer,
-    manufacturer,
-    "Manufacturer",
-  );
-}
+// function updateManufacturer(manufacturer: string) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsManufacturer,
+//     manufacturer,
+//     "Manufacturer",
+//   );
+// }
 
-function updateSupplier(supplier: string) {
-  updateItemHandler(boughtItemsRequest.putItemsSupplier, supplier, "Supplier");
-}
+// function updateSupplier(supplier: string) {
+//   updateItemHandler(boughtItemsRequest.putItemsSupplier, supplier, "Supplier");
+// }
 
-function updateNoteGeneral(note: string) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsNoteGeneral,
-    note,
-    "General Note",
-  );
-}
+// function updateNoteGeneral(note: string) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsNoteGeneral,
+//     note,
+//     "General Note",
+//   );
+// }
 
-function updateNoteSupplier(note: string) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsNoteSupplier,
-    note,
-    "Supplier Note",
-  );
-}
+// function updateNoteSupplier(note: string) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsNoteSupplier,
+//     note,
+//     "Supplier Note",
+//   );
+// }
 
-function updateDesiredDeliveryDate() {
-  const formattedDate = moment(pickedDesiredDate.value).format("YYYY-MM-DD");
-  updateItemHandler(
-    boughtItemsRequest.putItemsDesiredDeliveryDate,
-    formattedDate,
-    "Desired Delivery Date",
-  );
-}
+// function updateDesiredDeliveryDate() {
+//   const formattedDate = moment(pickedDesiredDate.value).format("YYYY-MM-DD");
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsDesiredDeliveryDate,
+//     formattedDate,
+//     "Desired Delivery Date",
+//   );
+// }
 
-function updateExpectedDeliveryDate() {
-  const formattedDate = moment(pickedExpectedDate.value).format("YYYY-MM-DD");
-  updateItemHandler(
-    boughtItemsRequest.putItemsExpectedDeliveryDate,
-    formattedDate,
-    "Expected Delivery Date",
-  );
-}
+// function updateExpectedDeliveryDate() {
+//   const formattedDate = moment(pickedExpectedDate.value).format("YYYY-MM-DD");
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsExpectedDeliveryDate,
+//     formattedDate,
+//     "Expected Delivery Date",
+//   );
+// }
 
-function updateStorage(storage: string) {
-  updateItemHandler(
-    boughtItemsRequest.putItemsStorage,
-    storage,
-    "Storage Place",
-  );
-}
+// function updateStorage(storage: string) {
+//   updateItemHandler(
+//     boughtItemsRequest.putItemsStorage,
+//     storage,
+//     "Storage Place",
+//   );
+// }
 
-function setDesiredDeliveryDate(date: Date) {
-  if (date != null && date != undefined) {
-    pickedDesiredDate.value = new Date(date);
-  } else {
-    pickedDesiredDate.value = null;
-  }
-}
+// function setDesiredDeliveryDate(date: Date) {
+//   if (date != null && date != undefined) {
+//     pickedDesiredDate.value = new Date(date);
+//   } else {
+//     pickedDesiredDate.value = null;
+//   }
+// }
 
-function setExpectedDeliveryDate(date: Date) {
-  if (date != null && date != undefined) {
-    pickedExpectedDate.value = new Date(date);
-  } else {
-    pickedExpectedDate.value = null;
-  }
-}
+// function setExpectedDeliveryDate(date: Date) {
+//   if (date != null && date != undefined) {
+//     pickedExpectedDate.value = new Date(date);
+//   } else {
+//     pickedExpectedDate.value = null;
+//   }
+// }
 
-function calcDiffInWeeks(fromDate: Date, toDate: Date) {
-  if (fromDate == null || toDate == null) {
-    return "";
-  }
-  const to = moment(toDate);
-  const from = moment(fromDate);
-  return to.diff(from, "week");
-}
+// function calcDiffInWeeks(fromDate: Date, toDate: Date) {
+//   if (fromDate == null || toDate == null) {
+//     return "";
+//   }
+//   const to = moment(toDate);
+//   const from = moment(fromDate);
+//   return to.diff(from, "week");
+// }
 
-function calcDiffInWeeksFromToday(toDate: Date) {
-  if (toDate == null) {
-    return "";
-  }
-  const to = moment(toDate);
-  return to.diff(moment(), "week");
-}
+// function calcDiffInWeeksFromToday(toDate: Date) {
+//   if (toDate == null) {
+//     return "";
+//   }
+//   const to = moment(toDate);
+//   return to.diff(moment(), "week");
+// }
 
-function resizeTextarea(event: any) {
-  var textarea = event.target;
-  textarea.style.width = "252px";
-  textarea.style.height = "20px";
-  textarea.style.height = textarea.scrollHeight + "px";
-}
+// function resizeTextarea(event: any) {
+//   var textarea = event.target;
+//   textarea.style.width = "252px";
+//   textarea.style.height = "20px";
+//   textarea.style.height = textarea.scrollHeight + "px";
+// }
 
 function eventKeyUp(event: any) {
   if (event.key === "Escape") {
@@ -1112,11 +1100,7 @@ watch(
           <tr
             v-for="(item, index) in boughtItemsStore.items"
             :key="item.id"
-            v-on:click="
-              multiSelect($event, item.id, index),
-                setExpectedDeliveryDate(item.expected_delivery_date),
-                setDesiredDeliveryDate(item.desired_delivery_date)
-            "
+            v-on:click="multiSelect($event, item.id, index)"
             v-bind:class="{
               selected: boughtItemsStore.selectedIDs.includes(item.id),
               open:
@@ -1173,7 +1157,7 @@ watch(
               :options="availableOptionsStatus"
               :update-method="boughtItemsRequest.putItemsStatus"
               :width="85"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
             <TableItemInput
               name="Project Number"
@@ -1181,7 +1165,7 @@ watch(
               :value="item.project_number"
               :update-method="boughtItemsRequest.putItemsProject"
               :width="85"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
             <TableItemText
               name="Product Number"
@@ -1196,9 +1180,8 @@ watch(
               :value="item.quantity"
               :update-method="boughtItemsRequest.putItemsQuantity"
               :width="41"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
-
             <!-- UNIT ENDPOINT NOT AVAILABLE IN BACKEND -->
             <TableItemSelect
               name="Unit"
@@ -1209,22 +1192,20 @@ watch(
               :width="41"
               :edit-mode="false"
             />
-
-            <td
-              id="weblink"
-              v-bind:class="{ 'sticky-col': controlsStore.state.lockCols }"
-            >
-              <a v-bind:href="item.weblink" target="_blank"
-                ><IconExternalLink v-if="item.weblink" class="weblink-icon"
-              /></a>
-            </td>
+            <TableItemLink
+              name="Weblink"
+              :value="item.weblink"
+              :display-icon="true"
+              :width="35"
+              :center="true"
+            />
             <TableItemInput
               name="Part Number"
               filter-store-key="partnumber"
               :value="item.partnumber"
               :update-method="boughtItemsRequest.putItemsPartnumber"
               :width="250"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
             <TableItemInput
               name="Order Number"
@@ -1232,7 +1213,7 @@ watch(
               :value="item.order_number"
               :update-method="boughtItemsRequest.putItemsOrderNumber"
               :width="200"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
             <TableItemInput
               name="Manufacturer"
@@ -1240,7 +1221,7 @@ watch(
               :value="item.manufacturer"
               :update-method="boughtItemsRequest.putItemsManufacturer"
               :width="150"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
             <TableItemInput
               name="Supplier"
@@ -1248,7 +1229,7 @@ watch(
               :value="item.supplier"
               :update-method="boughtItemsRequest.putItemsSupplier"
               :width="150"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
             <TableItemInput
               name="Group"
@@ -1256,86 +1237,24 @@ watch(
               :value="item.group_1"
               :update-method="boughtItemsRequest.putItemsGroup1"
               :width="170"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
-            <td
-              id="note-general"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.noteGeneral = item.note_general;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <textarea
-                  class="cell-textarea-note"
-                  v-model="item.note_general"
-                  type="text"
-                  @input="resizeTextarea($event)"
-                  @focusin="pauseFetchBoughtItems(true), resizeTextarea($event)"
-                  @focusout="
-                    updateNoteGeneral(item.note_general),
-                      pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                ></textarea>
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.note_general }}
-              </div>
-            </td>
-            <td
-              id="note-supplier"
-              @contextmenu.prevent="
-                () => {
-                  filterStore.state.noteSupplier = item.note_supplier;
-                }
-              "
-            >
-              <div
-                v-if="
-                  (userStore.user.is_superuser ||
-                    userStore.user.is_adminuser) &&
-                  boughtItemsStore.selectedIDs.includes(item.id) &&
-                  controlsStore.state.textOnly == false &&
-                  gtMinWidthTablet
-                "
-              >
-                <textarea
-                  class="cell-textarea-note"
-                  v-model="item.note_supplier"
-                  type="text"
-                  @input="resizeTextarea($event)"
-                  @focusin="pauseFetchBoughtItems(true), resizeTextarea($event)"
-                  @focusout="
-                    updateNoteSupplier(item.note_supplier),
-                      pauseFetchBoughtItems(false)
-                  "
-                  v-on:keyup.enter="
-                    looseFocus($event), pauseFetchBoughtItems(false)
-                  "
-                ></textarea>
-              </div>
-              <div
-                v-else
-                v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-              >
-                {{ item.note_supplier }}
-              </div>
-            </td>
+            <TableItemTextarea
+              name="General Note"
+              filter-store-key="noteGeneral"
+              :value="item.note_general"
+              :update-method="boughtItemsRequest.putItemsNoteGeneral"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
+              :width="300"
+            />
+            <TableItemTextarea
+              name="Supplier Note"
+              filter-store-key="noteSupplier"
+              :value="item.note_general"
+              :update-method="boughtItemsRequest.putItemsNoteSupplier"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
+              :width="300"
+            />
             <TableItemText
               name="Created"
               filter-store-key="createdDate"
@@ -1428,7 +1347,7 @@ watch(
               :value="item.storage_place"
               :update-method="boughtItemsRequest.putItemsStorage"
               :width="300"
-              :edit-mode="true"
+              :edit-mode="boughtItemsStore.selectedIDs.includes(item.id)"
             />
           </tr>
         </tbody>
@@ -1558,15 +1477,6 @@ tr.late:nth-child(odd) > td {
   background: $table-background-late-odd;
 }
 
-// tr.partial > td {
-//   background: rgb(90, 250, 90);
-//   background: linear-gradient(
-//     0deg,
-//     rgba(90, 250, 90, 1) 0%,
-//     rgba(240, 230, 70, 1) 50%
-//   );
-// }
-
 tr.partial:nth-child(even) > td {
   background: $table-background-partial-even;
 }
@@ -1600,20 +1510,15 @@ tr.lost:nth-child(odd) > td {
 }
 
 tr:hover > td {
-  // filter: brightness(1.05);
   background: $table-row-hover !important;
 }
 
 tr.selected > td {
   background: $table-row-active !important;
-  // background: rgb(160, 220, 255);
-  // color: black;
-  // font-weight: bold;
 }
 
 tr.selected:hover > td {
   background: $table-row-active-hover !important;
-  // background: rgb(170, 230, 255);
 }
 
 .request-view > td,
@@ -1622,38 +1527,29 @@ tr.selected:hover > td {
   background-color: white !important;
 }
 
-td {
-  z-index: 0;
-  height: 24px;
+// td {
+//   z-index: 0;
+//   height: 24px;
 
-  font-size: 14px; //0.8em;
+//   font-size: 14px;
 
-  margin: 0;
-  padding: 0;
-  // padding-top: 1px;
-  // padding-bottom: 1px;
-  // margin-left: 2px;
-  // margin-right: 2px;
+//   margin: 0;
+//   padding: 0;
 
-  word-wrap: break-word;
-  // border-right: solid thin rgb(220, 220, 220);
-  border-bottom: solid thin rgb(100, 100, 100);
-  border-right: solid thin $table-head-background;
-}
+//   word-wrap: break-word;
+//   border-bottom: solid thin rgb(100, 100, 100);
+//   border-right: solid thin $table-head-background;
+// }
 
-.fix-height {
-  // height: 20px;
-  // max-height: 20px;
-  height: min-content;
-  width: 100%; // calc(100% - 5px);
+// .fix-height {
+//   height: min-content;
+//   width: 100%;
 
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: block;
-  white-space: nowrap;
-
-  // background-color: aqua;
-}
+//   text-overflow: ellipsis;
+//   overflow: hidden;
+//   display: block;
+//   white-space: nowrap;
+// }
 
 // Sticky rows & cols
 
@@ -1669,7 +1565,6 @@ td {
   margin-top: 0;
   margin-bottom: 0;
 
-  // background: rgb(207, 207, 207);
   color: white;
   background: $table-head-background;
 }
@@ -1686,7 +1581,6 @@ td {
   margin-top: 0;
   margin-bottom: 0;
 
-  // background: rgb(207, 207, 207);
   border-bottom: solid thin rgb(50, 50, 50);
 
   color: white;
@@ -1707,283 +1601,276 @@ td.sticky-col {
   z-index: 30;
 }
 
-// columns
-#number {
-  width: 35px;
-  min-width: 35px;
-  max-width: 35px;
-  text-align: center;
-}
-#number.sticky-col {
-  left: 0px;
-}
+// #number {
+//   width: 35px;
+//   min-width: 35px;
+//   max-width: 35px;
+//   text-align: center;
+// }
+// #number.sticky-col {
+//   left: 0px;
+// }
 
-#item-id {
-  width: 45px;
-  min-width: 45px;
-  max-width: 45px;
-  text-align: center;
-}
-#item-id.sticky-col {
-  left: 37px;
-}
+// #item-id {
+//   width: 45px;
+//   min-width: 45px;
+//   max-width: 45px;
+//   text-align: center;
+// }
+// #item-id.sticky-col {
+//   left: 37px;
+// }
 
-#status {
-  width: 86px;
-  min-width: 86px;
-  min-width: 86px;
-}
-#status.sticky-col {
-  left: 84px;
-}
+// #status {
+//   width: 86px;
+//   min-width: 86px;
+//   min-width: 86px;
+// }
+// #status.sticky-col {
+//   left: 84px;
+// }
 
-#project {
-  width: 85px;
-  min-width: 85px;
-  max-width: 85px;
-  // text-align: center;
-}
-#project.sticky-col {
-  left: 172px;
-}
+// #project {
+//   width: 85px;
+//   min-width: 85px;
+//   max-width: 85px;
+// }
+// #project.sticky-col {
+//   left: 172px;
+// }
 
-#product-number {
-  width: 85px;
-  min-width: 85px;
-  max-width: 85px;
-  // text-align: center;
-}
-#product-number.sticky-col {
-  left: 259px;
-}
+// #product-number {
+//   width: 85px;
+//   min-width: 85px;
+//   max-width: 85px;
+// }
+// #product-number.sticky-col {
+//   left: 259px;
+// }
 
-#quantity {
-  width: 41px;
-  min-width: 41px;
-  max-width: 41px;
-  text-align: center;
-}
-#quantity.sticky-col {
-  left: 346px;
-}
+// #quantity {
+//   width: 41px;
+//   min-width: 41px;
+//   max-width: 41px;
+//   text-align: center;
+// }
+// #quantity.sticky-col {
+//   left: 346px;
+// }
 
-#unit {
-  width: 41px;
-  min-width: 41px;
-  max-width: 41px;
-  text-align: center;
-}
-#unit.sticky-col {
-  left: 389px;
-}
+// #unit {
+//   width: 41px;
+//   min-width: 41px;
+//   max-width: 41px;
+//   text-align: center;
+// }
+// #unit.sticky-col {
+//   left: 389px;
+// }
 
-#weblink {
-  width: 35px;
-  min-width: 35px;
-  max-width: 35px;
-  text-align: center;
-}
-#weblink.sticky-col {
-  left: 432px;
-}
+// #weblink {
+//   width: 35px;
+//   min-width: 35px;
+//   max-width: 35px;
+//   text-align: center;
+// }
+// #weblink.sticky-col {
+//   left: 432px;
+// }
 
-#partnumber {
-  width: auto;
-  min-width: 150px;
-  max-width: 400px;
-}
-#partnumber.sticky-col {
-  left: 469px;
-}
+// #partnumber {
+//   width: auto;
+//   min-width: 150px;
+//   max-width: 400px;
+// }
+// #partnumber.sticky-col {
+//   left: 469px;
+// }
 
-#order-number {
-  width: auto;
-  min-width: 150px;
-  max-width: 250px;
-}
+// #order-number {
+//   width: auto;
+//   min-width: 150px;
+//   max-width: 250px;
+// }
 
-#manufacturer {
-  width: auto;
-  min-width: 100px;
-  max-width: 200px;
-}
+// #manufacturer {
+//   width: auto;
+//   min-width: 100px;
+//   max-width: 200px;
+// }
 
-#supplier {
-  width: auto;
-  min-width: 100px;
-  max-width: 200px;
-}
+// #supplier {
+//   width: auto;
+//   min-width: 100px;
+//   max-width: 200px;
+// }
 
-#group {
-  width: auto;
-  min-width: 100px;
-  max-width: 150px;
-}
+// #group {
+//   width: auto;
+//   min-width: 100px;
+//   max-width: 150px;
+// }
 
-#note-general {
-  width: auto;
-  min-width: 150px;
-  max-width: 300px;
-}
+// #note-general {
+//   width: auto;
+//   min-width: 150px;
+//   max-width: 300px;
+// }
 
-#note-supplier {
-  width: auto;
-  min-width: 150px;
-  max-width: 300px;
-}
+// #note-supplier {
+//   width: auto;
+//   min-width: 150px;
+//   max-width: 300px;
+// }
 
-#created {
-  width: 81px;
-  min-width: 81px;
-  max-width: 81px;
-  text-align: center;
-}
+// #created {
+//   width: 81px;
+//   min-width: 81px;
+//   max-width: 81px;
+//   text-align: center;
+// }
 
-#creator {
-  min-width: 121px;
-  max-width: 121px;
-}
+// #creator {
+//   min-width: 121px;
+//   max-width: 121px;
+// }
 
-#desired {
-  text-align: center;
-  min-width: 81px;
-  max-width: 81px;
-}
+// #desired {
+//   text-align: center;
+//   min-width: 81px;
+//   max-width: 81px;
+// }
 
-#requested {
-  text-align: center;
-  min-width: 81px;
-  max-width: 81px;
-}
+// #requested {
+//   text-align: center;
+//   min-width: 81px;
+//   max-width: 81px;
+// }
 
-#requester {
-  min-width: 121px;
-  max-width: 121px;
-}
+// #requester {
+//   min-width: 121px;
+//   max-width: 121px;
+// }
 
-#ordered {
-  text-align: center;
-  min-width: 81px;
-  max-width: 81px;
-}
+// #ordered {
+//   text-align: center;
+//   min-width: 81px;
+//   max-width: 81px;
+// }
 
-#orderer {
-  min-width: 121px;
-  max-width: 121px;
-}
+// #orderer {
+//   min-width: 121px;
+//   max-width: 121px;
+// }
 
-#expected {
-  text-align: center;
-  min-width: 81px;
-  max-width: 81px;
-}
+// #expected {
+//   text-align: center;
+//   min-width: 81px;
+//   max-width: 81px;
+// }
 
-#delivered {
-  text-align: center;
-  min-width: 81px;
-  max-width: 81px;
-}
+// #delivered {
+//   text-align: center;
+//   min-width: 81px;
+//   max-width: 81px;
+// }
 
-#taken-over-by {
-  min-width: 121px;
-  max-width: 121px;
-}
+// #taken-over-by {
+//   min-width: 121px;
+//   max-width: 121px;
+// }
 
-#total-delivery-weeks {
-  text-align: center;
-  min-width: 61px;
-  max-width: 61px;
-}
+// #total-delivery-weeks {
+//   text-align: center;
+//   min-width: 61px;
+//   max-width: 61px;
+// }
 
-#arrival-weeks {
-  text-align: center;
-  min-width: 61px;
-  max-width: 61px;
-}
+// #arrival-weeks {
+//   text-align: center;
+//   min-width: 61px;
+//   max-width: 61px;
+// }
 
-#storage-place {
-  min-width: 221px;
-  max-width: 221px;
-}
+// #storage-place {
+//   min-width: 221px;
+//   max-width: 221px;
+// }
 
-// input elements
-select {
-  padding: 0;
-  margin: 0;
+// select {
+//   padding: 0;
+//   margin: 0;
 
-  outline: none;
-}
+//   outline: none;
+// }
 
-input {
-  padding: 0;
-  margin: 0;
-}
+// input {
+//   padding: 0;
+//   margin: 0;
+// }
 
-.cell-select {
-  width: 100%;
-  height: 18px;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+// .cell-select {
+//   width: 100%;
+//   height: 18px;
+//   box-sizing: border-box;
+//   -webkit-box-sizing: border-box;
 
-  border: none;
+//   border: none;
 
-  color: white;
-  background-color: transparent;
+//   color: white;
+//   background-color: transparent;
 
-  font-size: 12px; //0.9em;
-}
+//   font-size: 12px;
+// }
 
-.cell-select > option {
-  color: white;
-  background-color: $main-background-color-dark-2;
-}
+// .cell-select > option {
+//   color: white;
+//   background-color: $main-background-color-dark-2;
+// }
 
-.cell-input {
-  width: 100%;
-  height: 18px;
+// .cell-input {
+//   width: 100%;
+//   height: 18px;
 
-  box-shadow: none;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+//   box-shadow: none;
+//   box-sizing: border-box;
+//   -webkit-box-sizing: border-box;
 
-  color: white;
-  background-color: transparent;
+//   color: white;
+//   background-color: transparent;
 
-  outline: none;
-  border: none;
-  border-color: inherit;
+//   outline: none;
+//   border: none;
+//   border-color: inherit;
 
-  font-size: 12.25px;
-  // font-size: 13px; //0.9em;
-}
+//   font-size: 12.25px;
+// }
 
-.cell-textarea-note {
-  width: 100%;
-  min-width: 152px;
-  max-width: 252px;
+// .cell-textarea-note {
+//   width: 100%;
+//   min-width: 152px;
+//   max-width: 252px;
 
-  height: 18px;
-  min-height: 18px;
-  // margin-top: 3px;
-  // max-height: 300px;
+//   height: 18px;
+//   min-height: 18px;
 
-  overflow: hidden;
-  resize: none;
+//   overflow: hidden;
+//   resize: none;
 
-  box-shadow: none;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+//   box-shadow: none;
+//   box-sizing: border-box;
+//   -webkit-box-sizing: border-box;
 
-  color: white;
+//   color: white;
 
-  background-color: transparent;
-  outline: none;
-  border: none;
-  border-color: inherit;
+//   background-color: transparent;
+//   outline: none;
+//   border: none;
+//   border-color: inherit;
 
-  font-family: Calibri, Arial, Helvetica, sans-serif;
-  font-size: 13.5px; //1em;
-}
+//   font-family: Calibri, Arial, Helvetica, sans-serif;
+//   font-size: 13.5px;
+// }
 
 .spinner {
   z-index: 999;

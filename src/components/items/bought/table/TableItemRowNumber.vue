@@ -41,23 +41,12 @@ const cssWidth = computed<string>(() => {
 
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
-@import "@/scss/button/buttonBase.scss";
+@import "@/scss/dataTable/tableItem.scss";
 
 td {
-  width: auto;
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
   text-align: center;
-}
-
-.fix-height {
-  height: min-content;
-  width: 100%;
-
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: block;
-  white-space: nowrap;
 }
 
 .bell-icon {

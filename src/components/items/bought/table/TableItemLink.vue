@@ -2,23 +2,21 @@
 import { computed } from "vue";
 
 import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useBoughtItemFilterStore } from "@/stores/filter";
+
+import IconExternalLink from "@/components/icons/IconExternalLink.vue";
 
 const controlsStore = useBoughtItemsControlsStore();
-const filterStore = useBoughtItemFilterStore();
 
 interface Props {
   name: string;
-  value: string | number | Date | null;
-  displayValue?: string;
-  filterStoreKey?: string;
+  value: string;
+  displayIcon?: boolean;
   width?: number;
   center?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  displayValue: null,
-  filterStoreKey: null,
+  displayIcon: false,
   width: 100,
   center: false,
 });
@@ -32,19 +30,12 @@ const cssCenter = computed<string>(() => {
 </script>
 
 <template>
-  <td
-    @contextmenu.prevent="
-      () => {
-        if (props.value && props.filterStoreKey) {
-          filterStore.state[props.filterStoreKey] = String(props.value);
-        }
-      }
-    "
-  >
+  <td @contextmenu.prevent="">
     <div v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }">
-      <span>{{
-        props.displayValue != null ? props.displayValue : props.value
-      }}</span>
+      <a v-if="props.value" v-bind:href="props.value" target="_blank">
+        <IconExternalLink v-if="props.displayIcon" class="weblink-icon" />
+        <span v-else>{{ props.value }}</span>
+      </a>
     </div>
   </td>
 </template>
@@ -57,5 +48,12 @@ td {
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
   text-align: v-bind(cssCenter);
+}
+
+.weblink-icon {
+  color: white;
+  height: 12px;
+  width: 12px;
+  vertical-align: middle;
 }
 </style>

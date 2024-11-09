@@ -4,7 +4,6 @@ import { ref, computed, watch } from "vue";
 import moment from "moment";
 import Datepicker from "vue3-datepicker";
 
-import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useUserStore } from "@/stores/user";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
@@ -12,7 +11,6 @@ import { useResolutionStore } from "@/stores/resolution";
 
 import { updateSelectedTableElement } from "@/helper/selection.helper";
 
-const boughtItemsStore = useBoughtItemsStore();
 const userStore = useUserStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
@@ -119,22 +117,11 @@ watch(
 
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
-@import "@/scss/button/buttonBase.scss";
+@import "@/scss/dataTable/tableItem.scss";
 
 td {
-  width: auto;
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
   text-align: v-bind(cssCenter);
-}
-
-.fix-height {
-  height: min-content;
-  width: 100%;
-
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: block;
-  white-space: nowrap;
 }
 </style>

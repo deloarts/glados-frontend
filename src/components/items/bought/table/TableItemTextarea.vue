@@ -17,7 +17,7 @@ const resolutionStore = useResolutionStore();
 
 interface Props {
   name: string;
-  value: string | number | Date | null;
+  value: string | number | null;
   updateMethod: Function;
   filterStoreKey?: string;
   type?: string;
@@ -28,7 +28,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   filterStoreKey: null,
   type: "text",
-  width: 100,
+  width: 200,
   editMode: false,
 });
 
@@ -37,10 +37,18 @@ const gtMinWidthTablet = computed<boolean>(
 );
 
 const hasFocus = ref<boolean>(false);
-const inputModel = ref<string | number | Date | null>();
+const inputModel = ref<string | number | null>();
 const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
 });
+
+function resizeTextarea(event: Event) {
+  var textarea = event.target;
+  //@ts-ignore
+  textarea.style.height = "18px";
+  //@ts-ignore
+  textarea.style.height = textarea.scrollHeight + "px";
+}
 
 function blur() {
   if (document.activeElement instanceof HTMLElement) {
@@ -52,14 +60,17 @@ function onEscape() {
   blur();
 }
 
-function onEnter() {
-  blur();
-  updateSelectedTableElement(
-    props.name,
-    inputModel.value,
-    props.value,
-    props.updateMethod,
-  );
+function onEnter(event: Event) {
+  //@ts-ignore
+  if (event.keyCode == 13 && !event.shiftKey) {
+    blur();
+    updateSelectedTableElement(
+      props.name,
+      inputModel.value,
+      props.value,
+      props.updateMethod,
+    );
+  }
 }
 
 onMounted(() => {
@@ -105,14 +116,19 @@ watch(
         gtMinWidthTablet
       "
     >
-      <input
-        :type="props.type"
+      <textarea
         v-model="inputModel"
+        type="text"
         v-on:keyup.escape="onEscape()"
-        v-on:keyup.enter="onEnter()"
-        @focusin="boughtItemsStore.pause(true), (hasFocus = true)"
+        v-on:keyup.enter="onEnter($event)"
+        @input="resizeTextarea($event)"
+        @focusin="
+          boughtItemsStore.pause(true),
+            (hasFocus = true),
+            resizeTextarea($event)
+        "
         @focusout="boughtItemsStore.pause(false), (hasFocus = false)"
-      />
+      ></textarea>
     </div>
     <div
       v-else
@@ -132,21 +148,30 @@ td {
   max-width: v-bind(cssWidth);
 }
 
-input {
+textarea {
   width: 100%;
   height: 18px;
+  min-height: 18px;
+
+  overflow: hidden;
+  resize: none;
 
   box-shadow: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
   color: white;
-  background-color: transparent;
 
+  background-color: transparent;
   outline: none;
   border: none;
   border-color: inherit;
 
+  font-family: Calibri;
+  font-size: 14px;
+}
+
+textarea::placeholder {
   font-family: Calibri;
   font-size: 14px;
 }

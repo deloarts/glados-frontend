@@ -7,6 +7,7 @@ import { useUserStore } from "@/stores/user";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 
+import { capitalizeFirstLetter } from "@/helper/string.helper";
 import { updateSelectedTableElement } from "@/helper/selection.helper";
 
 const userStore = useUserStore();
@@ -86,17 +87,16 @@ function onChange(eventTarget: EventTarget) {
       </option>
     </select>
     <div v-else>
-      {{ String(props.value).toUpperCase() }}
+      <span>{{ capitalizeFirstLetter(String(props.value)) }}</span>
     </div>
   </td>
 </template>
 
 <style scoped lang="scss">
 @import "@/scss/variables.scss";
-@import "@/scss/button/buttonBase.scss";
+@import "@/scss/dataTable/tableItem.scss";
 
 td {
-  width: auto;
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
 }
@@ -113,7 +113,8 @@ select {
   color: white;
   background-color: transparent;
 
-  font-size: 12px;
+  font-family: Calibri;
+  font-size: 14px;
 }
 
 select > option {
@@ -121,13 +122,7 @@ select > option {
   background-color: $main-background-color-dark-2;
 }
 
-.fix-height {
-  height: min-content;
-  width: 100%;
-
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: block;
-  white-space: nowrap;
+span {
+  padding-left: 4px;
 }
 </style>

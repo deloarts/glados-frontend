@@ -1,0 +1,35 @@
+@import "@/scss/variables.scss";
+
+td {
+  z-index: 0;
+  
+  width: auto;
+  height: 24px;
+
+  font-family: Calibri;
+  font-size: 14px;
+
+  margin: 0;
+  padding: 0;
+
+  word-wrap: break-word;
+  border-bottom: solid thin rgb(100, 100, 100);
+  border-right: solid thin $table-head-background;
+}
+
+span {
+  padding-left: 2px;
+
+  font-family: Calibri;
+  font-size: 14px;
+}
+
+.fix-height {
+  height: min-content;
+  width: 100%;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
+}

@@ -4,7 +4,6 @@ export interface BoughtItemControls {
   textOnly: boolean;
   fixedHeight: boolean;
   unclutter: boolean;
-  requestView: boolean;
   lockCols: boolean;
 }
 

@@ -6,21 +6,19 @@ import { boughtItemsRequest } from "@/requests/items";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 import { getBoughtItemsFilterParams } from "@/requests/params";
 
+// import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
 import type { BoughtItemSchema } from "@/schemas/boughtItem";
 
 export const useBoughtItemsStore = defineStore("boughtItems", () => {
   const _filterStore = useBoughtItemFilterStore();
 
-  const paused = ref<boolean>(false);
   const loading = ref<boolean>(false);
+  const paused = ref<boolean>(false);
   const items = ref<Array<BoughtItemSchema>>([]);
   const selectedIDs = ref<Array<number>>([]);
 
   function clear() {
     items.value = [];
-  }
-
-  function clearSelection() {
     selectedIDs.value = [];
   }
 
@@ -28,7 +26,28 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
     paused.value = state;
   }
 
-  function get() {
+  function getItems(): Array<BoughtItemSchema> {
+    get();
+    return items.value;
+  }
+
+  function clearItems() {
+    items.value = [];
+  }
+
+  function getSelection(): Array<number> {
+    return selectedIDs.value;
+  }
+
+  function setSelection(itemIDs: Array<number>) {
+    selectedIDs.value = itemIDs;
+  }
+
+  function clearSelection() {
+    selectedIDs.value = [];
+  }
+
+  async function get(): Promise<any> {
     console.log("Bought Items store requesting data ...");
     loading.value = true;
 
@@ -43,14 +62,17 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
     });
   }
 
-  function getItems() {
+  function fetchItems() {
     if (paused.value) {
       console.log("Bought Items store is paused.");
-      setTimeout(getItems.bind(this), constants.patchBoughtItemsStoreInterval);
+      setTimeout(
+        fetchItems.bind(this),
+        constants.patchBoughtItemsStoreInterval,
+      );
     } else {
       get().then(() => {
         setTimeout(
-          getItems.bind(this),
+          fetchItems.bind(this),
           constants.patchBoughtItemsStoreInterval,
         );
       });
@@ -59,17 +81,19 @@ export const useBoughtItemsStore = defineStore("boughtItems", () => {
 
   onBeforeMount(() => {
     clear();
-    getItems();
+    fetchItems();
   });
 
   return {
     loading,
     paused,
     items,
-    selectedIDs,
-    get,
     clear,
     pause,
+    getItems,
+    clearItems,
+    getSelection,
+    setSelection,
     clearSelection,
   };
 });

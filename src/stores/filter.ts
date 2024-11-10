@@ -50,6 +50,10 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     receiverId: null,
   });
 
+  function set(key: string, value: string | number | Date | null) {
+    state.value[key] = value;
+  }
+
   function reset() {
     state.value = {
       limit: "100",
@@ -142,7 +146,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     }
   }
 
-  function get() {
+  async function get() {
     console.log("Filter store is requesting presets ...");
     loading.value = true;
 
@@ -188,6 +192,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     state,
     presets,
     get,
+    set,
     reset,
     applyPreset,
     saveMy,
@@ -207,6 +212,10 @@ export const useProjectFilterStore = defineStore("projectFilter", () => {
     designatedUserId: null,
   });
 
+  function set(key: string, value: string | number | Date | null) {
+    state.value[key] = value;
+  }
+
   function reset() {
     state.value = {
       skip: null,
@@ -224,5 +233,5 @@ export const useProjectFilterStore = defineStore("projectFilter", () => {
     reset();
   });
 
-  return { state, reset };
+  return { state, set, reset };
 });

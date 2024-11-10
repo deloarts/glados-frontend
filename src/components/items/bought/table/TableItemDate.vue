@@ -5,13 +5,16 @@ import moment from "moment";
 import Datepicker from "vue3-datepicker";
 
 import { useUserStore } from "@/stores/user";
+import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 import { useResolutionStore } from "@/stores/resolution";
 
+import { blur } from "@/helper/document.helper";
 import { updateSelectedTableElement } from "@/helper/selection.helper";
 
 const userStore = useUserStore();
+const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
 const resolutionStore = useResolutionStore();
@@ -28,7 +31,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   filterStoreKey: null,
-  width: 85,
   center: false,
   editMode: false,
 });
@@ -46,12 +48,6 @@ const cssCenter = computed<string>(() => {
   return props.center ? "center" : "left";
 });
 
-function blur() {
-  if (document.activeElement instanceof HTMLElement) {
-    document.activeElement.blur();
-  }
-}
-
 function onEscape() {
   blur();
 }
@@ -65,7 +61,16 @@ function onUpdate() {
     formattedDate,
     props.value,
     props.updateMethod,
+    boughtItemsStore,
   );
+}
+
+function onContextMenu() {
+  blur();
+  if (props.value && props.filterStoreKey) {
+    filterStore.state[props.filterStoreKey] = String(pickedDate.value);
+    boughtItemsStore.getItems();
+  }
 }
 
 watch(
@@ -81,15 +86,7 @@ watch(
 </script>
 
 <template>
-  <td
-    @contextmenu.prevent="
-      () => {
-        if (props.value && props.filterStoreKey) {
-          filterStore.state[props.filterStoreKey] = String(props.value);
-        }
-      }
-    "
-  >
+  <td @contextmenu.prevent="onContextMenu()">
     <div
       v-if="
         props.editMode &&

@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from "vue";
 
-import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useUserStore } from "@/stores/user";
+import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 import { useResolutionStore } from "@/stores/resolution";
 
+import { blur } from "@/helper/document.helper";
 import { updateSelectedTableElement } from "@/helper/selection.helper";
 
-const boughtItemsStore = useBoughtItemsStore();
 const userStore = useUserStore();
+const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
 const resolutionStore = useResolutionStore();
@@ -28,7 +29,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   filterStoreKey: null,
   type: "text",
-  width: 200,
   editMode: false,
 });
 
@@ -50,12 +50,6 @@ function resizeTextarea(event: Event) {
   textarea.style.height = textarea.scrollHeight + "px";
 }
 
-function blur() {
-  if (document.activeElement instanceof HTMLElement) {
-    document.activeElement.blur();
-  }
-}
-
 function onEscape() {
   blur();
 }
@@ -69,7 +63,16 @@ function onEnter(event: Event) {
       inputModel.value,
       props.value,
       props.updateMethod,
+      boughtItemsStore,
     );
+  }
+}
+
+function onContextMenu() {
+  blur();
+  if (props.value && props.filterStoreKey) {
+    filterStore.state[props.filterStoreKey] = String(inputModel.value);
+    boughtItemsStore.getItems();
   }
 }
 
@@ -99,15 +102,7 @@ watch(
 </script>
 
 <template>
-  <td
-    @contextmenu.prevent="
-      () => {
-        if (props.value && props.filterStoreKey) {
-          filterStore.state[props.filterStoreKey] = String(props.value);
-        }
-      }
-    "
-  >
+  <td @contextmenu.prevent="onContextMenu()">
     <div
       v-if="
         props.editMode &&

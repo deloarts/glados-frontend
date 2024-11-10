@@ -18,27 +18,22 @@ export const useProjectsStore = defineStore("projects", () => {
     projects.value = [];
   }
 
-  function get() {
+  async function get() {
     loading.value = true;
     const params = getProjectFilterParams(_filterStore.state);
-    projectsRequest.getProjects(params).then((response) => {
+    return projectsRequest.getProjects(params).then((response) => {
       loading.value = false;
       if (response.status === 200) {
         projects.value = response.data;
       }
+      return response;
     });
   }
 
   function fetch() {
     console.log("Projects store requesting projects (interval) ...");
     loading.value = true;
-    const params = getProjectFilterParams(_filterStore.state);
-    projectsRequest.getProjects(params).then((response) => {
-      loading.value = false;
-      if (response.status === 200) {
-        projects.value = response.data;
-        console.log("Projects store got data from server (interval).");
-      }
+    get().then(() => {
       setTimeout(fetch.bind(this), constants.patchProjectsStoreInterval);
     });
   }
@@ -53,8 +48,9 @@ export const useProjectsStore = defineStore("projects", () => {
   }
 
   onBeforeMount(() => {
-    get();
+    clear();
+    fetch();
   });
 
-  return { loading, projects, get, clear, fetch, getProductNumber };
+  return { loading, projects, get, clear, getProductNumber };
 });

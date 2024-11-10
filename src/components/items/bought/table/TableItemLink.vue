@@ -17,7 +17,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   displayIcon: false,
-  width: 100,
   center: false,
 });
 

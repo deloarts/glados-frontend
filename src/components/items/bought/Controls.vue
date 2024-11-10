@@ -98,16 +98,19 @@ const selectedOptionFilterPreset = ref<string>("");
 
 function saveFilter() {
   filterStore.saveMy();
+  boughtItemsStore.getItems();
   notificationStore.addInfo("Saved new filter.");
 }
 
 function loadFilter() {
   filterStore.loadMy();
+  boughtItemsStore.getItems();
 }
 
 function clearFilter() {
   selectedOptionFilterPreset.value = "";
   filterStore.reset();
+  boughtItemsStore.getItems();
   console.log("Cleared filter");
 }
 
@@ -116,29 +119,29 @@ function onButtonNewItem() {
 }
 
 function onButtonEdit() {
-  if (boughtItemsStore.selectedIDs.length == 0) {
+  if (boughtItemsStore.getSelection().length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (boughtItemsStore.selectedIDs.length != 1) {
+  } else if (boughtItemsStore.getSelection().length != 1) {
     notificationStore.addWarn("You can only edit one item.");
   } else {
-    router.push(`/items/bought/edit/${boughtItemsStore.selectedIDs[0]}`);
+    router.push(`/items/bought/edit/${boughtItemsStore.getSelection()[0]}`);
   }
 }
 
 function onButtonCopy() {
-  if (boughtItemsStore.selectedIDs.length == 0) {
+  if (boughtItemsStore.getSelection().length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (boughtItemsStore.selectedIDs.length != 1) {
+  } else if (boughtItemsStore.getSelection().length != 1) {
     notificationStore.addWarn("You can only edit one item.");
   } else {
-    router.push(`/items/bought/copy/${boughtItemsStore.selectedIDs[0]}`);
+    router.push(`/items/bought/copy/${boughtItemsStore.getSelection()[0]}`);
   }
 }
 
 function onButtonDelete() {
-  if (boughtItemsStore.selectedIDs.length == 0) {
+  if (boughtItemsStore.getSelection().length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (boughtItemsStore.selectedIDs.length != 1) {
+  } else if (boughtItemsStore.getSelection().length != 1) {
     notificationStore.addWarn("You can only delete one item.");
   } else {
     showDeletePrompt.value = true;
@@ -161,11 +164,11 @@ function onButtonUploadExcel() {
 }
 
 function deleteItem() {
-  const itemId = boughtItemsStore.selectedIDs[0];
+  const itemId = boughtItemsStore.getSelection()[0];
   boughtItemsRequest.deleteItemsId(itemId).then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(`Deleted item #${itemId}`);
-      boughtItemsStore.get();
+      boughtItemsStore.getItems();
     } else {
       notificationStore.addWarn(response.data.detail);
     }
@@ -175,12 +178,12 @@ function deleteItem() {
 
 function onButtonClear() {
   boughtItemsStore.clearSelection();
+  boughtItemsStore.getItems();
 }
 
 function setupMobileView() {
   if (!gtMinWidthTablet.value) {
     controlsStore.state.unclutter = true;
-    controlsStore.state.requestView = false;
     controlsStore.state.textOnly = false;
     controlsStore.state.lockCols = false;
   }
@@ -188,7 +191,6 @@ function setupMobileView() {
 
 function setupTabletView() {
   if (!gtMinWidthDesktop.value) {
-    controlsStore.state.requestView = false;
     controlsStore.state.textOnly = false;
     controlsStore.state.lockCols = false;
   }
@@ -197,6 +199,7 @@ function setupTabletView() {
 watch(selectedOptionFilterPreset, () => {
   const name = selectedOptionFilterPreset.value;
   filterStore.applyPreset(name);
+  boughtItemsStore.getItems();
 });
 
 watch(gtMinWidthTablet, () => {
@@ -269,7 +272,7 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         v-model:text="buttonSyncText"
         v-model:rotate="boughtItemsStore.loading"
-        v-on:click="boughtItemsStore.get()"
+        v-on:click="boughtItemsStore.getItems()"
       ></ButtonSync>
 
       <DropDownTableView
@@ -296,10 +299,6 @@ onBeforeMount(setupTabletView);
         <div v-if="gtMinWidthTablet" class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.unclutter"></Toggle
           ><span class="drop-down-toggle-item-text">Unclutter</span>
-        </div>
-        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.requestView"></Toggle
-          ><span class="drop-down-toggle-item-text">Request View</span>
         </div>
         <div class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.changelog"></Toggle
@@ -342,6 +341,7 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         text="Limit"
         v-model:selection="filterStore.state.limit"
+        v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsLimit"
       ></SelectPreText>
       <SelectPreText
@@ -349,12 +349,14 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         text="Sort By"
         v-model:selection="filterStore.state.sortBy"
+        v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsOrderBy"
       ></SelectPreText>
       <SelectPreText
         class="controls-base-element"
         text="Preset"
         v-model:selection="selectedOptionFilterPreset"
+        v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsFilterPresets"
       ></SelectPreText>
     </div>
@@ -373,7 +375,7 @@ onBeforeMount(setupTabletView);
     "
   />
   <ExcelImport
-    v-bind:on-success="boughtItemsStore.get"
+    v-bind:on-success="boughtItemsStore.getItems"
     v-model:show-uploader="showExcelImport"
   />
 </template>

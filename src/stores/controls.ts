@@ -12,7 +12,6 @@ export const useBoughtItemsControlsStore = defineStore(
       textOnly: false,
       fixedHeight: true,
       unclutter: false,
-      requestView: false,
       lockCols: false,
     });
 

@@ -18,7 +18,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   lockedIcon: false,
   bellIcon: false,
-  width: 35,
 });
 
 const cssWidth = computed<string>(() => {
@@ -47,6 +46,11 @@ td {
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
   text-align: center;
+
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 30;
 }
 
 .bell-icon {

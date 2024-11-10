@@ -23,14 +23,16 @@ function onCreate() {
     .then((response) => {
       if (response.status === 200) {
         notificationStore.addInfo("Created item");
-        boughtItemsStore.get();
+        boughtItemsStore.getItems();
         router.push({ name: "BoughtItems" });
       }
       // else if (response.status === 403) {
       //   notificationStore.addWarn("Not enough permission"
       // }
       else if (response.status === 422) {
-        notificationStore.addWarn(`Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`);
+        notificationStore.addWarn(
+          `Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`,
+        );
       } else {
         notificationStore.addWarn(response.data.detail);
       }

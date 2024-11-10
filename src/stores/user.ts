@@ -5,6 +5,7 @@ import constants from "@/constants";
 import router from "@/router/index";
 import { usersRequest } from "@/requests/users";
 
+import type { AvailableOption } from "@/models/controls";
 import type { UserSchema } from "@/schemas/user";
 
 export const useUserStore = defineStore("user", () => {
@@ -40,10 +41,9 @@ export const useUserStore = defineStore("user", () => {
     console.log("Logged out user");
   }
 
-  function get() {
+  async function get() {
     loading.value = true;
-
-    usersRequest.getUsersMe().then((response) => {
+    return usersRequest.getUsersMe().then((response) => {
       loading.value = false;
       if (response.status === 200) {
         user.value = response.data;
@@ -51,41 +51,34 @@ export const useUserStore = defineStore("user", () => {
         logout();
         router.push({ name: "Login" });
       }
+      return response;
     });
   }
+
   function fetch() {
     console.log("User store is requesting user ...");
-    loading.value = true;
-    usersRequest.getUsersMe().then((response) => {
-      loading.value = false;
-      if (response.status === 200) {
-        user.value = response.data;
-        console.log("User store got data from server.");
-      } else {
-        console.warn("User store could not get user.");
-        logout();
-        router.push({ name: "Login" });
-      }
+    get().then(() => {
       setTimeout(fetch.bind(this), constants.patchUserStoreInterval);
     });
   }
 
   onBeforeMount(() => {
-    get();
+    fetch();
   });
 
   return {
     loading,
     user,
     get,
-    fetch,
     logout,
   };
 });
 
 export const useUsersStore = defineStore("users", () => {
   const loading = ref<boolean>(false);
-  const users = ref<UserSchema[]>([]);
+  const users = ref<Array<UserSchema>>([]);
+  const usersOptions = ref<Array<AvailableOption>>([]);
+  const usersOptionsFilter = ref<Array<AvailableOption>>([]);
 
   function clear() {
     users.value = [];
@@ -103,33 +96,52 @@ export const useUsersStore = defineStore("users", () => {
     return "Unknown User";
   }
 
-  function get() {
+  async function get() {
     loading.value = true;
-    usersRequest.getUsers().then((response) => {
+    return usersRequest.getUsers().then((response) => {
       loading.value = false;
       if (response.status === 200) {
+        loading.value = false;
         users.value = response.data;
+
+        const tempUsersOptions = [];
+        const tempUsersOptionsFilter = [{ text: "All", value: null }];
+        for (let i = 0; i < users.value.length; i++) {
+          tempUsersOptions.push({
+            text: users.value[i].full_name,
+            value: users.value[i].id,
+          });
+          tempUsersOptionsFilter.push({
+            text: users.value[i].full_name,
+            value: users.value[i].id,
+          });
+        }
+        usersOptions.value = tempUsersOptions;
+        usersOptionsFilter.value = tempUsersOptionsFilter;
       }
+      return response;
     });
   }
 
   function fetch() {
     console.log("Users store requesting users ...");
-    loading.value = true;
-
-    usersRequest.getUsers().then((response) => {
-      loading.value = false;
-      if (response.status === 200) {
-        users.value = response.data;
-        console.log("Users store got data from server.");
-      }
+    get().then(() => {
       setTimeout(fetch.bind(this), constants.patchUsersStoreInterval);
     });
   }
 
   onBeforeMount(() => {
-    get();
+    clear();
+    fetch();
   });
 
-  return { loading, users, get, clear, fetch, getNameByID };
+  return {
+    loading,
+    users,
+    usersOptions,
+    usersOptionsFilter,
+    get,
+    clear,
+    getNameByID,
+  };
 });

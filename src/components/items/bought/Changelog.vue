@@ -9,9 +9,9 @@ const boughtItemsStore = useBoughtItemsStore();
 const changelog = ref<Array<string>>([""]);
 
 function fetchChangelog() {
-  if (boughtItemsStore.selectedIDs.length > 0) {
+  if (boughtItemsStore.getSelection().length > 0) {
     boughtItemsRequest
-      .getItemsIdChangelog(boughtItemsStore.selectedIDs[0])
+      .getItemsIdChangelog(boughtItemsStore.getSelection()[0])
       .then((response) => {
         changelog.value = response.data;
       });
@@ -21,7 +21,7 @@ function fetchChangelog() {
 onMounted(() => fetchChangelog());
 
 watch(
-  () => boughtItemsStore.selectedIDs,
+  () => boughtItemsStore.getSelection(),
   (newSelection: Array<number>, oldSelection: Array<number>) => {
     if (newSelection != oldSelection) {
       changelog.value = [];
@@ -33,8 +33,8 @@ watch(
 
 <template>
   <div class="scope">
-    <div v-if="boughtItemsStore.selectedIDs.length > 0" class="container">
-      <h1>Changelog of item #{{ boughtItemsStore.selectedIDs[0] }}</h1>
+    <div v-if="boughtItemsStore.getSelection().length > 0" class="container">
+      <h1>Changelog of item #{{ boughtItemsStore.getSelection()[0] }}</h1>
       <div v-for="log in changelog" class="changelog-item">{{ log }}</div>
     </div>
     <div v-else class="container">

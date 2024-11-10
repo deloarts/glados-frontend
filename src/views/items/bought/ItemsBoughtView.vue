@@ -2,6 +2,7 @@
 import { onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 
@@ -12,15 +13,27 @@ import Controls from "@/components/items/bought/Controls.vue";
 const router = useRouter();
 const route = useRoute();
 
+const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
 const boughtItemFilterStore = useBoughtItemFilterStore();
 
 onMounted(() => {
-  if (isNaN(Number(route.query.id))) {
-    boughtItemFilterStore.reset();
-  } else if (route.query.id != null) {
+  if (route.query != null) {
+    boughtItemsStore.clear();
+  }
+
+  // Apply id query
+  if (route.query.id != null && !isNaN(Number(route.query.id))) {
     boughtItemFilterStore.state.id = Number(route.query.id);
   }
+  // Apply project number query
+  if (route.query.projectNumber != null) {
+    boughtItemFilterStore.state.projectNumber = String(
+      route.query.projectNumber,
+    );
+  }
+
+  boughtItemsStore.getItems();
   router.replace({ query: null });
 });
 </script>

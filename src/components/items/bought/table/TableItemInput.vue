@@ -23,6 +23,7 @@ interface Props {
   filterStoreKey?: string;
   type?: string;
   width?: number;
+  center?: boolean;
   editMode?: boolean;
 }
 
@@ -30,6 +31,7 @@ const props = withDefaults(defineProps<Props>(), {
   filterStoreKey: null,
   type: "text",
   editMode: false,
+  center: false,
 });
 
 const gtMinWidthTablet = computed<boolean>(
@@ -40,6 +42,9 @@ const hasFocus = ref<boolean>(false);
 const inputModel = ref<string | number | Date | null>();
 const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
+});
+const cssCenter = computed<string>(() => {
+  return props.center ? "center" : "left";
 });
 
 function onEscape() {
@@ -125,6 +130,7 @@ watch(
 td {
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
+  text-align: v-bind(cssCenter);
 }
 
 input {
@@ -144,5 +150,18 @@ input {
 
   font-family: Calibri;
   font-size: 14px;
+
+  text-align: v-bind(cssCenter);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>

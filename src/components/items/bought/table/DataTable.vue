@@ -22,6 +22,7 @@ import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
 
 import TableHeadRowNumber from "@/components/dataTable/TableHeadRowNumber.vue";
 import TableRowHead from "@/components/dataTable/TableRowHead.vue";
+import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
 import TableHeadText from "@/components/dataTable/TableHeadText.vue";
 import TableHeadFilterInput from "@/components/dataTable/TableHeadFilterInput.vue";
 import TableHeadFilterSelect from "@/components/dataTable/TableHeadFilterSelect.vue";
@@ -42,6 +43,9 @@ const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
 const unitsStore = useUnitsStore();
 const statusStore = useStatusStore();
+
+// ColumnWidths
+const colW = ref(boughtItemColumnWidths);
 
 // Selection
 const lineIndex = ref<number>(0);
@@ -80,118 +84,76 @@ onUnmounted(() => {
       <table>
         <thead>
           <TableRowHead>
-            <TableHeadRowNumber
-              value="#"
-              :width="boughtItemColumnWidths.number"
-            />
-            <TableHeadText name="ID" :width="boughtItemColumnWidths.id" />
-            <TableHeadText
-              name="Status"
-              :width="boughtItemColumnWidths.status"
-            />
-            <TableHeadText
-              name="Project"
-              :width="boughtItemColumnWidths.projectNumber"
-            />
-            <TableHeadText
-              name="Product"
-              :width="boughtItemColumnWidths.productNumber"
-            />
-            <TableHeadText
-              name="QTY"
-              :width="boughtItemColumnWidths.quantity"
-            />
-            <TableHeadText name="Unit" :width="boughtItemColumnWidths.unit" />
-            <TableHeadText
-              name="Link"
-              :width="boughtItemColumnWidths.weblink"
-            />
-            <TableHeadText
+            <TableHeadRowNumber value="#" v-model:width="colW.number" />
+            <TableHeadTitle name="ID" v-model:width="colW.id" />
+            <TableHeadTitle name="Status" v-model:width="colW.status" />
+            <TableHeadTitle name="Project" v-model:width="colW.projectNumber" />
+            <TableHeadTitle name="Product" v-model:width="colW.productNumber" />
+            <TableHeadTitle name="QTY" v-model:width="colW.quantity" />
+            <TableHeadTitle name="Unit" v-model:width="colW.unit" />
+            <TableHeadTitle name="Link" v-model:width="colW.weblink" />
+            <TableHeadTitle
               name="Part Number"
-              :width="boughtItemColumnWidths.partnumber"
+              v-model:width="colW.partnumber"
             />
-            <TableHeadText
+            <TableHeadTitle
               name="Order Number"
-              :width="boughtItemColumnWidths.orderNumber"
+              v-model:width="colW.orderNumber"
             />
-            <TableHeadText
+            <TableHeadTitle
               name="Manufacturer"
-              :width="boughtItemColumnWidths.manufacturer"
+              v-model:width="colW.manufacturer"
             />
-            <TableHeadText
-              name="Supplier"
-              :width="boughtItemColumnWidths.supplier"
-            />
-            <TableHeadText
-              name="Group"
-              :width="boughtItemColumnWidths.group1"
-            />
-            <TableHeadText
-              name="Note"
-              :width="boughtItemColumnWidths.noteGeneral"
-            />
-            <TableHeadText
+            <TableHeadTitle name="Supplier" v-model:width="colW.supplier" />
+            <TableHeadTitle name="Group" v-model:width="colW.group1" />
+            <TableHeadTitle name="Note" v-model:width="colW.noteGeneral" />
+            <TableHeadTitle
               name="Supplier Note"
-              :width="boughtItemColumnWidths.noteSupplier"
+              v-model:width="colW.noteSupplier"
             />
-            <TableHeadText
-              name="Created"
-              :width="boughtItemColumnWidths.createdDate"
-            />
-            <TableHeadText
+            <TableHeadTitle name="Created" v-model:width="colW.createdDate" />
+            <TableHeadTitle
               name="Creator"
               v-if="!controlsStore.state.unclutter"
-              :width="boughtItemColumnWidths.creatorId"
+              v-model:width="colW.creatorId"
             />
-            <TableHeadText
-              name="Desired"
-              :width="boughtItemColumnWidths.desiredDate"
-            />
-            <TableHeadText
+            <TableHeadTitle name="Desired" v-model:width="colW.desiredDate" />
+            <TableHeadTitle
               name="Requested"
-              :width="boughtItemColumnWidths.requestedDate"
+              v-model:width="colW.requestedDate"
             />
-            <TableHeadText
+            <TableHeadTitle
               name="Requester"
               v-if="!controlsStore.state.unclutter"
-              :width="boughtItemColumnWidths.requesterId"
+              v-model:width="colW.requesterId"
             />
-            <TableHeadText
-              name="Ordered"
-              :width="boughtItemColumnWidths.orderedDate"
-            />
-            <TableHeadText
+            <TableHeadTitle name="Ordered" v-model:width="colW.orderedDate" />
+            <TableHeadTitle
               name="Orderer"
-              :width="boughtItemColumnWidths.ordererId"
+              v-model:width="colW.ordererId"
               v-if="!controlsStore.state.unclutter"
             />
-            <TableHeadText
-              name="Expected"
-              :width="boughtItemColumnWidths.expectedDate"
-            />
-            <TableHeadText
+            <TableHeadTitle name="Expected" v-model:width="colW.expectedDate" />
+            <TableHeadTitle
               name="Delivered"
-              :width="boughtItemColumnWidths.deliveredDate"
+              v-model:width="colW.deliveredDate"
             />
-            <TableHeadText
+            <TableHeadTitle
               name="Receiver"
               v-if="!controlsStore.state.unclutter"
-              :width="boughtItemColumnWidths.receiverId"
+              v-model:width="colW.receiverId"
             />
-            <TableHeadText
+            <TableHeadTitle
               name="Arrival"
               v-if="!controlsStore.state.unclutter"
-              :width="boughtItemColumnWidths.arrivalWeeks"
+              v-model:width="colW.arrivalWeeks"
             />
-            <TableHeadText
+            <TableHeadTitle
               name="Total"
               v-if="!controlsStore.state.unclutter"
-              :width="boughtItemColumnWidths.totalWeeks"
+              v-model:width="colW.totalWeeks"
             />
-            <TableHeadText
-              name="Storage"
-              :width="boughtItemColumnWidths.storagePlace"
-            />
+            <TableHeadTitle name="Storage" v-model:width="colW.storagePlace" />
           </TableRowHead>
           <TableRowHead v-if="controlsStore.state.textOnly == false">
             <TableHeadRowNumber value="" />
@@ -233,7 +195,7 @@ onUnmounted(() => {
               :filter-store="filterStore"
               filter-store-key="unit"
             />
-            <TableHeadText name="Link" value="" />
+            <TableHeadTitle name="Link" value="" />
             <TableHeadFilterInput
               name="Part Number"
               :item-store="boughtItemsStore"
@@ -374,14 +336,14 @@ onUnmounted(() => {
               :number="index + 1"
               :locked-icon="!item.project_is_active"
               :bell-icon="item.high_priority"
-              :width="boughtItemColumnWidths.number"
+              v-model:width="colW.number"
             />
             <TableItemText
               name="ID"
               filter-store-key="id"
               :value="item.id"
               :center="true"
-              :width="boughtItemColumnWidths.id"
+              v-model:width="colW.id"
             />
             <TableItemSelect
               name="Status"
@@ -390,7 +352,7 @@ onUnmounted(() => {
               :options="statusStore.boughtItemStatusOption"
               :update-method="boughtItemsRequest.putItemsStatus"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.status"
+              v-model:width="colW.status"
             />
             <TableItemInput
               name="Project Number"
@@ -398,13 +360,13 @@ onUnmounted(() => {
               :value="item.project_number"
               :update-method="boughtItemsRequest.putItemsProject"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.projectNumber"
+              v-model:width="colW.projectNumber"
             />
             <TableItemText
               name="Product Number"
               filter-store-key="productNumber"
               :value="item.product_number"
-              :width="boughtItemColumnWidths.productNumber"
+              v-model:width="colW.productNumber"
             />
             <TableItemInput
               name="Quantity"
@@ -413,7 +375,8 @@ onUnmounted(() => {
               :value="item.quantity"
               :update-method="boughtItemsRequest.putItemsQuantity"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.quantity"
+              :center="true"
+              v-model:width="colW.quantity"
             />
             <!-- UNIT ENDPOINT NOT AVAILABLE IN BACKEND -->
             <TableItemSelect
@@ -423,14 +386,14 @@ onUnmounted(() => {
               :options="unitsStore.boughtItemUnitsOption"
               :update-method="boughtItemsRequest.putItemsUnit"
               :edit-mode="false"
-              :width="boughtItemColumnWidths.unit"
+              v-model:width="colW.unit"
             />
             <TableItemLink
               name="Weblink"
               :value="item.weblink"
               :display-icon="true"
               :center="true"
-              :width="boughtItemColumnWidths.weblink"
+              v-model:width="colW.weblink"
             />
             <TableItemInput
               name="Part Number"
@@ -438,7 +401,7 @@ onUnmounted(() => {
               :value="item.partnumber"
               :update-method="boughtItemsRequest.putItemsPartnumber"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.partnumber"
+              v-model:width="colW.partnumber"
             />
             <TableItemInput
               name="Order Number"
@@ -446,7 +409,7 @@ onUnmounted(() => {
               :value="item.order_number"
               :update-method="boughtItemsRequest.putItemsOrderNumber"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.orderNumber"
+              v-model:width="colW.orderNumber"
             />
             <TableItemInput
               name="Manufacturer"
@@ -454,7 +417,7 @@ onUnmounted(() => {
               :value="item.manufacturer"
               :update-method="boughtItemsRequest.putItemsManufacturer"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.manufacturer"
+              v-model:width="colW.manufacturer"
             />
             <TableItemInput
               name="Supplier"
@@ -462,7 +425,7 @@ onUnmounted(() => {
               :value="item.supplier"
               :update-method="boughtItemsRequest.putItemsSupplier"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.supplier"
+              v-model:width="colW.supplier"
             />
             <TableItemInput
               name="Group"
@@ -470,7 +433,7 @@ onUnmounted(() => {
               :value="item.group_1"
               :update-method="boughtItemsRequest.putItemsGroup1"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.group1"
+              v-model:width="colW.group1"
             />
             <TableItemTextarea
               name="General Note"
@@ -478,7 +441,7 @@ onUnmounted(() => {
               :value="item.note_general"
               :update-method="boughtItemsRequest.putItemsNoteGeneral"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.noteGeneral"
+              v-model:width="colW.noteGeneral"
             />
             <TableItemTextarea
               name="Supplier Note"
@@ -486,14 +449,14 @@ onUnmounted(() => {
               :value="item.note_general"
               :update-method="boughtItemsRequest.putItemsNoteSupplier"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.noteSupplier"
+              v-model:width="colW.noteSupplier"
             />
             <TableItemText
               name="Created"
               filter-store-key="createdDate"
               :value="item.created"
               :center="true"
-              :width="boughtItemColumnWidths.createdDate"
+              v-model:width="colW.createdDate"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
@@ -501,7 +464,7 @@ onUnmounted(() => {
               filter-store-key="creatorId"
               :value="item.creator_id"
               :display-value="usersStore.getNameByID(item.creator_id)"
-              :width="boughtItemColumnWidths.creatorId"
+              v-model:width="colW.creatorId"
             />
             <TableItemDate
               name="Desired Delivery Date"
@@ -510,14 +473,14 @@ onUnmounted(() => {
               :update-method="boughtItemsRequest.putItemsDesiredDeliveryDate"
               :center="true"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.desiredDate"
+              v-model:width="colW.desiredDate"
             />
             <TableItemText
               name="Requested Delivery Date"
               filter-store-key="requestedDate"
               :value="item.requested_date"
               :center="true"
-              :width="boughtItemColumnWidths.requestedDate"
+              v-model:width="colW.requestedDate"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
@@ -525,14 +488,14 @@ onUnmounted(() => {
               filter-store-key="requesterId"
               :value="item.requester_id"
               :display-value="usersStore.getNameByID(item.requester_id)"
-              :width="boughtItemColumnWidths.requesterId"
+              v-model:width="colW.requesterId"
             />
             <TableItemText
               name="Ordered"
               filter-store-key="orderedDate"
               :value="item.ordered_date"
               :center="true"
-              :width="boughtItemColumnWidths.orderedDate"
+              v-model:width="colW.orderedDate"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
@@ -540,7 +503,7 @@ onUnmounted(() => {
               filter-store-key="ordererId"
               :value="item.orderer_id"
               :display-value="usersStore.getNameByID(item.orderer_id)"
-              :width="boughtItemColumnWidths.ordererId"
+              v-model:width="colW.ordererId"
             />
             <TableItemDate
               name="Expected Delivery Date"
@@ -549,14 +512,14 @@ onUnmounted(() => {
               :update-method="boughtItemsRequest.putItemsExpectedDeliveryDate"
               :center="true"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.expectedDate"
+              v-model:width="colW.expectedDate"
             />
             <TableItemText
               name="Delivered"
               filter-store-key="deliveredDate"
               :value="item.delivery_date"
               :center="true"
-              :width="boughtItemColumnWidths.deliveredDate"
+              v-model:width="colW.deliveredDate"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
@@ -564,19 +527,19 @@ onUnmounted(() => {
               filter-store-key="receiverId"
               :value="item.receiver_id"
               :display-value="usersStore.getNameByID(item.receiver_id)"
-              :width="boughtItemColumnWidths.receiverId"
+              v-model:width="colW.receiverId"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Arrival Weeks"
               :value="calcDiffInWeeksFromToday(item.expected_delivery_date)"
-              :width="boughtItemColumnWidths.arrivalWeeks"
+              v-model:width="colW.arrivalWeeks"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Total Weeks"
               :value="calcDiffInWeeks(item.ordered_date, item.delivery_date)"
-              :width="boughtItemColumnWidths.totalWeeks"
+              v-model:width="colW.totalWeeks"
             />
             <TableItemInput
               name="Storage Place"
@@ -584,7 +547,7 @@ onUnmounted(() => {
               :value="item.storage_place"
               :update-method="boughtItemsRequest.putItemsStorage"
               :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :width="boughtItemColumnWidths.storagePlace"
+              v-model:width="colW.storagePlace"
             />
           </TableRowItems>
         </tbody>

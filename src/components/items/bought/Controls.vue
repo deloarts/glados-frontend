@@ -281,15 +281,24 @@ onBeforeMount(setupTabletView);
         :hide-when-clicked="false"
       >
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.state.ignoreDelivered"></Toggle
+          <Toggle
+            v-model="filterStore.state.ignoreDelivered"
+            @change="boughtItemsStore.getItems()"
+          ></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Delivered</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.state.ignoreCanceled"></Toggle
+          <Toggle
+            v-model="filterStore.state.ignoreCanceled"
+            @change="boughtItemsStore.getItems()"
+          ></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Canceled</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.state.ignoreLost"></Toggle
+          <Toggle
+            v-model="filterStore.state.ignoreLost"
+            @change="boughtItemsStore.getItems()"
+          ></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Lost</span>
         </div>
         <div class="drop-down-toggle-item">

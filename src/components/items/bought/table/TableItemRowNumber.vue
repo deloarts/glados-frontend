@@ -3,6 +3,8 @@ import { computed } from "vue";
 
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
+import config from "@/config";
+
 import IconBellRing from "@/components/icons/IconBellRing.vue";
 import IconLocked from "@/components/icons/IconLocked.vue";
 
@@ -10,6 +12,7 @@ const controlsStore = useBoughtItemsControlsStore();
 
 interface Props {
   number: number;
+  id: number;
   lockedIcon?: boolean;
   bellIcon?: boolean;
   width?: number;
@@ -23,10 +26,20 @@ const props = withDefaults(defineProps<Props>(), {
 const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
 });
+
+async function copyURL() {
+  const url = `${config.localURL}/#/items/bought?id=${props.id}`;
+  try {
+    await navigator.clipboard.writeText(url);
+    alert(`Copied '${url}'' to clipboard`);
+  } catch ($e) {
+    alert("Cannot copy");
+  }
+}
 </script>
 
 <template>
-  <td @contextmenu.prevent="">
+  <td @contextmenu.prevent="copyURL()">
     <IconLocked v-if="props.lockedIcon" class="locked-icon" />
     <IconBellRing v-else-if="props.bellIcon" class="bell-icon" />
     <div

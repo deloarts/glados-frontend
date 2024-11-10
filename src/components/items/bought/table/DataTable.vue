@@ -334,6 +334,7 @@ onUnmounted(() => {
           >
             <TableItemRowNumber
               :number="index + 1"
+              :id="item.id"
               :locked-icon="!item.project_is_active"
               :bell-icon="item.high_priority"
               v-model:width="colW.number"

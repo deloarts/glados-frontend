@@ -33,9 +33,16 @@ watch(
 
 <template>
   <div class="scope">
-    <div v-if="boughtItemsStore.getSelection().length > 0" class="container">
+    <div v-if="boughtItemsStore.getSelection().length == 1" class="container">
       <h1>Changelog of item #{{ boughtItemsStore.getSelection()[0] }}</h1>
       <div v-for="log in changelog" class="changelog-item">{{ log }}</div>
+    </div>
+    <div
+      v-else-if="boughtItemsStore.getSelection().length > 1"
+      class="container"
+    >
+      <h1>Changelog</h1>
+      <div class="changelog-item">Too many items selected</div>
     </div>
     <div v-else class="container">
       <h1>Changelog</h1>
@@ -65,8 +72,10 @@ watch(
 }
 
 h1 {
-  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1.25em;
+  font-family: "Play", "Calibri";
+  font-size: 16px;
+  font-weight: bold;
+
   margin: 0;
   padding-top: 20px;
   padding-left: 20px;
@@ -74,6 +83,9 @@ h1 {
 }
 
 .changelog-item {
+  font-family: "Calibri";
+  font-size: 14px;
+
   margin: 0;
   padding-top: 2px;
   padding-bottom: 2px;

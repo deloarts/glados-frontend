@@ -52,5 +52,7 @@ th {
   min-width: v-bind(cssMinWidth);
   max-width: v-bind(cssWidth);
   width: v-bind(cssWidth);
+
+  cursor: ew-resize;
 }
 </style>

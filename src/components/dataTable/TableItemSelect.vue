@@ -78,7 +78,7 @@ function onChange(eventTarget: EventTarget) {
     <select
       v-if="
         props.editMode &&
-        (userStore.user.is_superuser || userStore.user.is_adminuser) &&
+        (userStore.user.is_superuser || userStore.user.is_adminuser)
       "
       :value="props.value"
       v-on:keyup.escape="onEscape()"

@@ -184,14 +184,12 @@ function onButtonClear() {
 function setupMobileView() {
   if (!gtMinWidthTablet.value) {
     controlsStore.state.unclutter = true;
-    controlsStore.state.textOnly = false;
     controlsStore.state.lockCols = false;
   }
 }
 
 function setupTabletView() {
   if (!gtMinWidthDesktop.value) {
-    controlsStore.state.textOnly = false;
     controlsStore.state.lockCols = false;
   }
 }
@@ -316,10 +314,6 @@ onBeforeMount(setupTabletView);
         <div class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.rainbow"></Toggle
           ><span class="drop-down-toggle-item-text">Rainbow</span>
-        </div>
-        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.textOnly"></Toggle
-          ><span class="drop-down-toggle-item-text">Text Only</span>
         </div>
         <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.lockCols"></Toggle

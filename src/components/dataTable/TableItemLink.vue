@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-
 import IconExternalLink from "@/components/icons/IconExternalLink.vue";
-
-const controlsStore = useBoughtItemsControlsStore();
 
 interface Props {
   name: string;
@@ -13,11 +9,13 @@ interface Props {
   displayIcon?: boolean;
   width?: number;
   center?: boolean;
+  fixedHeight?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   displayIcon: false,
   center: false,
+  fixedHeight: false,
 });
 
 const cssWidth = computed<string>(() => {
@@ -30,7 +28,7 @@ const cssCenter = computed<string>(() => {
 
 <template>
   <td @contextmenu.prevent="">
-    <div v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }">
+    <div v-bind:class="{ 'fix-height': props.fixedHeight }">
       <a v-if="props.value" v-bind:href="props.value" target="_blank">
         <IconExternalLink v-if="props.displayIcon" class="weblink-icon" />
         <span v-else>{{ props.value }}</span>

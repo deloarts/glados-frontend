@@ -9,7 +9,6 @@ export const useBoughtItemsControlsStore = defineStore(
     const state = ref<BoughtItemControls>({
       changelog: false,
       rainbow: false,
-      textOnly: false,
       fixedHeight: true,
       unclutter: false,
       lockCols: false,

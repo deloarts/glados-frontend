@@ -1,36 +1,42 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useBoughtItemFilterStore } from "@/stores/filter";
+import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
+import type { FilterStoreProtocol } from "@/protocols/filterStoreProtocol";
 
 import { blur } from "@/helper/document.helper";
-
-const boughtItemsStore = useBoughtItemsStore();
-const controlsStore = useBoughtItemsControlsStore();
-const filterStore = useBoughtItemFilterStore();
 
 interface Props {
   name: string;
   value: string | number | Date | null;
+  itemStore?: ItemStoreProtocol;
+  filterStore?: FilterStoreProtocol;
   displayValue?: string;
   filterStoreKey?: string;
   width?: number;
   center?: boolean;
+  fixedHeight?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  itemStore: null,
+  filterStore: null,
   displayValue: null,
   filterStoreKey: null,
   center: false,
+  fixedHeight: false,
 });
 
 function onContextMenu() {
   blur();
-  if (props.value && props.filterStoreKey) {
-    filterStore.state[props.filterStoreKey] = String(props.value);
-    boughtItemsStore.getItems();
+  if (
+    props.value &&
+    props.itemStore &&
+    props.filterStore &&
+    props.filterStoreKey
+  ) {
+    props.filterStore.state[props.filterStoreKey] = String(props.value);
+    props.itemStore.getItems();
   }
 }
 
@@ -44,7 +50,7 @@ const cssCenter = computed<string>(() => {
 
 <template>
   <td @contextmenu.prevent="onContextMenu()">
-    <div v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }">
+    <div v-bind:class="{ 'fix-height': props.fixedHeight }">
       <span>{{
         props.displayValue != null ? props.displayValue : props.value
       }}</span>

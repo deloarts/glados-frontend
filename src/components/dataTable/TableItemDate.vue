@@ -4,34 +4,37 @@ import { ref, computed, watch } from "vue";
 import moment from "moment";
 import Datepicker from "vue3-datepicker";
 
+import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
+import type { FilterStoreProtocol } from "@/protocols/filterStoreProtocol";
+
 import { useUserStore } from "@/stores/user";
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useBoughtItemFilterStore } from "@/stores/filter";
 import { useResolutionStore } from "@/stores/resolution";
 
 import { blur } from "@/helper/document.helper";
 import { updateSelectedTableElement } from "@/helper/selection.helper";
 
 const userStore = useUserStore();
-const boughtItemsStore = useBoughtItemsStore();
-const controlsStore = useBoughtItemsControlsStore();
-const filterStore = useBoughtItemFilterStore();
 const resolutionStore = useResolutionStore();
 
 interface Props {
   name: string;
   value: string | number | Date | null;
   updateMethod: Function;
+  itemStore?: ItemStoreProtocol;
+  filterStore?: FilterStoreProtocol;
   filterStoreKey?: string;
   width?: number;
   center?: boolean;
+  fixedHeight?: boolean;
   editMode?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  itemStore: null,
+  filterStore: null,
   filterStoreKey: null,
   center: false,
+  fixedHeight: false,
   editMode: false,
 });
 
@@ -61,15 +64,20 @@ function onUpdate() {
     formattedDate,
     props.value,
     props.updateMethod,
-    boughtItemsStore,
+    props.itemStore,
   );
 }
 
 function onContextMenu() {
   blur();
-  if (props.value && props.filterStoreKey) {
-    filterStore.state[props.filterStoreKey] = String(pickedDate.value);
-    boughtItemsStore.getItems();
+  if (
+    props.value &&
+    props.itemStore &&
+    props.filterStore &&
+    props.filterStoreKey
+  ) {
+    props.filterStore.state[props.filterStoreKey] = String(pickedDate.value);
+    props.itemStore.getItems();
   }
 }
 
@@ -91,7 +99,6 @@ watch(
       v-if="
         props.editMode &&
         (userStore.user.is_superuser || userStore.user.is_adminuser) &&
-        !controlsStore.state.textOnly &&
         gtMinWidthTablet
       "
     >
@@ -103,10 +110,7 @@ watch(
         style="width: 75px; height: 14px; text-align: center"
       />
     </div>
-    <div
-      v-else
-      v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-    >
+    <div v-else v-bind:class="{ 'fix-height': props.fixedHeight }">
       {{ props.value }}
     </div>
   </td>

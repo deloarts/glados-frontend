@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onUnmounted } from "vue";
+import { ref, onBeforeMount, onUnmounted, computed } from "vue";
 
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useUnitsStore } from "@/stores/units";
@@ -20,21 +20,22 @@ import Spinner from "@/components/spinner/LoadingSpinner.vue";
 
 import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
 
-import TableHeadRowNumber from "@/components/dataTable/TableHeadRowNumber.vue";
 import TableRowHead from "@/components/dataTable/TableRowHead.vue";
 import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
+import TableHeadRowNumber from "@/components/dataTable/TableHeadRowNumber.vue";
 import TableHeadText from "@/components/dataTable/TableHeadText.vue";
 import TableHeadFilterInput from "@/components/dataTable/TableHeadFilterInput.vue";
 import TableHeadFilterSelect from "@/components/dataTable/TableHeadFilterSelect.vue";
 
+import TableItemRowNumber from "@/components/dataTable/TableItemRowNumber.vue";
+import TableItemText from "@/components/dataTable/TableItemText.vue";
+import TableItemInput from "@/components/dataTable/TableItemInput.vue";
+import TableItemSelect from "@/components/dataTable/TableItemSelect.vue";
+import TableItemLink from "@/components/dataTable/TableItemLink.vue";
+import TableItemTextarea from "@/components/dataTable/TableItemTextarea.vue";
+import TableItemDate from "@/components/dataTable/TableItemDate.vue";
+
 import TableRowItems from "./TableRowItems.vue";
-import TableItemRowNumber from "./TableItemRowNumber.vue";
-import TableItemInput from "./TableItemInput.vue";
-import TableItemTextarea from "./TableItemTextarea.vue";
-import TableItemSelect from "./TableItemSelect.vue";
-import TableItemText from "./TableItemText.vue";
-import TableItemLink from "./TableItemLink.vue";
-import TableItemDate from "./TableItemDate.vue";
 
 // Store
 const boughtItemsStore = useBoughtItemsStore();
@@ -43,6 +44,10 @@ const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
 const unitsStore = useUnitsStore();
 const statusStore = useStatusStore();
+
+const fixedHeight = computed(() => {
+  return controlsStore.state.fixedHeight;
+});
 
 // ColumnWidths
 const colW = ref(boughtItemColumnWidths);
@@ -155,7 +160,7 @@ onUnmounted(() => {
             />
             <TableHeadTitle name="Storage" v-model:width="colW.storagePlace" />
           </TableRowHead>
-          <TableRowHead v-if="controlsStore.state.textOnly == false">
+          <TableRowHead>
             <TableHeadRowNumber value="" />
             <TableHeadFilterInput
               name="ID"
@@ -338,56 +343,79 @@ onUnmounted(() => {
               :locked-icon="!item.project_is_active"
               :bell-icon="item.high_priority"
               v-model:width="colW.number"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               name="ID"
-              filter-store-key="id"
               :value="item.id"
-              :center="true"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="id"
               v-model:width="colW.id"
+              :center="true"
+              :fixed-height="fixedHeight"
             />
             <TableItemSelect
               name="Status"
-              filter-store-key="status"
               :value="item.status"
               :options="statusStore.boughtItemStatusOption"
               :update-method="boughtItemsRequest.putItemsStatus"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="status"
               v-model:width="colW.status"
+              :center="true"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemInput
               name="Project Number"
-              filter-store-key="projectNumber"
               :value="item.project_number"
               :update-method="boughtItemsRequest.putItemsProject"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="projectNumber"
               v-model:width="colW.projectNumber"
+              :center="true"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemText
               name="Product Number"
-              filter-store-key="productNumber"
               :value="item.product_number"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="productNumber"
               v-model:width="colW.productNumber"
+              :center="true"
+              :fixed-height="fixedHeight"
             />
             <TableItemInput
               name="Quantity"
-              type="number"
-              filter-store-key="quantity"
               :value="item.quantity"
               :update-method="boughtItemsRequest.putItemsQuantity"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
-              :center="true"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="quantity"
+              type="number"
               v-model:width="colW.quantity"
+              :center="true"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <!-- UNIT ENDPOINT NOT AVAILABLE IN BACKEND -->
             <TableItemSelect
               name="Unit"
-              filter-store-key="unit"
               :value="item.unit"
               :options="unitsStore.boughtItemUnitsOption"
               :update-method="boughtItemsRequest.putItemsUnit"
-              :edit-mode="false"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="unit"
               v-model:width="colW.unit"
+              :center="true"
+              :fixed-height="fixedHeight"
+              :edit-mode="false"
             />
             <TableItemLink
               name="Weblink"
@@ -395,160 +423,221 @@ onUnmounted(() => {
               :display-icon="true"
               :center="true"
               v-model:width="colW.weblink"
+              :fixed-height="fixedHeight"
             />
             <TableItemInput
               name="Part Number"
-              filter-store-key="partnumber"
               :value="item.partnumber"
               :update-method="boughtItemsRequest.putItemsPartnumber"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="partnumber"
               v-model:width="colW.partnumber"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemInput
               name="Order Number"
-              filter-store-key="orderNumber"
               :value="item.order_number"
               :update-method="boughtItemsRequest.putItemsOrderNumber"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="orderNumber"
               v-model:width="colW.orderNumber"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemInput
               name="Manufacturer"
-              filter-store-key="manufacturer"
               :value="item.manufacturer"
               :update-method="boughtItemsRequest.putItemsManufacturer"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="manufacturer"
               v-model:width="colW.manufacturer"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemInput
               name="Supplier"
-              filter-store-key="supplier"
               :value="item.supplier"
               :update-method="boughtItemsRequest.putItemsSupplier"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="supplier"
               v-model:width="colW.supplier"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemInput
               name="Group"
-              filter-store-key="group1"
               :value="item.group_1"
               :update-method="boughtItemsRequest.putItemsGroup1"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="group1"
               v-model:width="colW.group1"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemTextarea
               name="General Note"
-              filter-store-key="noteGeneral"
               :value="item.note_general"
               :update-method="boughtItemsRequest.putItemsNoteGeneral"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="noteGeneral"
               v-model:width="colW.noteGeneral"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemTextarea
               name="Supplier Note"
-              filter-store-key="noteSupplier"
               :value="item.note_general"
               :update-method="boughtItemsRequest.putItemsNoteSupplier"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="noteSupplier"
               v-model:width="colW.noteSupplier"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemText
               name="Created"
-              filter-store-key="createdDate"
               :value="item.created"
-              :center="true"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="createdDate"
               v-model:width="colW.createdDate"
+              :center="true"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Creator"
-              filter-store-key="creatorId"
               :value="item.creator_id"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
               :display-value="usersStore.getNameByID(item.creator_id)"
+              filter-store-key="creatorId"
               v-model:width="colW.creatorId"
+              :fixed-height="fixedHeight"
             />
             <TableItemDate
               name="Desired Delivery Date"
-              filter-store-key="desiredDate"
               :value="item.desired_delivery_date"
               :update-method="boughtItemsRequest.putItemsDesiredDeliveryDate"
-              :center="true"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="desiredDate"
               v-model:width="colW.desiredDate"
+              :center="true"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemText
               name="Requested Delivery Date"
-              filter-store-key="requestedDate"
               :value="item.requested_date"
-              :center="true"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="requestedDate"
               v-model:width="colW.requestedDate"
+              :center="true"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Requester"
-              filter-store-key="requesterId"
               :value="item.requester_id"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="requesterId"
               :display-value="usersStore.getNameByID(item.requester_id)"
               v-model:width="colW.requesterId"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               name="Ordered"
-              filter-store-key="orderedDate"
               :value="item.ordered_date"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="orderedDate"
               :center="true"
               v-model:width="colW.orderedDate"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Orderer"
-              filter-store-key="ordererId"
               :value="item.orderer_id"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
               :display-value="usersStore.getNameByID(item.orderer_id)"
+              filter-store-key="ordererId"
               v-model:width="colW.ordererId"
+              :fixed-height="fixedHeight"
             />
             <TableItemDate
               name="Expected Delivery Date"
-              filter-store-key="expectedDate"
               :value="item.expected_delivery_date"
               :update-method="boughtItemsRequest.putItemsExpectedDeliveryDate"
-              :center="true"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="expectedDate"
               v-model:width="colW.expectedDate"
+              :center="true"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
             <TableItemText
               name="Delivered"
-              filter-store-key="deliveredDate"
               :value="item.delivery_date"
-              :center="true"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="deliveredDate"
               v-model:width="colW.deliveredDate"
+              :center="true"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Receiver"
-              filter-store-key="receiverId"
               :value="item.receiver_id"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
               :display-value="usersStore.getNameByID(item.receiver_id)"
+              filter-store-key="receiverId"
               v-model:width="colW.receiverId"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Arrival Weeks"
               :value="calcDiffInWeeksFromToday(item.expected_delivery_date)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
               v-model:width="colW.arrivalWeeks"
+              :fixed-height="fixedHeight"
             />
             <TableItemText
               v-if="!controlsStore.state.unclutter"
               name="Total Weeks"
               :value="calcDiffInWeeks(item.ordered_date, item.delivery_date)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
               v-model:width="colW.totalWeeks"
+              :fixed-height="fixedHeight"
             />
             <TableItemInput
               name="Storage Place"
-              filter-store-key="storagePlace"
               :value="item.storage_place"
               :update-method="boughtItemsRequest.putItemsStorage"
-              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
+              :item-store="boughtItemsStore"
+              :filter-store="filterStore"
+              filter-store-key="storagePlace"
               v-model:width="colW.storagePlace"
+              :fixed-height="fixedHeight"
+              :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
             />
           </TableRowItems>
         </tbody>

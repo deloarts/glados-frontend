@@ -1,34 +1,39 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from "vue";
 
+import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
+import type { FilterStoreProtocol } from "@/protocols/filterStoreProtocol";
+
 import { useUserStore } from "@/stores/user";
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useBoughtItemFilterStore } from "@/stores/filter";
 import { useResolutionStore } from "@/stores/resolution";
 
 import { blur } from "@/helper/document.helper";
 import { updateSelectedTableElement } from "@/helper/selection.helper";
 
 const userStore = useUserStore();
-const boughtItemsStore = useBoughtItemsStore();
-const controlsStore = useBoughtItemsControlsStore();
-const filterStore = useBoughtItemFilterStore();
 const resolutionStore = useResolutionStore();
 
 interface Props {
   name: string;
-  value: string | number | null;
+  value: string | number | Date | null;
   updateMethod: Function;
+  itemStore?: ItemStoreProtocol;
+  filterStore?: FilterStoreProtocol;
   filterStoreKey?: string;
   type?: string;
   width?: number;
+  center?: boolean;
+  fixedHeight?: boolean;
   editMode?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  itemStore: null,
+  filterStore: null,
   filterStoreKey: null,
   type: "text",
+  center: false,
+  fixedHeight: false,
   editMode: false,
 });
 
@@ -37,42 +42,39 @@ const gtMinWidthTablet = computed<boolean>(
 );
 
 const hasFocus = ref<boolean>(false);
-const inputModel = ref<string | number | null>();
+const inputModel = ref<string | number | Date | null>();
 const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
 });
-
-function resizeTextarea(event: Event) {
-  var textarea = event.target;
-  //@ts-ignore
-  textarea.style.height = "18px";
-  //@ts-ignore
-  textarea.style.height = textarea.scrollHeight + "px";
-}
+const cssCenter = computed<string>(() => {
+  return props.center ? "center" : "left";
+});
 
 function onEscape() {
   blur();
 }
 
-function onEnter(event: Event) {
-  //@ts-ignore
-  if (event.keyCode == 13 && !event.shiftKey) {
-    blur();
-    updateSelectedTableElement(
-      props.name,
-      inputModel.value,
-      props.value,
-      props.updateMethod,
-      boughtItemsStore,
-    );
-  }
+function onEnter() {
+  blur();
+  updateSelectedTableElement(
+    props.name,
+    inputModel.value,
+    props.value,
+    props.updateMethod,
+    props.itemStore,
+  );
 }
 
 function onContextMenu() {
   blur();
-  if (props.value && props.filterStoreKey) {
-    filterStore.state[props.filterStoreKey] = String(inputModel.value);
-    boughtItemsStore.getItems();
+  if (
+    props.value &&
+    props.itemStore &&
+    props.filterStore &&
+    props.filterStoreKey
+  ) {
+    props.filterStore.state[props.filterStoreKey] = String(inputModel.value);
+    props.itemStore.getItems();
   }
 }
 
@@ -107,28 +109,20 @@ watch(
       v-if="
         props.editMode &&
         (userStore.user.is_superuser || userStore.user.is_adminuser) &&
-        !controlsStore.state.textOnly &&
         gtMinWidthTablet
       "
     >
-      <textarea
+      <input
+        :type="props.type"
         v-model="inputModel"
-        type="text"
         v-on:keyup.escape="onEscape()"
-        v-on:keyup.enter="onEnter($event)"
-        @input="resizeTextarea($event)"
-        @focusin="
-          boughtItemsStore.pause(true),
-            (hasFocus = true),
-            resizeTextarea($event)
-        "
-        @focusout="boughtItemsStore.pause(false), (hasFocus = false)"
-      ></textarea>
+        v-on:keyup.enter="onEnter()"
+        @focusin="props.itemStore.pause(true), (hasFocus = true)"
+        @focusout="props.itemStore.pause(false), (hasFocus = false)"
+        v-bind:class="{ editing: props.value != inputModel }"
+      />
     </div>
-    <div
-      v-else
-      v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-    >
+    <div v-else v-bind:class="{ 'fix-height': props.fixedHeight }">
       <span>{{ props.value }}</span>
     </div>
   </td>
@@ -141,33 +135,38 @@ watch(
 td {
   min-width: v-bind(cssWidth);
   max-width: v-bind(cssWidth);
+  text-align: v-bind(cssCenter);
 }
 
-textarea {
+input {
   width: 100%;
   height: 18px;
-  min-height: 18px;
-
-  overflow: hidden;
-  resize: none;
 
   box-shadow: none;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
   color: white;
-
   background-color: transparent;
+
   outline: none;
   border: none;
   border-color: inherit;
 
   font-family: Calibri;
   font-size: 14px;
+
+  text-align: v-bind(cssCenter);
 }
 
-textarea::placeholder {
-  font-family: Calibri;
-  font-size: 14px;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>

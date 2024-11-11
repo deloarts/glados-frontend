@@ -1,7 +1,6 @@
 export interface BoughtItemControls {
   changelog: boolean;
   rainbow: boolean;
-  textOnly: boolean;
   fixedHeight: boolean;
   unclutter: boolean;
   lockCols: boolean;

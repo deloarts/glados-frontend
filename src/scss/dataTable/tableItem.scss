@@ -34,3 +34,12 @@ span {
   display: block;
   white-space: nowrap;
 }
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.editing {
+  font-style: italic;
+}

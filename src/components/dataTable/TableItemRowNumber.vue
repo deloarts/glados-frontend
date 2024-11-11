@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
-import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { useNotificationStore } from "@/stores/notification";
 
 import config from "@/config";
 
+import IconCopy from "@/components/icons/IconCopy.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
 import IconLocked from "@/components/icons/IconLocked.vue";
 
-const controlsStore = useBoughtItemsControlsStore();
+const notificationStore = useNotificationStore();
 
 interface Props {
   number: number;
@@ -16,12 +17,16 @@ interface Props {
   lockedIcon?: boolean;
   bellIcon?: boolean;
   width?: number;
+  fixedHeight?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   lockedIcon: false,
   bellIcon: false,
+  fixedHeight: false,
 });
+
+const hover = ref<boolean>(false);
 
 const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
@@ -31,21 +36,25 @@ async function copyURL() {
   const url = `${config.localURL}/#/items/bought?id=${props.id}`;
   try {
     await navigator.clipboard.writeText(url);
-    alert(`Copied '${url}'' to clipboard`);
+    notificationStore.addInfo(`Copied item URL to clipboard`);
   } catch ($e) {
-    alert("Cannot copy");
+    notificationStore.addWarn(`Cannot copy item URL`);
   }
 }
 </script>
 
 <template>
-  <td @contextmenu.prevent="copyURL()">
-    <IconLocked v-if="props.lockedIcon" class="locked-icon" />
+  <td
+    @contextmenu.prevent="copyURL()"
+    @click="copyURL()"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+    class="sticky"
+  >
+    <IconCopy v-if="hover" class="copy-icon"></IconCopy>
+    <IconLocked v-else-if="props.lockedIcon" class="locked-icon" />
     <IconBellRing v-else-if="props.bellIcon" class="bell-icon" />
-    <div
-      v-else
-      v-bind:class="{ 'fix-height': controlsStore.state.fixedHeight }"
-    >
+    <div v-else v-bind:class="{ 'fix-height': props.fixedHeight }">
       {{ props.number }}
     </div>
   </td>
@@ -60,10 +69,15 @@ td {
   max-width: v-bind(cssWidth);
   text-align: center;
 
-  position: -webkit-sticky;
-  position: sticky;
   left: 0;
   z-index: 30;
+}
+
+.copy-icon {
+  color: white;
+  height: 12px;
+  width: 12px;
+  vertical-align: middle;
 }
 
 .bell-icon {

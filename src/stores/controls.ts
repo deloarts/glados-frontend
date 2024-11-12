@@ -99,6 +99,7 @@ export const useProjectsControlsStore = defineStore("projectsControls", () => {
     id: true,
     projectNumber: true,
     productNumber: true,
+    projectLink: true,
     customer: true,
     description: true,
     designatedUser: true,

@@ -10,12 +10,14 @@ interface Props {
   width?: number;
   center?: boolean;
   fixedHeight?: boolean;
+  newTab?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   displayIcon: false,
   center: false,
   fixedHeight: false,
+  newTab: true,
 });
 
 const cssWidth = computed<string>(() => {
@@ -29,7 +31,11 @@ const cssCenter = computed<string>(() => {
 <template>
   <td @contextmenu.prevent="">
     <div v-bind:class="{ 'fix-height': props.fixedHeight }">
-      <a v-if="props.value" v-bind:href="props.value" target="_blank">
+      <a
+        v-if="props.value"
+        v-bind:href="props.value"
+        :target="props.newTab ? '_blank' : '_self'"
+      >
         <IconExternalLink v-if="props.displayIcon" class="weblink-icon" />
         <span v-else>{{ props.value }}</span>
       </a>

@@ -4,6 +4,7 @@ export const projectsColumnWidths = {
   status: 85,
   projectNumber: 85,
   productNumber: 85,
+  projectLink: 35,
   customer: 250,
   description: 350,
   designatedUser: 121,

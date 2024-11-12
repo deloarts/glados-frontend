@@ -14,6 +14,7 @@ import TableItemNumber from "./item/TableItemNumber.vue";
 import TableItemID from "./item/TableItemID.vue";
 import TableItemProjectNumber from "./item/TableItemProjectNumber.vue";
 import TableItemProductNumber from "./item/TableItemProductNumber.vue";
+import TableItemProjectLink from "./item/TableItemProjectLink.vue";
 import TableItemCustomer from "./item/TableItemCustomer.vue";
 import TableItemDescription from "./item/TableItemDescription.vue";
 import TableItemDesignatedUser from "./item/TableItemDesignatedUser.vue";
@@ -51,6 +52,7 @@ function multiSelect(event: Event, id: number, index: number) {
       <TableItemID :item="item" v-model:width="props.colW" />
       <TableItemProjectNumber :item="item" v-model:width="props.colW" />
       <TableItemProductNumber :item="item" v-model:width="props.colW" />
+      <TableItemProjectLink :item="item" v-model:width="props.colW" />
       <TableItemCustomer :item="item" v-model:width="props.colW" />
       <TableItemDescription :item="item" v-model:width="props.colW" />
       <TableItemDesignatedUser :item="item" v-model:width="props.colW" />

@@ -47,6 +47,7 @@ export interface ProjectControlsState {
 export interface ProjectControlsColumns {
   id: boolean;
   projectNumber: boolean;
+  projectLink: boolean;
   productNumber: boolean;
   customer: boolean;
   description: boolean;

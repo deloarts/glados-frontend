@@ -24,7 +24,6 @@ const props = defineProps<{
 </script>
 
 <template>
-  <!-- UNIT ENDPOINT NOT AVAILABLE IN BACKEND -->
   <TableItemSelect
     v-if="controlsStore.columns.unit"
     name="Unit"
@@ -37,7 +36,7 @@ const props = defineProps<{
     v-model:width="props.width.unit"
     :center="true"
     :fixed-height="controlsStore.state.fixedHeight"
-    :edit-mode="false"
+    :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
   />
 </template>
 

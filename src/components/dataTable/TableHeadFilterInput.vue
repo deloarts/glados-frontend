@@ -66,6 +66,9 @@ watch(
         v-on:keyup.enter="onEnter()"
         @focusin="props.itemStore.pause(true)"
         @focusout="props.itemStore.pause(false)"
+        v-bind:class="{
+          editing: props.filterStore.state[props.filterStoreKey] != inputModel,
+        }"
       />
     </div>
   </th>

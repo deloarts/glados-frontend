@@ -23,7 +23,7 @@ const props = defineProps<{
 
 <template>
   <TableItemText
-    v-if="!controlsStore.state.unclutter"
+    v-if="controlsStore.columns.arrivalWeeks"
     name="Arrival Weeks"
     :value="calcDiffInWeeksFromToday(item.expected_delivery_date)"
     :item-store="boughtItemsStore"

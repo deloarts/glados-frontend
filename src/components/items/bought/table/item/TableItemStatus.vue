@@ -25,6 +25,7 @@ const props = defineProps<{
 
 <template>
   <TableItemSelect
+    v-if="controlsStore.columns.status"
     name="Status"
     :value="item.status"
     :options="statusStore.boughtItemStatusOption"

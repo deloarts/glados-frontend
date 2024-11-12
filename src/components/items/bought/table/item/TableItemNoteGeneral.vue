@@ -23,6 +23,7 @@ const props = defineProps<{
 
 <template>
   <TableItemTextarea
+    v-if="controlsStore.columns.noteGeneral"
     name="General Note"
     :value="item.note_general"
     :update-method="boughtItemsRequest.putItemsNoteGeneral"

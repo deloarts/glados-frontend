@@ -27,6 +27,7 @@ import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue";
 import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue";
 import ButtonClear from "@/components/elements/ButtonClear.vue";
 import DropDownTableView from "@/components/elements/DropDownTableView.vue";
+import DropDownTableColumns from "@/components/elements/DropDownTableColumns.vue";
 import SelectPreText from "@/components/elements/SelectPreText.vue";
 
 import type { AvailableOption } from "@/models/controls";
@@ -66,6 +67,9 @@ const buttonSyncText = computed<string>(() => {
 });
 const buttonViewsText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Views" : "";
+});
+const buttonColumnsText = computed<string>(() => {
+  return gtMinWidthTablet.value ? "Columns" : "";
 });
 const buttonClearFilterText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Clear Filter" : "";
@@ -183,7 +187,6 @@ function onButtonClear() {
 
 function setupMobileView() {
   if (!gtMinWidthTablet.value) {
-    controlsStore.state.unclutter = true;
     controlsStore.state.lockCols = false;
   }
 }
@@ -303,10 +306,6 @@ onBeforeMount(setupTabletView);
           <Toggle v-model="controlsStore.state.fixedHeight"></Toggle
           ><span class="drop-down-toggle-item-text">Fixed Height</span>
         </div>
-        <div v-if="gtMinWidthTablet" class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.unclutter"></Toggle
-          ><span class="drop-down-toggle-item-text">Unclutter</span>
-        </div>
         <div class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.changelog"></Toggle
           ><span class="drop-down-toggle-item-text">Changelog</span>
@@ -315,11 +314,27 @@ onBeforeMount(setupTabletView);
           <Toggle v-model="controlsStore.state.rainbow"></Toggle
           ><span class="drop-down-toggle-item-text">Rainbow</span>
         </div>
-        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
+        <!-- <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.lockCols"></Toggle
           ><span class="drop-down-toggle-item-text">Lock Columns</span>
-        </div>
+        </div> -->
       </DropDownTableView>
+
+      <DropDownTableColumns
+        class="controls-base-element"
+        v-model:text="buttonColumnsText"
+        :hide-when-clicked="false"
+      >
+        <div
+          v-for="(value, key) in controlsStore.columns"
+          class="drop-down-toggle-item"
+        >
+          <Toggle v-model="controlsStore.columns[key]"></Toggle
+          ><span class="drop-down-toggle-item-text">{{
+            capitalizeFirstLetter(key)
+          }}</span>
+        </div>
+      </DropDownTableColumns>
 
       <ButtonFilterSave
         v-if="gtMinWidthDesktop"

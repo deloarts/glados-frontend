@@ -21,6 +21,7 @@ const props = defineProps<{
 
 <template>
   <TableItemText
+    v-if="controlsStore.columns.orderedDate"
     name="Ordered"
     :value="item.ordered_date"
     :item-store="boughtItemsStore"

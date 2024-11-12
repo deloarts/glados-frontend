@@ -23,6 +23,7 @@ const props = defineProps<{
 
 <template>
   <TableItemInput
+    v-if="controlsStore.columns.storagePlace"
     name="Storage Place"
     :value="item.storage_place"
     :update-method="boughtItemsRequest.putItemsStorage"

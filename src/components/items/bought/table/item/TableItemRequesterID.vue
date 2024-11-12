@@ -23,7 +23,7 @@ const props = defineProps<{
 
 <template>
   <TableItemText
-    v-if="!controlsStore.state.unclutter"
+    v-if="controlsStore.columns.requesterID"
     name="Requester"
     :value="item.requester_id"
     :item-store="boughtItemsStore"

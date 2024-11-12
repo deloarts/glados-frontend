@@ -8,11 +8,11 @@ import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
 import { boughtItemsRequest } from "@/requests/items";
 
 import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
+import { useBoughtItemsControlsStore } from "@/stores/controls";
 
+const boughtItemsControlsStore = useBoughtItemsControlsStore();
 const boughtItemsStore = useBoughtItemsStore();
-const controlsStore = useBoughtItemsControlsStore();
 const boughtItemFilterStore = useBoughtItemFilterStore();
 
 const props = defineProps<{
@@ -23,6 +23,7 @@ const props = defineProps<{
 
 <template>
   <TableItemInput
+    v-if="boughtItemsControlsStore.columns.manufacturer"
     name="Manufacturer"
     :value="item.manufacturer"
     :update-method="boughtItemsRequest.putItemsManufacturer"
@@ -30,7 +31,7 @@ const props = defineProps<{
     :filter-store="boughtItemFilterStore"
     filter-store-key="manufacturer"
     v-model:width="props.width.manufacturer"
-    :fixed-height="controlsStore.state.fixedHeight"
+    :fixed-height="boughtItemsControlsStore.state.fixedHeight"
     :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
   />
 </template>

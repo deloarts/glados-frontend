@@ -1,9 +1,38 @@
-export interface BoughtItemControls {
+export interface BoughtItemControlsState {
   changelog: boolean;
   rainbow: boolean;
   fixedHeight: boolean;
-  unclutter: boolean;
   lockCols: boolean;
+}
+
+export interface BoughtItemControlsColumns {
+  id: boolean;
+  status: boolean;
+  projectNumber: boolean;
+  productNumber: boolean;
+  quantity: boolean;
+  unit: boolean;
+  weblink: boolean;
+  partnumber: boolean;
+  orderNumber: boolean;
+  manufacturer: boolean;
+  supplier: boolean;
+  group1: boolean;
+  noteGeneral: boolean;
+  noteSupplier: boolean;
+  createdDate: boolean;
+  creatorID: boolean;
+  desiredDate: boolean;
+  requestedDate: boolean;
+  requesterID: boolean;
+  orderedDate: boolean;
+  ordererID: boolean;
+  expectedDate: boolean;
+  deliveredDate: boolean;
+  receiverID: boolean;
+  arrivalWeeks: boolean;
+  totalWeeks: boolean;
+  storagePlace: boolean;
 }
 
 export interface AvailableOption {

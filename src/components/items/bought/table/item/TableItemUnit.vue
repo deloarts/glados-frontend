@@ -26,6 +26,7 @@ const props = defineProps<{
 <template>
   <!-- UNIT ENDPOINT NOT AVAILABLE IN BACKEND -->
   <TableItemSelect
+    v-if="controlsStore.columns.unit"
     name="Unit"
     :value="item.unit"
     :options="unitsStore.boughtItemUnitsOption"

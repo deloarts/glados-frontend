@@ -2,6 +2,9 @@
 import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
 
 import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { useBoughtItemsControlsStore } from "@/stores/controls";
+
+const boughtItemsControlsStore = useBoughtItemsControlsStore();
 
 const props = defineProps<{
   width: typeof boughtItemColumnWidths;
@@ -9,7 +12,11 @@ const props = defineProps<{
 </script>
 
 <template>
-  <TableHeadTitle name="Part Number" v-model:width="props.width.partnumber" />
+  <TableHeadTitle
+    v-if="boughtItemsControlsStore.columns.partnumber"
+    name="Part Number"
+    v-model:width="props.width.partnumber"
+  />
 </template>
 
 <style scoped lang="scss"></style>

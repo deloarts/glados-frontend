@@ -23,6 +23,7 @@ const props = defineProps<{
 
 <template>
   <TableItemInput
+    v-if="controlsStore.columns.orderNumber"
     name="Order Number"
     :value="item.order_number"
     :update-method="boughtItemsRequest.putItemsOrderNumber"

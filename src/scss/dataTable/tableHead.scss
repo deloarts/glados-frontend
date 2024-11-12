@@ -1,5 +1,10 @@
 @import "@/scss/variables.scss";
 
+tr {
+  color: white;
+  background: $table-head-background;
+}
+
 th {
   z-index: 50;
   position: sticky;
@@ -14,4 +19,8 @@ th {
 
   color: white;
   background: $table-head-background;
+}
+
+.editing {
+  font-style: italic;
 }

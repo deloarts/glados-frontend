@@ -1,20 +1,7 @@
 <script setup lang="ts">
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useUnitsStore } from "@/stores/units";
-import { useStatusStore } from "@/stores/status";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useBoughtItemFilterStore } from "@/stores/filter";
-import { useUsersStore } from "@/stores/user";
-
 import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
 
 import TableHeadRow from "@/components/dataTable/TableHeadRow.vue";
-
-import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
-import TableHeadRowNumber from "@/components/dataTable/TableHeadRowNumber.vue";
-import TableHeadText from "@/components/dataTable/TableHeadText.vue";
-import TableHeadFilterInput from "@/components/dataTable/TableHeadFilterInput.vue";
-import TableHeadFilterSelect from "@/components/dataTable/TableHeadFilterSelect.vue";
 
 import TableHeadTitleNumber from "./head/TableHeadTitleNumber.vue";
 import TableHeadTitleID from "./head/TableHeadTitleID.vue";
@@ -45,12 +32,34 @@ import TableHeadTitleArrivalWeek from "./head/TableHeadTitleArrivalWeek.vue";
 import TableHeadTitleTotalWeeks from "./head/TableHeadTitleTotalWeeks.vue";
 import TableHeadTitleStoragePlace from "./head/TableHeadTitleStoragePlace.vue";
 
-const boughtItemsStore = useBoughtItemsStore();
-const usersStore = useUsersStore();
-const controlsStore = useBoughtItemsControlsStore();
-const filterStore = useBoughtItemFilterStore();
-const unitsStore = useUnitsStore();
-const statusStore = useStatusStore();
+import TableHeadFilterNumber from "./head/TableHeadFilterNumber.vue";
+import TableHeadFilterID from "./head/TableHeadFilterID.vue";
+import TableHeadFilterStatus from "./head/TableHeadFilterStatus.vue";
+import TableHeadFilterProjectNumber from "./head/TableHeadFilterProjectNumber.vue";
+import TableHeadFilterProductNumber from "./head/TableHeadFilterProductNumber.vue";
+import TableHeadFilterQuantity from "./head/TableHeadFilterQuantity.vue";
+import TableHeadFilterUnit from "./head/TableHeadFilterUnit.vue";
+import TableHeadFilterLink from "./head/TableHeadFilterLink.vue";
+import TableHeadFilterPartNumber from "./head/TableHeadFilterPartNumber.vue";
+import TableHeadFilterOrderNumber from "./head/TableHeadFilterOrderNumber.vue";
+import TableHeadFilterManufacturer from "./head/TableHeadFilterManufacturer.vue";
+import TableHeadFilterSupplier from "./head/TableHeadFilterSupplier.vue";
+import TableHeadFilterGroup from "./head/TableHeadFilterGroup.vue";
+import TableHeadFilterNoteGeneral from "./head/TableHeadFilterNoteGeneral.vue";
+import TableHeadFilterNoteSupplier from "./head/TableHeadFilterNoteSupplier.vue";
+import TableHeadFilterCreatedDate from "./head/TableHeadFilterCreatedDate.vue";
+import TableHeadFilterCreatorID from "./head/TableHeadFilterCreatorID.vue";
+import TableHeadFilterDesiredDate from "./head/TableHeadFilterDesiredDate.vue";
+import TableHeadFilterRequestedDate from "./head/TableHeadFilterRequestedDate.vue";
+import TableHeadFilterRequesterID from "./head/TableHeadFilterRequesterID.vue";
+import TableHeadFilterOrderedDate from "./head/TableHeadFilterOrderedDate.vue";
+import TableHeadFilterOrdererID from "./head/TableHeadFilterOrdererID.vue";
+import TableHeadFilterExpectedDate from "./head/TableHeadFilterExpectedDate.vue";
+import TableHeadFilterDeliveredDate from "./head/TableHeadFilterDeliveredDate.vue";
+import TableHeadFilterReceiverID from "./head/TableHeadFilterReceiverID.vue";
+import TableHeadFilterArrivalWeeks from "./head/TableHeadFilterArrivalWeeks.vue";
+import TableHeadFilterTotalWeeks from "./head/TableHeadFilterTotalWeeks.vue";
+import TableHeadFilterStoragePlace from "./head/TableHeadFilterStoragePlace.vue";
 
 const props = defineProps<{
   colW: typeof boughtItemColumnWidths;
@@ -90,172 +99,34 @@ const props = defineProps<{
       <TableHeadTitleStoragePlace v-model:width="props.colW" />
     </TableHeadRow>
     <TableHeadRow>
-      <TableHeadRowNumber value="" />
-      <TableHeadFilterInput
-        name="ID"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="id"
-      />
-      <TableHeadFilterSelect
-        name="Status"
-        :options="statusStore.boughtItemStatusOptionFilter"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="status"
-      />
-      <TableHeadFilterInput
-        name="Project Number"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="projectNumber"
-      />
-      <TableHeadFilterInput
-        name="Product Number"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="productNumber"
-      />
-      <TableHeadFilterInput
-        name="Quantity"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="quantity"
-      />
-      <TableHeadFilterSelect
-        name="Unit"
-        :options="unitsStore.boughtItemUnitsOptionFilter"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="unit"
-      />
-      <TableHeadTitle name="Link" value="" />
-      <TableHeadFilterInput
-        name="Part Number"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="partnumber"
-      />
-      <TableHeadFilterInput
-        name="Order Number"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="orderNumber"
-      />
-      <TableHeadFilterInput
-        name="Manufacturer"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="manufacturer"
-      />
-      <TableHeadFilterInput
-        name="Supplier"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="supplier"
-      />
-      <TableHeadFilterInput
-        name="Group"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="group1"
-      />
-      <TableHeadFilterInput
-        name="General Note"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="noteGeneral"
-      />
-      <TableHeadFilterInput
-        name="Supplier Note"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="noteSupplier"
-      />
-      <TableHeadFilterInput
-        name="Created Date"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="createdDate"
-      />
-      <TableHeadFilterSelect
-        v-if="!controlsStore.state.unclutter"
-        name="Creator"
-        :options="usersStore.usersOptionsFilter"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="creatorId"
-      />
-      <TableHeadFilterInput
-        name="Desired Date"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="desiredDate"
-      />
-      <TableHeadFilterInput
-        name="Requested Date"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="requestedDate"
-      />
-      <TableHeadFilterSelect
-        v-if="!controlsStore.state.unclutter"
-        name="Requester"
-        :options="usersStore.usersOptionsFilter"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="requesterId"
-      />
-      <TableHeadFilterInput
-        name="Ordered Date"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="orderedDate"
-      />
-      <TableHeadFilterSelect
-        v-if="!controlsStore.state.unclutter"
-        name="Orderer"
-        :options="usersStore.usersOptionsFilter"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="ordererId"
-      />
-      <TableHeadFilterInput
-        name="Expected Date"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="expectedDate"
-      />
-      <TableHeadFilterInput
-        name="Delivered Date"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="deliveredDate"
-      />
-      <TableHeadFilterSelect
-        v-if="!controlsStore.state.unclutter"
-        name="Receiver"
-        :options="usersStore.usersOptionsFilter"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="receiverId"
-      />
-      <TableHeadText
-        v-if="!controlsStore.state.unclutter"
-        name="Arrival"
-        value="(weeks)"
-      />
-      <TableHeadText
-        v-if="!controlsStore.state.unclutter"
-        name="Total"
-        value="(weeks)"
-      />
-      <TableHeadFilterInput
-        name="Storage Place"
-        :item-store="boughtItemsStore"
-        :filter-store="filterStore"
-        filter-store-key="storagePlace"
-      />
+      <TableHeadFilterNumber v-model:width="props.colW" />
+      <TableHeadFilterID v-model:width="props.colW" />
+      <TableHeadFilterStatus v-model:width="props.colW" />
+      <TableHeadFilterProjectNumber v-model:width="props.colW" />
+      <TableHeadFilterProductNumber v-model:width="props.colW" />
+      <TableHeadFilterQuantity v-model:width="props.colW" />
+      <TableHeadFilterUnit v-model:width="props.colW" />
+      <TableHeadFilterLink v-model:width="props.colW" />
+      <TableHeadFilterPartNumber v-model:width="props.colW" />
+      <TableHeadFilterOrderNumber v-model:width="props.colW" />
+      <TableHeadFilterManufacturer v-model:width="props.colW" />
+      <TableHeadFilterSupplier v-model:width="props.colW" />
+      <TableHeadFilterGroup v-model:width="props.colW" />
+      <TableHeadFilterNoteGeneral v-model:width="props.colW" />
+      <TableHeadFilterNoteSupplier v-model:width="props.colW" />
+      <TableHeadFilterCreatedDate v-model:width="props.colW" />
+      <TableHeadFilterCreatorID v-model:width="props.colW" />
+      <TableHeadFilterDesiredDate v-model:width="props.colW" />
+      <TableHeadFilterRequestedDate v-model:width="props.colW" />
+      <TableHeadFilterRequesterID v-model:width="props.colW" />
+      <TableHeadFilterOrderedDate v-model:width="props.colW" />
+      <TableHeadFilterOrdererID v-model:width="props.colW" />
+      <TableHeadFilterExpectedDate v-model:width="props.colW" />
+      <TableHeadFilterDeliveredDate v-model:width="props.colW" />
+      <TableHeadFilterReceiverID v-model:width="props.colW" />
+      <TableHeadFilterArrivalWeeks v-model:width="props.colW" />
+      <TableHeadFilterTotalWeeks v-model:width="props.colW" />
+      <TableHeadFilterStoragePlace v-model:width="props.colW" />
     </TableHeadRow>
   </thead>
 </template>

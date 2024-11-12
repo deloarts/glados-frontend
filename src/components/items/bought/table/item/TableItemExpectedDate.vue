@@ -23,6 +23,7 @@ const props = defineProps<{
 
 <template>
   <TableItemDate
+    v-if="controlsStore.columns.expectedDate"
     name="Expected Delivery Date"
     :value="item.expected_delivery_date"
     :update-method="boughtItemsRequest.putItemsExpectedDeliveryDate"

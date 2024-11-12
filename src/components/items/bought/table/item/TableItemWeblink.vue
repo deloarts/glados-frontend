@@ -17,6 +17,7 @@ const props = defineProps<{
 
 <template>
   <TableItemLink
+    v-if="controlsStore.columns.weblink"
     name="Weblink"
     :value="item.weblink"
     :display-icon="true"

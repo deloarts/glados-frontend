@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onBeforeMount } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import { useProjectsStore } from "@/stores/projects";
+import { useProjectFilterStore } from "@/stores/filter";
 import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
+import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 import Changelog from "@/components/items/bought/Changelog.vue";
 import DataTable from "@/components/items/bought/table/DataTable.vue";
@@ -13,9 +15,16 @@ import Controls from "@/components/items/bought/Controls.vue";
 const router = useRouter();
 const route = useRoute();
 
+const projectsStore = useProjectsStore();
+const projectFilterStore = useProjectFilterStore();
 const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
 const boughtItemFilterStore = useBoughtItemFilterStore();
+
+onBeforeMount(() => {
+  projectFilterStore.reset();
+  projectsStore.getItems();
+});
 
 onMounted(() => {
   if (route.query != null) {

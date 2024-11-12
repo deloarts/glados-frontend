@@ -5,7 +5,7 @@ import { useBoughtItemsStore } from "@/stores/boughtItems";
 
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 
-import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
 
 import TableMain from "@/components/dataTable/TableMain.vue";
 import DataTableHead from "./DataTableHead.vue";

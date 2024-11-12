@@ -8,7 +8,7 @@ import { blur } from "@/helper/document.helper";
 
 interface Props {
   name: string;
-  value: string | number | Date | null;
+  value: string | number | Date | boolean | null;
   itemStore?: ItemStoreProtocol;
   filterStore?: FilterStoreProtocol;
   displayValue?: string;

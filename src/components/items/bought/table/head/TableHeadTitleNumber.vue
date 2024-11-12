@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TableHeadRowNumber from "@/components/dataTable/TableHeadRowNumber.vue";
 
-import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
 
 const props = defineProps<{
   width: typeof boughtItemColumnWidths;

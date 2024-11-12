@@ -3,7 +3,7 @@ import type { BoughtItemSchema } from "@/schemas/boughtItem";
 
 import TableItemTextarea from "@/components/dataTable/TableItemTextarea.vue";
 
-import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
 
 import { boughtItemsRequest } from "@/requests/items";
 

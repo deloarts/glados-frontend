@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
 
 import TableHeadRow from "@/components/dataTable/TableHeadRow.vue";
+import TableHeadEmpty from "@/components/dataTable/TableHeadEmpty.vue";
 
 import TableHeadTitleNumber from "./head/TableHeadTitleNumber.vue";
 import TableHeadTitleID from "./head/TableHeadTitleID.vue";
@@ -97,6 +98,7 @@ const props = defineProps<{
       <TableHeadTitleArrivalWeek v-model:width="props.colW" />
       <TableHeadTitleTotalWeeks v-model:width="props.colW" />
       <TableHeadTitleStoragePlace v-model:width="props.colW" />
+      <TableHeadEmpty />
     </TableHeadRow>
     <TableHeadRow>
       <TableHeadFilterNumber v-model:width="props.colW" />
@@ -127,6 +129,7 @@ const props = defineProps<{
       <TableHeadFilterArrivalWeeks v-model:width="props.colW" />
       <TableHeadFilterTotalWeeks v-model:width="props.colW" />
       <TableHeadFilterStoragePlace v-model:width="props.colW" />
+      <TableHeadEmpty />
     </TableHeadRow>
   </thead>
 </template>

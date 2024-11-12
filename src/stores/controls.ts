@@ -4,6 +4,8 @@ import { defineStore } from "pinia";
 import type {
   BoughtItemControlsState,
   BoughtItemControlsColumns,
+  ProjectControlsState,
+  ProjectControlsColumns,
 } from "@/models/controls";
 
 export const useBoughtItemsControlsStore = defineStore(
@@ -87,3 +89,60 @@ export const useBoughtItemsControlsStore = defineStore(
     return { state, columns };
   },
 );
+
+export const useProjectsControlsStore = defineStore("projectsControls", () => {
+  const state = ref<ProjectControlsState>({
+    fixedHeight: true,
+  });
+
+  const columns = ref<ProjectControlsColumns>({
+    id: true,
+    projectNumber: true,
+    productNumber: true,
+    customer: true,
+    description: true,
+    designatedUser: true,
+    createdDate: true,
+    state: true,
+  });
+
+  watch(
+    state,
+    () => {
+      localStorage.setItem(
+        "gladosProjectControlsState",
+        JSON.stringify(state.value),
+      );
+      console.log("Saved project controls state to local storage.");
+    },
+    { deep: true },
+  );
+
+  watch(
+    columns,
+    () => {
+      localStorage.setItem(
+        "gladosProjectControlsColumns",
+        JSON.stringify(state.value),
+      );
+      console.log("Saved project controls columns to local storage.");
+    },
+    { deep: true },
+  );
+
+  onBeforeMount(() => {
+    const lsState = localStorage.getItem("gladosProjectControlsState");
+    const lsColumns = localStorage.getItem("gladosProjectControlsColumns");
+
+    if (lsState != null) {
+      state.value = JSON.parse(lsState);
+      console.log("Got project controls state from local storage.");
+    }
+    if (lsColumns != null) {
+      state.value = JSON.parse(lsColumns);
+      console.log("Got project controls columns from local storage.");
+    }
+  });
+
+  return { state, columns };
+});

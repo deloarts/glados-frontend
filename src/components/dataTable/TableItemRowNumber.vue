@@ -14,6 +14,7 @@ const notificationStore = useNotificationStore();
 interface Props {
   number: number;
   id: number;
+  copyUrl?: string;
   lockedIcon?: boolean;
   bellIcon?: boolean;
   width?: number;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  copyUrl: null,
   lockedIcon: false,
   bellIcon: false,
   fixedHeight: false,
@@ -32,8 +34,8 @@ const cssWidth = computed<string>(() => {
   return String(props.width) + "px";
 });
 
-async function copyURL() {
-  const url = `${config.localURL}/#/items/bought?id=${props.id}`;
+async function copyToClipboard() {
+  const url = `${config.localURL}/#/${props.copyUrl}?id=${props.id}`;
   try {
     await navigator.clipboard.writeText(url);
     notificationStore.addInfo(`Copied item URL to clipboard`);
@@ -45,13 +47,16 @@ async function copyURL() {
 
 <template>
   <td
-    @contextmenu.prevent="copyURL()"
-    @click="copyURL()"
+    @contextmenu.prevent="copyToClipboard()"
+    @click="copyToClipboard()"
     @mouseover="hover = true"
     @mouseleave="hover = false"
     class="sticky"
   >
-    <IconCopy v-if="hover" class="copy-icon"></IconCopy>
+    <IconCopy
+      v-if="hover && props.copyUrl != null"
+      class="copy-icon"
+    ></IconCopy>
     <IconLocked v-else-if="props.lockedIcon" class="locked-icon" />
     <IconBellRing v-else-if="props.bellIcon" class="bell-icon" />
     <div v-else v-bind:class="{ 'fix-height': props.fixedHeight }">

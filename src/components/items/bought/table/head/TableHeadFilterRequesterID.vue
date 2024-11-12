@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TableHeadFilterSelect from "@/components/dataTable/TableHeadFilterSelect.vue";
 
-import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
 
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useBoughtItemFilterStore } from "@/stores/filter";

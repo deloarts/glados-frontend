@@ -204,6 +204,7 @@ export const useProjectFilterStore = defineStore("projectFilter", () => {
   const state = ref<HostConfigProjectFilterSchema>({
     skip: null,
     limit: null,
+    id: null,
     number: null,
     productNumber: null,
     customer: null,
@@ -220,6 +221,7 @@ export const useProjectFilterStore = defineStore("projectFilter", () => {
     state.value = {
       skip: null,
       limit: null,
+      id: null,
       number: null,
       productNumber: null,
       customer: null,

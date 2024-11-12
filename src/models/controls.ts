@@ -1,3 +1,8 @@
+export interface AvailableOption {
+  text: string;
+  value: string;
+}
+
 export interface BoughtItemControlsState {
   changelog: boolean;
   rainbow: boolean;
@@ -35,7 +40,17 @@ export interface BoughtItemControlsColumns {
   storagePlace: boolean;
 }
 
-export interface AvailableOption {
-  text: string;
-  value: string;
+export interface ProjectControlsState {
+  fixedHeight: boolean;
+}
+
+export interface ProjectControlsColumns {
+  id: boolean;
+  projectNumber: boolean;
+  productNumber: boolean;
+  customer: boolean;
+  description: boolean;
+  designatedUser: boolean;
+  createdDate: boolean;
+  state: boolean;
 }

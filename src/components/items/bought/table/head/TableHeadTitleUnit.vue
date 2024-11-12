@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
 
-import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 const boughtItemsControlsStore = useBoughtItemsControlsStore();

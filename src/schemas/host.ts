@@ -51,6 +51,7 @@ export interface HostConfigBoughtItemsFilterSchema {
 export interface HostConfigProjectFilterSchema {
   skip: number;
   limit: number;
+  id: number;
   number: string;
   productNumber: string;
   customer: string;

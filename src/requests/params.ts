@@ -121,6 +121,9 @@ export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
     params.append("limit", String(filter.limit));
   }
   if (filter.number != "" && filter.number != undefined) {
+    params.append("id", String(filter.id));
+  }
+  if (filter.number != "" && filter.number != undefined) {
     params.append("number", filter.number);
   }
   if (filter.productNumber != "" && filter.productNumber != undefined) {

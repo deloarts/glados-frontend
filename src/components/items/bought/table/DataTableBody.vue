@@ -5,10 +5,11 @@ import { useBoughtItemsStore } from "@/stores/boughtItems";
 
 import { getSelection } from "@/helper/selection.helper";
 
-import { boughtItemColumnWidths } from "@/presets/boughtItemsColumnWidths";
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
+
+import TableItemEmpty from "@/components/dataTable/TableItemEmpty.vue";
 
 import DataTableBodyRow from "./DataTableBodyRow.vue";
-
 import TableItemNumber from "./item/TableItemNumber.vue";
 import TableItemID from "./item/TableItemID.vue";
 import TableItemStatus from "./item/TableItemStatus.vue";
@@ -94,6 +95,7 @@ function multiSelect(event: Event, id: number, index: number) {
       <TableItemArrivalWeeks :item="item" v-model:width="props.colW" />
       <TableItemTotalWeeks :item="item" v-model:width="props.colW" />
       <TableItemStoragePlace :item="item" v-model:width="props.colW" />
+      <TableItemEmpty />
     </DataTableBodyRow>
   </tbody>
 </template>

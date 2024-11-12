@@ -15,9 +15,9 @@ const projectsStore = useProjectsStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 
-onBeforeMount(projectsStore.fetch);
-onBeforeMount(userStore.fetch);
-onBeforeMount(usersStore.fetch);
+onBeforeMount(projectsStore.getItems);
+onBeforeMount(userStore.get);
+onBeforeMount(usersStore.get);
 </script>
 <template>
   <div id="app">

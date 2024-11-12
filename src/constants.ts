@@ -4,8 +4,8 @@ export default {
 
   // Media
   minWidth: 400,
-  minWidthTablet: 760,
-  minWidthDesktop: 1280,
+  minWidthTablet: 900,
+  minWidthDesktop: 1300,
 
   // Watch intervals
   watchServerConnInterval: 4000,

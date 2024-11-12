@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 
+import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { boughtItemsRequest } from "@/requests/items";
 
-const props = defineProps<{
-  selectedItemIds: Array<number>;
-}>();
+const boughtItemsStore = useBoughtItemsStore();
 
 const changelog = ref<Array<string>>([""]);
 
 function fetchChangelog() {
-  if (props.selectedItemIds.length > 0) {
+  if (boughtItemsStore.getSelection().length > 0) {
     boughtItemsRequest
-      .getItemsIdChangelog(props.selectedItemIds[0])
+      .getItemsIdChangelog(boughtItemsStore.getSelection()[0])
       .then((response) => {
         changelog.value = response.data;
       });
@@ -22,7 +21,7 @@ function fetchChangelog() {
 onMounted(() => fetchChangelog());
 
 watch(
-  () => props.selectedItemIds,
+  () => boughtItemsStore.getSelection(),
   (newSelection: Array<number>, oldSelection: Array<number>) => {
     if (newSelection != oldSelection) {
       changelog.value = [];
@@ -34,9 +33,16 @@ watch(
 
 <template>
   <div class="scope">
-    <div v-if="props.selectedItemIds.length > 0" class="container">
-      <h1>Changelog of item #{{ props.selectedItemIds[0] }}</h1>
+    <div v-if="boughtItemsStore.getSelection().length == 1" class="container">
+      <h1>Changelog of item #{{ boughtItemsStore.getSelection()[0] }}</h1>
       <div v-for="log in changelog" class="changelog-item">{{ log }}</div>
+    </div>
+    <div
+      v-else-if="boughtItemsStore.getSelection().length > 1"
+      class="container"
+    >
+      <h1>Changelog</h1>
+      <div class="changelog-item">Too many items selected</div>
     </div>
     <div v-else class="container">
       <h1>Changelog</h1>
@@ -66,8 +72,10 @@ watch(
 }
 
 h1 {
-  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1.25em;
+  font-family: "Play", "Calibri";
+  font-size: 16px;
+  font-weight: bold;
+
   margin: 0;
   padding-top: 20px;
   padding-left: 20px;
@@ -75,6 +83,9 @@ h1 {
 }
 
 .changelog-item {
+  font-family: "Calibri";
+  font-size: 14px;
+
   margin: 0;
   padding-top: 2px;
   padding-bottom: 2px;

@@ -88,6 +88,15 @@ export class BoughtItemsRequest {
       null,
     );
   }
+  putItemsUnit(id: Number, unit: any) {
+    const params = new URLSearchParams();
+    params.append("unit", unit);
+    return request.put(
+      `/api/web/v1/items/bought/${id}/unit/`,
+      requestConfig(params),
+      null,
+    );
+  }
   putItemsPartnumber(id: Number, partnumber: any) {
     const params = new URLSearchParams();
     params.append("partnumber", partnumber);

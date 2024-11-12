@@ -1,17 +1,50 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, onBeforeMount } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
+import { useProjectsStore } from "@/stores/projects";
+import { useProjectFilterStore } from "@/stores/filter";
+import { useBoughtItemsStore } from "@/stores/boughtItems";
+import { useBoughtItemFilterStore } from "@/stores/filter";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 import Changelog from "@/components/items/bought/Changelog.vue";
-import DataTable from "@/components/items/bought/DataTable.vue";
+import DataTable from "@/components/items/bought/table/DataTable.vue";
 import Controls from "@/components/items/bought/Controls.vue";
 
-// Store
-const controlsStore = useBoughtItemsControlsStore();
+const router = useRouter();
+const route = useRoute();
 
-// Items
-const selectedItemIds = ref<Array<number>>([]);
-const triggerGetNewData = ref<boolean>(false);
+const projectsStore = useProjectsStore();
+const projectFilterStore = useProjectFilterStore();
+const boughtItemsStore = useBoughtItemsStore();
+const controlsStore = useBoughtItemsControlsStore();
+const boughtItemFilterStore = useBoughtItemFilterStore();
+
+onBeforeMount(() => {
+  projectFilterStore.reset();
+  projectsStore.getItems();
+});
+
+onMounted(() => {
+  if (route.query != null) {
+    boughtItemsStore.clear();
+  }
+
+  // Apply id query
+  if (route.query.id != null && !isNaN(Number(route.query.id))) {
+    boughtItemFilterStore.state.id = Number(route.query.id);
+  }
+  // Apply project number query
+  if (route.query.projectNumber != null) {
+    boughtItemFilterStore.state.projectNumber = String(
+      route.query.projectNumber,
+    );
+  }
+
+  boughtItemsStore.getItems();
+  router.replace({ query: null });
+});
 </script>
 
 <template>
@@ -22,23 +55,17 @@ const triggerGetNewData = ref<boolean>(false);
         v-bind:class="{ 'show-changelog': controlsStore.state.changelog }"
       >
         <div id="controls" class="controls">
-          <Controls
-            v-model:selected-item-ids="selectedItemIds"
-            v-model:trigger-get-new-data="triggerGetNewData"
-          />
+          <Controls />
         </div>
         <div id="data" class="data">
-          <DataTable
-            v-model:selected-item-ids="selectedItemIds"
-            v-model:trigger-get-new-data="triggerGetNewData"
-          />
+          <DataTable />
         </div>
         <div
           id="changelog"
           class="changelog"
           v-if="controlsStore.state.changelog"
         >
-          <Changelog v-model:selected-item-ids="selectedItemIds" />
+          <Changelog />
         </div>
       </div>
     </div>

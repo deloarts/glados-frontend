@@ -1,3 +1,16 @@
+export const projectsColumnWidths = {
+  number: 35,
+  id: 55,
+  status: 85,
+  projectNumber: 85,
+  productNumber: 85,
+  customer: 250,
+  description: 350,
+  designatedUser: 121,
+  createdDate: 85,
+  state: 85,
+};
+
 export const boughtItemColumnWidths = {
   number: 35,
   id: 55,

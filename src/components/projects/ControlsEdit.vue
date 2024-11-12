@@ -29,10 +29,12 @@ function onUpdate() {
     .then((response) => {
       if (response.status === 200) {
         notificationStore.addInfo(`Updated project #${itemId}.`);
-        projectsStore.get();
+        projectsStore.getItems();
         router.push({ name: "Projects" });
       } else if (response.status === 422) {
-        notificationStore.addWarn(`Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`);
+        notificationStore.addWarn(
+          `Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`,
+        );
       } else {
         notificationStore.addWarn(response.data.detail);
       }

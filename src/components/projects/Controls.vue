@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import Toggle from "@vueform/toggle/dist/toggle.js";
 
 import router from "@/router/index";
+import { projectsRequest } from "@/requests/projects";
+import { capitalizeFirstLetter } from "@/helper/string.helper";
+
 import { useProjectsStore } from "@/stores/projects";
 import { useProjectFilterStore } from "@/stores/filter";
 import { useNotificationStore } from "@/stores/notification";
 import { useUserStore } from "@/stores/user";
 import { useResolutionStore } from "@/stores/resolution";
-
-import { projectsRequest } from "@/requests/projects";
+import { useProjectsControlsStore } from "@/stores/controls";
 
 import Prompt from "@/components/main/Prompt.vue";
 import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
@@ -17,15 +20,8 @@ import ButtonEdit from "@/components/elements/ButtonEdit.vue";
 import ButtonDelete from "@/components/elements/ButtonDelete.vue";
 import ButtonSync from "@/components/elements/ButtonSync.vue";
 import ButtonClear from "@/components/elements/ButtonClear.vue";
-
-const props = defineProps<{
-  selectedProjectId: number;
-}>();
-
-const emit = defineEmits<{
-  (e: "update:selectedProjectId", v: number): void;
-  (e: "update:triggerGetNewData", v: boolean): void;
-}>();
+import DropDownTableColumns from "../elements/DropDownTableColumns.vue";
+import DropDownTableView from "../elements/DropDownTableView.vue";
 
 // Stores
 const projectStore = useProjectsStore();
@@ -33,6 +29,7 @@ const projectFilterStore = useProjectFilterStore();
 const notificationStore = useNotificationStore();
 const resolutionStore = useResolutionStore();
 const userStore = useUserStore();
+const projectsControlsStore = useProjectsControlsStore();
 
 const enableControls = computed<boolean>(() => !userStore.user.is_guestuser);
 const gtMinWidthDesktop = computed<boolean>(
@@ -55,6 +52,12 @@ const buttonEditText = computed<string>(() => {
 const buttonSyncText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Sync" : "";
 });
+const buttonViewsText = computed<string>(() => {
+  return gtMinWidthTablet.value ? "Views" : "";
+});
+const buttonColumnsText = computed<string>(() => {
+  return gtMinWidthTablet.value ? "Columns" : "";
+});
 const buttonClearFilterText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Clear Filter" : "";
 });
@@ -64,31 +67,31 @@ function onButtonNew() {
 }
 
 function onButtonEdit() {
-  if (props.selectedProjectId == null) {
+  if (projectStore.getSelection().length == 0) {
     notificationStore.addWarn("Select a project first.");
+  } else if (projectStore.getSelection().length != 1) {
+    notificationStore.addWarn("You can only edit one project.");
   } else {
-    router.push(`/projects/edit/${props.selectedProjectId}`);
+    router.push(`/projects/edit/${projectStore.getSelection()[0]}`);
   }
 }
 
 function onButtonDelete() {
-  if (props.selectedProjectId == null) {
+  if (projectStore.getSelection().length == 0) {
     notificationStore.addWarn("Select a project first.");
+  } else if (projectStore.getSelection().length != 1) {
+    notificationStore.addWarn("You can only delete one project.");
   } else {
     showDeletePrompt.value = true;
   }
 }
 
-function getNewData() {
-  emit("update:triggerGetNewData", true);
-}
-
 function deleteItem() {
-  const projectId = props.selectedProjectId;
+  const projectId = projectStore.getSelection()[0];
   projectsRequest.deleteProjects(projectId).then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(`Deleted project #${projectId}`);
-      getNewData();
+      projectStore.getItems();
     } else {
       notificationStore.addWarn(response.data.detail);
     }
@@ -97,7 +100,8 @@ function deleteItem() {
 }
 
 function onButtonClear() {
-  emit("update:selectedProjectId", null);
+  projectStore.clearSelection();
+  projectStore.getItems();
 }
 
 function clearFilter() {
@@ -139,8 +143,36 @@ function clearFilter() {
         class="controls-base-element"
         v-model:text="buttonSyncText"
         v-model:rotate="projectStore.loading"
-        v-on:click="projectStore.get()"
+        v-on:click="projectStore.getItems()"
       ></ButtonSync>
+
+      <DropDownTableView
+        class="controls-base-element"
+        v-model:text="buttonViewsText"
+        :hide-when-clicked="false"
+      >
+        <div class="drop-down-toggle-item">
+          <Toggle v-model="projectsControlsStore.state.fixedHeight"></Toggle
+          ><span class="drop-down-toggle-item-text">Fixed Height</span>
+        </div>
+      </DropDownTableView>
+
+      <DropDownTableColumns
+        class="controls-base-element"
+        v-model:text="buttonColumnsText"
+        :hide-when-clicked="false"
+      >
+        <div
+          v-for="(value, key) in projectsControlsStore.columns"
+          class="drop-down-toggle-item"
+        >
+          <Toggle v-model="projectsControlsStore.columns[key]"></Toggle
+          ><span class="drop-down-toggle-item-text">{{
+            capitalizeFirstLetter(key)
+          }}</span>
+        </div>
+      </DropDownTableColumns>
+
       <ButtonFilterClear
         class="controls-base-element"
         v-model:text="buttonClearFilterText"

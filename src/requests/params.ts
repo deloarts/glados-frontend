@@ -120,7 +120,7 @@ export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
   if (filter.limit != null && filter.limit != undefined) {
     params.append("limit", String(filter.limit));
   }
-  if (filter.number != "" && filter.number != undefined) {
+  if (filter.id != null && filter.id != undefined) {
     params.append("id", String(filter.id));
   }
   if (filter.number != "" && filter.number != undefined) {

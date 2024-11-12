@@ -19,6 +19,7 @@ import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue";
 import ButtonEdit from "@/components/elements/ButtonEdit.vue";
 import ButtonDelete from "@/components/elements/ButtonDelete.vue";
 import ButtonSync from "@/components/elements/ButtonSync.vue";
+import ButtonSyncOff from "../elements/ButtonSyncOff.vue";
 import ButtonClear from "@/components/elements/ButtonClear.vue";
 import DropDownTableColumns from "../elements/DropDownTableColumns.vue";
 import DropDownTableView from "../elements/DropDownTableView.vue";
@@ -106,6 +107,7 @@ function onButtonClear() {
 
 function clearFilter() {
   projectFilterStore.reset();
+  projectStore.getItems();
 }
 </script>
 
@@ -139,7 +141,13 @@ function clearFilter() {
       ></ButtonClear>
     </div>
     <div id="filter-controls" class="controls-base-container">
+      <ButtonSyncOff
+        v-if="projectStore.paused"
+        class="controls-base-element"
+        v-model:text="buttonSyncText"
+      ></ButtonSyncOff>
       <ButtonSync
+        v-else
         class="controls-base-element"
         v-model:text="buttonSyncText"
         v-model:rotate="projectStore.loading"

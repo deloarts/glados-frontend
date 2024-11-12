@@ -1,12 +1,43 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, onBeforeMount } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
 import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { useProjectsStore } from "@/stores/projects";
+import { useProjectFilterStore } from "@/stores/filter";
 
 import DataTable from "@/components/projects/table/DataTable.vue";
 import Controls from "@/components/projects/Controls.vue";
 
-// Store
+const router = useRouter();
+const route = useRoute();
+
+const projectsStore = useProjectsStore();
+const projectFilterStore = useProjectFilterStore();
 const controlsStore = useBoughtItemsControlsStore();
+
+onBeforeMount(() => {
+  projectFilterStore.reset();
+  projectsStore.getItems();
+});
+
+onMounted(() => {
+  if (route.query != null) {
+    projectsStore.clear();
+  }
+
+  // Apply id query
+  if (route.query.id != null && !isNaN(Number(route.query.id))) {
+    projectFilterStore.state.id = Number(route.query.id);
+  }
+  // Apply project number query
+  if (route.query.projectNumber != null) {
+    projectFilterStore.state.number = String(route.query.projectNumber);
+  }
+
+  projectsStore.getItems();
+  router.replace({ query: null });
+});
 </script>
 
 <template>

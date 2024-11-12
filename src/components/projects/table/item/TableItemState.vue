@@ -22,10 +22,14 @@ const props = defineProps<{
 <template>
   <TableItemText
     v-if="projectsControlsStore.columns.state"
+    v-bind:class="{
+      active: props.item.is_active,
+      inactive: !props.item.is_active,
+    }"
     name="State"
     :value="item.is_active"
     :item-store="projectsStore"
-    :display-value="item.is_active ? 'Active' : 'Inactive'"
+    :display-value="props.item.is_active ? 'Active' : 'Inactive'"
     :filter-store="projectsFilterStore"
     filter-store-key="isActive"
     v-model:width="props.width.state"
@@ -34,4 +38,12 @@ const props = defineProps<{
   />
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.active {
+  color: lime;
+}
+
+.inactive {
+  color: red;
+}
+</style>

@@ -64,6 +64,9 @@
   display: inline-block;
   padding: 0;
   margin: 0;
+  
+  max-height: 350px;
+  overflow-y: auto;
 
   border-style: $main-border-style;
   border-color: $main-border-color;

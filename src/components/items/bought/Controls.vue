@@ -27,18 +27,10 @@ import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue";
 import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue";
 import ButtonClear from "@/components/elements/ButtonClear.vue";
 import DropDownTableView from "@/components/elements/DropDownTableView.vue";
+import DropDownTableColumns from "@/components/elements/DropDownTableColumns.vue";
 import SelectPreText from "@/components/elements/SelectPreText.vue";
 
 import type { AvailableOption } from "@/models/controls";
-
-const props = defineProps<{
-  selectedItemIds: Array<number>;
-}>();
-
-const emit = defineEmits<{
-  (e: "update:selectedItemIds", v: Array<number>): void;
-  (e: "update:triggerGetNewData", v: boolean): void;
-}>();
 
 // Stores
 const boughtItemsStore = useBoughtItemsStore();
@@ -76,6 +68,9 @@ const buttonSyncText = computed<string>(() => {
 const buttonViewsText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Views" : "";
 });
+const buttonColumnsText = computed<string>(() => {
+  return gtMinWidthTablet.value ? "Columns" : "";
+});
 const buttonClearFilterText = computed<string>(() => {
   return gtMinWidthTablet.value ? "Clear Filter" : "";
 });
@@ -107,16 +102,19 @@ const selectedOptionFilterPreset = ref<string>("");
 
 function saveFilter() {
   filterStore.saveMy();
+  boughtItemsStore.getItems();
   notificationStore.addInfo("Saved new filter.");
 }
 
 function loadFilter() {
   filterStore.loadMy();
+  boughtItemsStore.getItems();
 }
 
 function clearFilter() {
   selectedOptionFilterPreset.value = "";
   filterStore.reset();
+  boughtItemsStore.getItems();
   console.log("Cleared filter");
 }
 
@@ -125,29 +123,29 @@ function onButtonNewItem() {
 }
 
 function onButtonEdit() {
-  if (props.selectedItemIds.length == 0) {
+  if (boughtItemsStore.getSelection().length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (props.selectedItemIds.length != 1) {
+  } else if (boughtItemsStore.getSelection().length != 1) {
     notificationStore.addWarn("You can only edit one item.");
   } else {
-    router.push(`/items/bought/edit/${props.selectedItemIds[0]}`);
+    router.push(`/items/bought/edit/${boughtItemsStore.getSelection()[0]}`);
   }
 }
 
 function onButtonCopy() {
-  if (props.selectedItemIds.length == 0) {
+  if (boughtItemsStore.getSelection().length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (props.selectedItemIds.length != 1) {
+  } else if (boughtItemsStore.getSelection().length != 1) {
     notificationStore.addWarn("You can only edit one item.");
   } else {
-    router.push(`/items/bought/copy/${props.selectedItemIds[0]}`);
+    router.push(`/items/bought/copy/${boughtItemsStore.getSelection()[0]}`);
   }
 }
 
 function onButtonDelete() {
-  if (props.selectedItemIds.length == 0) {
+  if (boughtItemsStore.getSelection().length == 0) {
     notificationStore.addWarn("Select an item first.");
-  } else if (props.selectedItemIds.length != 1) {
+  } else if (boughtItemsStore.getSelection().length != 1) {
     notificationStore.addWarn("You can only delete one item.");
   } else {
     showDeletePrompt.value = true;
@@ -169,16 +167,12 @@ function onButtonUploadExcel() {
   showExcelImport.value = true;
 }
 
-function getNewData() {
-  emit("update:triggerGetNewData", true);
-}
-
 function deleteItem() {
-  const itemId = props.selectedItemIds[0];
+  const itemId = boughtItemsStore.getSelection()[0];
   boughtItemsRequest.deleteItemsId(itemId).then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(`Deleted item #${itemId}`);
-      getNewData();
+      boughtItemsStore.getItems();
     } else {
       notificationStore.addWarn(response.data.detail);
     }
@@ -187,22 +181,18 @@ function deleteItem() {
 }
 
 function onButtonClear() {
-  emit("update:selectedItemIds", []);
+  boughtItemsStore.clearSelection();
+  boughtItemsStore.getItems();
 }
 
 function setupMobileView() {
   if (!gtMinWidthTablet.value) {
-    controlsStore.state.unclutter = true;
-    controlsStore.state.requestView = false;
-    controlsStore.state.textOnly = false;
     controlsStore.state.lockCols = false;
   }
 }
 
 function setupTabletView() {
   if (!gtMinWidthDesktop.value) {
-    controlsStore.state.requestView = false;
-    controlsStore.state.textOnly = false;
     controlsStore.state.lockCols = false;
   }
 }
@@ -210,6 +200,7 @@ function setupTabletView() {
 watch(selectedOptionFilterPreset, () => {
   const name = selectedOptionFilterPreset.value;
   filterStore.applyPreset(name);
+  boughtItemsStore.getItems();
 });
 
 watch(gtMinWidthTablet, () => {
@@ -282,7 +273,7 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         v-model:text="buttonSyncText"
         v-model:rotate="boughtItemsStore.loading"
-        v-on:click="boughtItemsStore.get()"
+        v-on:click="boughtItemsStore.getItems()"
       ></ButtonSync>
 
       <DropDownTableView
@@ -291,28 +282,29 @@ onBeforeMount(setupTabletView);
         :hide-when-clicked="false"
       >
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.state.ignoreDelivered"></Toggle
+          <Toggle
+            v-model="filterStore.state.ignoreDelivered"
+            @change="boughtItemsStore.getItems()"
+          ></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Delivered</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.state.ignoreCanceled"></Toggle
+          <Toggle
+            v-model="filterStore.state.ignoreCanceled"
+            @change="boughtItemsStore.getItems()"
+          ></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Canceled</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle v-model="filterStore.state.ignoreLost"></Toggle
+          <Toggle
+            v-model="filterStore.state.ignoreLost"
+            @change="boughtItemsStore.getItems()"
+          ></Toggle
           ><span class="drop-down-toggle-item-text">Ignore Lost</span>
         </div>
         <div class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.fixedHeight"></Toggle
           ><span class="drop-down-toggle-item-text">Fixed Height</span>
-        </div>
-        <div v-if="gtMinWidthTablet" class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.unclutter"></Toggle
-          ><span class="drop-down-toggle-item-text">Unclutter</span>
-        </div>
-        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.requestView"></Toggle
-          ><span class="drop-down-toggle-item-text">Request View</span>
         </div>
         <div class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.changelog"></Toggle
@@ -322,15 +314,27 @@ onBeforeMount(setupTabletView);
           <Toggle v-model="controlsStore.state.rainbow"></Toggle
           ><span class="drop-down-toggle-item-text">Rainbow</span>
         </div>
-        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.textOnly"></Toggle
-          ><span class="drop-down-toggle-item-text">Text Only</span>
-        </div>
-        <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
+        <!-- <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
           <Toggle v-model="controlsStore.state.lockCols"></Toggle
           ><span class="drop-down-toggle-item-text">Lock Columns</span>
-        </div>
+        </div> -->
       </DropDownTableView>
+
+      <DropDownTableColumns
+        class="controls-base-element"
+        v-model:text="buttonColumnsText"
+        :hide-when-clicked="false"
+      >
+        <div
+          v-for="(value, key) in controlsStore.columns"
+          class="drop-down-toggle-item"
+        >
+          <Toggle v-model="controlsStore.columns[key]"></Toggle
+          ><span class="drop-down-toggle-item-text">{{
+            capitalizeFirstLetter(key)
+          }}</span>
+        </div>
+      </DropDownTableColumns>
 
       <ButtonFilterSave
         v-if="gtMinWidthDesktop"
@@ -355,6 +359,7 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         text="Limit"
         v-model:selection="filterStore.state.limit"
+        v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsLimit"
       ></SelectPreText>
       <SelectPreText
@@ -362,12 +367,14 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         text="Sort By"
         v-model:selection="filterStore.state.sortBy"
+        v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsOrderBy"
       ></SelectPreText>
       <SelectPreText
         class="controls-base-element"
         text="Preset"
         v-model:selection="selectedOptionFilterPreset"
+        v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsFilterPresets"
       ></SelectPreText>
     </div>
@@ -386,7 +393,7 @@ onBeforeMount(setupTabletView);
     "
   />
   <ExcelImport
-    v-bind:on-success="getNewData"
+    v-bind:on-success="boughtItemsStore.getItems"
     v-model:show-uploader="showExcelImport"
   />
 </template>

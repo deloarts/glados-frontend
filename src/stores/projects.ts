@@ -12,49 +12,89 @@ export const useProjectsStore = defineStore("projects", () => {
   const _filterStore = useProjectFilterStore();
 
   const loading = ref<boolean>(false);
-  const projects = ref<ProjectSchema[]>([]);
+  const paused = ref<boolean>(false);
+  const items = ref<ProjectSchema[]>([]);
+  const selectedIDs = ref<Array<number>>([]);
 
   function clear() {
-    projects.value = [];
+    items.value = [];
+    selectedIDs.value = [];
   }
 
-  function get() {
+  function pause(state: boolean) {
+    paused.value = state;
+  }
+
+  function getItems(): Array<ProjectSchema> {
+    get();
+    return items.value;
+  }
+
+  function clearItems() {
+    items.value = [];
+  }
+
+  function getSelection(): Array<number> {
+    return selectedIDs.value;
+  }
+
+  function setSelection(itemIDs: Array<number>) {
+    selectedIDs.value = itemIDs;
+  }
+
+  function clearSelection() {
+    selectedIDs.value = [];
+  }
+
+  async function get() {
     loading.value = true;
     const params = getProjectFilterParams(_filterStore.state);
-    projectsRequest.getProjects(params).then((response) => {
+    return projectsRequest.getProjects(params).then((response) => {
       loading.value = false;
       if (response.status === 200) {
-        projects.value = response.data;
+        items.value = response.data;
+        console.log("Projects store got data from server.");
       }
+      return response;
     });
   }
 
-  function fetch() {
-    console.log("Projects store requesting projects (interval) ...");
-    loading.value = true;
-    const params = getProjectFilterParams(_filterStore.state);
-    projectsRequest.getProjects(params).then((response) => {
-      loading.value = false;
-      if (response.status === 200) {
-        projects.value = response.data;
-        console.log("Projects store got data from server (interval).");
-      }
-      setTimeout(fetch.bind(this), constants.patchProjectsStoreInterval);
-    });
+  function fetchItems() {
+    if (paused.value) {
+      console.log("Project store is paused.");
+      setTimeout(fetchItems.bind(this), constants.patchProjectsStoreInterval);
+    } else {
+      get().then(() => {
+        setTimeout(fetchItems.bind(this), constants.patchProjectsStoreInterval);
+      });
+    }
   }
 
   function getProductNumber(project_id: number) {
-    for (let i = 0; i < projects.value.length; i++) {
-      if (projects.value[i].id == project_id) {
-        return projects.value[i].product_number;
+    for (let i = 0; i < items.value.length; i++) {
+      if (items.value[i].id == project_id) {
+        return items.value[i].product_number;
       }
     }
     return null;
   }
 
   onBeforeMount(() => {
-    get();
+    clear();
+    fetchItems();
   });
 
-  return { loading, projects, get, clear, fetch, getProductNumber };
+  return {
+    loading,
+    paused,
+    items,
+    clear,
+    pause,
+    getItems,
+    clearItems,
+    getSelection,
+    setSelection,
+    clearSelection,
+    getProductNumber,
+  };
 });

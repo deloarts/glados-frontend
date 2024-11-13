@@ -1,11 +1,11 @@
 export default {
-  version: "0.8.2",
-  serverVersion: "0.8.2",
+  version: "0.9.0",
+  serverVersion: "0.9.0",
 
   // Media
   minWidth: 400,
-  minWidthTablet: 760,
-  minWidthDesktop: 1280,
+  minWidthTablet: 900,
+  minWidthDesktop: 1300,
 
   // Watch intervals
   watchServerConnInterval: 4000,

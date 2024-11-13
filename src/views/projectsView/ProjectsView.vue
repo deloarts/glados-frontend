@@ -1,16 +1,43 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { onMounted, onBeforeMount } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
-import DataTable from "@/components/projects/DataTable.vue";
+import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { useProjectsStore } from "@/stores/projects";
+import { useProjectFilterStore } from "@/stores/filter";
+
+import DataTable from "@/components/projects/table/DataTable.vue";
 import Controls from "@/components/projects/Controls.vue";
 
-// Store
+const router = useRouter();
+const route = useRoute();
+
+const projectsStore = useProjectsStore();
+const projectFilterStore = useProjectFilterStore();
 const controlsStore = useBoughtItemsControlsStore();
 
-// Items
-const selectedProjectId = ref<number>(null);
-const triggerGetNewData = ref<boolean>(false);
+onBeforeMount(() => {
+  projectFilterStore.reset();
+  projectsStore.getItems();
+});
+
+onMounted(() => {
+  if (route.query != null) {
+    projectsStore.clear();
+  }
+
+  // Apply id query
+  if (route.query.id != null && !isNaN(Number(route.query.id))) {
+    projectFilterStore.state.id = Number(route.query.id);
+  }
+  // Apply project number query
+  if (route.query.projectNumber != null) {
+    projectFilterStore.state.number = String(route.query.projectNumber);
+  }
+
+  projectsStore.getItems();
+  router.replace({ query: null });
+});
 </script>
 
 <template>
@@ -21,16 +48,10 @@ const triggerGetNewData = ref<boolean>(false);
         v-bind:class="{ 'show-changelog': controlsStore.state.changelog }"
       >
         <div id="controls" class="controls">
-          <Controls
-            v-model:selected-project-id="selectedProjectId"
-            v-model:trigger-get-new-data="triggerGetNewData"
-          />
+          <Controls />
         </div>
         <div id="data" class="data">
-          <DataTable
-            v-model:selected-project-id="selectedProjectId"
-            v-model:trigger-get-new-data="triggerGetNewData"
-          />
+          <DataTable />
         </div>
       </div>
     </div>

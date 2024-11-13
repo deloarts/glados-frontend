@@ -5,6 +5,7 @@ import TableHeadRow from "@/components/dataTable/TableHeadRow.vue";
 import TableHeadEmpty from "@/components/dataTable/TableHeadEmpty.vue";
 
 import TableHeadTitleNumber from "./head/TableHeadTitleNumber.vue";
+import TableHeadTitleState from "./head/TableHeadTitleState.vue";
 import TableHeadTitleID from "./head/TableHeadTitleID.vue";
 import TableHeadTitleStatus from "./head/TableHeadTitleStatus.vue";
 import TableHeadTitleProjectNumber from "./head/TableHeadTitleProjectNumber.vue";
@@ -34,6 +35,7 @@ import TableHeadTitleTotalWeeks from "./head/TableHeadTitleTotalWeeks.vue";
 import TableHeadTitleStoragePlace from "./head/TableHeadTitleStoragePlace.vue";
 
 import TableHeadFilterNumber from "./head/TableHeadFilterNumber.vue";
+import TableHeadFilterState from "./head/TableHeadFilterState.vue";
 import TableHeadFilterID from "./head/TableHeadFilterID.vue";
 import TableHeadFilterStatus from "./head/TableHeadFilterStatus.vue";
 import TableHeadFilterProjectNumber from "./head/TableHeadFilterProjectNumber.vue";
@@ -72,6 +74,7 @@ const props = defineProps<{
     <TableHeadRow>
       <TableHeadTitleNumber v-model:width="props.colW" />
       <TableHeadTitleID v-model:width="props.colW" />
+      <TableHeadTitleState v-model:width="props.colW" />
       <TableHeadTitleStatus v-model:width="props.colW" />
       <TableHeadTitleProjectNumber v-model:width="props.colW" />
       <TableHeadTitleProductNumber v-model:width="props.colW" />
@@ -103,6 +106,7 @@ const props = defineProps<{
     <TableHeadRow>
       <TableHeadFilterNumber v-model:width="props.colW" />
       <TableHeadFilterID v-model:width="props.colW" />
+      <TableHeadFilterState v-model:width="props.colW" />
       <TableHeadFilterStatus v-model:width="props.colW" />
       <TableHeadFilterProjectNumber v-model:width="props.colW" />
       <TableHeadFilterProductNumber v-model:width="props.colW" />

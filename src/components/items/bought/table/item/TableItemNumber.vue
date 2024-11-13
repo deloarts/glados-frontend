@@ -21,8 +21,6 @@ const props = defineProps<{
     :number="index + 1"
     :id="item.id"
     copy-url="items/bought"
-    :locked-icon="!item.project_is_active"
-    :bell-icon="item.high_priority"
     v-model:width="props.width.number"
     :fixed-height="controlsStore.state.fixedHeight"
   />

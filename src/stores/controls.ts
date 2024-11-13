@@ -20,6 +20,7 @@ export const useBoughtItemsControlsStore = defineStore(
 
     const columns = ref<BoughtItemControlsColumns>({
       id: true,
+      state: true,
       status: true,
       projectNumber: true,
       productNumber: true,

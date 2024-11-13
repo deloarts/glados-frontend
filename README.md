@@ -3,7 +3,7 @@
 Frontend for the glados project.
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
-![version](https://img.shields.io/badge/Version-0.8.2-orange.svg?style=for-the-badge)
+![version](https://img.shields.io/badge/Version-0.9.0-orange.svg?style=for-the-badge)
 ![backend](https://img.shields.io/badge/Backend-0.9.0-orange.svg?style=for-the-badge)
 
 ![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
@@ -124,7 +124,7 @@ cd glados-frontend
 git checkout {TAG_NAME}
 ```
 
-Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.8.2`.
+Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.9.0`.
 
 > ✏️ You can use this command to update the app as well. Just modify the tag name.
 >
@@ -173,7 +173,7 @@ git fetch --all --tags
 git checkout {TAG_NAME}
 ```
 
-Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.8.2`.
+Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.9.0`.
 
 ### 2.2 update the config file
 
@@ -292,6 +292,7 @@ No license.
 
 ## 5 changelog
 
+**v0.9.0**: Refactor data table.  
 **v0.8.2**: Add version to host info.  
 **v0.8.1**: Allow normal user to create projects.  
 **v0.8.0**: Rename item definition and project machine.  

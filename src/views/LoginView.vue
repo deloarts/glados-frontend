@@ -55,7 +55,7 @@ function login() {
     if (response.status === 200) {
       setTimeout(userStore.get, 1200);
       usersStore.get();
-      projectsStore.get();
+      projectsStore.getItems();
     } else {
       showLoadingBar.value = false;
       form_pw.value = "";

@@ -47,16 +47,16 @@ const formatDesiredDate = (pickedDesiredDate: Date) => {
 function setOptionsProjects() {
   var tempActive = [];
   var tempInactive = [];
-  for (let i = 0; i < projectsStore.projects.length; i++) {
-    if (projectsStore.projects[i].is_active) {
+  for (let i = 0; i < projectsStore.items.length; i++) {
+    if (projectsStore.items[i].is_active) {
       tempActive.push({
-        text: `${projectsStore.projects[i].number} - ${projectsStore.projects[i].customer} - ${projectsStore.projects[i].description}`,
-        value: projectsStore.projects[i].id,
+        text: `${projectsStore.items[i].number} - ${projectsStore.items[i].customer} - ${projectsStore.items[i].description}`,
+        value: projectsStore.items[i].id,
       });
     } else {
       tempInactive.push({
-        text: `${projectsStore.projects[i].number} - ${projectsStore.projects[i].customer} - ${projectsStore.projects[i].description}`,
-        value: projectsStore.projects[i].id,
+        text: `${projectsStore.items[i].number} - ${projectsStore.items[i].customer} - ${projectsStore.items[i].description}`,
+        value: projectsStore.items[i].id,
       });
     }
   }
@@ -117,7 +117,9 @@ onBeforeMount(setOptionsProjects);
         <div id="product-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-bind:value="projectsStore.getProductNumber(updateFormData.project_id)"
+            v-bind:value="
+              projectsStore.getProductNumber(updateFormData.project_id)
+            "
             placeholder="Product Number"
             readonly
           />

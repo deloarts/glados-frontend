@@ -12,6 +12,7 @@ export interface BoughtItemControlsState {
 
 export interface BoughtItemControlsColumns {
   id: boolean;
+  state: boolean;
   status: boolean;
   projectNumber: boolean;
   productNumber: boolean;

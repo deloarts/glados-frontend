@@ -11,6 +11,7 @@ import TableItemEmpty from "@/components/dataTable/TableItemEmpty.vue";
 
 import DataTableBodyRow from "./DataTableBodyRow.vue";
 import TableItemNumber from "./item/TableItemNumber.vue";
+import TableItemState from "./item/TableItemState.vue";
 import TableItemID from "./item/TableItemID.vue";
 import TableItemStatus from "./item/TableItemStatus.vue";
 import TableItemProjectNumber from "./item/TableItemProjectNumber.vue";
@@ -69,6 +70,7 @@ function multiSelect(event: Event, id: number, index: number) {
     >
       <TableItemNumber :index="index" :item="item" v-model:width="props.colW" />
       <TableItemID :item="item" v-model:width="props.colW" />
+      <TableItemState :item="item" v-model:width="props.colW" />
       <TableItemStatus :item="item" v-model:width="props.colW" />
       <TableItemProjectNumber :item="item" v-model:width="props.colW" />
       <TableItemProductNumber :item="item" v-model:width="props.colW" />

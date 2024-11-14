@@ -79,6 +79,15 @@ export const useProjectsStore = defineStore("projects", () => {
     return null;
   }
 
+  function getProjectByID(project_id: number) {
+    for (let i = 0; i < items.value.length; i++) {
+      if (items.value[i].id == project_id) {
+        return items.value[i];
+      }
+    }
+    return null;
+  }
+
   onBeforeMount(() => {
     clear();
     fetchItems();
@@ -96,5 +105,6 @@ export const useProjectsStore = defineStore("projects", () => {
     setSelection,
     clearSelection,
     getProductNumber,
+    getProjectByID,
   };
 });

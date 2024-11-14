@@ -13,9 +13,9 @@ export const projectsColumnWidths = {
 };
 
 export const boughtItemColumnWidths = {
-  number: 40,
+  number: 45,
   id: 55,
-  state: 40,
+  state: 45,
   status: 85,
   projectNumber: 85,
   productNumber: 85,

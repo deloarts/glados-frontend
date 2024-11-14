@@ -66,7 +66,7 @@ export const useBoughtItemsControlsStore = defineStore(
       () => {
         localStorage.setItem(
           "gladosBoughtItemControlsColumns",
-          JSON.stringify(state.value),
+          JSON.stringify(columns.value),
         );
         console.log("Saved bought items controls columns to local storage.");
       },
@@ -78,11 +78,21 @@ export const useBoughtItemsControlsStore = defineStore(
       const lsColumns = localStorage.getItem("gladosBoughtItemControlsColumns");
 
       if (lsState != null) {
-        state.value = JSON.parse(lsState);
+        const tempState = JSON.parse(lsState);
+        for (const [key, value] of Object.entries(tempState)) {
+          if (key in state.value) {
+            state.value[key] = value;
+          }
+        }
         console.log("Got bought items controls state from local storage.");
       }
       if (lsColumns != null) {
-        state.value = JSON.parse(lsColumns);
+        const tempColumns = JSON.parse(lsColumns);
+        for (const [key, value] of Object.entries(tempColumns)) {
+          if (key in columns.value) {
+            columns.value[key] = value;
+          }
+        }
         console.log("Got bought items controls columns from local storage.");
       }
     });

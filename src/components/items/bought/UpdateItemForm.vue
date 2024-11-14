@@ -106,7 +106,7 @@ onBeforeMount(setOptionsProjects);
 <template>
   <div class="form-base-scope">
     <div class="form-base-container">
-      <div id="grid">
+      <div class="grid">
         <div id="project" class="grid-item-center">
           <SelectProject
             v-model:selection="updateFormData.project_id"
@@ -222,7 +222,7 @@ onBeforeMount(setOptionsProjects);
 @import "@/scss/form/formBase.scss";
 @import "@/scss/grid/gridBase.scss";
 
-#grid {
+.grid {
   grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
   grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
@@ -241,7 +241,7 @@ onBeforeMount(setOptionsProjects);
 }
 
 @media screen and (max-width: $max-width-desktop) {
-  #grid {
+  .grid {
     grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
     grid-template-columns: 50px auto 150px;
     grid-template-areas:

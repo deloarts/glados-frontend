@@ -41,8 +41,6 @@ const priority = computed<boolean>(() => {
 
 // Custom edit rules
 const editable = computed<boolean>(() => {
-  // boughtItemsStore.getSelection().includes(item.id);
-
   if (
     !finished.value &&
     !late.value &&

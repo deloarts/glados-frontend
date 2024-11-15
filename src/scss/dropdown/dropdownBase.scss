@@ -78,6 +78,14 @@
   transform: translateY(calc(50% + 20px));
 }
 
+:deep(hr) {
+  background-color: $main-color;
+  border: 0;
+  height: 1px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 :deep(.drop-down-toggle-item) {
   display: list-item;
   list-style: none;
@@ -96,4 +104,16 @@
 
 :deep(.drop-down-toggle-item-text) {
   padding-left: 14px;
+}
+
+:deep(.drop-down-button-item) {
+  display: list-item;
+  list-style: none;
+  display: flex;
+  vertical-align: middle;
+  padding: 8px;
+
+  border-radius: $main-border-radius;
+
+  transition: all 0.2s ease;
 }

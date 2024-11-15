@@ -8,6 +8,8 @@ export interface BoughtItemControlsState {
   rainbow: boolean;
   fixedHeight: boolean;
   lockCols: boolean;
+  textView: boolean;
+  requestView: boolean;
 }
 
 export interface BoughtItemControlsColumns {

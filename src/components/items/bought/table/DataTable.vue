@@ -25,7 +25,7 @@ function eventKeyUp(event: any) {
 
 onBeforeMount(() => {
   document.addEventListener("keyup", eventKeyUp);
-  colW.value = boughtItemColumnWidths;
+  colW.value = JSON.parse(JSON.stringify(boughtItemColumnWidths));
 });
 
 onUnmounted(() => {

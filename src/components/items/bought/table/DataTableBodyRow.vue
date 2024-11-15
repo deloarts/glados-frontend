@@ -23,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {});
       delivered: controlsStore.state.rainbow && props.status == 'delivered',
       canceled: controlsStore.state.rainbow && props.status == 'canceled',
       lost: controlsStore.state.rainbow && props.status == 'lost',
+      'text-mode': controlsStore.state.textView,
     }"
   >
     <slot></slot>
@@ -123,5 +124,17 @@ tr.selected > td {
 
 tr.selected:hover > td {
   background: $table-row-active-hover !important;
+}
+
+tr.text-mode > td {
+  background: white !important;
+  color: black !important;
+
+  cursor: text !important;
+  user-select: text !important;
+}
+tr.text-mode:hover > td {
+  background: white !important;
+  color: black !important;
 }
 </style>

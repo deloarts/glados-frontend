@@ -16,6 +16,8 @@ export const useBoughtItemsControlsStore = defineStore(
       rainbow: false,
       fixedHeight: true,
       lockCols: false,
+      textView: false,
+      requestView: false,
     });
 
     const columns = ref<BoughtItemControlsColumns>({
@@ -49,14 +51,46 @@ export const useBoughtItemsControlsStore = defineStore(
       storagePlace: true,
     });
 
+    function enableAllColumns() {
+      for (const key in columns.value) {
+        columns.value[key] = true;
+      }
+    }
+
+    function disableAllColumns() {
+      for (const key in columns.value) {
+        columns.value[key] = false;
+      }
+    }
+
     watch(
       state,
       () => {
+        // Save store state to LS
         localStorage.setItem(
           "gladosBoughtItemControlsState",
           JSON.stringify(state.value),
         );
         console.log("Saved bought items controls state to local storage.");
+
+        // Setup required columns for request view
+        if (state.value.requestView) {
+          state.value.textView = true;
+          disableAllColumns();
+          columns.value.id = true;
+          columns.value.projectNumber = true;
+          columns.value.productNumber = true;
+          columns.value.quantity = true;
+          columns.value.unit = true;
+          columns.value.partnumber = true;
+          columns.value.orderNumber = true;
+          columns.value.manufacturer = true;
+          columns.value.noteGeneral = true;
+          columns.value.noteSupplier = true;
+        } else {
+          state.value.textView = false;
+          enableAllColumns();
+        }
       },
       { deep: true },
     );
@@ -97,7 +131,7 @@ export const useBoughtItemsControlsStore = defineStore(
       }
     });
 
-    return { state, columns };
+    return { state, columns, enableAllColumns, disableAllColumns };
   },
 );
 

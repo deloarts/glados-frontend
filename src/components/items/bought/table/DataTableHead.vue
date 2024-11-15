@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useBoughtItemsControlsStore } from "@/stores/controls";
+
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
 
 import TableHeadRow from "@/components/dataTable/TableHeadRow.vue";
@@ -64,6 +66,8 @@ import TableHeadFilterArrivalWeeks from "./head/TableHeadFilterArrivalWeeks.vue"
 import TableHeadFilterTotalWeeks from "./head/TableHeadFilterTotalWeeks.vue";
 import TableHeadFilterStoragePlace from "./head/TableHeadFilterStoragePlace.vue";
 
+const controlsStore = useBoughtItemsControlsStore();
+
 const props = defineProps<{
   colW: typeof boughtItemColumnWidths;
 }>();
@@ -71,7 +75,11 @@ const props = defineProps<{
 
 <template>
   <thead>
-    <TableHeadRow>
+    <TableHeadRow
+      v-bind:class="{
+        'text-mode': controlsStore.state.textView,
+      }"
+    >
       <TableHeadTitleNumber v-model:width="props.colW" />
       <TableHeadTitleID v-model:width="props.colW" />
       <TableHeadTitleState v-model:width="props.colW" />
@@ -103,7 +111,7 @@ const props = defineProps<{
       <TableHeadTitleStoragePlace v-model:width="props.colW" />
       <TableHeadEmpty />
     </TableHeadRow>
-    <TableHeadRow>
+    <TableHeadRow v-if="!controlsStore.state.textView">
       <TableHeadFilterNumber v-model:width="props.colW" />
       <TableHeadFilterID v-model:width="props.colW" />
       <TableHeadFilterState v-model:width="props.colW" />
@@ -138,4 +146,19 @@ const props = defineProps<{
   </thead>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+tr.text-mode > th {
+  background: lightgray !important;
+  color: black !important;
+
+  border-bottom: solid thin black;
+  border-right: solid thin black;
+
+  cursor: text !important;
+  user-select: text !important;
+}
+tr.text-mode:hover > th {
+  background: lightgrey !important;
+  color: black !important;
+}
+</style>

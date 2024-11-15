@@ -14,6 +14,8 @@ import TableHeadTitleID from "./head/TableHeadTitleID.vue";
 import TableHeadTitleStatus from "./head/TableHeadTitleStatus.vue";
 import TableHeadTitleProjectNumber from "./head/TableHeadTitleProjectNumber.vue";
 import TableHeadTitleProductNumber from "./head/TableHeadTitleProductNumber.vue";
+import TableHeadTitleProjectCustomer from "./head/TableHeadTitleProjectCustomer.vue";
+import TableHeadTitleProjectDescription from "./head/TableHeadTitleProjectDescription.vue";
 import TableHeadTitleQuantity from "./head/TableHeadTitleQuantity.vue";
 import TableHeadTitleUnit from "./head/TableHeadTitleUnit.vue";
 import TableHeadTitleLink from "./head/TableHeadTitleLink.vue";
@@ -44,6 +46,8 @@ import TableHeadFilterID from "./head/TableHeadFilterID.vue";
 import TableHeadFilterStatus from "./head/TableHeadFilterStatus.vue";
 import TableHeadFilterProjectNumber from "./head/TableHeadFilterProjectNumber.vue";
 import TableHeadFilterProductNumber from "./head/TableHeadFilterProductNumber.vue";
+import TableHeadFilterProjectCustomer from "./head/TableHeadFilterProjectCustomer.vue";
+import TableHeadFilterProjectDescription from "./head/TableHeadFilterProjectDescription.vue";
 import TableHeadFilterQuantity from "./head/TableHeadFilterQuantity.vue";
 import TableHeadFilterUnit from "./head/TableHeadFilterUnit.vue";
 import TableHeadFilterLink from "./head/TableHeadFilterLink.vue";
@@ -101,6 +105,8 @@ const computedColW = computed<typeof boughtItemColumnWidths>({
       <TableHeadTitleStatus v-model:width="computedColW" />
       <TableHeadTitleProjectNumber v-model:width="computedColW" />
       <TableHeadTitleProductNumber v-model:width="computedColW" />
+      <TableHeadTitleProjectCustomer v-model:width="computedColW" />
+      <TableHeadTitleProjectDescription v-model:width="computedColW" />
       <TableHeadTitleQuantity v-model:width="computedColW" />
       <TableHeadTitleUnit v-model:width="computedColW" />
       <TableHeadTitleLink v-model:width="computedColW" />
@@ -133,6 +139,8 @@ const computedColW = computed<typeof boughtItemColumnWidths>({
       <TableHeadFilterStatus v-model:width="computedColW" />
       <TableHeadFilterProjectNumber v-model:width="computedColW" />
       <TableHeadFilterProductNumber v-model:width="computedColW" />
+      <TableHeadFilterProjectCustomer v-model:width="computedColW" />
+      <TableHeadFilterProjectDescription v-model:width="computedColW" />
       <TableHeadFilterQuantity v-model:width="computedColW" />
       <TableHeadFilterUnit v-model:width="computedColW" />
       <TableHeadFilterLink v-model:width="computedColW" />

@@ -7,6 +7,8 @@ export interface BoughtItemSchema {
   notify_on_delivery: boolean;
   project_id: number;
   project_number: string;
+  project_customer: string;
+  project_description: string;
   project_is_active: boolean;
   product_number: string | null;
   quantity: number;

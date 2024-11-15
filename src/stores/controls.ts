@@ -25,6 +25,8 @@ export const useBoughtItemsControlsStore = defineStore(
       state: true,
       status: true,
       projectNumber: true,
+      projectCustomer: true,
+      projectDescription: true,
       productNumber: true,
       quantity: true,
       unit: true,

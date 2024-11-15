@@ -30,7 +30,7 @@ const props = defineProps<{
     :item-store="boughtItemsStore"
     :filter-store="boughtItemFilterStore"
     filter-store-key="supplier"
-    v-model:width="props.width.supplier"
+    :width="props.width.supplier"
     :fixed-height="controlsStore.state.fixedHeight"
     :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
   />

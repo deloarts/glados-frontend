@@ -15,7 +15,7 @@ const props = defineProps<{
   <TableHeadRowNumber
     v-if="projectsControlsStore.columns.projectLink"
     value=""
-    v-model:width="props.width.projectLink"
+    :width="props.width.projectLink"
   />
 </template>
 

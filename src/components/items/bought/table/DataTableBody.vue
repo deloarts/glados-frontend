@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 
@@ -45,6 +45,19 @@ const boughtItemsStore = useBoughtItemsStore();
 const props = defineProps<{
   colW: typeof boughtItemColumnWidths;
 }>();
+const emit = defineEmits<{
+  (e: "update:colW", v: typeof boughtItemColumnWidths): void;
+}>();
+
+const computedColW = computed<typeof boughtItemColumnWidths>({
+  get() {
+    return props.colW;
+  },
+  set(newValue) {
+    emit("update:colW", newValue);
+    return newValue;
+  },
+});
 
 // Selection
 const lineIndex = ref<number>(0);
@@ -68,35 +81,39 @@ function multiSelect(event: Event, id: number, index: number) {
       :status="item.status"
       v-on:click="multiSelect($event, item.id, index)"
     >
-      <TableItemNumber :index="index" :item="item" v-model:width="props.colW" />
-      <TableItemID :item="item" v-model:width="props.colW" />
-      <TableItemState :item="item" v-model:width="props.colW" />
-      <TableItemStatus :item="item" v-model:width="props.colW" />
-      <TableItemProjectNumber :item="item" v-model:width="props.colW" />
-      <TableItemProductNumber :item="item" v-model:width="props.colW" />
-      <TableItemQuantity :item="item" v-model:width="props.colW" />
-      <TableItemUnit :item="item" v-model:width="props.colW" />
-      <TableItemWeblink :item="item" v-model:width="props.colW" />
-      <TableItemPartNumber :item="item" v-model:width="props.colW" />
-      <TableItemOrderNumber :item="item" v-model:width="props.colW" />
-      <TableItemManufacturer :item="item" v-model:width="props.colW" />
-      <TableItemSupplier :item="item" v-model:width="props.colW" />
-      <TableItemGroup :item="item" v-model:width="props.colW" />
-      <TableItemNoteGeneral :item="item" v-model:width="props.colW" />
-      <TableItemNoteSupplier :item="item" v-model:width="props.colW" />
-      <TableItemCreatedDate :item="item" v-model:width="props.colW" />
-      <TableItemCreatorName :item="item" v-model:width="props.colW" />
-      <TableItemDesiredDate :item="item" v-model:width="props.colW" />
-      <TableItemRequestedDate :item="item" v-model:width="props.colW" />
-      <TableItemRequesterID :item="item" v-model:width="props.colW" />
-      <TableItemOrderedDate :item="item" v-model:width="props.colW" />
-      <TableItemOrdererID :item="item" v-model:width="props.colW" />
-      <TableItemExpectedDate :item="item" v-model:width="props.colW" />
-      <TableItemDeliveredDate :item="item" v-model:width="props.colW" />
-      <TableItemReceiverID :item="item" v-model:width="props.colW" />
-      <TableItemArrivalWeeks :item="item" v-model:width="props.colW" />
-      <TableItemTotalWeeks :item="item" v-model:width="props.colW" />
-      <TableItemStoragePlace :item="item" v-model:width="props.colW" />
+      <TableItemNumber
+        :index="index"
+        :item="item"
+        v-model:width="computedColW"
+      />
+      <TableItemID :item="item" v-model:width="computedColW" />
+      <TableItemState :item="item" v-model:width="computedColW" />
+      <TableItemStatus :item="item" v-model:width="computedColW" />
+      <TableItemProjectNumber :item="item" v-model:width="computedColW" />
+      <TableItemProductNumber :item="item" v-model:width="computedColW" />
+      <TableItemQuantity :item="item" v-model:width="computedColW" />
+      <TableItemUnit :item="item" v-model:width="computedColW" />
+      <TableItemWeblink :item="item" v-model:width="computedColW" />
+      <TableItemPartNumber :item="item" v-model:width="computedColW" />
+      <TableItemOrderNumber :item="item" v-model:width="computedColW" />
+      <TableItemManufacturer :item="item" v-model:width="computedColW" />
+      <TableItemSupplier :item="item" v-model:width="computedColW" />
+      <TableItemGroup :item="item" v-model:width="computedColW" />
+      <TableItemNoteGeneral :item="item" v-model:width="computedColW" />
+      <TableItemNoteSupplier :item="item" v-model:width="computedColW" />
+      <TableItemCreatedDate :item="item" v-model:width="computedColW" />
+      <TableItemCreatorName :item="item" v-model:width="computedColW" />
+      <TableItemDesiredDate :item="item" v-model:width="computedColW" />
+      <TableItemRequestedDate :item="item" v-model:width="computedColW" />
+      <TableItemRequesterID :item="item" v-model:width="computedColW" />
+      <TableItemOrderedDate :item="item" v-model:width="computedColW" />
+      <TableItemOrdererID :item="item" v-model:width="computedColW" />
+      <TableItemExpectedDate :item="item" v-model:width="computedColW" />
+      <TableItemDeliveredDate :item="item" v-model:width="computedColW" />
+      <TableItemReceiverID :item="item" v-model:width="computedColW" />
+      <TableItemArrivalWeeks :item="item" v-model:width="computedColW" />
+      <TableItemTotalWeeks :item="item" v-model:width="computedColW" />
+      <TableItemStoragePlace :item="item" v-model:width="computedColW" />
       <TableItemEmpty />
     </DataTableBodyRow>
   </tbody>

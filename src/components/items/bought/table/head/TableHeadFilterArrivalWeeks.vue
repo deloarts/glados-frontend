@@ -17,7 +17,7 @@ const props = defineProps<{
     v-if="boughtItemsControlsStore.columns.arrivalWeeks"
     name="Arrival"
     value="(weeks)"
-    v-model:width="props.width.arrivalWeeks"
+    :width="props.width.arrivalWeeks"
   />
 </template>
 

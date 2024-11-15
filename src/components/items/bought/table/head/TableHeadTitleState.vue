@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
 
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
@@ -9,13 +11,26 @@ const boughtItemsControlsStore = useBoughtItemsControlsStore();
 const props = defineProps<{
   width: typeof boughtItemColumnWidths;
 }>();
+const emit = defineEmits<{
+  (e: "update:width", v: typeof boughtItemColumnWidths): void;
+}>();
+
+const computedWidth = computed<typeof boughtItemColumnWidths>({
+  get() {
+    return props.width;
+  },
+  set(newValue) {
+    emit("update:width", newValue);
+    return newValue;
+  },
+});
 </script>
 
 <template>
   <TableHeadTitle
     v-if="boughtItemsControlsStore.columns.state"
     name="State"
-    v-model:width="props.width.state"
+    v-model:width="computedWidth.state"
   />
 </template>
 

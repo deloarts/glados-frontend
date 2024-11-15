@@ -15,7 +15,7 @@ const props = defineProps<{
   <TableHeadRowNumber
     v-if="boughtItemsControlsStore.columns.weblink"
     value=""
-    v-model:width="props.width.weblink"
+    :width="props.width.weblink"
   />
 </template>
 

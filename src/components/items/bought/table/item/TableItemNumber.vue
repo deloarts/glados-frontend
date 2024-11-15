@@ -20,7 +20,7 @@ const props = defineProps<{
   <TableItemRowNumber
     :number="index + 1"
     :id="item.id"
-    v-model:width="props.width.number"
+    :width="props.width.number"
     :fixed-height="controlsStore.state.fixedHeight"
   />
   <!-- <TableItemRowNumber

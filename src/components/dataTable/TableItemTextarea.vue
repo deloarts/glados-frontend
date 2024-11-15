@@ -34,6 +34,19 @@ const props = withDefaults(defineProps<Props>(), {
   fixedHeight: false,
   editMode: false,
 });
+const emit = defineEmits<{
+  (e: "update:filterStore", v: FilterStoreProtocol): void;
+}>();
+
+const computedFilterStore = computed<FilterStoreProtocol>({
+  get() {
+    return props.filterStore;
+  },
+  set(newValue) {
+    emit("update:filterStore", newValue.state);
+    return newValue;
+  },
+});
 
 const gtMinWidthTablet = computed<boolean>(
   () => resolutionStore.gtMinWidthTablet,
@@ -79,7 +92,9 @@ function onContextMenu() {
     props.filterStore &&
     props.filterStoreKey
   ) {
-    props.filterStore.state[props.filterStoreKey] = String(inputModel.value);
+    computedFilterStore.value.state[props.filterStoreKey] = String(
+      inputModel.value,
+    );
     props.itemStore.getItems();
   }
 }

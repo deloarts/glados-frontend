@@ -24,7 +24,7 @@ const props = defineProps<{
     :value="`${config.localURL}/#/items/bought?projectNumber=${props.item.number}`"
     :display-icon="true"
     :center="true"
-    v-model:width="props.width.projectLink"
+    :width="props.width.projectLink"
     :fixed-height="projectsControlsStore.state.fixedHeight"
     :new-tab="false"
   />

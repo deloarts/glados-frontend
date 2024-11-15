@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
@@ -71,6 +73,19 @@ const controlsStore = useBoughtItemsControlsStore();
 const props = defineProps<{
   colW: typeof boughtItemColumnWidths;
 }>();
+const emit = defineEmits<{
+  (e: "update:colW", v: typeof boughtItemColumnWidths): void;
+}>();
+
+const computedColW = computed<typeof boughtItemColumnWidths>({
+  get() {
+    return props.colW;
+  },
+  set(newValue) {
+    emit("update:colW", newValue);
+    return newValue;
+  },
+});
 </script>
 
 <template>
@@ -80,67 +95,67 @@ const props = defineProps<{
         'text-mode': controlsStore.state.textView,
       }"
     >
-      <TableHeadTitleNumber v-model:width="props.colW" />
-      <TableHeadTitleID v-model:width="props.colW" />
-      <TableHeadTitleState v-model:width="props.colW" />
-      <TableHeadTitleStatus v-model:width="props.colW" />
-      <TableHeadTitleProjectNumber v-model:width="props.colW" />
-      <TableHeadTitleProductNumber v-model:width="props.colW" />
-      <TableHeadTitleQuantity v-model:width="props.colW" />
-      <TableHeadTitleUnit v-model:width="props.colW" />
-      <TableHeadTitleLink v-model:width="props.colW" />
-      <TableHeadTitlePartNumber v-model:width="props.colW" />
-      <TableHeadTitleOrderNumber v-model:width="props.colW" />
-      <TableHeadTitleManufacturer v-model:width="props.colW" />
-      <TableHeadTitleSupplier v-model:width="props.colW" />
-      <TableHeadTitleGroup v-model:width="props.colW" />
-      <TableHeadTitleNoteGeneral v-model:width="props.colW" />
-      <TableHeadTitleNoteSupplier v-model:width="props.colW" />
-      <TableHeadTitleCreatedDate v-model:width="props.colW" />
-      <TableHeadTitleCreatorID v-model:width="props.colW" />
-      <TableHeadTitleDesiredDate v-model:width="props.colW" />
-      <TableHeadTitleRequestedDate v-model:width="props.colW" />
-      <TableHeadTitleRequestorID v-model:width="props.colW" />
-      <TableHeadTitleOrderedDate v-model:width="props.colW" />
-      <TableHeadTitleOrdererID v-model:width="props.colW" />
-      <TableHeadTitleExpectedDate v-model:width="props.colW" />
-      <TableHeadTitleDeliveredDate v-model:width="props.colW" />
-      <TableHeadTitleReceiverID v-model:width="props.colW" />
-      <TableHeadTitleArrivalWeek v-model:width="props.colW" />
-      <TableHeadTitleTotalWeeks v-model:width="props.colW" />
-      <TableHeadTitleStoragePlace v-model:width="props.colW" />
+      <TableHeadTitleNumber v-model:width="computedColW" />
+      <TableHeadTitleID v-model:width="computedColW" />
+      <TableHeadTitleState v-model:width="computedColW" />
+      <TableHeadTitleStatus v-model:width="computedColW" />
+      <TableHeadTitleProjectNumber v-model:width="computedColW" />
+      <TableHeadTitleProductNumber v-model:width="computedColW" />
+      <TableHeadTitleQuantity v-model:width="computedColW" />
+      <TableHeadTitleUnit v-model:width="computedColW" />
+      <TableHeadTitleLink v-model:width="computedColW" />
+      <TableHeadTitlePartNumber v-model:width="computedColW" />
+      <TableHeadTitleOrderNumber v-model:width="computedColW" />
+      <TableHeadTitleManufacturer v-model:width="computedColW" />
+      <TableHeadTitleSupplier v-model:width="computedColW" />
+      <TableHeadTitleGroup v-model:width="computedColW" />
+      <TableHeadTitleNoteGeneral v-model:width="computedColW" />
+      <TableHeadTitleNoteSupplier v-model:width="computedColW" />
+      <TableHeadTitleCreatedDate v-model:width="computedColW" />
+      <TableHeadTitleCreatorID v-model:width="computedColW" />
+      <TableHeadTitleDesiredDate v-model:width="computedColW" />
+      <TableHeadTitleRequestedDate v-model:width="computedColW" />
+      <TableHeadTitleRequestorID v-model:width="computedColW" />
+      <TableHeadTitleOrderedDate v-model:width="computedColW" />
+      <TableHeadTitleOrdererID v-model:width="computedColW" />
+      <TableHeadTitleExpectedDate v-model:width="computedColW" />
+      <TableHeadTitleDeliveredDate v-model:width="computedColW" />
+      <TableHeadTitleReceiverID v-model:width="computedColW" />
+      <TableHeadTitleArrivalWeek v-model:width="computedColW" />
+      <TableHeadTitleTotalWeeks v-model:width="computedColW" />
+      <TableHeadTitleStoragePlace v-model:width="computedColW" />
       <TableHeadEmpty />
     </TableHeadRow>
     <TableHeadRow v-if="!controlsStore.state.textView">
-      <TableHeadFilterNumber v-model:width="props.colW" />
-      <TableHeadFilterID v-model:width="props.colW" />
-      <TableHeadFilterState v-model:width="props.colW" />
-      <TableHeadFilterStatus v-model:width="props.colW" />
-      <TableHeadFilterProjectNumber v-model:width="props.colW" />
-      <TableHeadFilterProductNumber v-model:width="props.colW" />
-      <TableHeadFilterQuantity v-model:width="props.colW" />
-      <TableHeadFilterUnit v-model:width="props.colW" />
-      <TableHeadFilterLink v-model:width="props.colW" />
-      <TableHeadFilterPartNumber v-model:width="props.colW" />
-      <TableHeadFilterOrderNumber v-model:width="props.colW" />
-      <TableHeadFilterManufacturer v-model:width="props.colW" />
-      <TableHeadFilterSupplier v-model:width="props.colW" />
-      <TableHeadFilterGroup v-model:width="props.colW" />
-      <TableHeadFilterNoteGeneral v-model:width="props.colW" />
-      <TableHeadFilterNoteSupplier v-model:width="props.colW" />
-      <TableHeadFilterCreatedDate v-model:width="props.colW" />
-      <TableHeadFilterCreatorID v-model:width="props.colW" />
-      <TableHeadFilterDesiredDate v-model:width="props.colW" />
-      <TableHeadFilterRequestedDate v-model:width="props.colW" />
-      <TableHeadFilterRequesterID v-model:width="props.colW" />
-      <TableHeadFilterOrderedDate v-model:width="props.colW" />
-      <TableHeadFilterOrdererID v-model:width="props.colW" />
-      <TableHeadFilterExpectedDate v-model:width="props.colW" />
-      <TableHeadFilterDeliveredDate v-model:width="props.colW" />
-      <TableHeadFilterReceiverID v-model:width="props.colW" />
-      <TableHeadFilterArrivalWeeks v-model:width="props.colW" />
-      <TableHeadFilterTotalWeeks v-model:width="props.colW" />
-      <TableHeadFilterStoragePlace v-model:width="props.colW" />
+      <TableHeadFilterNumber v-model:width="computedColW" />
+      <TableHeadFilterID v-model:width="computedColW" />
+      <TableHeadFilterState v-model:width="computedColW" />
+      <TableHeadFilterStatus v-model:width="computedColW" />
+      <TableHeadFilterProjectNumber v-model:width="computedColW" />
+      <TableHeadFilterProductNumber v-model:width="computedColW" />
+      <TableHeadFilterQuantity v-model:width="computedColW" />
+      <TableHeadFilterUnit v-model:width="computedColW" />
+      <TableHeadFilterLink v-model:width="computedColW" />
+      <TableHeadFilterPartNumber v-model:width="computedColW" />
+      <TableHeadFilterOrderNumber v-model:width="computedColW" />
+      <TableHeadFilterManufacturer v-model:width="computedColW" />
+      <TableHeadFilterSupplier v-model:width="computedColW" />
+      <TableHeadFilterGroup v-model:width="computedColW" />
+      <TableHeadFilterNoteGeneral v-model:width="computedColW" />
+      <TableHeadFilterNoteSupplier v-model:width="computedColW" />
+      <TableHeadFilterCreatedDate v-model:width="computedColW" />
+      <TableHeadFilterCreatorID v-model:width="computedColW" />
+      <TableHeadFilterDesiredDate v-model:width="computedColW" />
+      <TableHeadFilterRequestedDate v-model:width="computedColW" />
+      <TableHeadFilterRequesterID v-model:width="computedColW" />
+      <TableHeadFilterOrderedDate v-model:width="computedColW" />
+      <TableHeadFilterOrdererID v-model:width="computedColW" />
+      <TableHeadFilterExpectedDate v-model:width="computedColW" />
+      <TableHeadFilterDeliveredDate v-model:width="computedColW" />
+      <TableHeadFilterReceiverID v-model:width="computedColW" />
+      <TableHeadFilterArrivalWeeks v-model:width="computedColW" />
+      <TableHeadFilterTotalWeeks v-model:width="computedColW" />
+      <TableHeadFilterStoragePlace v-model:width="computedColW" />
       <TableHeadEmpty />
     </TableHeadRow>
   </thead>

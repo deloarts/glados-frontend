@@ -21,7 +21,7 @@ const props = defineProps<{
     :number="index + 1"
     :id="item.id"
     copy-url="projects"
-    v-model:width="props.width.number"
+    :width="props.width.number"
     :fixed-height="controlsStore.state.fixedHeight"
   />
 </template>

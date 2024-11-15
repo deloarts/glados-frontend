@@ -31,7 +31,7 @@ let availableOptionsState: Array<AvailableOption> = [
     :item-store="projectsStore"
     :filter-store="projectFilterStore"
     filter-store-key="isActive"
-    v-model:width="props.width.state"
+    :width="props.width.state"
   />
 </template>
 

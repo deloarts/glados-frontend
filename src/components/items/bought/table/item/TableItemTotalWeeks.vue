@@ -28,7 +28,7 @@ const props = defineProps<{
     :value="calcDiffInWeeks(item.ordered_date, item.delivery_date)"
     :item-store="boughtItemsStore"
     :filter-store="boughtItemFilterStore"
-    v-model:width="props.width.totalWeeks"
+    :width="props.width.totalWeeks"
     :center="true"
     :fixed-height="controlsStore.state.fixedHeight"
   />

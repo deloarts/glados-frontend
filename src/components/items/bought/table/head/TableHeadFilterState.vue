@@ -16,7 +16,7 @@ const props = defineProps<{
     v-if="boughtItemsControlsStore.columns.state"
     name="State"
     value=""
-    v-model:width="props.width.state"
+    :width="props.width.state"
   />
 </template>
 

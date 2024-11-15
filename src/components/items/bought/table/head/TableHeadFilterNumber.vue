@@ -9,7 +9,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <TableHeadRowNumber value="" v-model:width="props.width.number" />
+  <TableHeadRowNumber value="" :width="props.width.number" />
 </template>
 
 <style scoped lang="scss"></style>

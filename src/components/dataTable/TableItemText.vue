@@ -26,6 +26,19 @@ const props = withDefaults(defineProps<Props>(), {
   center: false,
   fixedHeight: false,
 });
+const emit = defineEmits<{
+  (e: "update:filterStore", v: FilterStoreProtocol): void;
+}>();
+
+const computedFilterStore = computed<FilterStoreProtocol>({
+  get() {
+    return props.filterStore;
+  },
+  set(newValue) {
+    emit("update:filterStore", newValue.state);
+    return newValue;
+  },
+});
 
 function onContextMenu() {
   blur();
@@ -35,7 +48,7 @@ function onContextMenu() {
     props.filterStore &&
     props.filterStoreKey
   ) {
-    props.filterStore.state[props.filterStoreKey] = String(props.value);
+    computedFilterStore.value.state[props.filterStoreKey] = String(props.value);
     props.itemStore.getItems();
   }
 }

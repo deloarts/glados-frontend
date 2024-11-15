@@ -18,6 +18,8 @@ export interface BoughtItemControlsColumns {
   status: boolean;
   projectNumber: boolean;
   productNumber: boolean;
+  projectCustomer: boolean;
+  projectDescription: boolean;
   quantity: boolean;
   unit: boolean;
   weblink: boolean;

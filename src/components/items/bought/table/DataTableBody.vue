@@ -16,6 +16,8 @@ import TableItemID from "./item/TableItemID.vue";
 import TableItemStatus from "./item/TableItemStatus.vue";
 import TableItemProjectNumber from "./item/TableItemProjectNumber.vue";
 import TableItemProductNumber from "./item/TableItemProductNumber.vue";
+import TableItemProjectCustomer from "./item/TableItemProjectCustomer.vue";
+import TableItemProjectDescription from "./item/TableItemProjectDescription.vue";
 import TableItemQuantity from "./item/TableItemQuantity.vue";
 import TableItemUnit from "./item/TableItemUnit.vue";
 import TableItemWeblink from "./item/TableItemWeblink.vue";
@@ -91,6 +93,8 @@ function multiSelect(event: Event, id: number, index: number) {
       <TableItemStatus :item="item" v-model:width="computedColW" />
       <TableItemProjectNumber :item="item" v-model:width="computedColW" />
       <TableItemProductNumber :item="item" v-model:width="computedColW" />
+      <TableItemProjectCustomer :item="item" v-model:width="computedColW" />
+      <TableItemProjectDescription :item="item" v-model:width="computedColW" />
       <TableItemQuantity :item="item" v-model:width="computedColW" />
       <TableItemUnit :item="item" v-model:width="computedColW" />
       <TableItemWeblink :item="item" v-model:width="computedColW" />

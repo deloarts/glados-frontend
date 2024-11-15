@@ -68,13 +68,18 @@ export const useBoughtItemsControlsStore = defineStore(
     watch(
       state,
       () => {
-        // Save store state to LS
         localStorage.setItem(
           "gladosBoughtItemControlsState",
           JSON.stringify(state.value),
         );
         console.log("Saved bought items controls state to local storage.");
+      },
+      { deep: true },
+    );
 
+    watch(
+      () => state.value.requestView,
+      () => {
         // Setup required columns for request view
         if (state.value.requestView) {
           state.value.textView = true;

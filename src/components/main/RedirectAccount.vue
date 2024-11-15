@@ -6,5 +6,3 @@ onBeforeMount(() => {
   router.push({ name: "AccountUpdate" });
 });
 </script>
-
-<template></template>

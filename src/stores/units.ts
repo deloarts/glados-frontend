@@ -18,11 +18,11 @@ export const useUnitsStore = defineStore("units", () => {
   const boughtItemUnitsOption = ref<Array<AvailableOption>>([]);
   const boughtItemUnitsOptionFilter = ref<Array<AvailableOption>>([]);
 
-  function get() {
+  async function get() {
     console.log("Units store requesting data ...");
     loading.value = true;
 
-    hostRequest.getConfigItemsBoughtUnits().then((response) => {
+    return hostRequest.getConfigItemsBoughtUnits().then((response) => {
       loading.value = false;
       if (response.status === 200) {
         boughtItemUnits.value = response.data;
@@ -32,12 +32,18 @@ export const useUnitsStore = defineStore("units", () => {
         );
         console.log("Units store got data from server.");
       }
-      setTimeout(get.bind(this), constants.patchServerConfigInterval);
+      return response;
+    });
+  }
+
+  function fetch() {
+    get().then(() => {
+      setTimeout(fetch.bind(this), constants.patchServerConfigInterval);
     });
   }
 
   onBeforeMount(() => {
-    get();
+    fetch();
   });
 
   return {

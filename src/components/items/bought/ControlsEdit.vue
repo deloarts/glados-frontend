@@ -3,6 +3,8 @@ import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 
@@ -19,6 +21,7 @@ const props = defineProps<{
 const route = useRoute();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 const boughtItemsStore = useBoughtItemsStore();
 
@@ -59,12 +62,12 @@ function onAbort() {
     <div id="item-controls" class="controls-base-container">
       <ButtonItemCreate
         class="controls-base-element"
-        text="Update"
+        :text="languageStore.l.boughtItem.button.update"
         v-on:click="onUpdate"
       ></ButtonItemCreate>
       <ButtonAbort
         class="controls-base-element"
-        text="Cancel"
+        :text="languageStore.l.boughtItem.button.cancel"
         v-on:click="onAbort"
       ></ButtonAbort>
     </div>

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, watch, computed, onBeforeMount } from "vue";
 //@ts-ignore
-import moment from "moment";
+import moment, { lang } from "moment";
 import Toggle from "@vueform/toggle/dist/toggle.js";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
+import { useLanguageStore } from "@/stores/language";
 import { useUnitsStore } from "@/stores/units";
 import { useProjectsStore } from "@/stores/projects";
 
@@ -28,6 +29,7 @@ const emit = defineEmits<{
 const updateFormData = computed<BoughtItemUpdateSchema>(() => props.formData);
 
 // Stores
+const languageStore = useLanguageStore();
 const unitStore = useUnitsStore();
 const projectsStore = useProjectsStore();
 
@@ -120,7 +122,9 @@ onBeforeMount(setOptionsProjects);
             v-bind:value="
               projectsStore.getProductNumber(updateFormData.project_id)
             "
-            placeholder="Product Number"
+            :placeholder="
+              languageStore.l.boughtItem.input.productNumberPlaceholder
+            "
             readonly
           />
         </div>
@@ -129,7 +133,7 @@ onBeforeMount(setOptionsProjects);
             class="form-base-text-input"
             v-model="updateFormData.quantity"
             type="number"
-            placeholder="Quantity *"
+            :placeholder="languageStore.l.boughtItem.input.quantityPlaceholder"
           />
         </div>
         <div id="unit" class="grid-item-center">
@@ -142,42 +146,48 @@ onBeforeMount(setOptionsProjects);
           <input
             class="form-base-text-input"
             v-model="updateFormData.partnumber"
-            placeholder="Partnumber *"
+            :placeholder="
+              languageStore.l.boughtItem.input.partnumberPlaceholder
+            "
           />
         </div>
         <div id="order-number" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.order_number"
-            placeholder="Order Number *"
+            :placeholder="
+              languageStore.l.boughtItem.input.orderNumberPlaceholder
+            "
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.manufacturer"
-            placeholder="Manufacturer *"
+            :placeholder="
+              languageStore.l.boughtItem.input.manufacturerPlaceholder
+            "
           />
         </div>
         <div id="supplier" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.supplier"
-            placeholder="Supplier"
+            :placeholder="languageStore.l.boughtItem.input.supplierPlaceholder"
           />
         </div>
         <div id="group" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.group_1"
-            placeholder="Group"
+            :placeholder="languageStore.l.boughtItem.input.group1Placeholder"
           />
         </div>
         <div id="weblink" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.weblink"
-            placeholder="Weblink"
+            :placeholder="languageStore.l.boughtItem.input.weblinkPlaceholder"
           />
         </div>
         <div id="desired" class="grid-item-center">
@@ -186,7 +196,9 @@ onBeforeMount(setOptionsProjects);
             v-model="pickedDesiredDate"
             :format="formatDesiredDate"
             :clearable="true"
-            placeholder="Desired Delivery Date"
+            :placeholder="
+              languageStore.l.boughtItem.input.desiredDatePlaceholder
+            "
             dark
           />
         </div>
@@ -194,24 +206,32 @@ onBeforeMount(setOptionsProjects);
           <textarea
             class="form-base-text-input-multiline"
             v-model="updateFormData.note_general"
-            placeholder="Note"
+            :placeholder="
+              languageStore.l.boughtItem.input.noteGeneralPlaceholder
+            "
           ></textarea>
         </div>
         <div id="note-supplier" class="grid-item-center">
           <textarea
             class="form-base-text-input-multiline"
             v-model="updateFormData.note_supplier"
-            placeholder="Note Supplier"
+            :placeholder="
+              languageStore.l.boughtItem.input.noteSupplierPlaceholder
+            "
           ></textarea>
         </div>
         <div id="notify" class="grid-item-center">
           <Toggle v-model="updateFormData.notify_on_delivery"></Toggle>
         </div>
-        <div id="notify-text" class="grid-item-left">Notify me on delivery</div>
+        <div id="notify-text" class="grid-item-left">
+          {{ languageStore.l.boughtItem.toggle.notifyOnDelivery }}
+        </div>
         <div id="priority" class="grid-item-center">
           <Toggle v-model="updateFormData.high_priority"></Toggle>
         </div>
-        <div id="priority-text" class="grid-item-left">High priority</div>
+        <div id="priority-text" class="grid-item-left">
+          {{ languageStore.l.boughtItem.toggle.highPriority }}
+        </div>
       </div>
     </div>
   </div>

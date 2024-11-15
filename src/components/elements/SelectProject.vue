@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { AvailableOption } from "@/models/controls";
 
+import { useLanguageStore } from "@/stores/language";
+const languageStore = useLanguageStore();
+
 const props = defineProps<{
   selection: number;
   optionsActive: Array<AvailableOption>;
@@ -19,7 +22,9 @@ function onChange(event) {
 <template>
   <div class="box">
     <select v-model="props.selection" @change="onChange">
-      <option value="null" disabled selected hidden>Project</option>
+      <option value="null" disabled selected hidden>
+        {{ languageStore.l.boughtItem.input.projectNumberPlaceholder }}
+      </option>
       <option
         v-for="option in props.optionsActive"
         :key="option.text"

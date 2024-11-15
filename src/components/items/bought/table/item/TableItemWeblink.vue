@@ -22,7 +22,7 @@ const props = defineProps<{
     :value="item.weblink"
     :display-icon="true"
     :center="true"
-    v-model:width="props.width.weblink"
+    :width="props.width.weblink"
     :fixed-height="controlsStore.state.fixedHeight"
   />
 </template>

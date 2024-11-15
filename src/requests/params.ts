@@ -71,6 +71,15 @@ export function getBoughtItemsFilterParams(
   if (filter.projectNumber != "" && filter.projectNumber != undefined) {
     params.append("project_number", filter.projectNumber);
   }
+  if (filter.projectCustomer != "" && filter.projectCustomer != undefined) {
+    params.append("project_customer", filter.projectCustomer);
+  }
+  if (
+    filter.projectDescription != "" &&
+    filter.projectDescription != undefined
+  ) {
+    params.append("project_description", filter.projectDescription);
+  }
   if (filter.productNumber != "" && filter.productNumber != undefined) {
     params.append("product_number", filter.productNumber);
   }

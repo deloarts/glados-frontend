@@ -77,7 +77,7 @@ const locked = computed<boolean>(() => {
     :finished="finished"
     :canceled="canceled"
     :lost="lost"
-    v-model:width="props.width.state"
+    :width="props.width.state"
     :fixed-height="controlsStore.state.fixedHeight"
   />
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import { useProjectsStore } from "@/stores/projects";
 
@@ -26,6 +26,19 @@ const projectsStore = useProjectsStore();
 const props = defineProps<{
   colW: typeof projectsColumnWidths;
 }>();
+const emit = defineEmits<{
+  (e: "update:colW", v: typeof projectsColumnWidths): void;
+}>();
+
+const computedColW = computed<typeof projectsColumnWidths>({
+  get() {
+    return props.colW;
+  },
+  set(newValue) {
+    emit("update:colW", newValue);
+    return newValue;
+  },
+});
 
 // Selection
 const lineIndex = ref<number>(0);
@@ -48,16 +61,20 @@ function multiSelect(event: Event, id: number, index: number) {
       :selected="projectsStore.getSelection().includes(item.id)"
       v-on:click="multiSelect($event, item.id, index)"
     >
-      <TableItemNumber :index="index" :item="item" v-model:width="props.colW" />
-      <TableItemID :item="item" v-model:width="props.colW" />
-      <TableItemProjectNumber :item="item" v-model:width="props.colW" />
-      <TableItemProductNumber :item="item" v-model:width="props.colW" />
-      <TableItemProjectLink :item="item" v-model:width="props.colW" />
-      <TableItemCustomer :item="item" v-model:width="props.colW" />
-      <TableItemDescription :item="item" v-model:width="props.colW" />
-      <TableItemDesignatedUser :item="item" v-model:width="props.colW" />
-      <TableItemCreatedDate :item="item" v-model:width="props.colW" />
-      <TableItemState :item="item" v-model:width="props.colW" />
+      <TableItemNumber
+        :index="index"
+        :item="item"
+        v-model:width="computedColW"
+      />
+      <TableItemID :item="item" v-model:width="computedColW" />
+      <TableItemProjectNumber :item="item" v-model:width="computedColW" />
+      <TableItemProductNumber :item="item" v-model:width="computedColW" />
+      <TableItemProjectLink :item="item" v-model:width="computedColW" />
+      <TableItemCustomer :item="item" v-model:width="computedColW" />
+      <TableItemDescription :item="item" v-model:width="computedColW" />
+      <TableItemDesignatedUser :item="item" v-model:width="computedColW" />
+      <TableItemCreatedDate :item="item" v-model:width="computedColW" />
+      <TableItemState :item="item" v-model:width="computedColW" />
       <TableItemEmpty />
     </DataTableBodyRow>
   </tbody>

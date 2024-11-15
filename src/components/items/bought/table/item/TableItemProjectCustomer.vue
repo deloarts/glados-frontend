@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import type { BoughtItemSchema } from "@/schemas/boughtItem";
 
-import TableItemInput from "@/components/dataTable/TableItemInput.vue";
+import TableItemText from "@/components/dataTable/TableItemText.vue";
 
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
-
-import { boughtItemsRequest } from "@/requests/items";
 
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
@@ -22,17 +20,15 @@ const props = defineProps<{
 </script>
 
 <template>
-  <TableItemInput
-    v-if="controlsStore.columns.supplier"
-    name="Supplier"
-    :value="item.supplier"
-    :update-method="boughtItemsRequest.putItemsSupplier"
+  <TableItemText
+    v-if="controlsStore.columns.projectCustomer"
+    name="Customer"
+    :value="item.project_customer"
     :item-store="boughtItemsStore"
     :filter-store="boughtItemFilterStore"
-    filter-store-key="supplier"
-    :width="props.width.supplier"
+    filter-store-key="projectCustomer"
+    :width="props.width.projectCustomer"
     :fixed-height="controlsStore.state.fixedHeight"
-    :edit-mode="boughtItemsStore.getSelection().includes(item.id)"
   />
 </template>
 

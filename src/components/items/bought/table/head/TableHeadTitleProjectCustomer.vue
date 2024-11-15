@@ -28,9 +28,9 @@ const computedWidth = computed<typeof boughtItemColumnWidths>({
 
 <template>
   <TableHeadTitle
-    v-if="boughtItemsControlsStore.columns.productNumber"
-    name="Product"
-    v-model:width="computedWidth.productNumber"
+    v-if="boughtItemsControlsStore.columns.projectCustomer"
+    name="Customer"
+    v-model:width="computedWidth.projectCustomer"
   />
 </template>
 

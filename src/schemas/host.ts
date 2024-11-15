@@ -34,6 +34,8 @@ export interface HostConfigBoughtItemsFilterSchema {
   id: number;
   status: string;
   projectNumber: string;
+  projectCustomer: string;
+  projectDescription: string;
   productNumber: string;
   quantity: number;
   unit: string;

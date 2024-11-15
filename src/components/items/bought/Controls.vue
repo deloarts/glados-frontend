@@ -11,7 +11,7 @@ import { useUserStore } from "@/stores/user";
 import { useResolutionStore } from "@/stores/resolution";
 import { boughtItemsRequest } from "@/requests/items";
 import { getBoughtItemsFilterParams } from "@/requests/params";
-import { capitalizeFirstLetter } from "@/helper/string.helper";
+import { camelToTitle } from "@/helper/string.helper";
 
 import ExcelImport from "@/components/items/bought/ExcelImport.vue";
 import Prompt from "@/components/main/Prompt.vue";
@@ -26,6 +26,7 @@ import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue";
 import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue";
 import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue";
 import ButtonClear from "@/components/elements/ButtonClear.vue";
+import ButtonShowInitial from "@/components/elements/ButtonShowInitial.vue";
 import DropDownTableView from "@/components/elements/DropDownTableView.vue";
 import DropDownTableColumns from "@/components/elements/DropDownTableColumns.vue";
 import SelectPreText from "@/components/elements/SelectPreText.vue";
@@ -94,7 +95,7 @@ const availableOptionsOrderBy: Array<AvailableOption> = [
 const availableOptionsFilterPresets = computed<Array<AvailableOption>>(() => {
   let presets = [];
   for (const key in filterStore.presets) {
-    presets.push({ text: capitalizeFirstLetter(key), value: key });
+    presets.push({ text: camelToTitle(key), value: key });
   }
   return presets;
 });
@@ -226,47 +227,47 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         v-model:text="buttonItemCreateText"
         v-on:click="onButtonNewItem"
-      ></ButtonItemCreate>
+      />
       <ButtonExcel
         class="controls-base-element"
         text="Import Excel"
         v-if="gtMinWidthDesktop"
         v-on:click="onButtonUploadExcel"
-      ></ButtonExcel>
+      />
       <ButtonExcel
         v-if="gtMinWidthDesktop"
         class="controls-base-element"
         text="Export Excel"
         v-on:click="onButtonDownloadExcel"
-      ></ButtonExcel>
+      />
       <ButtonEdit
         class="controls-base-element"
         v-model:text="buttonItemEditText"
         v-on:click="onButtonEdit"
-      ></ButtonEdit>
+      />
       <ButtonCopy
         class="controls-base-element"
         v-model:text="buttonItemCopyText"
         v-on:click="onButtonCopy"
-      ></ButtonCopy>
+      />
       <ButtonDelete
         v-if="gtMinWidthTablet"
         class="controls-base-element"
         text="Delete Item"
         v-on:click="onButtonDelete"
-      ></ButtonDelete>
+      />
       <ButtonClear
         class="controls-base-element"
         text="Unselect"
         v-on:click="onButtonClear"
-      ></ButtonClear>
+      />
     </div>
     <div id="filter-controls" class="controls-base-container">
       <ButtonSyncOff
         v-if="boughtItemsStore.paused"
         class="controls-base-element"
         v-model:text="buttonSyncText"
-      ></ButtonSyncOff>
+      />
 
       <ButtonSync
         v-else
@@ -274,7 +275,7 @@ onBeforeMount(setupTabletView);
         v-model:text="buttonSyncText"
         v-model:rotate="boughtItemsStore.loading"
         v-on:click="boughtItemsStore.getItems()"
-      ></ButtonSync>
+      />
 
       <DropDownTableView
         class="controls-base-element"
@@ -285,39 +286,36 @@ onBeforeMount(setupTabletView);
           <Toggle
             v-model="filterStore.state.ignoreDelivered"
             @change="boughtItemsStore.getItems()"
-          ></Toggle
-          ><span class="drop-down-toggle-item-text">Ignore Delivered</span>
+          />
+          <span class="drop-down-toggle-item-text">Ignore Delivered</span>
         </div>
         <div class="drop-down-toggle-item">
           <Toggle
             v-model="filterStore.state.ignoreCanceled"
             @change="boughtItemsStore.getItems()"
-          ></Toggle
-          ><span class="drop-down-toggle-item-text">Ignore Canceled</span>
+          />
+          <span class="drop-down-toggle-item-text">Ignore Canceled</span>
         </div>
         <div class="drop-down-toggle-item">
           <Toggle
             v-model="filterStore.state.ignoreLost"
             @change="boughtItemsStore.getItems()"
-          ></Toggle
-          ><span class="drop-down-toggle-item-text">Ignore Lost</span>
+          />
+          <span class="drop-down-toggle-item-text">Ignore Lost</span>
         </div>
-        <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.fixedHeight"></Toggle
-          ><span class="drop-down-toggle-item-text">Fixed Height</span>
+
+        <hr />
+
+        <div
+          v-for="(value, key) in controlsStore.state"
+          v-bind:key="key"
+          class="drop-down-toggle-item"
+        >
+          <Toggle v-model="controlsStore.state[key]" />
+          <span class="drop-down-toggle-item-text">{{
+            camelToTitle(key)
+          }}</span>
         </div>
-        <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.changelog"></Toggle
-          ><span class="drop-down-toggle-item-text">Changelog</span>
-        </div>
-        <div class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.rainbow"></Toggle
-          ><span class="drop-down-toggle-item-text">Rainbow</span>
-        </div>
-        <!-- <div v-if="gtMinWidthDesktop" class="drop-down-toggle-item">
-          <Toggle v-model="controlsStore.state.lockCols"></Toggle
-          ><span class="drop-down-toggle-item-text">Lock Columns</span>
-        </div> -->
       </DropDownTableView>
 
       <DropDownTableColumns
@@ -325,13 +323,21 @@ onBeforeMount(setupTabletView);
         v-model:text="buttonColumnsText"
         :hide-when-clicked="false"
       >
+        <div class="drop-down-button-item">
+          <ButtonShowInitial
+            text="Show All"
+            v-on:click="controlsStore.enableAllColumns()"
+          />
+        </div>
+
         <div
           v-for="(value, key) in controlsStore.columns"
+          v-bind:key="key"
           class="drop-down-toggle-item"
         >
-          <Toggle v-model="controlsStore.columns[key]"></Toggle
-          ><span class="drop-down-toggle-item-text">{{
-            capitalizeFirstLetter(key)
+          <Toggle v-model="controlsStore.columns[key]" />
+          <span class="drop-down-toggle-item-text">{{
+            camelToTitle(key)
           }}</span>
         </div>
       </DropDownTableColumns>
@@ -341,18 +347,18 @@ onBeforeMount(setupTabletView);
         class="controls-base-element"
         text="Save Filter"
         v-on:click="saveFilter"
-      ></ButtonFilterSave>
+      />
       <ButtonFilterLoad
         v-if="gtMinWidthDesktop"
         class="controls-base-element"
         text="Load Filter"
         v-on:click="loadFilter"
-      ></ButtonFilterLoad>
+      />
       <ButtonFilterClear
         class="controls-base-element"
         v-model:text="buttonClearFilterText"
         v-on:click="clearFilter"
-      ></ButtonFilterClear>
+      />
 
       <SelectPreText
         v-if="gtMinWidthDesktop"
@@ -361,7 +367,7 @@ onBeforeMount(setupTabletView);
         v-model:selection="filterStore.state.limit"
         v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsLimit"
-      ></SelectPreText>
+      />
       <SelectPreText
         v-if="gtMinWidthTablet"
         class="controls-base-element"
@@ -369,14 +375,14 @@ onBeforeMount(setupTabletView);
         v-model:selection="filterStore.state.sortBy"
         v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsOrderBy"
-      ></SelectPreText>
+      />
       <SelectPreText
         class="controls-base-element"
         text="Preset"
         v-model:selection="selectedOptionFilterPreset"
         v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsFilterPresets"
-      ></SelectPreText>
+      />
     </div>
   </div>
 

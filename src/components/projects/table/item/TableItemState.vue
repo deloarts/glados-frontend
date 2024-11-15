@@ -32,7 +32,7 @@ const props = defineProps<{
     :display-value="props.item.is_active ? 'Active' : 'Inactive'"
     :filter-store="projectsFilterStore"
     filter-store-key="isActive"
-    v-model:width="props.width.state"
+    :width="props.width.state"
     :center="true"
     :fixed-height="projectsControlsStore.state.fixedHeight"
   />

@@ -18,12 +18,12 @@ const props = defineProps<{
 
 <template>
   <TableHeadFilterInput
-    v-if="boughtItemsControlsStore.columns.manufacturer"
-    name="Manufacturer"
+    v-if="boughtItemsControlsStore.columns.projectCustomer"
+    name="Customer"
     :item-store="boughtItemsStore"
     :filter-store="boughtItemsFilterStore"
-    filter-store-key="manufacturer"
-    :width="props.width.manufacturer"
+    filter-store-key="projectCustomer"
+    :width="props.width.projectCustomer"
   />
 </template>
 

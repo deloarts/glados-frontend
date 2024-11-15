@@ -37,6 +37,19 @@ const props = withDefaults(defineProps<Props>(), {
   fixedHeight: false,
   editMode: false,
 });
+const emit = defineEmits<{
+  (e: "update:filterStore", v: FilterStoreProtocol): void;
+}>();
+
+const computedFilterStore = computed<FilterStoreProtocol>({
+  get() {
+    return props.filterStore;
+  },
+  set(newValue) {
+    emit("update:filterStore", newValue.state);
+    return newValue;
+  },
+});
 
 const pickedDate = ref<Date>(new Date());
 
@@ -76,7 +89,9 @@ function onContextMenu() {
     props.filterStore &&
     props.filterStoreKey
   ) {
-    props.filterStore.state[props.filterStoreKey] = String(pickedDate.value);
+    computedFilterStore.value.state[props.filterStoreKey] = String(
+      pickedDate.value,
+    );
     props.itemStore.getItems();
   }
 }

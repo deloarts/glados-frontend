@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import { projectsColumnWidths } from "@/presets/columnWidth";
 
 import TableHeadRow from "@/components/dataTable/TableHeadRow.vue";
@@ -29,34 +31,47 @@ import TableHeadFilterState from "./head/TableHeadFilterState.vue";
 const props = defineProps<{
   colW: typeof projectsColumnWidths;
 }>();
+const emit = defineEmits<{
+  (e: "update:colW", v: typeof projectsColumnWidths): void;
+}>();
+
+const computedColW = computed<typeof projectsColumnWidths>({
+  get() {
+    return props.colW;
+  },
+  set(newValue) {
+    emit("update:colW", newValue);
+    return newValue;
+  },
+});
 </script>
 
 <template>
   <thead>
     <TableHeadRow>
-      <TableHeadTitleNumber v-model:width="props.colW" />
-      <TableHeadTitleID v-model:width="props.colW" />
-      <TableHeadTitleProjectNumber v-model:width="props.colW" />
-      <TableHeadTitleProductNumber v-model:width="props.colW" />
-      <TableHeadTitleProjectLink v-model:width="props.colW" />
-      <TableHeadTitleCustomer v-model:width="props.colW" />
-      <TableHeadTitleDescription v-model:width="props.colW" />
-      <TableHeadTitleDesignatedUser v-model:width="props.colW" />
-      <TableHeadTitleCreatedDate v-model:width="props.colW" />
-      <TableHeadTitleState v-model:width="props.colW" />
+      <TableHeadTitleNumber v-model:width="computedColW" />
+      <TableHeadTitleID v-model:width="computedColW" />
+      <TableHeadTitleProjectNumber v-model:width="computedColW" />
+      <TableHeadTitleProductNumber v-model:width="computedColW" />
+      <TableHeadTitleProjectLink v-model:width="computedColW" />
+      <TableHeadTitleCustomer v-model:width="computedColW" />
+      <TableHeadTitleDescription v-model:width="computedColW" />
+      <TableHeadTitleDesignatedUser v-model:width="computedColW" />
+      <TableHeadTitleCreatedDate v-model:width="computedColW" />
+      <TableHeadTitleState v-model:width="computedColW" />
       <TableHeadEmpty />
     </TableHeadRow>
     <TableHeadRow>
-      <TableHeadFilterNumber v-model:width="props.colW" />
-      <TableHeadFilterID v-model:width="props.colW" />
-      <TableHeadFilterProjectNumber v-model:width="props.colW" />
-      <TableHeadFilterProductNumber v-model:width="props.colW" />
-      <TableHeadFilterProjectLink v-model:width="props.colW" />
-      <TableHeadFilterCustomer v-model:width="props.colW" />
-      <TableHeadFilterDescription v-model:width="props.colW" />
-      <TableHeadFilterDesignatedUser v-model:width="props.colW" />
-      <TableHeadFilterCreatedDate v-model:width="props.colW" />
-      <TableHeadFilterState v-model:width="props.colW" />
+      <TableHeadFilterNumber v-model:width="computedColW" />
+      <TableHeadFilterID v-model:width="computedColW" />
+      <TableHeadFilterProjectNumber v-model:width="computedColW" />
+      <TableHeadFilterProductNumber v-model:width="computedColW" />
+      <TableHeadFilterProjectLink v-model:width="computedColW" />
+      <TableHeadFilterCustomer v-model:width="computedColW" />
+      <TableHeadFilterDescription v-model:width="computedColW" />
+      <TableHeadFilterDesignatedUser v-model:width="computedColW" />
+      <TableHeadFilterCreatedDate v-model:width="computedColW" />
+      <TableHeadFilterState v-model:width="computedColW" />
       <TableHeadEmpty />
     </TableHeadRow>
   </thead>

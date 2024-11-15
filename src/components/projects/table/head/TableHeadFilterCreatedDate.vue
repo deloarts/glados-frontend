@@ -29,7 +29,7 @@ const props = defineProps<{
     v-if="projectControlsStore.columns.createdDate"
     name="Created Date"
     value=""
-    v-model:width="props.width.createdDate"
+    :width="props.width.createdDate"
   />
 </template>
 

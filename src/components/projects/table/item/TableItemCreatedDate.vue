@@ -29,7 +29,7 @@ const props = defineProps<{
     :value="item.created"
     :item-store="projectsStore"
     :display-value="moment(item.created).format('YYYY-MM-DD')"
-    v-model:width="props.width.createdDate"
+    :width="props.width.createdDate"
     :center="true"
     :fixed-height="projectsControlsStore.state.fixedHeight"
   />

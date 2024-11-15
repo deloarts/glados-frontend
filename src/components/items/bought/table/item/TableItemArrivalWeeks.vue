@@ -28,7 +28,7 @@ const props = defineProps<{
     :value="calcDiffInWeeksFromToday(item.expected_delivery_date)"
     :item-store="boughtItemsStore"
     :filter-store="boughtItemFilterStore"
-    v-model:width="props.width.arrivalWeeks"
+    :width="props.width.arrivalWeeks"
     :center="true"
     :fixed-height="controlsStore.state.fixedHeight"
   />

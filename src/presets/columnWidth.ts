@@ -19,6 +19,8 @@ export const boughtItemColumnWidths = {
   status: 85,
   projectNumber: 85,
   productNumber: 85,
+  projectCustomer: 100,
+  projectDescription: 100,
   quantity: 51,
   unit: 51,
   weblink: 35,

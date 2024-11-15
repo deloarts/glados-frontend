@@ -23,7 +23,7 @@ const props = defineProps<{
     :item-store="boughtItemsStore"
     :filter-store="boughtItemsFilterStore"
     filter-store-key="projectNumber"
-    v-model:width="props.width.projectNumber"
+    :width="props.width.projectNumber"
   />
 </template>
 

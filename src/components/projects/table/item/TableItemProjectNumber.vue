@@ -27,7 +27,7 @@ const props = defineProps<{
     :item-store="projectsStore"
     :filter-store="projectsFilterStore"
     filter-store-key="number"
-    v-model:width="props.width.projectNumber"
+    :width="props.width.projectNumber"
     :center="true"
     :fixed-height="projectsControlsStore.state.fixedHeight"
   />

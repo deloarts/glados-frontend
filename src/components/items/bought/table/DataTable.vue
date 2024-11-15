@@ -15,7 +15,7 @@ import DataTableBody from "./DataTableBody.vue";
 const boughtItemsStore = useBoughtItemsStore();
 
 // ColumnWidths
-const colW = ref(boughtItemColumnWidths);
+const colW = ref<typeof boughtItemColumnWidths>();
 
 function eventKeyUp(event: any) {
   if (event.key === "Escape") {
@@ -25,6 +25,7 @@ function eventKeyUp(event: any) {
 
 onBeforeMount(() => {
   document.addEventListener("keyup", eventKeyUp);
+  colW.value = JSON.parse(JSON.stringify(boughtItemColumnWidths));
 });
 
 onUnmounted(() => {

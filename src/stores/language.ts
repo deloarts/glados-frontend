@@ -42,16 +42,6 @@ export const useLanguageStore = defineStore("language", () => {
   );
 
   onBeforeMount(() => {
-    apply("deAT");
-    setInterval(() => {
-      if (selected.value == "enGB") {
-        apply("deAT");
-      } else {
-        apply("enGB");
-      }
-    }, 1000);
-    return;
-
     const lsSelected = localStorage.getItem("gladosSelectedLanguage");
 
     if (lsSelected != null) {

@@ -10,6 +10,7 @@ import { useUserStore } from "@/stores/user";
 import type { UserUpdateSchema } from "@/schemas/user";
 
 import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
+import SelectLanguage from "@/components/elements/SelectLanguage.vue";
 
 const languageStore = useLanguageStore();
 const userStore = useUserStore();
@@ -19,12 +20,14 @@ let formUserUpdate = ref<UserUpdateSchema>({
   username: userStore.user.username,
   full_name: userStore.user.full_name,
   email: userStore.user.email,
+  language: userStore.user.language,
 });
 
 function updateUser() {
   usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
     if (response.status == 200) {
       userStore.user = response.data;
+      languageStore.apply(userStore.user.language);
       notificationStore.addInfo(
         languageStore.l.notification.info.updatedUserData,
       );
@@ -73,6 +76,9 @@ function updateUser() {
             :placeholder="languageStore.l.account.input.passwordPlaceholder"
           />
         </div>
+        <div id="language">
+          <SelectLanguage v-model:selection="formUserUpdate.language" />
+        </div>
         <div id="btn">
           <ButtonUserUpdate
             v-on:click="updateUser"
@@ -97,11 +103,16 @@ function updateUser() {
     "full-name full-name"
     "email email"
     "password password"
+    "language language"
     "btn btn";
 }
 
 #btn {
   grid-area: btn;
+}
+
+#language {
+  grid-area: language;
 }
 
 #username {

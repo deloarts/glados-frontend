@@ -68,7 +68,7 @@ function logout() {
         />
         <Transition>
           <div v-if="showLabelLogout" class="label">
-            {{ languageStore.l.sideBar.logout }}
+            {{ languageStore.l.main.sideBar.logout }}
           </div>
         </Transition></a
       >
@@ -81,7 +81,7 @@ function logout() {
         <IconDashboard v-bind:class="{ active: routeIsActive('/dashboard') }" />
         <Transition>
           <div v-if="showLabelDashboard" class="label">
-            {{ languageStore.l.sideBar.dashboard }}
+            {{ languageStore.l.main.sideBar.dashboard }}
           </div>
         </Transition>
       </router-link>
@@ -93,7 +93,7 @@ function logout() {
         <IconProject v-bind:class="{ active: routeIsActive('/projects') }" />
         <Transition>
           <div v-if="showLabelProjects" class="label">
-            {{ languageStore.l.sideBar.projects }}
+            {{ languageStore.l.main.sideBar.projects }}
           </div>
         </Transition>
       </router-link>
@@ -105,7 +105,7 @@ function logout() {
         <IconItems v-bind:class="{ active: routeIsActive('/items/bought') }" />
         <Transition>
           <div v-if="showLabelBoughtItems" class="label">
-            {{ languageStore.l.sideBar.boughtItems }}
+            {{ languageStore.l.main.sideBar.boughtItems }}
           </div>
         </Transition>
       </router-link>
@@ -117,7 +117,7 @@ function logout() {
         <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
         <Transition>
           <div v-if="showLabelAccount" class="label">
-            {{ languageStore.l.sideBar.account }}
+            {{ languageStore.l.main.sideBar.account }}
           </div>
         </Transition>
       </router-link>
@@ -129,7 +129,7 @@ function logout() {
         <IconTools v-bind:class="{ active: routeIsActive('/tools') }" />
         <Transition>
           <div v-if="showLabelTools" class="label">
-            {{ languageStore.l.sideBar.tools }}
+            {{ languageStore.l.main.sideBar.tools }}
           </div>
         </Transition>
       </router-link>
@@ -144,7 +144,7 @@ function logout() {
         />
         <Transition>
           <div v-if="showLabelSettings" class="label">
-            {{ languageStore.l.sideBar.settings }}
+            {{ languageStore.l.main.sideBar.settings }}
           </div>
         </Transition>
       </router-link>

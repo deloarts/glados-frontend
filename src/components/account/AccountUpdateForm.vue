@@ -2,6 +2,8 @@
 import { ref } from "vue";
 
 import { usersRequest } from "@/requests/users";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useUserStore } from "@/stores/user";
 
@@ -9,6 +11,7 @@ import type { UserUpdateSchema } from "@/schemas/user";
 
 import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
 
+const languageStore = useLanguageStore();
 const userStore = useUserStore();
 const notificationStore = useNotificationStore();
 
@@ -23,10 +26,12 @@ function updateUser() {
     if (response.status == 200) {
       userStore.user = response.data;
       notificationStore.addInfo(
-        `Updated user ${formUserUpdate.value.username}.`,
+        languageStore.l.notification.info.updatedUserData,
       );
     } else if (response.status == 422) {
-      notificationStore.addWarn("Data is incomplete.");
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.userDataIncomplete,
+      );
     } else {
       notificationStore.addWarn(response.data.detail);
     }
@@ -43,7 +48,7 @@ function updateUser() {
             class="form-base-text-input"
             v-model="formUserUpdate.username"
             type="text"
-            placeholder="Username"
+            :placeholder="languageStore.l.account.input.usernamePlaceholder"
             readonly
           />
         </div>
@@ -51,25 +56,28 @@ function updateUser() {
           <input
             class="form-base-text-input"
             v-model="formUserUpdate.full_name"
-            placeholder="Name"
+            :placeholder="languageStore.l.account.input.fullNamePlaceholder"
           />
         </div>
         <div id="email" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formUserUpdate.email"
-            placeholder="Mail"
+            :placeholder="languageStore.l.account.input.emailPlaceholder"
           />
         </div>
         <div id="password" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formUserUpdate.password"
-            placeholder="Password"
+            :placeholder="languageStore.l.account.input.passwordPlaceholder"
           />
         </div>
         <div id="btn">
-          <ButtonUserUpdate v-on:click="updateUser" text="Save" />
+          <ButtonUserUpdate
+            v-on:click="updateUser"
+            :text="languageStore.l.account.button.save"
+          />
         </div>
       </div>
     </div>

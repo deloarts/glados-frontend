@@ -210,11 +210,11 @@ function onButtonUploadExcel() {
 }
 
 function deleteItem() {
-  const itemId = boughtItemsStore.getSelection()[0];
-  boughtItemsRequest.deleteItemsId(itemId).then((response) => {
+  const itemID = boughtItemsStore.getSelection()[0];
+  boughtItemsRequest.deleteItemsID(itemID).then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(
-        languageStore.l.notification.info.deletedItem(itemId),
+        languageStore.l.notification.info.deletedItem(itemID),
       );
       boughtItemsStore.getItems();
     } else {
@@ -362,7 +362,7 @@ onBeforeMount(setupTabletView);
         >
           <Toggle v-model="controlsStore.state[key]" />
           <span class="drop-down-toggle-item-text">{{
-            camelToTitle(key)
+            camelToTitle(languageStore.l.boughtItem.options.views[key])
           }}</span>
         </div>
       </DropDownTableView>
@@ -386,7 +386,7 @@ onBeforeMount(setupTabletView);
         >
           <Toggle v-model="controlsStore.columns[key]" />
           <span class="drop-down-toggle-item-text">{{
-            camelToTitle(key)
+            camelToTitle(languageStore.l.boughtItem.table[key])
           }}</span>
         </div>
       </DropDownTableColumns>
@@ -436,7 +436,7 @@ onBeforeMount(setupTabletView);
   </div>
 
   <Prompt
-    text="Delete item?"
+    :text="languageStore.l.boughtItem.prompt.deleteItem"
     yes-is-danger
     v-bind:at-mouse="gtMinWidthDesktop"
     v-model:show="showDeletePrompt"

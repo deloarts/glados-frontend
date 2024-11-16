@@ -4,21 +4,47 @@ export const enGB: Language = {
   notification: {
     info: {
       reconnectedToServer: "Reconnected to the server",
+      welcomeMessage: (name: string) => {
+        return `Welcome ${name}`;
+      },
       savedNewFilter: "Saved new filter",
+      createdNewPAT: "Created new token",
+      updatedUserData: "Updated user data",
+      selectProjectFirst: "Select a project first",
+      onlyEditOneProject: "You can only edit one project",
+      onlyDeleteOneProject: "You can only delete one project",
+      deletedProject: (id: number) => {
+        return `Deleted project #${id}`;
+      },
+      createdProject: "Project created",
+      updatedProject: (id: number) => {
+        return `Updated project #${id}`;
+      },
       selectItemFirst: "Select an item first",
       onlyEditOneItem: "You can only edit one item",
       onlyCopyOneItem: "You can only copy one item",
       onlyDeleteOneItem: "You can only delete one item",
-      deletedItem: (itemID: number) => {
-        return `Deleted item #${itemID}`;
+      deletedItem: (id: number) => {
+        return `Deleted item #${id}`;
       },
       createdItem: "Created item",
+      updatedItem: (id: number) => {
+        return `Updated item #${id}`;
+      },
       xlsxImportSuccess: "EXCEL import successful",
     },
     warn: {
       lostServerConnection: "Lost server connection",
-      itemCreateErrorInField: (loc: string, msg: string) => {
+      wrongUserCreds: "Wrong login credentials",
+      createUpdateErrorInField: (loc: string, msg: string) => {
         return `Error in field '${loc}': ${msg}`;
+      },
+      userDataIncomplete: "User data incomplete",
+      failedFetchItem: (id: number) => {
+        return `Could not fetch an item with the ID ${id}`;
+      },
+      failedFetchProject: (id: number) => {
+        return `Could not fetch a project with the ID ${id}`;
       },
       xlsxTemplateDownloadFailed: "Could not download template file.",
       xlsxUploadContentIncomplete: "EXCEL file content is incomplete.",
@@ -31,15 +57,131 @@ export const enGB: Language = {
     screenResolutionNotSupported: "Screen Resolution Not Supported",
     promptYes: "Yes",
     promptNo: "No",
+    login: {
+      usernamePlaceholder: "Username",
+      passwordPlaceholder: "Password",
+      loginButton: "Login",
+    },
+    sideBar: {
+      logout: "Logout",
+      dashboard: "Dashboard",
+      projects: "Projects",
+      boughtItems: "Bought Items",
+      account: "Account",
+      tools: "Tools",
+      settings: "Settings",
+    },
   },
-  sideBar: {
-    logout: "Ausloggen",
-    dashboard: "Übersicht",
-    projects: "Projekte",
-    boughtItems: "Zukaufteile",
-    account: "Konto",
-    tools: "Werkzeuge",
-    settings: "Einstellungen",
+  dashboard: {
+    boughtItemStatus: "Bought Items Status",
+    createdItems: "Created Items",
+    timelineItems: "Bought Items Timeline",
+    labels: {
+      active: "Active",
+      created: "Created",
+      open: "Open",
+      requested: "Requested",
+      ordered: "Ordered",
+      delivered: "Delivered",
+      partial: "Partial",
+      late: "Late",
+      canceled: "Canceled",
+      lost: "Lost",
+    },
+    months: {
+      january: "JAN",
+      february: "FEB",
+      march: "MAR",
+      april: "APR",
+      may: "MAY",
+      june: "JUN",
+      july: "JUL",
+      august: "AUG",
+      september: "SEP",
+      october: "OCT",
+      november: "NOV",
+      december: "DEC",
+    },
+    banner: {
+      showingItems:
+        "Showing all items that have been edited within the last 30 days.",
+    },
+  },
+  account: {
+    banner: {
+      myAccount: "My Account",
+      pat: "Personal Access Token",
+      patCreationWarning:
+        "Creating a new token renders the current token invalid.",
+    },
+    button: {
+      myAccount: "My Account",
+      pat: "Access Token",
+      save: "Save",
+      newToken: "New Token",
+    },
+    input: {
+      usernamePlaceholder: "Username",
+      fullNamePlaceholder: "Full Name",
+      emailPlaceholder: "Mail",
+      passwordPlaceholder: "Password",
+      patPlaceholder: "Secret Token",
+    },
+  },
+  project: {
+    table: {
+      number: "#",
+      id: "ID",
+      projectNumber: "Project",
+      productNumber: "Product",
+      projectLink: "Link",
+      customer: "Customer",
+      description: "Description",
+      designatedUserID: "Designated User",
+      createdDate: "Created",
+      state: "State",
+    },
+    input: {
+      filterPlaceholder: "Filter",
+      projectNumberPlaceholder: "Project Number *",
+      productNumberPlaceholder: "Product Number",
+      customerPlaceholder: "Customer *",
+      descriptionPlaceholder: "Description *",
+      designateUserPlaceholder: "Designated User",
+    },
+    toggle: {
+      projectState: "Active",
+    },
+    button: {
+      newProject: "New Project",
+      editProject: "Edit Project",
+      deleteProject: "Delete",
+      unselect: "Unselect",
+      sync: "Synchronize",
+      views: "Views",
+      columns: "Columns",
+      clearFilter: "Clear Filter",
+      create: "Create",
+      update: "Update",
+      cancel: "Cancel",
+    },
+    options: {
+      showAll: "All",
+      views: {
+        fixedHeight: "Fixed Height",
+      },
+      status: {
+        active: "Active",
+        inactive: "Inactive",
+      },
+    },
+    prompt: {
+      deleteProject: "Delete Project?",
+    },
+    banner: {
+      notAllowedEditItemOtherUser:
+        "You are not allowed to edit a project of another designated user.",
+    },
   },
   boughtItem: {
     table: {
@@ -124,6 +266,12 @@ export const enGB: Language = {
         ignoreDelivered: "Ignore Delivered",
         ignoreCanceled: "Ignore Canceled",
         ignoreLost: "Ignore Lost",
+        changelog: "Changelog",
+        rainbow: "Rainbow",
+        fixedHeight: "Fixed Height",
+        lockCols: "Lock Columns",
+        textView: "Text View",
+        requestView: "Request View",
       },
       status: {
         open: "Open",
@@ -158,6 +306,60 @@ export const enGB: Language = {
       changelogOfItem: "Changelog of item #",
       tooManySelected: "Too many items selected",
       nothingSelected: "No item selected",
+    },
+    prompt: {
+      deleteItem: "Delete item?",
+    },
+    banner: {
+      notAllowedEditItemInactiveProject:
+        "You are not allowed to edit an item of an inactive project.",
+      notAllowedEditItemOtherUser:
+        "You are not allowed to edit an item of another user.",
+      notAllowedEditItemPlanned:
+        "You are not allowed to edit an item that is already planned.",
+    },
+  },
+  tools: {
+    banner: {
+      stockCut1D: "1D Stock Cut Solver",
+      stockCut2D: "2D Stock Cut Solver",
+      definitions: "Basic Definitions",
+      solution: "Solution",
+      stock: "Stock",
+      items: "Items",
+      panels: "Panels",
+    },
+    buttons: {
+      stockCut1D: "Stock Cut 1D",
+      stockCut2D: "Stock Cut 2D",
+      add: "Add",
+      addPanel: "Add Panel",
+      addItem: "Add Item",
+      solve: "Solve",
+      solving: "Solving ...",
+      exportPDF: "Export PDF",
+    },
+    labels: {
+      item: "Item",
+      panel: "Panel",
+      stockLength: "Stock Length",
+      cutWidth: "Cut Width",
+      solverMethod: "Method",
+      minimum: "Minimum",
+      stockNumber: "Stock #",
+      itemLength: "Item Length",
+    },
+    table: {
+      cutLength: "Cut Length",
+      quantity: "Quantity",
+      panelID: "Panel ID",
+      panelWidth: "Panel Width",
+      panelHeight: "Panel Height",
+      itemID: "Item ID",
+      itemWidth: "Item Width",
+      itemHeight: "Item Height",
+      rotate: "Rotate",
+      rotated: "Rotated",
     },
   },
 };

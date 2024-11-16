@@ -23,8 +23,8 @@ export function getBoughtItemsFilterParams(
   if (filter.highPriority) {
     params.append("high_priority", String(filter.highPriority));
   }
-  if (String(filter.creatorId) != "" && filter.creatorId != undefined) {
-    params.append("creator_id", String(filter.creatorId));
+  if (String(filter.creatorID) != "" && filter.creatorID != undefined) {
+    params.append("creator_id", String(filter.creatorID));
   }
   if (filter.createdDate) {
     params.append("created_from", String(filter.createdDate));
@@ -37,15 +37,15 @@ export function getBoughtItemsFilterParams(
     params.append("desired_from", String(filter.desiredDate));
     params.append("desired_to", String(filter.desiredDate));
   }
-  if (String(filter.requesterId) != "" && filter.requesterId != undefined) {
-    params.append("requester_id", String(filter.requesterId));
+  if (String(filter.requesterID) != "" && filter.requesterID != undefined) {
+    params.append("requester_id", String(filter.requesterID));
   }
   if (filter.requestedDate) {
     params.append("requested_from", String(filter.requestedDate));
     params.append("requested_to", String(filter.requestedDate));
   }
-  if (String(filter.ordererId) != "" && filter.ordererId != undefined) {
-    params.append("orderer_id", String(filter.ordererId));
+  if (String(filter.ordererID) != "" && filter.ordererID != undefined) {
+    params.append("orderer_id", String(filter.ordererID));
   }
   if (filter.orderedDate) {
     params.append("ordered_from", String(filter.orderedDate));
@@ -113,8 +113,8 @@ export function getBoughtItemsFilterParams(
   if (filter.storagePlace != "" && filter.storagePlace != undefined) {
     params.append("storage_place", filter.storagePlace);
   }
-  if (String(filter.receiverId) != "" && filter.receiverId != undefined) {
-    params.append("receiver_id", String(filter.receiverId));
+  if (String(filter.receiverID) != "" && filter.receiverID != undefined) {
+    params.append("receiver_id", String(filter.receiverID));
   }
 
   return params;
@@ -148,10 +148,10 @@ export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
     params.append("is_active", String(filter.isActive));
   }
   if (
-    String(filter.designatedUserId) != "" &&
-    filter.designatedUserId != undefined
+    String(filter.designatedUserID) != "" &&
+    filter.designatedUserID != undefined
   ) {
-    params.append("designated_user_id", String(filter.designatedUserId));
+    params.append("designated_user_id", String(filter.designatedUserID));
   }
 
   return params;

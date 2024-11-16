@@ -3,8 +3,12 @@ import { useRoute } from "vue-router";
 
 import ButtonBlade from "@/components/elements/ButtonBlade.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 // Router
 const route = useRoute();
+
+const languageStore = useLanguageStore();
 
 function routeIsActive(currentLink: string) {
   let activeRoute = route.path;
@@ -26,14 +30,14 @@ function routeIsActive(currentLink: string) {
         ><ButtonBlade
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/tools/stock-cut-1d') }"
-          text="Stock Cut 1D"
+          :text="languageStore.l.tools.buttons.stockCut1D"
       /></router-link>
 
       <router-link :to="'/tools/stock-cut-2d'"
         ><ButtonBlade
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/tools/stock-cut-2d') }"
-          text="Stock Cut 2D"
+          :text="languageStore.l.tools.buttons.stockCut2D"
       /></router-link>
     </div>
   </div>

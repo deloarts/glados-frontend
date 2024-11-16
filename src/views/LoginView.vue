@@ -7,6 +7,8 @@ import moment from "moment";
 import router from "@/router/index";
 
 import { request } from "@/requests/index";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useProjectsStore } from "@/stores/projects";
 import { useUsersStore, useUserStore } from "@/stores/user";
@@ -23,6 +25,7 @@ const particlesLoaded = async (container) => {
 };
 
 // Stores
+const languageStore = useLanguageStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 const projectsStore = useProjectsStore();
@@ -59,14 +62,18 @@ function login() {
     } else {
       showLoadingBar.value = false;
       form_pw.value = "";
-      notificationStore.addWarn("Wrong login credentials.");
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.wrongUserCreds,
+      );
     }
   });
 }
 
 function enterApp() {
   showLoadingBar.value = false;
-  notificationStore.addInfo(`Welcome ${userStore.user.full_name}`);
+  notificationStore.addInfo(
+    languageStore.l.notification.info.welcomeMessage(userStore.user.full_name),
+  );
   var previousRoute = localStorage.getItem("gladosActiveRoute");
   if (previousRoute == "/login" || previousRoute == null) {
     previousRoute = "/";
@@ -128,7 +135,7 @@ onMounted(() => {
           v-on:keyup.enter="login()"
           class="input-username"
           type="text"
-          placeholder="Username"
+          :placeholder="languageStore.l.main.login.usernamePlaceholder"
           ref="userInput"
       /></Transition>
       <Transition name="fade-move">
@@ -139,7 +146,7 @@ onMounted(() => {
           v-on:keyup.enter="login()"
           class="input-password"
           type="password"
-          placeholder="Password"
+          :placeholder="languageStore.l.main.login.passwordPlaceholder"
       /></Transition>
       <Transition name="fade-move">
         <button
@@ -148,7 +155,7 @@ onMounted(() => {
           v-on:click="login()"
           class="button-login"
         >
-          Login
+          {{ languageStore.l.main.login.loginButton }}
         </button>
       </Transition>
       <Transition name="fade">

@@ -2,18 +2,32 @@ export interface Language {
   notification: {
     info: {
       reconnectedToServer: string;
+      welcomeMessage: Function;
       savedNewFilter: string;
+      createdNewPAT: string;
+      updatedUserData: string;
+      selectProjectFirst: string;
+      onlyEditOneProject: string;
+      onlyDeleteOneProject: string;
+      deletedProject: Function;
+      createdProject: string;
+      updatedProject: Function;
       selectItemFirst: string;
       onlyEditOneItem: string;
       onlyCopyOneItem: string;
       onlyDeleteOneItem: string;
       deletedItem: Function;
       createdItem: string;
+      updatedItem: Function;
       xlsxImportSuccess: string;
     };
     warn: {
       lostServerConnection: string;
-      itemCreateErrorInField: Function;
+      wrongUserCreds: string;
+      createUpdateErrorInField: Function;
+      userDataIncomplete: string;
+      failedFetchItem: Function;
+      failedFetchProject: Function;
       xlsxTemplateDownloadFailed: string;
       xlsxUploadContentIncomplete: string;
       xlsxProcessError: string;
@@ -25,15 +39,128 @@ export interface Language {
     screenResolutionNotSupported: string;
     promptYes: string;
     promptNo: string;
+    login: {
+      usernamePlaceholder: string;
+      passwordPlaceholder: string;
+      loginButton: string;
+    };
+    sideBar: {
+      logout: string;
+      dashboard: string;
+      projects: string;
+      boughtItems: string;
+      account: string;
+      tools: string;
+      settings: string;
+    };
   };
-  sideBar: {
-    logout: string;
-    dashboard: string;
-    projects: string;
-    boughtItems: string;
-    account: string;
-    tools: string;
-    settings: string;
+  dashboard: {
+    boughtItemStatus: string;
+    createdItems: string;
+    timelineItems: string;
+    labels: {
+      active: string;
+      created: string;
+      open: string;
+      requested: string;
+      ordered: string;
+      delivered: string;
+      partial: string;
+      late: string;
+      canceled: string;
+      lost: string;
+    };
+    months: {
+      january: string;
+      february: string;
+      march: string;
+      april: string;
+      may: string;
+      june: string;
+      july: string;
+      august: string;
+      september: string;
+      october: string;
+      november: string;
+      december: string;
+    };
+    banner: {
+      showingItems: string;
+    };
+  };
+  account: {
+    banner: {
+      myAccount: string;
+      pat: string;
+      patCreationWarning: string;
+    };
+    button: {
+      myAccount: string;
+      pat: string;
+      save: string;
+      newToken: string;
+    };
+    input: {
+      usernamePlaceholder: string;
+      fullNamePlaceholder: string;
+      emailPlaceholder: string;
+      passwordPlaceholder: string;
+      patPlaceholder: string;
+    };
+  };
+  project: {
+    table: {
+      number: string;
+      id: string;
+      projectNumber: string;
+      productNumber: string;
+      projectLink: string;
+      customer: string;
+      description: string;
+      designatedUserID: string;
+      createdDate: string;
+      state: string;
+    };
+    input: {
+      filterPlaceholder: string;
+      projectNumberPlaceholder: string;
+      productNumberPlaceholder: string;
+      customerPlaceholder: string;
+      descriptionPlaceholder: string;
+      designateUserPlaceholder: string;
+    };
+    toggle: {
+      projectState: string;
+    };
+    button: {
+      newProject: string;
+      editProject: string;
+      deleteProject: string;
+      unselect: string;
+      sync: string;
+      views: string;
+      columns: string;
+      clearFilter: string;
+      create: string;
+      update: string;
+      cancel: string;
+    };
+    options: {
+      showAll: string;
+      views: {
+        fixedHeight: string;
+      };
+      status: {
+        active: string;
+        inactive: string;
+      };
+    };
+    prompt: {
+      deleteProject: string;
+    };
+    banner: {
+      notAllowedEditItemOtherUser: string;
+    };
   };
   boughtItem: {
     table: {
@@ -118,6 +245,12 @@ export interface Language {
         ignoreDelivered: string;
         ignoreCanceled: string;
         ignoreLost: string;
+        changelog: string;
+        rainbow: string;
+        fixedHeight: string;
+        lockCols: string;
+        textView: string;
+        requestView: string;
       };
       status: {
         open: string;
@@ -152,6 +285,57 @@ export interface Language {
       changelogOfItem: string;
       tooManySelected: string;
       nothingSelected: string;
+    };
+    prompt: {
+      deleteItem: string;
+    };
+    banner: {
+      notAllowedEditItemInactiveProject: string;
+      notAllowedEditItemOtherUser: string;
+      notAllowedEditItemPlanned: string;
+    };
+  };
+  tools: {
+    banner: {
+      stockCut1D: string;
+      stockCut2D: string;
+      definitions: string;
+      solution: string;
+      stock: string;
+      items: string;
+      panels: string;
+    };
+    buttons: {
+      stockCut1D: string;
+      stockCut2D: string;
+      add: string;
+      addPanel: string;
+      addItem: string;
+      solve: string;
+      solving: string;
+      exportPDF: string;
+    };
+    labels: {
+      item: string;
+      panel: string;
+      stockLength: string;
+      cutWidth: string;
+      solverMethod: string;
+      minimum: string;
+      stockNumber: string;
+      itemLength: string;
+    };
+    table: {
+      cutLength: string;
+      quantity: string;
+      panelID: string;
+      panelWidth: string;
+      panelHeight: string;
+      itemID: string;
+      itemWidth: string;
+      itemHeight: string;
+      rotate: string;
+      rotated: string;
     };
   };
 }

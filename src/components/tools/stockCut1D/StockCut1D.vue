@@ -2,10 +2,12 @@
 import { ref } from "vue";
 
 import { stockCut1DRequest } from "@/requests/tools";
-import { useNotificationStore } from "@/stores/notification";
 
 import SolverInput from "@/components/tools/stockCut1D/SolverInput.vue";
 import SolverOutput from "@/components/tools/stockCut1D/SolverOutput.vue";
+
+import { useLanguageStore } from "@/stores/language";
+import { useNotificationStore } from "@/stores/notification";
 
 import type {
   StockCut1DResultSchema,
@@ -13,6 +15,7 @@ import type {
 } from "@/schemas/stockCut1d";
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 const solverInput = ref<StockCut1DJobSchema>({
@@ -45,7 +48,9 @@ function onSolve() {
       }, 250);
       solverOutput.value = response.data;
       solverInput.value = response.data.job;
-      notificationStore.addInfo(`Solved in ${response.data.time_us}ms using ${response.data.solver_type}`);
+      notificationStore.addInfo(
+        `Solved in ${response.data.time_us}ms using ${response.data.solver_type}`,
+      );
     } else if (response.status == 406) {
       notificationStore.addWarn(response.data.detail);
     } else if (response.status == 422) {
@@ -69,7 +74,7 @@ function onAdd() {
 <template>
   <div class="scope">
     <div class="content">
-      <h1>1D Stock Cut Solver</h1>
+      <h1>{{ languageStore.l.tools.banner.stockCut1D }}</h1>
       <SolverInput
         :solver-input="solverInput"
         :solving="solving"

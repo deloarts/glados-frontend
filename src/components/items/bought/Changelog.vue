@@ -13,7 +13,7 @@ const changelog = ref<Array<string>>([""]);
 function fetchChangelog() {
   if (boughtItemsStore.getSelection().length > 0) {
     boughtItemsRequest
-      .getItemsIdChangelog(boughtItemsStore.getSelection()[0])
+      .getItemsIDChangelog(boughtItemsStore.getSelection()[0])
       .then((response) => {
         changelog.value = response.data;
       });

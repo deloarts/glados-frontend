@@ -30,7 +30,7 @@ const formData = ref<UserUpdateSchema>({
 const isSystemuser = ref<boolean>(false);
 
 function getUser() {
-  usersRequest.getUsersId(props.selectedUserID).then((response) => {
+  usersRequest.getUsersID(props.selectedUserID).then((response) => {
     formData.value = response.data;
     isSystemuser.value = response.data.is_systemuser;
   });

@@ -5,6 +5,10 @@ import TableHeadRowNumber from "@/components/dataTable/TableHeadRowNumber.vue";
 
 import { projectsColumnWidths } from "@/presets/columnWidth";
 
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
+
 const props = defineProps<{
   width: typeof projectsColumnWidths;
 }>();
@@ -24,7 +28,10 @@ const computedWidth = computed<typeof projectsColumnWidths>({
 </script>
 
 <template>
-  <TableHeadRowNumber value="#" v-model:width="computedWidth.number" />
+  <TableHeadRowNumber
+    :value="languageStore.l.project.table.number"
+    v-model:width="computedWidth.number"
+  />
 </template>
 
 <style scoped lang="scss"></style>

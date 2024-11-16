@@ -36,7 +36,7 @@ function onCreate() {
       // }
       else if (response.status === 422) {
         notificationStore.addWarn(
-          languageStore.l.notification.warn.itemCreateErrorInField(
+          languageStore.l.notification.warn.createUpdateErrorInField(
             response.data.detail[0].loc[1],
             response.data.detail[0].msg,
           ),

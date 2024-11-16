@@ -20,13 +20,13 @@ export interface HostConfigBoughtItemsFilterSchema {
   ignoreCanceled: boolean;
   ignoreLost: boolean;
   highPriority: boolean | null;
-  creatorId: number;
+  creatorID: number;
   createdDate: Date;
   changedDateFrom: Date;
   desiredDate: Date;
-  requesterId: number;
+  requesterID: number;
   requestedDate: Date;
-  ordererId: number;
+  ordererID: number;
   orderedDate: Date;
   expectedDate: Date;
   deliveredDate: Date;
@@ -47,7 +47,7 @@ export interface HostConfigBoughtItemsFilterSchema {
   noteGeneral: string;
   noteSupplier: string;
   storagePlace: string;
-  receiverId: number;
+  receiverID: number;
 }
 
 export interface HostConfigProjectFilterSchema {
@@ -59,5 +59,5 @@ export interface HostConfigProjectFilterSchema {
   customer: string;
   description: string;
   isActive: boolean;
-  designatedUserId: number;
+  designatedUserID: number;
 }

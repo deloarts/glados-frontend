@@ -4,21 +4,47 @@ export const deAT: Language = {
   notification: {
     info: {
       reconnectedToServer: "Serververbindung wiederhergestellt",
+      welcomeMessage: (name: string) => {
+        return `Willkommen ${name}`;
+      },
       savedNewFilter: "Neuer Filter wurde gespeichert",
+      createdNewPAT: "Neuer geheimer Schlüssel wurde erstellt",
+      updatedUserData: "Benutzerdaten wurden aktualisiert",
+      selectProjectFirst: "Wähle zuerst ein Projekt aus",
+      onlyEditOneProject: "Du kannst nur ein Projekt bearbeiten",
+      onlyDeleteOneProject: "Du kannst nur ein Projekt löschen",
+      deletedProject: (id: number) => {
+        return `Projekt #${id} wurde gelöscht`;
+      },
+      createdProject: "Projekt wurde angelegt",
+      updatedProject: (id: number) => {
+        return `Projekt #${id} wurde aktualisiert`;
+      },
       selectItemFirst: "Wähle zuerst einen Artikel aus",
       onlyEditOneItem: "Du kannst nur einen Artikel bearbeiten",
       onlyCopyOneItem: "Du kannst nur einen Artikel kopieren",
       onlyDeleteOneItem: "Du kannst nur einen Artikel löschen",
-      deletedItem: (itemID: number) => {
-        return `Artikel #${itemID} wurde gelöscht`;
+      deletedItem: (id: number) => {
+        return `Artikel #${id} wurde gelöscht`;
       },
       createdItem: "Artikel wurde erstellt",
-      xlsxImportSuccess: "Excel-Datei importiert",
+      updatedItem: (id: number) => {
+        return `Artikel #${id} wurde aktualisiert`;
+      },
+      xlsxImportSuccess: "Excel-Datei erfolgreich importiert",
     },
     warn: {
       lostServerConnection: "Keine Verbindung zum Server",
-      itemCreateErrorInField: (loc: string, msg: string) => {
+      wrongUserCreds: "Zugangsdaten nicht korrket",
+      createUpdateErrorInField: (loc: string, msg: string) => {
         return `Fehler im Feld '${loc}': ${msg}`;
+      },
+      userDataIncomplete: "Benuterdaten sind unvollständig",
+      failedFetchItem: (id: number) => {
+        return `Der Artikel #${id} kann nicht geladen werden`;
+      },
+      failedFetchProject: (id: number) => {
+        return `Das Projekt #${id} kann nicht geladen werden`;
       },
       xlsxTemplateDownloadFailed: "Die Vorlage kann nicht geladen werden",
       xlsxUploadContentIncomplete: "Der Inhalt der Datei ist unvollständig",
@@ -31,15 +57,131 @@ export const deAT: Language = {
     screenResolutionNotSupported: "Bildschirmauflösung nicht unterstützt",
     promptYes: "Ja",
     promptNo: "Nein",
+    login: {
+      usernamePlaceholder: "Benutzername",
+      passwordPlaceholder: "Passwort",
+      loginButton: "Anmelden",
+    },
+    sideBar: {
+      logout: "Ausloggen",
+      dashboard: "Übersicht",
+      projects: "Projekte",
+      boughtItems: "Zukaufteile",
+      account: "Konto",
+      tools: "Werkzeuge",
+      settings: "Einstellungen",
+    },
   },
-  sideBar: {
-    logout: "Logout",
-    dashboard: "Dashboard",
-    projects: "Projects",
-    boughtItems: "Bought Items",
-    account: "Account",
-    tools: "Tools",
-    settings: "Settings",
+  dashboard: {
+    boughtItemStatus: "Artikel-Status",
+    createdItems: "Artikel-Anforderer",
+    timelineItems: "Artikel-Zeitverlauf",
+    labels: {
+      active: "Aktiv",
+      created: "Erstellt",
+      open: "Offen",
+      requested: "Angefragt",
+      ordered: "Bestellt",
+      delivered: "Geliefert",
+      partial: "Teillieferung",
+      late: "Verspätet",
+      canceled: "Storniert",
+      lost: "Unauffindbar",
+    },
+    months: {
+      january: "JÄN",
+      february: "FEB",
+      march: "MÄR",
+      april: "APR",
+      may: "MAI",
+      june: "JUN",
+      july: "JUL",
+      august: "AUG",
+      september: "SEP",
+      october: "OKT",
+      november: "NOV",
+      december: "DEZ",
+    },
+    banner: {
+      showingItems:
+        "Ansicht aller Artikel, die in den letzten 30 Tagen bearbeitet wurden.",
+    },
+  },
+  account: {
+    banner: {
+      myAccount: "Mein Konto",
+      pat: "Personalisierter Schlüssel",
+      patCreationWarning:
+        "Beim Erstellen eines neuen Schlüssels wird der aktuelle Schlüssel ungültig.",
+    },
+    button: {
+      myAccount: "Mein Konto",
+      pat: "Schlüssel",
+      save: "Speichern",
+      newToken: "Generieren",
+    },
+    input: {
+      usernamePlaceholder: "Benutzername",
+      fullNamePlaceholder: "Vollständiger Name",
+      emailPlaceholder: "E-Mail",
+      passwordPlaceholder: "Passwort",
+      patPlaceholder: "Geheimer Schlüssel",
+    },
+  },
+  project: {
+    table: {
+      number: "#",
+      id: "ID",
+      projectNumber: "Projekt",
+      productNumber: "Produkt",
+      projectLink: "Link",
+      customer: "Kunde",
+      description: "Beschreibung",
+      designatedUserID: "Zugewiesener User",
+      createdDate: "Erstellt",
+      state: "Status",
+    },
+    input: {
+      filterPlaceholder: "Filter",
+      projectNumberPlaceholder: "Projektnummer *",
+      productNumberPlaceholder: "Produktnummer",
+      customerPlaceholder: "Kunde *",
+      descriptionPlaceholder: "Beschreibung *",
+      designateUserPlaceholder: "Zugewiesener Benutzer *",
+    },
+    toggle: {
+      projectState: "Aktiv",
+    },
+    button: {
+      newProject: "Anlegen",
+      editProject: "Bearbeiten",
+      deleteProject: "Löschen",
+      unselect: "Abwählen",
+      sync: "Laden",
+      views: "Ansichten",
+      columns: "Spalten",
+      clearFilter: "Löschen",
+      create: "Erstellen",
+      update: "Aktualisieren",
+      cancel: "Abbrechen",
+    },
+    options: {
+      showAll: "Alle",
+      views: {
+        fixedHeight: "Fixe Höhe",
+      },
+      status: {
+        active: "Aktiv",
+        inactive: "Inaktiv",
+      },
+    },
+    prompt: {
+      deleteProject: "Projekt löschen?",
+    },
+    banner: {
+      notAllowedEditItemOtherUser:
+        "Du kannst das Projekt eines anderen zugewiesenen Benutzers nicht ändern.",
+    },
   },
   boughtItem: {
     table: {
@@ -124,6 +266,12 @@ export const deAT: Language = {
         ignoreDelivered: "Ignoriere Geliefert",
         ignoreCanceled: "Ignoriere Storniert",
         ignoreLost: "Ignoriere Unauffindbar",
+        changelog: "Änderunsindex",
+        rainbow: "Farbansicht",
+        fixedHeight: "Fixe Höhe",
+        lockCols: "Fixe Spalten",
+        textView: "Textansicht",
+        requestView: "Anforderungsansicht",
       },
       status: {
         open: "Offen",
@@ -158,6 +306,60 @@ export const deAT: Language = {
       changelogOfItem: "Änderungsindex von Artikel #",
       tooManySelected: "Zu viele Artikel ausgewählt",
       nothingSelected: "Kein Artikel ausgewählt",
+    },
+    prompt: {
+      deleteItem: "Artikel löschen?",
+    },
+    banner: {
+      notAllowedEditItemInactiveProject:
+        "Du kannst keinen Artikel eines inaktiven Projekts ändern.",
+      notAllowedEditItemOtherUser:
+        "Du kannst keinen Artikel eines anderen Benutzers ändern.",
+      notAllowedEditItemPlanned:
+        "Du kannst keinen bereits geplanten Artikel ändern.",
+    },
+  },
+  tools: {
+    banner: {
+      stockCut1D: "1D Schnitt-Löser",
+      stockCut2D: "2D Schnitt-Löser",
+      definitions: "Basisdaten",
+      solution: "Lösung",
+      stock: "Material",
+      items: "Elemente",
+      panels: "Platten",
+    },
+    buttons: {
+      stockCut1D: "1D Schnitt",
+      stockCut2D: "2D Schnitt",
+      add: "Hinzufügen",
+      addPanel: "Platte",
+      addItem: "Element",
+      solve: "Lösen",
+      solving: "Wird gelöst ...",
+      exportPDF: "PDF",
+    },
+    labels: {
+      item: "Element",
+      panel: "Platte",
+      stockLength: "Materiallänge",
+      cutWidth: "Schnittbreite",
+      solverMethod: "Methode",
+      minimum: "Minimum",
+      stockNumber: "Material #",
+      itemLength: "Elementlänge",
+    },
+    table: {
+      cutLength: "Schnittlänge",
+      quantity: "Menge",
+      panelID: "Platten-ID",
+      panelWidth: "Plattenbreite",
+      panelHeight: "Plattenhöhe",
+      itemID: "Element-ID",
+      itemWidth: "Elementbreite",
+      itemHeight: "Elementhöhe",
+      rotate: "Drehen",
+      rotated: "Gedreht",
     },
   },
 };

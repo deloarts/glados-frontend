@@ -32,7 +32,7 @@ const computedWidth = computed<typeof boughtItemColumnWidths>({
   <TableHeadTitle
     v-if="boughtItemsControlsStore.columns.receiverID"
     :name="languageStore.l.boughtItem.table.receiverID"
-    v-model:width="computedWidth.receiverId"
+    v-model:width="computedWidth.receiverID"
   />
 </template>
 

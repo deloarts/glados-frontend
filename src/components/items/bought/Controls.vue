@@ -197,11 +197,15 @@ function onButtonDelete() {
 function onButtonDownloadExcel() {
   const params = getBoughtItemsFilterParams(filterStore.state);
   boughtItemsRequest.getItemsExcel(params).then((response) => {
-    let blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      }),
-      url = window.URL.createObjectURL(blob);
-    window.open(url);
+    if (response.status == 200) {
+      let blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }),
+        url = window.URL.createObjectURL(blob);
+      window.open(url);
+    } else {
+      notificationStore.addWarn(response.data.detail);
+    }
   });
 }
 

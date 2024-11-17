@@ -5,6 +5,7 @@ export interface Language {
       welcomeMessage: Function;
       savedNewFilter: string;
       createdNewPAT: string;
+      createdUser: string;
       updatedUserData: string;
       selectProjectFirst: string;
       onlyEditOneProject: string;
@@ -20,6 +21,11 @@ export interface Language {
       createdItem: string;
       updatedItem: Function;
       xlsxImportSuccess: string;
+      selectCategoryFirst: string;
+      chooseNameFirst: string;
+      createNewConfig: string;
+      configUpdated: string;
+      configDelete: string;
     };
     warn: {
       lostServerConnection: string;
@@ -336,6 +342,77 @@ export interface Language {
       itemHeight: string;
       rotate: string;
       rotated: string;
+    };
+  };
+  settings: {
+    host: {
+      selectorButton: string;
+      banner: string;
+      version: string;
+      hostname: string;
+      os: string;
+      dbDiscSpace: string;
+      backupDiscSpace: string;
+      freeOf: string;
+      notMounted: string;
+    };
+    config: {
+      selectorButton: string;
+      banner: string;
+      create: string;
+      update: string;
+      button: {
+        save: string;
+        update: string;
+        delete: string;
+      };
+      table: {
+        category: string;
+        name: string;
+      };
+    };
+    logs: {
+      selectorButton: string;
+      banner: string;
+    };
+    users: {
+      selectorButton: string;
+      banner: string;
+      create: string;
+      update: string;
+      button: {
+        create: string;
+        update: string;
+      };
+      input: {
+        usernamePlaceholder: string;
+        fullNamePlaceholder: string;
+        mailPlaceholder: string;
+        passwordPlaceholder: string;
+      };
+      toggle: {
+        active: string;
+        guestuser: string;
+        superUser: string;
+        adminUser: string;
+      };
+      table: {
+        id: string;
+        username: string;
+        fullName: string;
+        mail: string;
+        active: string;
+        superUser: string;
+        adminUser: string;
+        guestUser: string;
+        createdDate: string;
+      };
+    };
+    apiKeys: {
+      selectorButton: string;
+      banner: string;
+      create: string;
+      update: string;
     };
   };
 }

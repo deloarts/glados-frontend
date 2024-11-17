@@ -59,12 +59,16 @@ function login() {
       setTimeout(userStore.get, 1200);
       usersStore.get();
       projectsStore.getItems();
-    } else {
+    } else if (response.status === 401) {
       showLoadingBar.value = false;
       form_pw.value = "";
       notificationStore.addWarn(
         languageStore.l.notification.warn.wrongUserCreds,
       );
+    } else {
+      showLoadingBar.value = false;
+      form_pw.value = "";
+      notificationStore.addWarn(response.data.detail);
     }
   });
 }

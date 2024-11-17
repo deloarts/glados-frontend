@@ -2,6 +2,8 @@
 import { ref, watch } from "vue";
 
 import { hostRequest } from "@/requests/host";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 
@@ -20,6 +22,7 @@ const emit = defineEmits<{
 }>();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 const boughtItemsFilterStore = useBoughtItemFilterStore();
 
@@ -32,9 +35,13 @@ const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(null);
 
 function createConfig() {
   if (selectedOptionCategory.value == "") {
-    notificationStore.addWarn("Select a category first");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.selectCategoryFirst,
+    );
   } else if (newConfigName.value == "") {
-    notificationStore.addWarn("Choose a name for the configuration first");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.chooseNameFirst,
+    );
   } else {
     let data = defaultJson.value;
     if (typeof data == "string") data = JSON.parse(data);
@@ -44,7 +51,9 @@ function createConfig() {
         .postConfigItemsBoughtFilter(newConfigName.value, data)
         .then((response) => {
           if (response.status === 200) {
-            notificationStore.addInfo("Created new config");
+            notificationStore.addInfo(
+              languageStore.l.notification.info.createNewConfig,
+            );
             boughtItemsFilterStore.get();
             emit("update:selectedConfigName", newConfigName.value);
           } else {
@@ -90,7 +99,10 @@ watch(selectedOptionCategory, () => {
           />
         </div>
         <div id="btn-save">
-          <ButtonSave v-on:click="createConfig" text="Save" />
+          <ButtonSave
+            v-on:click="createConfig"
+            :text="languageStore.l.settings.config.button.save"
+          />
         </div>
       </div>
     </div>

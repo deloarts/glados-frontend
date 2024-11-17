@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
+
 const selectedKeyID = ref<number>(0);
 const mode = ref<string>("create");
 
@@ -16,16 +20,16 @@ watch(selectedKeyID, () => {
 <template>
   <div class="scope">
     <div class="content">
-      <h1>Registered API Keys</h1>
+      <h1>{{ languageStore.l.settings.apiKeys.banner }}</h1>
       <span class="gray">Coming soon...</span>
     </div>
     <hr />
     <div class="content" v-if="mode == 'create'">
-      <h1>Create Key</h1>
+      <h1>{{ languageStore.l.settings.apiKeys.create }}</h1>
       <span class="gray">Coming soon...</span>
     </div>
     <div class="content" v-if="mode == 'update'">
-      <h1>Update Key</h1>
+      <h1>{{ languageStore.l.settings.apiKeys.update }}</h1>
       <span class="gray">Coming soon...</span>
     </div>
   </div>

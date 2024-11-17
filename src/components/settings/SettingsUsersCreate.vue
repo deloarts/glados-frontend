@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { usersRequest } from "@/requests/users";
 
@@ -10,6 +11,7 @@ import Toggle from "@vueform/toggle/dist/toggle.js";
 import ButtonUserCreate from "@/components/elements/ButtonUserCreate.vue";
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 const formData = ref<UserCreateSchema>({
@@ -26,7 +28,7 @@ const formData = ref<UserCreateSchema>({
 function createUser() {
   usersRequest.postUsers(formData.value).then((response) => {
     if (response.status == 200) {
-      notificationStore.addInfo(`Created user ${formData.value.username}.`);
+      notificationStore.addInfo(languageStore.l.notification.info.createdUser);
       formData.value = {
         is_active: false,
         is_superuser: false,
@@ -39,10 +41,12 @@ function createUser() {
       };
       // } else if (response.status == 403) {
       //   notificationStore.addWarn("Not enough permission");
-    } else if (response.status == 406) {
-      notificationStore.addWarn("User already exists");
+      // } else if (response.status == 406) {
+      //   notificationStore.addWarn(response.data.detail);
     } else if (response.status == 422) {
-      notificationStore.addWarn("Data is incomplete");
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.userDataIncomplete,
+      );
     } else {
       notificationStore.addWarn(response.data.detail);
     }
@@ -57,50 +61,67 @@ function createUser() {
         <div id="guestuser" class="grid-item-center">
           <Toggle v-model="formData.is_guestuser" />
         </div>
-        <div id="guestuser-text" class="grid-item-left">Guest</div>
+        <div id="guestuser-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.guestuser }}
+        </div>
         <div id="superuser" class="grid-item-center">
           <Toggle v-model="formData.is_superuser" />
         </div>
-        <div id="superuser-text" class="grid-item-left">Superuser</div>
+        <div id="superuser-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.superUser }}
+        </div>
         <div id="adminuser" class="grid-item-center">
           <Toggle v-model="formData.is_adminuser" />
         </div>
-        <div id="adminuser-text" class="grid-item-left">Admin</div>
+        <div id="adminuser-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.adminUser }}
+        </div>
         <div id="active" class="grid-item-center">
           <Toggle v-model="formData.is_active" />
         </div>
-        <div id="active-text" class="grid-item-left">Active</div>
+        <div id="active-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.active }}
+        </div>
         <div id="username" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.username"
             type="text"
-            placeholder="Username"
+            :placeholder="
+              languageStore.l.settings.users.input.usernamePlaceholder
+            "
           />
         </div>
         <div id="full-name" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.full_name"
-            placeholder="Name"
+            :placeholder="
+              languageStore.l.settings.users.input.fullNamePlaceholder
+            "
           />
         </div>
         <div id="email" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.email"
-            placeholder="Mail"
+            :placeholder="languageStore.l.settings.users.input.mailPlaceholder"
           />
         </div>
         <div id="password" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.password"
-            placeholder="Password (at least 8 characters)"
+            :placeholder="
+              languageStore.l.settings.users.input.passwordPlaceholder
+            "
           />
         </div>
         <div id="btn">
-          <ButtonUserCreate v-on:click="createUser" text="Create User" />
+          <ButtonUserCreate
+            v-on:click="createUser"
+            :text="languageStore.l.settings.users.button.create"
+          />
         </div>
       </div>
     </div>

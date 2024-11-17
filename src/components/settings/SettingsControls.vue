@@ -7,8 +7,12 @@ import ButtonUsers from "@/components/elements/ButtonUsers.vue";
 import ButtonCloudKey from "@/components/elements/ButtonCloudKey.vue";
 import ButtonConfig from "@/components/elements/ButtonConfig.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 // Router
 const route = useRoute();
+
+const languageStore = useLanguageStore();
 
 function routeIsActive(currentLink: string) {
   let activeRoute = route.path;
@@ -30,32 +34,32 @@ function routeIsActive(currentLink: string) {
         ><ButtonServer
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/host') }"
-          text="Host"
+          :text="languageStore.l.settings.host.selectorButton"
         />
       </router-link>
       <router-link :to="'/settings/config'"
         ><ButtonConfig
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/config') }"
-          text="Config"
+          :text="languageStore.l.settings.config.selectorButton"
       /></router-link>
       <router-link :to="'/settings/logs'"
         ><ButtonFile
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/logs') }"
-          text="Logs"
+          :text="languageStore.l.settings.logs.selectorButton"
       /></router-link>
       <router-link :to="'/settings/users'"
         ><ButtonUsers
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/users') }"
-          text="Users"
+          :text="languageStore.l.settings.users.selectorButton"
       /></router-link>
       <router-link :to="'/settings/api-keys'"
         ><ButtonCloudKey
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/api-keys') }"
-          text="API Keys"
+          :text="languageStore.l.settings.apiKeys.selectorButton"
       /></router-link>
     </div>
   </div>

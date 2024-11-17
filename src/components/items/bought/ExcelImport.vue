@@ -60,6 +60,8 @@ function onTemplate() {
       let url = window.URL.createObjectURL(blob);
       window.open(url);
       emit("update:showUploader", false);
+    } else if (response.status == 404) {
+      notificationStore.addWarn(response.data.detail);
     } else {
       notificationStore.addWarn(
         languageStore.l.notification.warn.xlsxTemplateDownloadFailed,

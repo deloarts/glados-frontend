@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useLanguageStore } from "@/stores/language";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 
 import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
@@ -16,6 +17,7 @@ const emit = defineEmits<{
 }>();
 
 // Store
+const languageStore = useLanguageStore();
 const boughtItemsFilterStore = useBoughtItemFilterStore();
 
 function onSelect(
@@ -38,8 +40,12 @@ function onSelect(
       <table class="cursor-default">
         <thead>
           <tr>
-            <th class="first sticky-col" id="config-category">Category</th>
-            <th class="first sticky-col" id="config-name">Name</th>
+            <th class="first sticky-col" id="config-category">
+              {{ languageStore.l.settings.config.table.category }}
+            </th>
+            <th class="first sticky-col" id="config-name">
+              {{ languageStore.l.settings.config.table.name }}
+            </th>
           </tr>
         </thead>
         <tbody>

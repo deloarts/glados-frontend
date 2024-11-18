@@ -1,17 +1,27 @@
 <script setup lang="ts">
 import AccountControls from "@/components/account/AccountControls.vue";
 import AccountPersonalAccessToken from "@/components/account/AccountPersonalAccessToken.vue";
+import WarningForForm from "@/components/common/WarningForForm.vue";
+
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
 </script>
 
 <template>
   <div class="views-scope">
     <div class="views-content">
-      <div id="grid">
-        <div id="controls">
+      <div class="grid">
+        <div class="grid-area-controls">
           <AccountControls />
         </div>
-        <div id="display">
+        <div class="grid-area-display">
           <AccountPersonalAccessToken />
+        </div>
+        <div class="grid-area-warning">
+          <WarningForForm
+            :text="languageStore.l.account.banner.patCreationWarning"
+          />
         </div>
       </div>
     </div>
@@ -23,20 +33,25 @@ import AccountPersonalAccessToken from "@/components/account/AccountPersonalAcce
 @import "@/scss/views.scss";
 @import "@/scss/grid/gridBase.scss";
 
-#grid {
+.grid {
   grid-template-columns: 100%;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
-    "controls"
-    "display";
+    "grid-area-controls"
+    "grid-area-display"
+    "grid-area-warning";
 }
 
-#controls {
-  grid-area: controls;
+.grid-area-controls {
+  grid-area: grid-area-controls;
 }
 
-#display {
-  grid-area: display;
+.grid-area-warning {
+  grid-area: grid-area-warning;
+}
+
+.grid-area-display {
+  grid-area: grid-area-display;
 }
 
 ::-webkit-scrollbar {

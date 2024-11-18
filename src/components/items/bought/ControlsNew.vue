@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 
@@ -14,6 +16,7 @@ const props = defineProps<{
 }>();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 const boughtItemsStore = useBoughtItemsStore();
 
@@ -22,7 +25,9 @@ function onCreate() {
     .postItems(props.formData)
     .then((response) => {
       if (response.status === 200) {
-        notificationStore.addInfo("Created item");
+        notificationStore.addInfo(
+          languageStore.l.notification.info.createdItem,
+        );
         boughtItemsStore.getItems();
         router.push({ name: "BoughtItems" });
       }
@@ -31,7 +36,10 @@ function onCreate() {
       // }
       else if (response.status === 422) {
         notificationStore.addWarn(
-          `Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`,
+          languageStore.l.notification.warn.createUpdateErrorInField(
+            response.data.detail[0].loc[1],
+            response.data.detail[0].msg,
+          ),
         );
       } else {
         notificationStore.addWarn(response.data.detail);
@@ -53,12 +61,12 @@ function onAbort() {
     <div id="item-controls" class="controls-base-container">
       <ButtonItemCreate
         class="controls-base-element"
-        text="Create"
+        :text="languageStore.l.boughtItem.button.create"
         v-on:click="onCreate"
       ></ButtonItemCreate>
       <ButtonAbort
         class="controls-base-element"
-        text="Cancel"
+        :text="languageStore.l.boughtItem.button.cancel"
         v-on:click="onAbort"
       ></ButtonAbort>
     </div>

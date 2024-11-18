@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 
+import { useLanguageStore } from "@/stores/language";
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 import { boughtItemsRequest } from "@/requests/items";
 
+const languageStore = useLanguageStore();
 const boughtItemsStore = useBoughtItemsStore();
 
 const changelog = ref<Array<string>>([""]);
@@ -11,7 +13,7 @@ const changelog = ref<Array<string>>([""]);
 function fetchChangelog() {
   if (boughtItemsStore.getSelection().length > 0) {
     boughtItemsRequest
-      .getItemsIdChangelog(boughtItemsStore.getSelection()[0])
+      .getItemsIDChangelog(boughtItemsStore.getSelection()[0])
       .then((response) => {
         changelog.value = response.data;
       });
@@ -34,19 +36,28 @@ watch(
 <template>
   <div class="scope">
     <div v-if="boughtItemsStore.getSelection().length == 1" class="container">
-      <h1>Changelog of item #{{ boughtItemsStore.getSelection()[0] }}</h1>
-      <div v-for="log in changelog" class="changelog-item">{{ log }}</div>
+      <h1>
+        {{ languageStore.l.boughtItem.changelog.changelogOfItem }}
+        {{ boughtItemsStore.getSelection()[0] }}
+      </h1>
+      <div v-for="log in changelog" class="changelog-item" v-bind:key="log">
+        {{ log }}
+      </div>
     </div>
     <div
       v-else-if="boughtItemsStore.getSelection().length > 1"
       class="container"
     >
-      <h1>Changelog</h1>
-      <div class="changelog-item">Too many items selected</div>
+      <h1>{{ languageStore.l.boughtItem.changelog.changelog }}</h1>
+      <div class="changelog-item">
+        {{ languageStore.l.boughtItem.changelog.tooManySelected }}d
+      </div>
     </div>
     <div v-else class="container">
-      <h1>Changelog</h1>
-      <div class="changelog-item">No item selected</div>
+      <h1>{{ languageStore.l.boughtItem.changelog.changelog }}</h1>
+      <div class="changelog-item">
+        {{ languageStore.l.boughtItem.changelog.nothingSelected }}
+      </div>
     </div>
   </div>
 </template>

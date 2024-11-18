@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
+import { useLanguageStore } from "@/stores/language";
 import { useUserStore } from "@/stores/user";
 import { useResolutionStore } from "@/stores/resolution";
 
@@ -18,6 +19,7 @@ import IconSettings from "@/components/icons/IconSettings.vue";
 const route = useRoute();
 
 // Store
+const languageStore = useLanguageStore();
 const userStore = useUserStore();
 const resolutionStore = useResolutionStore();
 
@@ -65,7 +67,9 @@ function logout() {
           @mouseleave="showLabelLogout = false"
         />
         <Transition>
-          <div v-if="showLabelLogout" class="label">Logout</div>
+          <div v-if="showLabelLogout" class="label">
+            {{ languageStore.l.main.sideBar.logout }}
+          </div>
         </Transition></a
       >
       <hr />
@@ -76,7 +80,9 @@ function logout() {
       >
         <IconDashboard v-bind:class="{ active: routeIsActive('/dashboard') }" />
         <Transition>
-          <div v-if="showLabelDashboard" class="label">Dashboard</div>
+          <div v-if="showLabelDashboard" class="label">
+            {{ languageStore.l.main.sideBar.dashboard }}
+          </div>
         </Transition>
       </router-link>
       <router-link
@@ -86,7 +92,9 @@ function logout() {
       >
         <IconProject v-bind:class="{ active: routeIsActive('/projects') }" />
         <Transition>
-          <div v-if="showLabelProjects" class="label">Projects</div>
+          <div v-if="showLabelProjects" class="label">
+            {{ languageStore.l.main.sideBar.projects }}
+          </div>
         </Transition>
       </router-link>
       <router-link
@@ -96,7 +104,9 @@ function logout() {
       >
         <IconItems v-bind:class="{ active: routeIsActive('/items/bought') }" />
         <Transition>
-          <div v-if="showLabelBoughtItems" class="label">Bought Items</div>
+          <div v-if="showLabelBoughtItems" class="label">
+            {{ languageStore.l.main.sideBar.boughtItems }}
+          </div>
         </Transition>
       </router-link>
       <router-link
@@ -106,7 +116,9 @@ function logout() {
       >
         <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
         <Transition>
-          <div v-if="showLabelAccount" class="label">Account</div>
+          <div v-if="showLabelAccount" class="label">
+            {{ languageStore.l.main.sideBar.account }}
+          </div>
         </Transition>
       </router-link>
       <router-link
@@ -116,7 +128,9 @@ function logout() {
       >
         <IconTools v-bind:class="{ active: routeIsActive('/tools') }" />
         <Transition>
-          <div v-if="showLabelTools" class="label">Tools</div>
+          <div v-if="showLabelTools" class="label">
+            {{ languageStore.l.main.sideBar.tools }}
+          </div>
         </Transition>
       </router-link>
       <router-link
@@ -129,7 +143,9 @@ function logout() {
           v-bind:class="{ active: routeIsActive('/settings') }"
         />
         <Transition>
-          <div v-if="showLabelSettings" class="label">Settings</div>
+          <div v-if="showLabelSettings" class="label">
+            {{ languageStore.l.main.sideBar.settings }}
+          </div>
         </Transition>
       </router-link>
     </div>

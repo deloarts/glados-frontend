@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { usersRequest } from "@/requests/users";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 
 import ButtonNewPersonalAccessToken from "@/components/elements/ButtonNewPersonalAccessToken.vue";
 
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 let personalAccessToken = ref<string>("");
@@ -12,7 +15,9 @@ let personalAccessToken = ref<string>("");
 function newToken() {
   usersRequest.putUsersMePAT().then((response) => {
     if (response.status == 200) {
-      notificationStore.addInfo(`Created new token.`);
+      notificationStore.addInfo(
+        languageStore.l.notification.info.createdNewPAT,
+      );
       personalAccessToken.value = response.data;
     } else {
       notificationStore.addWarn(response.data.detail);
@@ -30,14 +35,14 @@ function newToken() {
             class="form-base-text-input"
             v-model="personalAccessToken"
             type="text"
-            placeholder="Secret"
+            :placeholder="languageStore.l.account.input.patPlaceholder"
             readonly
           />
         </div>
         <div id="btn">
           <ButtonNewPersonalAccessToken
             v-on:click="newToken"
-            text="New Token"
+            :text="languageStore.l.account.button.newToken"
           />
         </div>
       </div>

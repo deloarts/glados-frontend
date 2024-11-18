@@ -22,13 +22,13 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     ignoreCanceled: false,
     ignoreLost: false,
     highPriority: null,
-    creatorId: null,
+    creatorID: null,
     createdDate: null,
     changedDateFrom: null,
     desiredDate: null,
-    requesterId: null,
+    requesterID: null,
     requestedDate: null,
-    ordererId: null,
+    ordererID: null,
     orderedDate: null,
     expectedDate: null,
     deliveredDate: null,
@@ -49,7 +49,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
     noteGeneral: null,
     noteSupplier: null,
     storagePlace: null,
-    receiverId: null,
+    receiverID: null,
   });
 
   function set(key: string, value: string | number | Date | null) {
@@ -63,13 +63,13 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
       ignoreCanceled: false,
       ignoreLost: false,
       highPriority: null,
-      creatorId: null,
+      creatorID: null,
       createdDate: null,
       changedDateFrom: null,
       desiredDate: null,
-      requesterId: null,
+      requesterID: null,
       requestedDate: null,
-      ordererId: null,
+      ordererID: null,
       orderedDate: null,
       expectedDate: null,
       deliveredDate: null,
@@ -90,7 +90,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
       noteGeneral: null,
       noteSupplier: null,
       storagePlace: null,
-      receiverId: null,
+      receiverID: null,
     };
     console.log("Reset bought items filter");
   }
@@ -120,13 +120,13 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
         ignoreCanceled: p.ignoreCanceled,
         ignoreLost: p.ignoreLost,
         highPriority: p.highPriority,
-        creatorId: p.creatorId,
+        creatorID: p.creatorID,
         createdDate: p.createdDate,
         changedDateFrom: p.changedDateFrom,
         desiredDate: p.deliveredDate,
-        requesterId: p.requesterId,
+        requesterID: p.requesterID,
         requestedDate: p.requestedDate,
-        ordererId: p.ordererId,
+        ordererID: p.ordererID,
         orderedDate: p.orderedDate,
         expectedDate: p.expectedDate,
         deliveredDate: p.deliveredDate,
@@ -147,7 +147,7 @@ export const useBoughtItemFilterStore = defineStore("boughtItemFilter", () => {
         noteGeneral: p.noteGeneral,
         noteSupplier: p.noteSupplier,
         storagePlace: p.storagePlace,
-        receiverId: p.receiverId,
+        receiverID: p.receiverID,
       };
     }
   }
@@ -216,7 +216,7 @@ export const useProjectFilterStore = defineStore("projectFilter", () => {
     customer: null,
     description: null,
     isActive: null,
-    designatedUserId: null,
+    designatedUserID: null,
   });
 
   function set(key: string, value: string | number | Date | null) {
@@ -233,7 +233,7 @@ export const useProjectFilterStore = defineStore("projectFilter", () => {
       customer: null,
       description: null,
       isActive: null,
-      designatedUserId: null,
+      designatedUserID: null,
     };
   }
 

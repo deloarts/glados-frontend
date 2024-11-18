@@ -5,10 +5,14 @@ import { Doughnut } from "vue-chartjs";
 
 import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 // Props & Emits
 const props = defineProps(["dataset"]);
+
+const languageStore = useLanguageStore();
 
 const chartLabels = ref([""]);
 const chartDataset = ref([0]);
@@ -114,7 +118,7 @@ watch(
 
 <template>
   <div class="chart-base-scope">
-    <h1>Created Items</h1>
+    <h1>{{ languageStore.l.dashboard.createdItems }}</h1>
     <div class="chart-base-wrapper">
       <div v-if="props.dataset == null" class="spinner-wrapper">
         <LoadingSpinner />

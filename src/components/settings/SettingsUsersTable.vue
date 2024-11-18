@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useLanguageStore } from "@/stores/language";
 import { useUsersStore } from "@/stores/user";
 
 import IconCheckboxBlank from "@/components/icons/IconCheckboxBlank.vue";
@@ -13,6 +14,7 @@ const emit = defineEmits<{
 }>();
 
 // Store
+const languageStore = useLanguageStore();
 const usersStore = useUsersStore();
 
 function onSelect(id: number) {
@@ -29,15 +31,33 @@ function onSelect(id: number) {
       <table class="cursor-default">
         <thead>
           <tr>
-            <th class="first sticky-col" id="user-id">ID</th>
-            <th class="first sticky-col" id="username">Username</th>
-            <th class="first sticky-col" id="full-name">Full Name</th>
-            <th class="first sticky-col" id="mail">Mail</th>
-            <th class="first sticky-col" id="active">Active</th>
-            <th class="first sticky-col" id="superuser">Superuser</th>
-            <th class="first sticky-col" id="superuser">Admin</th>
-            <th class="first sticky-col" id="superuser">Guest</th>
-            <th class="first sticky-col" id="created">Created</th>
+            <th class="first sticky-col" id="user-id">
+              {{ languageStore.l.settings.users.table.id }}
+            </th>
+            <th class="first sticky-col" id="username">
+              {{ languageStore.l.settings.users.table.username }}
+            </th>
+            <th class="first sticky-col" id="full-name">
+              F{{ languageStore.l.settings.users.table.fullName }}
+            </th>
+            <th class="first sticky-col" id="mail">
+              {{ languageStore.l.settings.users.table.mail }}
+            </th>
+            <th class="first sticky-col" id="active">
+              {{ languageStore.l.settings.users.table.active }}
+            </th>
+            <th class="first sticky-col" id="superuser">
+              {{ languageStore.l.settings.users.table.superUser }}
+            </th>
+            <th class="first sticky-col" id="superuser">
+              {{ languageStore.l.settings.users.table.adminUser }}
+            </th>
+            <th class="first sticky-col" id="superuser">
+              {{ languageStore.l.settings.users.table.guestUser }}
+            </th>
+            <th class="first sticky-col" id="created">
+              {{ languageStore.l.settings.users.table.createdDate }}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -52,20 +72,20 @@ function onSelect(id: number) {
             <td id="full-name" class="sticky-col">{{ user.full_name }}</td>
             <td id="mail" class="sticky-col">{{ user.email }}</td>
             <td id="active" class="sticky-col">
-              <IconCheckboxMarked v-if="user.is_active" />
-              <IconCheckboxBlank v-else />
+              <IconCheckboxMarked v-if="user.is_active" class="checked" />
+              <IconCheckboxBlank v-else class="unchecked" />
             </td>
             <td id="superuser" class="sticky-col">
-              <IconCheckboxMarked v-if="user.is_superuser" />
-              <IconCheckboxBlank v-else />
+              <IconCheckboxMarked v-if="user.is_superuser" class="checked" />
+              <IconCheckboxBlank v-else class="unchecked" />
             </td>
             <td id="adminuser" class="sticky-col">
-              <IconCheckboxMarked v-if="user.is_adminuser" />
-              <IconCheckboxBlank v-else />
+              <IconCheckboxMarked v-if="user.is_adminuser" class="checked" />
+              <IconCheckboxBlank v-else class="unchecked" />
             </td>
             <td id="guestuser" class="sticky-col">
-              <IconCheckboxMarked v-if="user.is_guestuser" />
-              <IconCheckboxBlank v-else />
+              <IconCheckboxMarked v-if="user.is_guestuser" class="checked" />
+              <IconCheckboxBlank v-else class="unchecked" />
             </td>
             <td id="created" class="sticky-col">{{ user.created }}</td>
           </tr>
@@ -139,5 +159,13 @@ function onSelect(id: number) {
 svg {
   width: 15px;
   height: 15px;
+}
+
+.checked {
+  color: lime;
+}
+
+.unchecked {
+  color: red;
 }
 </style>

@@ -15,8 +15,12 @@ import UsersChart from "@/components/dashboard/UsersChart.vue";
 import TimelineChart from "@/components/dashboard/TimelineChart.vue";
 import ItemCount from "@/components/dashboard/ItemCount.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 // Router
 const route = useRoute();
+
+const languageStore = useLanguageStore();
 
 // Stores
 const usersStore = useUsersStore();
@@ -151,16 +155,31 @@ function autoFetchBoughtItemStatus() {
         // WRITE DATASETS
         boughtItemsAmount.value = boughtItems;
         boughtItemsUsersDataset.value = sortedUsersDataset;
-        boughtItemsOverviewDataset.value = {
-          Open: boughtItems.open,
-          Requested: boughtItems.requested,
-          Ordered: boughtItems.ordered,
-          Late: boughtItems.late,
-          Partial: boughtItems.partial,
-          Delivered: boughtItems.delivered,
-          Canceled: boughtItems.canceled,
-          Lost: boughtItems.lost,
-        };
+        boughtItemsOverviewDataset.value = {};
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.open
+        ] = boughtItems.open;
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.requested
+        ] = boughtItems.requested;
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.ordered
+        ] = boughtItems.ordered;
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.late
+        ] = boughtItems.late;
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.partial
+        ] = boughtItems.partial;
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.delivered
+        ] = boughtItems.delivered;
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.canceled
+        ] = boughtItems.canceled;
+        boughtItemsOverviewDataset.value[
+          languageStore.l.dashboard.labels.lost
+        ] = boughtItems.lost;
       } else {
         console.error("Failed to fetch data for dashboard.");
       }
@@ -199,18 +218,18 @@ function autoFetchBoughtItemTimeline() {
         const data = response.data;
         let dataset = {
           months: [
-            "JAN",
-            "FEB",
-            "MAR",
-            "APR",
-            "MAY",
-            "JUN",
-            "JUL",
-            "AUG",
-            "SEP",
-            "OCT",
-            "NOV",
-            "DEC",
+            languageStore.l.dashboard.months.january,
+            languageStore.l.dashboard.months.february,
+            languageStore.l.dashboard.months.march,
+            languageStore.l.dashboard.months.april,
+            languageStore.l.dashboard.months.may,
+            languageStore.l.dashboard.months.june,
+            languageStore.l.dashboard.months.july,
+            languageStore.l.dashboard.months.august,
+            languageStore.l.dashboard.months.september,
+            languageStore.l.dashboard.months.october,
+            languageStore.l.dashboard.months.november,
+            languageStore.l.dashboard.months.december,
           ],
           created: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           ordered: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -311,54 +330,54 @@ onBeforeMount(() => {
         </div>
         <div id="active-items" class="grid-item-center">
           <ItemCount
-            text="Active"
+            :text="languageStore.l.dashboard.labels.active"
             v-model:count="boughtItemsAmount.active"
           ></ItemCount>
         </div>
         <div id="open-items" class="grid-item-center">
           <ItemCount
-            text="Open"
+            :text="languageStore.l.dashboard.labels.open"
             v-model:count="boughtItemsAmount.open"
           ></ItemCount>
         </div>
         <div id="requested-items" class="grid-item-center">
           <ItemCount
-            text="Requested"
+            :text="languageStore.l.dashboard.labels.requested"
             v-model:count="boughtItemsAmount.requested"
           ></ItemCount>
         </div>
         <div id="ordered-items" class="grid-item-center">
           <ItemCount
-            text="Ordered"
+            :text="languageStore.l.dashboard.labels.ordered"
             v-model:count="boughtItemsAmount.ordered"
           ></ItemCount>
         </div>
         <div id="delivered-items" class="grid-item-center">
           <ItemCount
-            text="Delivered"
+            :text="languageStore.l.dashboard.labels.delivered"
             v-model:count="boughtItemsAmount.delivered"
           ></ItemCount>
         </div>
         <div id="partial-items" class="grid-item-center">
           <ItemCount
-            text="Partial"
+            :text="languageStore.l.dashboard.labels.partial"
             v-model:count="boughtItemsAmount.partial"
           ></ItemCount>
         </div>
         <div id="late-items" class="grid-item-center">
           <ItemCount
-            text="Late"
+            :text="languageStore.l.dashboard.labels.late"
             v-model:count="boughtItemsAmount.late"
           ></ItemCount>
         </div>
         <div id="canceled-items" class="grid-item-center">
           <ItemCount
-            text="Canceled"
+            :text="languageStore.l.dashboard.labels.canceled"
             v-model:count="boughtItemsAmount.canceled"
           ></ItemCount>
         </div>
         <div v-if="gtMinWidthTablet" id="data-note" class="grid-item-left">
-          Showing all items that have been edited within the last 30 days.
+          {{ languageStore.l.dashboard.banner.showingItems }}
         </div>
       </div>
     </div>

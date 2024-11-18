@@ -4,6 +4,9 @@ import { computed } from "vue";
 import TableHeadRowNumber from "@/components/dataTable/TableHeadRowNumber.vue";
 
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
 
 const props = defineProps<{
   width: typeof boughtItemColumnWidths;
@@ -24,7 +27,10 @@ const computedWidth = computed<typeof boughtItemColumnWidths>({
 </script>
 
 <template>
-  <TableHeadRowNumber value="#" v-model:width="computedWidth.number" />
+  <TableHeadRowNumber
+    :value="languageStore.l.boughtItem.table.number"
+    v-model:width="computedWidth.number"
+  />
 </template>
 
 <style scoped lang="scss"></style>

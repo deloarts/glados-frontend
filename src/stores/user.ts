@@ -8,7 +8,11 @@ import { usersRequest } from "@/requests/users";
 import type { AvailableOption } from "@/models/controls";
 import type { UserSchema } from "@/schemas/user";
 
+import { useLanguageStore } from "./language";
+
 export const useUserStore = defineStore("user", () => {
+  const _languageStore = useLanguageStore();
+
   const loading = ref<boolean>(false);
   const user = ref<UserSchema>({
     id: null,
@@ -16,6 +20,7 @@ export const useUserStore = defineStore("user", () => {
     username: null,
     full_name: null,
     email: null,
+    language: null,
     is_active: false,
     is_superuser: false,
     is_adminuser: false,
@@ -32,6 +37,7 @@ export const useUserStore = defineStore("user", () => {
       username: null,
       full_name: null,
       email: null,
+      language: null,
       is_active: false,
       is_superuser: false,
       is_adminuser: false,
@@ -47,6 +53,7 @@ export const useUserStore = defineStore("user", () => {
       loading.value = false;
       if (response.status === 200) {
         user.value = response.data;
+        _languageStore.apply(user.value.language);
       } else {
         logout();
         router.push({ name: "Login" });

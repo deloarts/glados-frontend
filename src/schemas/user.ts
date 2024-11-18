@@ -4,6 +4,7 @@ export interface UserSchema {
   username: string;
   full_name: string;
   email: string;
+  language: "enGB" | "deAT";
   is_active: boolean;
   is_adminuser: boolean;
   is_superuser: boolean;
@@ -26,6 +27,7 @@ export interface UserUpdateSchema {
   username: string;
   full_name: string;
   email: string;
+  language: "enGB" | "deAT";
   is_active?: boolean;
   is_adminuser?: boolean;
   is_superuser?: boolean;

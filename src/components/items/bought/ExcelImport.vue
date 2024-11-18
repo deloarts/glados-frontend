@@ -2,6 +2,8 @@
 import { ref, watch } from "vue";
 
 import { boughtItemsRequest } from "@/requests/items";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 
 import { ErrorDetails } from "@/models/errors";
@@ -28,6 +30,7 @@ const emit = defineEmits<{
 }>();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 // Files
@@ -39,7 +42,7 @@ let warningsList = ref<Array<ResponseWarning>>([]);
 
 function onInputChange(e: any) {
   addFiles(e.target.files);
-  e.target.value = null; // reset so that selecting the same file again will still cause it to fire this change
+  e.target.value = null; // reset so that selecting the same file again will still cause it to recognize this change
 }
 
 function onAbort() {
@@ -57,8 +60,12 @@ function onTemplate() {
       let url = window.URL.createObjectURL(blob);
       window.open(url);
       emit("update:showUploader", false);
+    } else if (response.status == 404) {
+      notificationStore.addWarn(response.data.detail);
     } else {
-      notificationStore.addWarn("Could not download template file.");
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.xlsxTemplateDownloadFailed,
+      );
     }
   });
 }
@@ -74,11 +81,15 @@ function uploadFile() {
     .then((response) => {
       uploading.value = false;
       if (response.status == 200) {
-        notificationStore.addInfo("EXCEL import successful.");
+        notificationStore.addInfo(
+          languageStore.l.notification.info.xlsxImportSuccess,
+        );
         props.onSuccess();
         emit("update:showUploader", false);
       } else if (response.status == 422) {
-        notificationStore.addWarn("EXCEL file content is incomplete.");
+        notificationStore.addWarn(
+          languageStore.l.notification.warn.xlsxUploadContentIncomplete,
+        );
         warningsList.value = response.data.detail;
       } else {
         notificationStore.addWarn(response.data.detail);
@@ -86,14 +97,16 @@ function uploadFile() {
       }
     })
     .catch((error) => {
-      notificationStore.addWarn("Could not process file.");
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.xlsxProcessError,
+      );
       emit("update:showUploader", false);
     });
 }
 
 function textErrorInput(text) {
   if (text == null) {
-    return "an empty cell";
+    return languageStore.l.boughtItem.xlsx.anEmptyCell;
   } else {
     return text;
   }
@@ -122,10 +135,10 @@ watch(files, () => {
               <Spinner class="spinner"></Spinner>
             </div>
             <div v-else-if="dropZoneActive">
-              <span>Drop Them Here</span>
+              <span>{{ languageStore.l.boughtItem.xlsx.dropHere }}</span>
             </div>
             <div v-else>
-              <span>Drag Your Files Here</span>
+              <span>{{ languageStore.l.boughtItem.xlsx.dragHere }}</span>
             </div>
             <input
               type="file"
@@ -139,18 +152,18 @@ watch(files, () => {
         <div>
           <ButtonAbort
             class="buttonAbort"
-            text="Abort"
+            :text="languageStore.l.boughtItem.button.cancel"
             v-on:click="onAbort"
           ></ButtonAbort>
           <ButtonExcel
             class="buttonTemplate"
-            text="Template"
+            :text="languageStore.l.boughtItem.button.template"
             v-on:click="onTemplate"
           ></ButtonExcel>
         </div>
       </div>
       <div v-else class="warnings">
-        <h1>Import Validation Errors</h1>
+        <h1>{{ languageStore.l.boughtItem.xlsx.importValidationErrors }}</h1>
         <div class="warningsWrapper">
           <ol>
             <li
@@ -158,11 +171,15 @@ watch(files, () => {
               v-for="(warning, i) in warningsList"
               :key="i"
             >
-              <span class="bold bigger">Error in row #{{ warning.row }}:</span>
+              <span class="bold bigger"
+                >{{ languageStore.l.boughtItem.xlsx.errorInRow
+                }}{{ warning.row }}:</span
+              >
               <ul>
                 <li v-for="(error, j) in warningsList[i].errors" :key="j">
                   <span class="bold">{{ error.loc.join(", ") }}</span
-                  >: {{ error.msg }}, but received
+                  >: {{ error.msg }},
+                  {{ languageStore.l.boughtItem.xlsx.butReceived }}
                   <em>{{ textErrorInput(error.input) }}</em>
                 </li>
               </ul>
@@ -172,7 +189,7 @@ watch(files, () => {
         <div>
           <ButtonAbort
             class="buttonAbort"
-            text="Close"
+            :text="languageStore.l.boughtItem.button.cancel"
             v-on:click="onAbort"
           ></ButtonAbort>
         </div>

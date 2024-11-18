@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import AccountUpdateForm from "@/components/account/AccountUpdateForm.vue";
+
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
 </script>
 
 <template>
   <div class="scope">
     <div class="content">
-      <h1>My Account</h1>
+      <h1>{{ languageStore.l.account.banner.myAccount }}</h1>
       <AccountUpdateForm />
     </div>
   </div>

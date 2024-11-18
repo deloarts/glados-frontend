@@ -2,6 +2,8 @@
 import { ref, watch } from "vue";
 
 import { hostRequest } from "@/requests/host";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 
@@ -24,6 +26,7 @@ const emit = defineEmits<{
 }>();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 const boughtItemsFilterStore = useBoughtItemFilterStore();
 
@@ -41,7 +44,9 @@ function updateConfig() {
       .putConfigItemsBoughtFilter(props.selectedConfigName, data)
       .then((response) => {
         if (response.status === 200) {
-          notificationStore.addInfo("Updated config");
+          notificationStore.addInfo(
+            languageStore.l.notification.info.configUpdated,
+          );
           boughtItemsFilterStore.get();
           emit("update:selectedConfigName", null);
         } else {
@@ -61,7 +66,9 @@ function deleteConfig() {
         if (response.status === 200) {
           emit("update:selectedConfigName", null);
           boughtItemsFilterStore.get();
-          notificationStore.addInfo("Deleted config");
+          notificationStore.addInfo(
+            languageStore.l.notification.info.configDelete,
+          );
         } else {
           notificationStore.addWarn(response.data.detail);
         }
@@ -84,10 +91,16 @@ watch(
     <div class="form-base-container controls">
       <div id="grid" class="grid-command">
         <div id="btn-update">
-          <ButtonSave v-on:click="updateConfig" text="Update" />
+          <ButtonSave
+            v-on:click="updateConfig"
+            :text="languageStore.l.settings.config.button.update"
+          />
         </div>
         <div id="btn-delete">
-          <ButtonDelete v-on:click="showDeletePrompt = true" text="Delete" />
+          <ButtonDelete
+            v-on:click="showDeletePrompt = true"
+            :text="languageStore.l.settings.config.button.delete"
+          />
         </div>
       </div>
     </div>

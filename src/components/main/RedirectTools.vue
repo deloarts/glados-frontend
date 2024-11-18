@@ -7,4 +7,3 @@ onBeforeMount(() => {
 });
 </script>
 
-<template></template>

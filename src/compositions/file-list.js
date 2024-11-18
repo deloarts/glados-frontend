@@ -10,8 +10,8 @@ export default function () {
     files.value = files.value.concat(newUploadableFiles);
   }
 
-  function fileExists(otherId) {
-    return files.value.some(({ id }) => id === otherId);
+  function fileExists(otherID) {
+    return files.value.some(({ id }) => id === otherID);
   }
 
   function removeFile(file) {

@@ -13,6 +13,8 @@ import { Bar } from "vue-chartjs";
 
 import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,6 +26,8 @@ ChartJS.register(
 
 // Props & Emits
 const props = defineProps(["dataset"]);
+
+const languageStore = useLanguageStore();
 
 const chartLabels = ref();
 const chartDatasets = ref([0]);
@@ -61,18 +65,18 @@ function updateChart() {
 
     datasets.push({
       data: props.dataset.created,
-      label: "Created",
+      label: languageStore.l.dashboard.labels.created,
       backgroundColor: "#25CCF7",
     });
     datasets.push({
       data: props.dataset.ordered,
-      label: "Ordered",
+      label: languageStore.l.dashboard.labels.ordered,
       backgroundColor: "#cec000",
     });
     datasets.push({
       data: props.dataset.delivered,
-      label: "Delivered",
-      backgroundColor: "#38a938",
+      label: languageStore.l.dashboard.labels.delivered,
+      backgroundColor: "#32CD32",
     });
 
     chartLabels.value = props.dataset.months;
@@ -93,7 +97,7 @@ watch(
 
 <template>
   <div class="chart-base-scope">
-    <h1>Bought Items Timeline</h1>
+    <h1>{{ languageStore.l.dashboard.timelineItems }}</h1>
     <div class="chart-base-wrapper">
       <div v-if="props.dataset == null" class="spinner-wrapper">
         <LoadingSpinner />

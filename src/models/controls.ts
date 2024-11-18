@@ -56,7 +56,7 @@ export interface ProjectControlsColumns {
   productNumber: boolean;
   customer: boolean;
   description: boolean;
-  designatedUser: boolean;
+  designatedUserID: boolean;
   createdDate: boolean;
   state: boolean;
 }

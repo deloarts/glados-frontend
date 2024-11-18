@@ -18,6 +18,7 @@ interface Props {
   value: string | number | Date | null;
   options: Array<AvailableOption>;
   updateMethod: Function;
+  displayValue?: string;
   itemStore?: ItemStoreProtocol;
   filterStore?: FilterStoreProtocol;
   filterStoreKey?: string;
@@ -28,6 +29,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  displayValue: null,
   itemStore: null,
   filterStore: null,
   filterStoreKey: null,
@@ -106,7 +108,11 @@ function onChange(eventTarget: EventTarget) {
       </option>
     </select>
     <div v-else v-bind:class="{ 'fix-height': props.fixedHeight }">
-      <span>{{ capitalizeFirstLetter(String(props.value)) }}</span>
+      <span>{{
+        capitalizeFirstLetter(
+          String(props.displayValue ? props.displayValue : props.value),
+        )
+      }}</span>
     </div>
   </td>
 </template>

@@ -6,6 +6,8 @@ import config from "@/config";
 import constants from "@/constants";
 import router from "@/router/index";
 import { request, requestConfig } from "@/requests/index";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 
 import FullScreenWarning from "@/components/main/FullScreenWarning.vue";
@@ -14,6 +16,7 @@ import FullScreenWarning from "@/components/main/FullScreenWarning.vue";
 const route = useRoute();
 
 // Store
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 const showBox = ref<boolean>(false);
@@ -21,7 +24,9 @@ const text = ref<string>("");
 
 function onReconnection() {
   showBox.value = false;
-  notificationStore.addInfo("Reconnected to the server.");
+  notificationStore.addInfo(
+    languageStore.l.notification.info.reconnectedToServer,
+  );
 
   if (!config.debug) {
     localStorage.setItem("gladosTokenValue", "");
@@ -44,7 +49,7 @@ function watchServerConnection() {
           serverVersion[2] < requiredVersion[2]
         ) {
           console.error("Server version is not supported.");
-          text.value = "Server Version Not Supported";
+          text.value = languageStore.l.main.serverVersionNotSupported;
           showBox.value = true;
         } else if (showBox.value) {
           onReconnection();
@@ -60,7 +65,7 @@ function watchServerConnection() {
     .catch((error) => {
       if (error.status == undefined) {
         console.error("Lost server connection.");
-        text.value = "No Server Connection";
+        text.value = languageStore.l.main.noServerConnection;
         showBox.value = true;
       }
       setTimeout(watchServerConnection.bind(this), 1000);

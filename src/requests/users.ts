@@ -10,7 +10,7 @@ export class UsersRequest {
   getUsersMe() {
     return request.get("/api/web/v1/users/me/", requestConfig(null));
   }
-  getUsersId(id: Number) {
+  getUsersID(id: Number) {
     return request.get(`/api/web/v1/users/${id}/`, requestConfig(null));
   }
 

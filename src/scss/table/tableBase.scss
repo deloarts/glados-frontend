@@ -44,10 +44,13 @@ th {
   position: sticky;
   top: 0;
 
-  padding: 9px;
-  margin: 9px;
+  padding: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin: 4px;
+  height: 25px;
 
-  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Play", "Calibri";
   font-size: 14px;
 
   background-color: $table-head-background;
@@ -90,9 +93,15 @@ tr.selected:hover > td {
 }
 
 td {
+  font-family: "Calibri";
   font-size: 14px;
-  padding: 6px;
-  margin: 6px;
+
+  padding: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin: 4px;
+  height: 25px;
+
   word-wrap: break-word;
 }
 

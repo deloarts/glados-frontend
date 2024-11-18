@@ -11,6 +11,8 @@ import IconDelete from "@/components/icons/IconDelete.vue";
 import SelectBase from "@/components/elements/SelectBase.vue";
 import Toggle from "@vueform/toggle/dist/toggle.js";
 
+import { useLanguageStore } from "@/stores/language";
+
 const props = defineProps<{
   solverInput: StockCut2DJobSchema;
   solving: boolean;
@@ -20,6 +22,9 @@ const props = defineProps<{
   onAddPanel: Function;
   onExportPdf: Function;
 }>();
+
+const languageStore = useLanguageStore();
+
 const solverInput = computed<StockCut2DJobSchema>(() => props.solverInput);
 const solverMethods = ["greedy", "forward_greedy"];
 
@@ -34,7 +39,7 @@ function removePanelRow(index: number) {
 }
 function removeAllPanels() {
   solverInput.value.params.panels = [
-    { id: "Panel 1", width: 100, height: 100 },
+    { id: `${languageStore.l.tools.labels.panel} 1`, width: 100, height: 100 },
   ];
 }
 function removeItemRow(index: number) {
@@ -48,7 +53,12 @@ function removeItemRow(index: number) {
 }
 function removeAllItems() {
   solverInput.value.params.items = [
-    { id: "Item 1", width: 100, height: 100, can_rotate: true },
+    {
+      id: `${languageStore.l.tools.labels.item} 1`,
+      width: 100,
+      height: 100,
+      can_rotate: true,
+    },
   ];
 }
 </script>
@@ -58,25 +68,45 @@ function removeAllItems() {
     <div class="form-base-container">
       <div id="grid" class="grid-command">
         <div id="btn-add-panel">
-          <ButtonPlus v-on:click="props.onAddPanel()" text="Add Panel" />
+          <ButtonPlus
+            v-on:click="props.onAddPanel()"
+            :text="languageStore.l.tools.buttons.addPanel"
+          />
         </div>
         <div id="btn-add-item">
-          <ButtonPlus v-on:click="props.onAddItem()" text="Add Item" />
+          <ButtonPlus
+            v-on:click="props.onAddItem()"
+            :text="languageStore.l.tools.buttons.addItem"
+          />
         </div>
         <div id="btn-solve">
-          <ButtonLoading v-if="props.solving" text="Solving..." />
-          <ButtonSolve v-else v-on:click="props.onSolve()" text="Solve" />
+          <ButtonLoading
+            v-if="props.solving"
+            :text="languageStore.l.tools.buttons.solving"
+          />
+          <ButtonSolve
+            v-else
+            v-on:click="props.onSolve()"
+            :text="languageStore.l.tools.buttons.solve"
+          />
         </div>
         <div id="btn-export-pdf">
-          <ButtonDownload v-on:click="props.onExportPdf()" text="Export PDF" />
+          <ButtonDownload
+            v-on:click="props.onExportPdf()"
+            :text="languageStore.l.tools.buttons.exportPDF"
+          />
         </div>
       </div>
     </div>
 
     <div class="form-base-container">
-      <div class="form-base-title">Basic Definitions</div>
+      <div class="form-base-title">
+        {{ languageStore.l.tools.banner.definitions }}
+      </div>
       <div id="grid" class="grid-input">
-        <div id="method-text" class="grid-item-left">Method</div>
+        <div id="method-text" class="grid-item-left">
+          {{ languageStore.l.tools.labels.solverMethod }}
+        </div>
         <div id="method" class="grid-item-left">
           <SelectBase
             v-model:selection="solverInput.method"
@@ -84,7 +114,9 @@ function removeAllItems() {
           />
         </div>
 
-        <div id="cut-width-text" class="grid-item-left">Cut Width</div>
+        <div id="cut-width-text" class="grid-item-left">
+          {{ languageStore.l.tools.labels.cutWidth }}
+        </div>
         <div id="cut-width" class="grid-item-center">
           <input
             class="form-base-text-input"
@@ -93,7 +125,9 @@ function removeAllItems() {
           />
         </div>
 
-        <div id="min-usage-text" class="grid-item-left">Minimum</div>
+        <div id="min-usage-text" class="grid-item-left">
+          {{ languageStore.l.tools.labels.minimum }}
+        </div>
         <div id="min-usage" class="grid-item-left">
           <Toggle v-model="solverInput.params.min_initial_usage"></Toggle>
         </div>
@@ -101,13 +135,21 @@ function removeAllItems() {
     </div>
 
     <div class="table-base-container">
-      <div class="table-base-title">Panels</div>
+      <div class="table-base-title">
+        {{ languageStore.l.tools.banner.panels }}
+      </div>
       <table class="cursor-default">
         <thead>
           <tr>
-            <th id="panel-id" class="first sticky-col">Panel ID</th>
-            <th id="panel-width" class="first sticky-col">Panel Width</th>
-            <th id="panel-height" class="first sticky-col">Panel Height</th>
+            <th id="panel-id" class="first sticky-col">
+              {{ languageStore.l.tools.table.panelID }}
+            </th>
+            <th id="panel-width" class="first sticky-col">
+              {{ languageStore.l.tools.table.panelWidth }}
+            </th>
+            <th id="panel-height" class="first sticky-col">
+              {{ languageStore.l.tools.table.panelHeight }}
+            </th>
             <th id="clear" class="first sticky-col">
               <IconDelete v-on:click="removeAllPanels()" />
             </th>
@@ -133,14 +175,24 @@ function removeAllItems() {
     </div>
 
     <div class="table-base-container">
-      <div class="table-base-title">Items</div>
+      <div class="table-base-title">
+        {{ languageStore.l.tools.banner.items }}
+      </div>
       <table class="cursor-default">
         <thead>
           <tr>
-            <th id="item-id" class="first sticky-col">Item ID</th>
-            <th id="item-width" class="first sticky-col">Item Width</th>
-            <th id="item-height" class="first sticky-col">Item Height</th>
-            <th id="item-rotate" class="first sticky-col">Rotate</th>
+            <th id="item-id" class="first sticky-col">
+              {{ languageStore.l.tools.table.itemID }}
+            </th>
+            <th id="item-width" class="first sticky-col">
+              {{ languageStore.l.tools.table.itemWidth }}
+            </th>
+            <th id="item-height" class="first sticky-col">
+              {{ languageStore.l.tools.table.itemHeight }}
+            </th>
+            <th id="item-rotate" class="first sticky-col">
+              {{ languageStore.l.tools.table.rotate }}
+            </th>
             <th id="clear" class="first sticky-col">
               <IconDelete v-on:click="removeAllItems()" />
             </th>

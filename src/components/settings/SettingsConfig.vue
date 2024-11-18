@@ -5,6 +5,10 @@ import SettingsConfigTable from "@/components/settings/SettingsConfigTable.vue";
 import SettingsConfigCreate from "@/components/settings/SettingsConfigCreate.vue";
 import SettingsConfigUpdate from "@/components/settings/SettingsConfigUpdate.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
+
 const selectedConfigValue = ref(null);
 const selectedConfigCategory = ref(null);
 const selectedConfigName = ref(null);
@@ -26,7 +30,7 @@ watch(selectedConfigName, () => {
     <div class="content">
       <div id="grid">
         <div id="registered-h1">
-          <h1>Available Configurations</h1>
+          <h1>{{ languageStore.l.settings.config.banner }}</h1>
         </div>
         <div id="registered">
           <SettingsConfigTable
@@ -37,7 +41,7 @@ watch(selectedConfigName, () => {
         </div>
 
         <div id="config-h1" v-if="mode == 'create'">
-          <h1>Create Config</h1>
+          <h1>{{ languageStore.l.settings.config.create }}</h1>
         </div>
         <div id="config" v-if="mode == 'create'">
           <SettingsConfigCreate
@@ -46,7 +50,11 @@ watch(selectedConfigName, () => {
         </div>
 
         <div id="config-h1" v-if="mode == 'update'">
-          <h1>Update Config '{{ selectedConfigName }}'</h1>
+          <h1>
+            {{ languageStore.l.settings.config.update }} '{{
+              selectedConfigName
+            }}'
+          </h1>
         </div>
         <div id="config" v-if="mode == 'update'">
           <SettingsConfigUpdate

@@ -6,5 +6,3 @@ onBeforeMount(() => {
   router.push({ name: "Dashboard" });
 });
 </script>
-
-<template></template>

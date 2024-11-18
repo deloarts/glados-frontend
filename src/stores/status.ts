@@ -1,4 +1,4 @@
-import { ref, onBeforeMount } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
 import constants from "@/constants";
@@ -7,9 +7,11 @@ import { hostRequest } from "@/requests/host";
 import type { AvailableOption } from "@/models/controls";
 import type { HostConfigBoughtItemsStatusSchema } from "@/schemas/host";
 
-import { setOptions, setOptionsFilter } from "@/helper/options.helper";
+import { useLanguageStore } from "./language";
 
 export const useStatusStore = defineStore("status", () => {
+  const _languageStore = useLanguageStore();
+
   const loading = ref(false);
   const boughtItemStatus = ref<HostConfigBoughtItemsStatusSchema>({
     open: null,
@@ -24,31 +26,55 @@ export const useStatusStore = defineStore("status", () => {
   const boughtItemStatusOption = ref<Array<AvailableOption>>([]);
   const boughtItemStatusOptionFilter = ref<Array<AvailableOption>>([]);
 
-  function get() {
+  async function get() {
     console.log("Status store requesting data ...");
     loading.value = true;
 
-    hostRequest.getConfigItemsBoughtStatus().then((response) => {
+    return hostRequest.getConfigItemsBoughtStatus().then((response) => {
       loading.value = false;
       if (response.status === 200) {
         boughtItemStatus.value = response.data;
 
-        const tempBoughtItemStatusOptions = [];
-        for (const property in boughtItemStatus.value) {
-          tempBoughtItemStatusOptions.push(boughtItemStatus.value[property]);
+        const tempOptions = [];
+        const tempFilter = [
+          {
+            text: _languageStore.l.boughtItem.options.showAll,
+            value: null,
+          },
+        ];
+        for (const key in boughtItemStatus.value) {
+          tempOptions.push({
+            text: _languageStore.l.boughtItem.options.status[key],
+            value: boughtItemStatus.value[key],
+          });
+          tempFilter.push({
+            text: _languageStore.l.boughtItem.options.status[key],
+            value: boughtItemStatus.value[key],
+          });
         }
-        boughtItemStatusOption.value = setOptions(tempBoughtItemStatusOptions);
-        boughtItemStatusOptionFilter.value = setOptionsFilter(
-          tempBoughtItemStatusOptions,
-        );
+        boughtItemStatusOption.value = tempOptions;
+        boughtItemStatusOptionFilter.value = tempFilter;
         console.log("Status store got data from server.");
+        return response;
       }
-      setTimeout(get.bind(this), constants.patchServerConfigInterval);
     });
   }
 
+  function fetch() {
+    get().then(() => {
+      setTimeout(fetch.bind(this), constants.patchServerConfigInterval);
+    });
+  }
+
+  watch(
+    () => _languageStore.l,
+    () => {
+      get();
+    },
+  );
+
   onBeforeMount(() => {
-    get();
+    fetch();
   });
 
   return {

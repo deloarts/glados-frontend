@@ -1,24 +1,41 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import type { UserSchema } from "@/schemas/user";
 
-const props = defineProps<{
+interface Props {
   selection: number;
   options: Array<UserSchema>;
-}>();
-
+  placeholder?: string;
+}
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: null,
+});
 const emit = defineEmits<{
   (e: "update:selection", v: number): void;
 }>();
 
+const computedSelection = computed<number>({
+  get() {
+    return props.selection;
+  },
+  set(newValue) {
+    emit("update:selection", newValue);
+    return newValue;
+  },
+});
+
 function onChange(event) {
-  emit("update:selection", event.target.value);
+  // computedSelection.value = event.target.value;
 }
 </script>
 
 <template>
   <div class="box">
-    <select v-model="props.selection" @change="onChange">
-      <option value="null" disabled selected hidden>User</option>
+    <select v-model="computedSelection" @change="onChange">
+      <option value="null" disabled selected hidden>
+        {{ props.placeholder ? props.placeholder : "User" }}
+      </option>
       <option
         v-for="option in props.options"
         :key="option.full_name"

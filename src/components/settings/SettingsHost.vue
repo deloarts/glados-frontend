@@ -15,6 +15,10 @@ import IconServer from "@/components/icons/IconServer.vue";
 import IconComputer from "@/components/icons/IconComputer.vue";
 import IconWarning from "@/components/icons/IconWarning.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
+
 const discSpaceDatabaseDataset = ref<DiscSpace>({
   used: 1,
   free: 0,
@@ -41,20 +45,22 @@ function getHostInformation() {
       os.value = response.data.os;
       databaseSpace.value =
         response.data.disc_space.db_free +
-        " GiB free of " +
+        " GiB" +
+        languageStore.l.settings.host.freeOf +
         response.data.disc_space.db_total +
         " GiB";
 
       if (response.data.disc_space.backup_total) {
         backupSpace.value =
           response.data.disc_space.backup_free +
-          " GiB free of " +
+          " GiB" +
+          languageStore.l.settings.host.freeOf +
           response.data.disc_space.backup_total +
           " GiB";
         backupNotMounted.value = false;
       } else {
         backupNotMounted.value = true;
-        backupSpace.value = "Not mounted";
+        backupSpace.value = languageStore.l.settings.host.notMounted;
       }
 
       discSpaceDatabaseDataset.value = {
@@ -75,28 +81,37 @@ onMounted(getHostInformation);
 <template>
   <div class="scope">
     <div class="content">
-      <h1>Host Information</h1>
+      <h1>{{ languageStore.l.settings.host.banner }}</h1>
       <div class="wrapper">
-        <HostInformationItem title="VERSION" v-model:text="version">
+        <HostInformationItem
+          :title="languageStore.l.settings.host.version"
+          v-model:text="version"
+        >
           <IconTagText v-if="version != '-'" />
           <LoadingSpinner v-else />
         </HostInformationItem>
       </div>
       <div class="wrapper">
-        <HostInformationItem title="HOSTNAME" v-model:text="hostname">
+        <HostInformationItem
+          :title="languageStore.l.settings.host.hostname"
+          v-model:text="hostname"
+        >
           <IconComputer v-if="hostname != '-'" />
           <LoadingSpinner v-else />
         </HostInformationItem>
       </div>
       <div class="wrapper">
-        <HostInformationItem title="OS" v-model:text="os">
+        <HostInformationItem
+          :title="languageStore.l.settings.host.os"
+          v-model:text="os"
+        >
           <IconServer v-if="os != '-'" />
           <LoadingSpinner v-else />
         </HostInformationItem>
       </div>
       <div class="wrapper">
         <HostInformationItem
-          title="Database Disc Space"
+          :title="languageStore.l.settings.host.dbDiscSpace"
           v-model:text="databaseSpace"
         >
           <DiscSpaceChart
@@ -109,7 +124,7 @@ onMounted(getHostInformation);
       </div>
       <div class="wrapper">
         <HostInformationItem
-          title="Backup Disc Space"
+          :title="languageStore.l.settings.host.backupDiscSpace"
           v-model:text="backupSpace"
         >
           <IconWarning v-if="backupNotMounted" />

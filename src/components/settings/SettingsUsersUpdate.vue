@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { usersRequest } from "@/requests/users";
 
@@ -15,6 +16,7 @@ const props = defineProps<{
 }>();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 const formData = ref<UserUpdateSchema>({
@@ -26,11 +28,12 @@ const formData = ref<UserUpdateSchema>({
   full_name: "",
   email: "",
   password: "",
+  language: null,
 });
 const isSystemuser = ref<boolean>(false);
 
 function getUser() {
-  usersRequest.getUsersId(props.selectedUserID).then((response) => {
+  usersRequest.getUsersID(props.selectedUserID).then((response) => {
     formData.value = response.data;
     isSystemuser.value = response.data.is_systemuser;
   });
@@ -38,7 +41,9 @@ function getUser() {
 
 function updateUser() {
   if (isSystemuser.value) {
-    notificationStore.addInfo("Systemuser cannot be updated");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.cannotUpdateSystemUser,
+    );
     return;
   }
 
@@ -47,13 +52,17 @@ function updateUser() {
     .then((response) => {
       getUser();
       if (response.status == 200) {
-        notificationStore.addInfo(`Updated user ${formData.value.username}`);
+        notificationStore.addInfo(
+          languageStore.l.notification.info.updatedUserData,
+        );
         // } else if (response.status == 403) {
         //   notificationStore.addWarn("Not enough permission"
-      } else if (response.status == 404) {
-        notificationStore.addWarn("User not found");
+        // } else if (response.status == 404) {
+        //   notificationStore.addWarn("User not found");
       } else if (response.status == 422) {
-        notificationStore.addWarn("Data is incomplete");
+        notificationStore.addWarn(
+          languageStore.l.notification.warn.userDataIncomplete,
+        );
       } else {
         notificationStore.addWarn(response.data.detail);
       }
@@ -73,6 +82,7 @@ watch(
         full_name: "",
         email: "",
         password: "",
+        language: null,
       };
     } else {
       getUser();
@@ -90,25 +100,35 @@ onMounted(() => getUser());
         <div id="guestuser" class="grid-item-center">
           <Toggle v-model="formData.is_guestuser"></Toggle>
         </div>
-        <div id="guestuser-text" class="grid-item-left">Guest</div>
+        <div id="guestuser-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.guestuser }}
+        </div>
         <div id="superuser" class="grid-item-center">
           <Toggle v-model="formData.is_superuser"></Toggle>
         </div>
-        <div id="superuser-text" class="grid-item-left">Superuser</div>
+        <div id="superuser-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.superUser }}
+        </div>
         <div id="adminuser" class="grid-item-center">
           <Toggle v-model="formData.is_adminuser"></Toggle>
         </div>
-        <div id="adminuser-text" class="grid-item-left">Admin</div>
+        <div id="adminuser-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.adminUser }}
+        </div>
         <div id="active" class="grid-item-center">
           <Toggle v-model="formData.is_active"></Toggle>
         </div>
-        <div id="active-text" class="grid-item-left">Active</div>
+        <div id="active-text" class="grid-item-left">
+          {{ languageStore.l.settings.users.toggle.active }}
+        </div>
         <div id="username" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.username"
             type="text"
-            placeholder="Username"
+            :placeholder="
+              languageStore.l.settings.users.input.usernamePlaceholder
+            "
             :disabled="isSystemuser"
           />
         </div>
@@ -116,26 +136,33 @@ onMounted(() => getUser());
           <input
             class="form-base-text-input"
             v-model="formData.full_name"
-            placeholder="Name"
+            :placeholder="
+              languageStore.l.settings.users.input.fullNamePlaceholder
+            "
           />
         </div>
         <div id="email" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.email"
-            placeholder="Mail"
+            :placeholder="languageStore.l.settings.users.input.mailPlaceholder"
           />
         </div>
         <div id="password" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.password"
-            placeholder="Password"
+            :placeholder="
+              languageStore.l.settings.users.input.passwordPlaceholder
+            "
             :disabled="isSystemuser"
           />
         </div>
         <div id="btn">
-          <ButtonUserUpdate v-on:click="updateUser" text="Update User" />
+          <ButtonUserUpdate
+            v-on:click="updateUser"
+            :text="languageStore.l.settings.users.button.update"
+          />
         </div>
       </div>
     </div>

@@ -3,10 +3,14 @@ import { onMounted, watch } from "vue";
 
 import type { StockCut2DResultSchema } from "@/schemas/stockCut2D";
 
+import { useLanguageStore } from "@/stores/language";
+
 // Props & Emits
 const props = defineProps<{
   solverOutput: StockCut2DResultSchema;
 }>();
+
+const languageStore = useLanguageStore();
 
 onMounted(() => {});
 watch(
@@ -18,15 +22,23 @@ watch(
 <template>
   <div class="form-base-scope">
     <div class="table-base-container">
-      <div class="table-base-title">Solution</div>
+      <div class="table-base-title">
+        {{ languageStore.l.tools.banner.solution }}
+      </div>
       <table class="cursor-default">
         <thead>
           <tr>
-            <th id="panel-id" class="first sticky-col">Panel ID</th>
-            <th id="item-id" class="first sticky-col">Item ID</th>
+            <th id="panel-id" class="first sticky-col">
+              {{ languageStore.l.tools.table.panelID }}
+            </th>
+            <th id="item-id" class="first sticky-col">
+              {{ languageStore.l.tools.table.itemID }}
+            </th>
             <th id="start-x" class="first sticky-col">X</th>
             <th id="start-y" class="first sticky-col">Y</th>
-            <th id="rotated" class="first sticky-col">Rotated</th>
+            <th id="rotated" class="first sticky-col">
+              {{ languageStore.l.tools.table.rotated }}
+            </th>
           </tr>
         </thead>
         <tbody>

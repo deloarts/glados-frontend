@@ -4,6 +4,8 @@ import ButtonAbort from "@/components/elements/ButtonAbort.vue";
 import ButtonCheckDanger from "@/components/elements/ButtonCheckDanger.vue";
 import IconQuestion from "@/components/icons/IconQuestion.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 // Props & Emits
 interface Props {
   show?: boolean;
@@ -17,6 +19,8 @@ const props = withDefaults(defineProps<Props>(), {
   atMouse: false,
   yesIsDanger: false,
 });
+
+const languageStore = useLanguageStore();
 
 const x = ref<string>("");
 const y = ref<string>("");
@@ -64,8 +68,16 @@ onUnmounted(() => {
         <span>{{ props.text }}</span>
       </div>
       <IconQuestion id="icon" class="prompt-icon" />
-      <ButtonCheckDanger id="btnYes" v-on:click="props.onYes()" text="Yes" />
-      <ButtonAbort id="btnNo" v-on:click="props.onNo()" text="No" />
+      <ButtonCheckDanger
+        id="btnYes"
+        v-on:click="props.onYes()"
+        :text="languageStore.l.main.promptYes"
+      />
+      <ButtonAbort
+        id="btnNo"
+        v-on:click="props.onNo()"
+        :text="languageStore.l.main.promptNo"
+      />
     </div>
   </div>
 </template>

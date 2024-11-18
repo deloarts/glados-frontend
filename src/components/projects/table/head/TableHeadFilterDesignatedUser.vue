@@ -20,13 +20,13 @@ const props = defineProps<{
 
 <template>
   <TableHeadFilterSelect
-    v-if="projectControlsStore.columns.designatedUser"
+    v-if="projectControlsStore.columns.designatedUserID"
     name="Receiver ID"
     :options="usersStore.usersOptionsFilter"
     :item-store="projectsStore"
     :filter-store="projectFilterStore"
-    filter-store-key="designatedUserId"
-    :width="props.width.designatedUser"
+    filter-store-key="designatedUserID"
+    :width="props.width.designatedUserID"
   />
 </template>
 

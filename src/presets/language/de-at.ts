@@ -11,6 +11,7 @@ export const deAT: Language = {
       createdNewPAT: "Neuer geheimer Schlüssel wurde erstellt",
       createdUser: "Benutzer wurde angelegt",
       updatedUserData: "Benutzerdaten wurden aktualisiert",
+      cannotUpdateSystemUser: "Der Systembenutzer kann nicht geändert werden",
       selectProjectFirst: "Wähle zuerst ein Projekt aus",
       onlyEditOneProject: "Du kannst nur ein Projekt bearbeiten",
       onlyDeleteOneProject: "Du kannst nur ein Projekt löschen",

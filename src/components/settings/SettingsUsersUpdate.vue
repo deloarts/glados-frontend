@@ -41,7 +41,9 @@ function getUser() {
 
 function updateUser() {
   if (isSystemuser.value) {
-    notificationStore.addInfo("Systemuser cannot be updated");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.cannotUpdateSystemUser,
+    );
     return;
   }
 

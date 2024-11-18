@@ -11,6 +11,7 @@ export const enGB: Language = {
       createdNewPAT: "Created new token",
       createdUser: "Created new user",
       updatedUserData: "Updated user data",
+      cannotUpdateSystemUser: "Systemuser cannot be updated",
       selectProjectFirst: "Select a project first",
       onlyEditOneProject: "You can only edit one project",
       onlyDeleteOneProject: "You can only delete one project",

@@ -7,6 +7,7 @@ export interface Language {
       createdNewPAT: string;
       createdUser: string;
       updatedUserData: string;
+      cannotUpdateSystemUser: string;
       selectProjectFirst: string;
       onlyEditOneProject: string;
       onlyDeleteOneProject: string;

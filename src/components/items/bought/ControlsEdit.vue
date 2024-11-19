@@ -3,6 +3,8 @@ import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useBoughtItemsStore } from "@/stores/boughtItems";
 
@@ -19,16 +21,19 @@ const props = defineProps<{
 const route = useRoute();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 const boughtItemsStore = useBoughtItemsStore();
 
 function onUpdate() {
-  const itemId = Number(route.params.id);
+  const itemID = Number(route.params.id);
   boughtItemsRequest
-    .putItems(itemId, props.formData)
+    .putItems(itemID, props.formData)
     .then((response) => {
       if (response.status === 200) {
-        notificationStore.addInfo(`Updated item #${itemId}.`);
+        notificationStore.addInfo(
+          languageStore.l.notification.info.updatedItem(itemID),
+        );
         boughtItemsStore.getItems();
         router.push({ name: "BoughtItems" });
       }
@@ -37,7 +42,10 @@ function onUpdate() {
       // }
       else if (response.status === 422) {
         notificationStore.addWarn(
-          `Error in field '${response.data.detail[0].loc[1]}': ${response.data.detail[0].msg}`,
+          languageStore.l.notification.warn.createUpdateErrorInField(
+            response.data.detail[0].loc[1],
+            response.data.detail[0].msg,
+          ),
         );
       } else {
         notificationStore.addWarn(response.data.detail);
@@ -59,12 +67,12 @@ function onAbort() {
     <div id="item-controls" class="controls-base-container">
       <ButtonItemCreate
         class="controls-base-element"
-        text="Update"
+        :text="languageStore.l.boughtItem.button.update"
         v-on:click="onUpdate"
       ></ButtonItemCreate>
       <ButtonAbort
         class="controls-base-element"
-        text="Cancel"
+        :text="languageStore.l.boughtItem.button.cancel"
         v-on:click="onAbort"
       ></ButtonAbort>
     </div>

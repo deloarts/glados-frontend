@@ -3,6 +3,7 @@ import { ref, watch, computed, onBeforeMount } from "vue";
 import Toggle from "@vueform/toggle/dist/toggle.js";
 
 import router from "@/router/index";
+import { useLanguageStore } from "@/stores/language";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 import { useBoughtItemFilterStore } from "@/stores/filter";
 import { useBoughtItemsStore } from "@/stores/boughtItems";
@@ -34,6 +35,7 @@ import SelectPreText from "@/components/elements/SelectPreText.vue";
 import type { AvailableOption } from "@/models/controls";
 
 // Stores
+const languageStore = useLanguageStore();
 const boughtItemsStore = useBoughtItemsStore();
 const controlsStore = useBoughtItemsControlsStore();
 const filterStore = useBoughtItemFilterStore();
@@ -55,25 +57,35 @@ const showExcelImport = ref<boolean>(false);
 
 // Buttons
 const buttonItemCreateText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "New Item" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.boughtItem.button.newItem
+    : "";
 });
 const buttonItemEditText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Edit Item" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.boughtItem.button.editItem
+    : "";
 });
 const buttonItemCopyText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Copy Item" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.boughtItem.button.copyItem
+    : "";
 });
 const buttonSyncText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Sync" : "";
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.sync : "";
 });
 const buttonViewsText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Views" : "";
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.views : "";
 });
 const buttonColumnsText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Columns" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.boughtItem.button.columns
+    : "";
 });
 const buttonClearFilterText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Clear Filter" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.boughtItem.button.clearFilter
+    : "";
 });
 
 // Selections
@@ -83,15 +95,32 @@ const availableOptionsLimit: Array<AvailableOption> = [
   { text: "250", value: "250" },
   { text: "500", value: "500" },
 ];
-const availableOptionsOrderBy: Array<AvailableOption> = [
-  { text: "ID", value: "id" },
-  { text: "Created", value: "created" },
-  { text: "Project", value: "project" },
-  { text: "Product", value: "productNumber" },
-  { text: "Group", value: "group1" },
-  { text: "Manufacturer", value: "manufacturer" },
-  { text: "Supplier", value: "supplier" },
-];
+const availableOptionsOrderBy = computed<Array<AvailableOption>>(() => {
+  return [
+    { text: languageStore.l.boughtItem.options.orderBy.id, value: "id" },
+    {
+      text: languageStore.l.boughtItem.options.orderBy.created,
+      value: "created",
+    },
+    {
+      text: languageStore.l.boughtItem.options.orderBy.project,
+      value: "project",
+    },
+    {
+      text: languageStore.l.boughtItem.options.orderBy.product,
+      value: "productNumber",
+    },
+    { text: languageStore.l.boughtItem.options.orderBy.group, value: "group1" },
+    {
+      text: languageStore.l.boughtItem.options.orderBy.manufacturer,
+      value: "manufacturer",
+    },
+    {
+      text: languageStore.l.boughtItem.options.orderBy.supplier,
+      value: "supplier",
+    },
+  ];
+});
 const availableOptionsFilterPresets = computed<Array<AvailableOption>>(() => {
   let presets = [];
   for (const key in filterStore.presets) {
@@ -104,7 +133,7 @@ const selectedOptionFilterPreset = ref<string>("");
 function saveFilter() {
   filterStore.saveMy();
   boughtItemsStore.getItems();
-  notificationStore.addInfo("Saved new filter.");
+  notificationStore.addInfo(languageStore.l.notification.info.savedNewFilter);
 }
 
 function loadFilter() {
@@ -125,9 +154,13 @@ function onButtonNewItem() {
 
 function onButtonEdit() {
   if (boughtItemsStore.getSelection().length == 0) {
-    notificationStore.addWarn("Select an item first.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.selectItemFirst,
+    );
   } else if (boughtItemsStore.getSelection().length != 1) {
-    notificationStore.addWarn("You can only edit one item.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.onlyEditOneItem,
+    );
   } else {
     router.push(`/items/bought/edit/${boughtItemsStore.getSelection()[0]}`);
   }
@@ -135,9 +168,13 @@ function onButtonEdit() {
 
 function onButtonCopy() {
   if (boughtItemsStore.getSelection().length == 0) {
-    notificationStore.addWarn("Select an item first.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.selectItemFirst,
+    );
   } else if (boughtItemsStore.getSelection().length != 1) {
-    notificationStore.addWarn("You can only edit one item.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.onlyCopyOneItem,
+    );
   } else {
     router.push(`/items/bought/copy/${boughtItemsStore.getSelection()[0]}`);
   }
@@ -145,9 +182,13 @@ function onButtonCopy() {
 
 function onButtonDelete() {
   if (boughtItemsStore.getSelection().length == 0) {
-    notificationStore.addWarn("Select an item first.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.selectItemFirst,
+    );
   } else if (boughtItemsStore.getSelection().length != 1) {
-    notificationStore.addWarn("You can only delete one item.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.onlyDeleteOneItem,
+    );
   } else {
     showDeletePrompt.value = true;
   }
@@ -156,11 +197,15 @@ function onButtonDelete() {
 function onButtonDownloadExcel() {
   const params = getBoughtItemsFilterParams(filterStore.state);
   boughtItemsRequest.getItemsExcel(params).then((response) => {
-    let blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      }),
-      url = window.URL.createObjectURL(blob);
-    window.open(url);
+    if (response.status == 200) {
+      let blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }),
+        url = window.URL.createObjectURL(blob);
+      window.open(url);
+    } else {
+      notificationStore.addWarn(response.data.detail);
+    }
   });
 }
 
@@ -169,10 +214,12 @@ function onButtonUploadExcel() {
 }
 
 function deleteItem() {
-  const itemId = boughtItemsStore.getSelection()[0];
-  boughtItemsRequest.deleteItemsId(itemId).then((response) => {
+  const itemID = boughtItemsStore.getSelection()[0];
+  boughtItemsRequest.deleteItemsID(itemID).then((response) => {
     if (response.status === 200) {
-      notificationStore.addInfo(`Deleted item #${itemId}`);
+      notificationStore.addInfo(
+        languageStore.l.notification.info.deletedItem(itemID),
+      );
       boughtItemsStore.getItems();
     } else {
       notificationStore.addWarn(response.data.detail);
@@ -230,14 +277,14 @@ onBeforeMount(setupTabletView);
       />
       <ButtonExcel
         class="controls-base-element"
-        text="Import Excel"
+        :text="languageStore.l.boughtItem.button.importExcel"
         v-if="gtMinWidthDesktop"
         v-on:click="onButtonUploadExcel"
       />
       <ButtonExcel
         v-if="gtMinWidthDesktop"
         class="controls-base-element"
-        text="Export Excel"
+        :text="languageStore.l.boughtItem.button.exportExcel"
         v-on:click="onButtonDownloadExcel"
       />
       <ButtonEdit
@@ -253,12 +300,12 @@ onBeforeMount(setupTabletView);
       <ButtonDelete
         v-if="gtMinWidthTablet"
         class="controls-base-element"
-        text="Delete Item"
+        :text="languageStore.l.boughtItem.button.deleteItem"
         v-on:click="onButtonDelete"
       />
       <ButtonClear
         class="controls-base-element"
-        text="Unselect"
+        :text="languageStore.l.boughtItem.button.unselect"
         v-on:click="onButtonClear"
       />
     </div>
@@ -287,21 +334,27 @@ onBeforeMount(setupTabletView);
             v-model="filterStore.state.ignoreDelivered"
             @change="boughtItemsStore.getItems()"
           />
-          <span class="drop-down-toggle-item-text">Ignore Delivered</span>
+          <span class="drop-down-toggle-item-text">{{
+            languageStore.l.boughtItem.options.views.ignoreDelivered
+          }}</span>
         </div>
         <div class="drop-down-toggle-item">
           <Toggle
             v-model="filterStore.state.ignoreCanceled"
             @change="boughtItemsStore.getItems()"
           />
-          <span class="drop-down-toggle-item-text">Ignore Canceled</span>
+          <span class="drop-down-toggle-item-text">{{
+            languageStore.l.boughtItem.options.views.ignoreCanceled
+          }}</span>
         </div>
         <div class="drop-down-toggle-item">
           <Toggle
             v-model="filterStore.state.ignoreLost"
             @change="boughtItemsStore.getItems()"
           />
-          <span class="drop-down-toggle-item-text">Ignore Lost</span>
+          <span class="drop-down-toggle-item-text">{{
+            languageStore.l.boughtItem.options.views.ignoreLost
+          }}</span>
         </div>
 
         <hr />
@@ -313,7 +366,7 @@ onBeforeMount(setupTabletView);
         >
           <Toggle v-model="controlsStore.state[key]" />
           <span class="drop-down-toggle-item-text">{{
-            camelToTitle(key)
+            camelToTitle(languageStore.l.boughtItem.options.views[key])
           }}</span>
         </div>
       </DropDownTableView>
@@ -325,7 +378,7 @@ onBeforeMount(setupTabletView);
       >
         <div class="drop-down-button-item">
           <ButtonShowInitial
-            text="Show All"
+            :text="languageStore.l.boughtItem.button.showAll"
             v-on:click="controlsStore.enableAllColumns()"
           />
         </div>
@@ -337,7 +390,7 @@ onBeforeMount(setupTabletView);
         >
           <Toggle v-model="controlsStore.columns[key]" />
           <span class="drop-down-toggle-item-text">{{
-            camelToTitle(key)
+            camelToTitle(languageStore.l.boughtItem.table[key])
           }}</span>
         </div>
       </DropDownTableColumns>
@@ -345,13 +398,13 @@ onBeforeMount(setupTabletView);
       <ButtonFilterSave
         v-if="gtMinWidthDesktop"
         class="controls-base-element"
-        text="Save Filter"
+        :text="languageStore.l.boughtItem.button.saveFilter"
         v-on:click="saveFilter"
       />
       <ButtonFilterLoad
         v-if="gtMinWidthDesktop"
         class="controls-base-element"
-        text="Load Filter"
+        :text="languageStore.l.boughtItem.button.loadFilter"
         v-on:click="loadFilter"
       />
       <ButtonFilterClear
@@ -371,14 +424,14 @@ onBeforeMount(setupTabletView);
       <SelectPreText
         v-if="gtMinWidthTablet"
         class="controls-base-element"
-        text="Sort By"
+        :text="languageStore.l.boughtItem.button.sortBy"
         v-model:selection="filterStore.state.sortBy"
         v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsOrderBy"
       />
       <SelectPreText
         class="controls-base-element"
-        text="Preset"
+        :text="languageStore.l.boughtItem.button.preset"
         v-model:selection="selectedOptionFilterPreset"
         v-on:update:selection="boughtItemsStore.getItems()"
         :options="availableOptionsFilterPresets"
@@ -387,7 +440,7 @@ onBeforeMount(setupTabletView);
   </div>
 
   <Prompt
-    text="Delete item?"
+    :text="languageStore.l.boughtItem.prompt.deleteItem"
     yes-is-danger
     v-bind:at-mouse="gtMinWidthDesktop"
     v-model:show="showDeletePrompt"

@@ -3,6 +3,7 @@ import { watch, computed } from "vue";
 //@ts-ignore
 import Toggle from "@vueform/toggle/dist/toggle.js";
 
+import { useLanguageStore } from "@/stores/language";
 import { useUsersStore } from "@/stores/user";
 
 import type { ProjectUpdateSchema } from "@/schemas/project";
@@ -22,6 +23,7 @@ const emit = defineEmits<{
 const updateFormData = computed<ProjectUpdateSchema>(() => props.formData);
 
 // Stores
+const languageStore = useLanguageStore();
 const usersStore = useUsersStore();
 
 watch(
@@ -41,40 +43,49 @@ watch(
           <input
             class="form-base-text-input"
             v-model="updateFormData.number"
-            placeholder="Number *"
+            :placeholder="
+              languageStore.l.project.input.projectNumberPlaceholder
+            "
           />
         </div>
         <div id="product-number" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.product_number"
-            placeholder="Product Number"
+            :placeholder="
+              languageStore.l.project.input.productNumberPlaceholder
+            "
           />
         </div>
         <div id="customer" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.customer"
-            placeholder="Customer *"
+            :placeholder="languageStore.l.project.input.customerPlaceholder"
           />
         </div>
         <div id="description" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.description"
-            placeholder="Description *"
+            :placeholder="languageStore.l.project.input.descriptionPlaceholder"
           />
         </div>
         <div id="designated" class="grid-item-center">
           <SelectUser
             v-model:selection="updateFormData.designated_user_id"
             :options="usersStore.users"
+            :placeholder="
+              languageStore.l.project.input.designateUserPlaceholder
+            "
           />
         </div>
         <div id="active" class="grid-item-center">
           <Toggle v-model="updateFormData.is_active"></Toggle>
         </div>
-        <div id="active-text" class="grid-item-left">Active</div>
+        <div id="active-text" class="grid-item-left">
+          {{ languageStore.l.project.toggle.projectState }}
+        </div>
       </div>
     </div>
   </div>

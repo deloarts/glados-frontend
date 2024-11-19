@@ -8,12 +8,16 @@ import ButtonSolve from "@/components/elements/ButtonSolve.vue";
 import ButtonLoading from "@/components/elements/ButtonLoading.vue";
 import IconDelete from "@/components/icons/IconDelete.vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 const props = defineProps<{
   solverInput: StockCut1DJobSchema;
   solving: boolean;
   onSolve: Function;
   onAdd: Function;
 }>();
+
+const languageStore = useLanguageStore();
 
 const solverInput = computed<StockCut1DJobSchema>(() => props.solverInput);
 
@@ -36,19 +40,33 @@ function removeAll() {
     <div class="form-base-container">
       <div id="grid" class="grid-command">
         <div id="btn-add">
-          <ButtonPlus v-on:click="props.onAdd()" text="Add" />
+          <ButtonPlus
+            v-on:click="props.onAdd()"
+            :text="languageStore.l.tools.buttons.add"
+          />
         </div>
         <div id="btn-solve">
-          <ButtonLoading v-if="props.solving" text="Solving..." />
-          <ButtonSolve v-else v-on:click="props.onSolve()" text="Solve" />
+          <ButtonLoading
+            v-if="props.solving"
+            :text="languageStore.l.tools.buttons.solving"
+          />
+          <ButtonSolve
+            v-else
+            v-on:click="props.onSolve()"
+            :text="languageStore.l.tools.buttons.solve"
+          />
         </div>
       </div>
     </div>
 
     <div class="form-base-container">
-      <div class="form-base-title">Stock</div>
+      <div class="form-base-title">
+        {{ languageStore.l.tools.banner.stock }}
+      </div>
       <div id="grid" class="grid-input">
-        <div id="stock-length-text" class="grid-item-left">Stock Length</div>
+        <div id="stock-length-text" class="grid-item-left">
+          {{ languageStore.l.tools.labels.stockLength }}
+        </div>
         <div id="stock-length" class="grid-item-center">
           <input
             class="form-base-text-input"
@@ -57,7 +75,9 @@ function removeAll() {
           />
         </div>
 
-        <div id="cut-width-text" class="grid-item-left">Cut Width</div>
+        <div id="cut-width-text" class="grid-item-left">
+          {{ languageStore.l.tools.labels.cutWidth }}
+        </div>
         <div id="cut-width" class="grid-item-center">
           <input
             class="form-base-text-input"
@@ -69,12 +89,18 @@ function removeAll() {
     </div>
 
     <div class="table-base-container">
-      <div class="table-base-title">Items</div>
+      <div class="table-base-title">
+        {{ languageStore.l.tools.banner.items }}
+      </div>
       <table class="cursor-default">
         <thead>
           <tr>
-            <th class="first sticky-col" id="cut-length">Cut Length</th>
-            <th class="first sticky-col" id="quantity">Quantity</th>
+            <th class="first sticky-col" id="cut-length">
+              {{ languageStore.l.tools.table.cutLength }}
+            </th>
+            <th class="first sticky-col" id="quantity">
+              {{ languageStore.l.tools.table.quantity }}
+            </th>
             <th class="first sticky-col" id="clear">
               <IconDelete v-on:click="removeAll()" />
             </th>
@@ -122,7 +148,7 @@ input {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
-  color: white;
+  color: var(--main-text-color);
   background-color: transparent;
 
   outline: none;

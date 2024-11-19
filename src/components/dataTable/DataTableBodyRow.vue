@@ -23,28 +23,28 @@ tr {
   margin: 0;
   padding: 0;
   height: 24px;
-  border-bottom: solid thin $main-color;
+  border-bottom: solid thin var(--main-color);
 }
 
 tr:nth-child(even) > td {
-  color: white;
-  background: $table-row-even;
+  color: var(--main-text-color);
+  background: var(--table-row-even);
 }
 
 tr:nth-child(odd) > td {
-  color: white;
-  background: $table-row-odd;
+  color: var(--main-text-color);
+  background: var(--table-row-odd);
 }
 
 tr:hover > td {
-  background: $table-row-hover !important;
+  background: var(--table-row-hover) !important;
 }
 
 tr.selected > td {
-  background: $table-row-active !important;
+  background: var(--table-row-active) !important;
 }
 
 tr.selected:hover > td {
-  background: $table-row-active-hover !important;
+  background: var(--table-row-active-hover) !important;
 }
 </style>

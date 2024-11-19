@@ -4,6 +4,8 @@ import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 
 import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
@@ -15,6 +17,7 @@ import UpdateItemForm from "@/components/items/bought/UpdateItemForm.vue";
 const route = useRoute();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 const formData = ref<BoughtItemCreateSchema>({
@@ -33,15 +36,17 @@ const formData = ref<BoughtItemCreateSchema>({
 });
 
 onMounted(() => {
-  const itemId = route.params.id;
+  const itemID = route.params.id;
 
   boughtItemsRequest
-    .getItemsId(Number(itemId))
+    .getItemsID(Number(itemID))
     .then((response) => {
       if (response.status === 200) {
         formData.value = response.data;
       } else {
-        notificationStore.addWarn(`Could not fetch an item with the ID ${itemId}.`);
+        notificationStore.addWarn(
+          languageStore.l.notification.warn.failedFetchItem(itemID),
+        );
         setTimeout(function () {
           router.push({ name: "BoughtItems" });
         }, 4000);
@@ -56,7 +61,7 @@ onMounted(() => {
     <div class="views-content">
       <div id="grid">
         <div id="controls">
-          <ControlsNew v-model:form-data="formData" header="Copy item" />
+          <ControlsNew v-model:form-data="formData" />
         </div>
         <div id="data">
           <UpdateItemForm v-model:form-data="formData" />

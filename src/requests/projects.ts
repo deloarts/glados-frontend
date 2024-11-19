@@ -12,7 +12,7 @@ export class ProjectsRequest {
   getProjectsMy() {
     return request.get("/api/web/v1/projects/my/", requestConfig(null));
   }
-  getProjectsId(id: Number) {
+  getProjectsID(id: Number) {
     return request.get(`/api/web/v1/projects/${id}/`, requestConfig(null));
   }
   getProjectsNumber(number: String) {

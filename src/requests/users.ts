@@ -10,7 +10,7 @@ export class UsersRequest {
   getUsersMe() {
     return request.get("/api/web/v1/users/me/", requestConfig(null));
   }
-  getUsersId(id: Number) {
+  getUsersID(id: Number) {
     return request.get(`/api/web/v1/users/${id}/`, requestConfig(null));
   }
 
@@ -30,6 +30,20 @@ export class UsersRequest {
     return request.put(
       `/api/web/v1/users/me/personal-access-token`,
       requestConfig({ expires_in_minutes: config.pat_expire_minutes }),
+      null,
+    );
+  }
+  putUsersMeLanguage(language: string) {
+    return request.put(
+      `/api/web/v1/users/me/language`,
+      requestConfig({ language: language }),
+      null,
+    );
+  }
+  putUsersMeTheme(theme: string) {
+    return request.put(
+      `/api/web/v1/users/me/theme`,
+      requestConfig({ theme: theme }),
       null,
     );
   }

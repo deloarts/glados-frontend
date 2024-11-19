@@ -29,8 +29,8 @@ const props = defineProps<{
     :item-store="boughtItemsStore"
     :filter-store="boughtItemFilterStore"
     :display-value="usersStore.getNameByID(item.creator_id)"
-    filter-store-key="creatorId"
-    :width="props.width.creatorId"
+    filter-store-key="creatorID"
+    :width="props.width.creatorID"
     :fixed-height="controlsStore.state.fixedHeight"
   />
 </template>

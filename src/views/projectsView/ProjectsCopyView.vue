@@ -4,6 +4,8 @@ import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { projectsRequest } from "@/requests/projects";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 
 import type { ProjectCreateSchema } from "@/schemas/project";
@@ -15,6 +17,7 @@ import UpdateForm from "@/components/projects/UpdateForm.vue";
 const route = useRoute();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 const formData = ref<ProjectCreateSchema>({
@@ -27,15 +30,16 @@ const formData = ref<ProjectCreateSchema>({
 });
 
 onMounted(() => {
-  const itemId = route.params.id;
-
+  const projectID = route.params.id;
   projectsRequest
-    .getProjectsId(Number(itemId))
+    .getProjectsID(Number(projectID))
     .then((response) => {
       if (response.status === 200) {
         formData.value = response.data;
       } else {
-        notificationStore.addWarn(`Could not fetch a project with the ID ${itemId}.`);
+        notificationStore.addWarn(
+          languageStore.l.notification.warn.failedFetchProject(projectID),
+        );
         setTimeout(function () {
           router.push({ name: "Projects" });
         }, 4000);

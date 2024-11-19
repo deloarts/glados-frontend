@@ -4,8 +4,9 @@ import Toggle from "@vueform/toggle/dist/toggle.js";
 
 import router from "@/router/index";
 import { projectsRequest } from "@/requests/projects";
-import { capitalizeFirstLetter } from "@/helper/string.helper";
+import { camelToTitle } from "@/helper/string.helper";
 
+import { useLanguageStore } from "@/stores/language";
 import { useProjectsStore } from "@/stores/projects";
 import { useProjectFilterStore } from "@/stores/filter";
 import { useNotificationStore } from "@/stores/notification";
@@ -25,6 +26,7 @@ import DropDownTableColumns from "../elements/DropDownTableColumns.vue";
 import DropDownTableView from "../elements/DropDownTableView.vue";
 
 // Stores
+const languageStore = useLanguageStore();
 const projectStore = useProjectsStore();
 const projectFilterStore = useProjectFilterStore();
 const notificationStore = useNotificationStore();
@@ -45,22 +47,33 @@ const showDeletePrompt = ref<boolean>(false);
 
 // Buttons
 const buttonCreateText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "New Project" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.project.button.newProject
+    : "";
 });
 const buttonEditText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Edit Project" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.project.button.editProject
+    : "";
+});
+const buttonDeleteText = computed<string>(() => {
+  return gtMinWidthTablet.value
+    ? languageStore.l.project.button.deleteProject
+    : "";
 });
 const buttonSyncText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Sync" : "";
+  return gtMinWidthTablet.value ? languageStore.l.project.button.sync : "";
 });
 const buttonViewsText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Views" : "";
+  return gtMinWidthTablet.value ? languageStore.l.project.button.views : "";
 });
 const buttonColumnsText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Columns" : "";
+  return gtMinWidthTablet.value ? languageStore.l.project.button.columns : "";
 });
 const buttonClearFilterText = computed<string>(() => {
-  return gtMinWidthTablet.value ? "Clear Filter" : "";
+  return gtMinWidthTablet.value
+    ? languageStore.l.project.button.clearFilter
+    : "";
 });
 
 function onButtonNew() {
@@ -69,9 +82,13 @@ function onButtonNew() {
 
 function onButtonEdit() {
   if (projectStore.getSelection().length == 0) {
-    notificationStore.addWarn("Select a project first.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.selectProjectFirst,
+    );
   } else if (projectStore.getSelection().length != 1) {
-    notificationStore.addWarn("You can only edit one project.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.onlyEditOneProject,
+    );
   } else {
     router.push(`/projects/edit/${projectStore.getSelection()[0]}`);
   }
@@ -79,19 +96,25 @@ function onButtonEdit() {
 
 function onButtonDelete() {
   if (projectStore.getSelection().length == 0) {
-    notificationStore.addWarn("Select a project first.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.selectProjectFirst,
+    );
   } else if (projectStore.getSelection().length != 1) {
-    notificationStore.addWarn("You can only delete one project.");
+    notificationStore.addInfo(
+      languageStore.l.notification.info.onlyDeleteOneProject,
+    );
   } else {
     showDeletePrompt.value = true;
   }
 }
 
 function deleteItem() {
-  const projectId = projectStore.getSelection()[0];
-  projectsRequest.deleteProjects(projectId).then((response) => {
+  const projectID = projectStore.getSelection()[0];
+  projectsRequest.deleteProjects(projectID).then((response) => {
     if (response.status === 200) {
-      notificationStore.addInfo(`Deleted project #${projectId}`);
+      notificationStore.addInfo(
+        languageStore.l.notification.info.deletedProject(projectID),
+      );
       projectStore.getItems();
     } else {
       notificationStore.addWarn(response.data.detail);
@@ -120,23 +143,23 @@ function clearFilter() {
     >
       <ButtonItemCreate
         class="controls-base-element"
-        v-model:text="buttonCreateText"
+        :text="buttonCreateText"
         v-on:click="onButtonNew"
       ></ButtonItemCreate>
       <ButtonEdit
         class="controls-base-element"
-        v-model:text="buttonEditText"
+        :text="buttonEditText"
         v-on:click="onButtonEdit"
       ></ButtonEdit>
       <ButtonDelete
         v-if="gtMinWidthTablet"
         class="controls-base-element"
-        text="Delete"
+        :text="buttonDeleteText"
         v-on:click="onButtonDelete"
       ></ButtonDelete>
       <ButtonClear
         class="controls-base-element"
-        text="Unselect"
+        :text="languageStore.l.project.button.unselect"
         v-on:click="onButtonClear"
       ></ButtonClear>
     </div>
@@ -144,53 +167,60 @@ function clearFilter() {
       <ButtonSyncOff
         v-if="projectStore.paused"
         class="controls-base-element"
-        v-model:text="buttonSyncText"
+        :text="buttonSyncText"
       ></ButtonSyncOff>
       <ButtonSync
         v-else
         class="controls-base-element"
-        v-model:text="buttonSyncText"
-        v-model:rotate="projectStore.loading"
+        :text="buttonSyncText"
+        :rotate="projectStore.loading"
         v-on:click="projectStore.getItems()"
       ></ButtonSync>
 
       <DropDownTableView
         class="controls-base-element"
-        v-model:text="buttonViewsText"
+        :text="buttonViewsText"
         :hide-when-clicked="false"
       >
-        <div class="drop-down-toggle-item">
-          <Toggle v-model="projectsControlsStore.state.fixedHeight"></Toggle
-          ><span class="drop-down-toggle-item-text">Fixed Height</span>
+        <div
+          v-for="(value, key) in projectsControlsStore.state"
+          v-bind:key="key"
+          class="drop-down-toggle-item"
+        >
+          <Toggle v-model="projectsControlsStore.state[key]" />
+          <span class="drop-down-toggle-item-text">{{
+            camelToTitle(languageStore.l.project.options.views[key])
+          }}</span>
         </div>
       </DropDownTableView>
 
       <DropDownTableColumns
         class="controls-base-element"
-        v-model:text="buttonColumnsText"
+        :text="buttonColumnsText"
         :hide-when-clicked="false"
       >
         <div
           v-for="(value, key) in projectsControlsStore.columns"
           class="drop-down-toggle-item"
+          v-bind:key="key"
         >
           <Toggle v-model="projectsControlsStore.columns[key]"></Toggle
           ><span class="drop-down-toggle-item-text">{{
-            capitalizeFirstLetter(key)
+            camelToTitle(languageStore.l.project.table[key])
           }}</span>
         </div>
       </DropDownTableColumns>
 
       <ButtonFilterClear
         class="controls-base-element"
-        v-model:text="buttonClearFilterText"
+        :text="buttonClearFilterText"
         v-on:click="clearFilter"
       ></ButtonFilterClear>
     </div>
   </div>
 
   <Prompt
-    text="Delete project?"
+    :text="languageStore.l.project.prompt.deleteProject"
     yes-is-danger
     v-bind:at-mouse="gtMinWidthDesktop"
     v-model:show="showDeletePrompt"

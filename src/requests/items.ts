@@ -22,10 +22,10 @@ export class BoughtItemsRequest {
       requestConfigXlsxDownload(null),
     );
   }
-  getItemsId(id: Number) {
+  getItemsID(id: Number) {
     return request.get(`/api/web/v1/items/bought/${id}/`, requestConfig(null));
   }
-  getItemsIdChangelog(id: Number) {
+  getItemsIDChangelog(id: Number) {
     return request.get(
       `/api/web/v1/items/bought/${id}/changelog/`,
       requestConfig(null),
@@ -180,7 +180,7 @@ export class BoughtItemsRequest {
   }
 
   // DELETE
-  deleteItemsId(id: Number) {
+  deleteItemsID(id: Number) {
     return request.delete(
       `/api/web/v1/items/bought/${id}/`,
       requestConfig(null),

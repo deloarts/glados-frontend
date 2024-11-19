@@ -23,14 +23,14 @@ const props = defineProps<{
 
 <template>
   <TableItemText
-    v-if="projectsControlsStore.columns.designatedUser"
+    v-if="projectsControlsStore.columns.designatedUserID"
     name="Designated User"
     :value="item.designated_user_id"
     :item-store="projectsStore"
     :filter-store="projectsFilterStore"
     :display-value="usersStore.getNameByID(props.item.designated_user_id)"
-    filter-store-key="designatedUserId"
-    :width="props.width.designatedUser"
+    filter-store-key="designatedUserID"
+    :width="props.width.designatedUserID"
     :fixed-height="projectsControlsStore.state.fixedHeight"
   />
 </template>

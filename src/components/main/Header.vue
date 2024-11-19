@@ -1,40 +1,8 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
-import Typed from "typed.js";
-
 import config from "@/config";
-import { useUserStore } from "@/stores/user";
 
-const userStore = useUserStore();
-const full_name = computed<string>(() => userStore.user.full_name);
-const email = computed<string>(() => userStore.user.email);
-
-function typeFullName() {
-  if (full_name.value.length <= 0) {
-    return;
-  }
-  new Typed(".full-name", {
-    strings: [full_name.value],
-    typeSpeed: 4,
-    showCursor: false,
-    onComplete: () => {
-      typeMail();
-    },
-  });
-}
-
-function typeMail() {
-  if (email.value.length <= 0) {
-    return;
-  }
-  new Typed(".email", {
-    strings: [email.value],
-    typeSpeed: 3,
-    showCursor: false,
-  });
-}
-
-watch(full_name, () => typeFullName());
+import QuickTheme from "@/components/common/QuickTheme.vue";
+import QuickLanguage from "@/components/common/QuickLanguage.vue";
 </script>
 
 <template>
@@ -45,10 +13,8 @@ watch(full_name, () => typeFullName());
         <span class="dev" v-if="config.debug">DEBUG MODE</span>
       </div>
       <div class="cell">
-        <div class="userdata">
-          <span class="full-name"> </span>
-          <span class="email"> </span>
-        </div>
+        <QuickLanguage />
+        <QuickTheme />
       </div>
     </div>
   </div>
@@ -69,7 +35,7 @@ watch(full_name, () => typeFullName());
   font-weight: thin;
 
   color: white;
-  background: $main-color;
+  background: var(--main-color);
 
   cursor: default;
 }
@@ -85,7 +51,7 @@ watch(full_name, () => typeFullName());
   vertical-align: middle;
 
   padding-left: 15px;
-  padding-right: 15px;
+  padding-right: 5px;
 }
 
 .cell:nth-child(1) {
@@ -104,27 +70,13 @@ watch(full_name, () => typeFullName());
   text-align: right;
 }
 
-.userdata {
-  display: table;
-  float: right;
-}
+.icon {
+  color: white;
+  height: 25px;
+  width: 25px;
 
-.full-name {
-  display: table-row;
-  text-align: right;
-  height: 20px;
-  font-size: 1em;
-  padding: 0;
-  margin: 0;
-}
-
-.email {
-  display: table-row;
-  text-align: right;
-  height: 14px;
-  font-size: 0.7em;
-  padding: 0;
-  margin: 0;
+  border-radius: 1px;
+  border-color: white;
 }
 
 .dev {
@@ -135,14 +87,6 @@ watch(full_name, () => typeFullName());
 }
 
 @media screen and (max-width: $max-width-tablet) {
-  .full-name {
-    font-size: 0.8em;
-  }
-
-  .email {
-    font-size: 0.6em;
-  }
-
   .dev {
     font-size: 0.7em;
   }

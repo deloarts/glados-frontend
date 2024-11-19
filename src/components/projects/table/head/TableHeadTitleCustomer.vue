@@ -4,8 +4,11 @@ import { computed } from "vue";
 import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
 
 import { projectsColumnWidths } from "@/presets/columnWidth";
+
+import { useLanguageStore } from "@/stores/language";
 import { useProjectsControlsStore } from "@/stores/controls";
 
+const languageStore = useLanguageStore();
 const projectControlsStore = useProjectsControlsStore();
 
 const props = defineProps<{
@@ -29,7 +32,7 @@ const computedWidth = computed<typeof projectsColumnWidths>({
 <template>
   <TableHeadTitle
     v-if="projectControlsStore.columns.customer"
-    name="Customer"
+    :name="languageStore.l.project.table.customer"
     v-model:width="computedWidth.customer"
   />
 </template>

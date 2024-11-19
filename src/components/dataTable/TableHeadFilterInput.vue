@@ -91,13 +91,13 @@ input {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
-  color: white;
-  background-color: $main-background-color-dark-2;
-
-  border-width: $main-border-width;
-  border-style: $main-border-style;
-  border-color: $main-background-color-dark;
+  color: var(--main-text-color);
+  background-color: var(--input-background);
+  border: 1px solid var(--input-border-color);
   border-radius: $main-border-radius;
+  border-style: $main-border-style;
+  border-width: $main-border-width;
+  
   outline: none;
 
   font-family: Calibri;
@@ -105,10 +105,10 @@ input {
 }
 
 input:hover {
-  background-color: $main-background-color-hover;
+  background-color: var(--main-background-color-hover);
 }
 
 input:focus {
-  border-color: $main-color;
+  border-color: var(--main-color);
 }
 </style>

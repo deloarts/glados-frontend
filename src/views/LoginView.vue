@@ -7,6 +7,8 @@ import moment from "moment";
 import router from "@/router/index";
 
 import { request } from "@/requests/index";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useProjectsStore } from "@/stores/projects";
 import { useUsersStore, useUserStore } from "@/stores/user";
@@ -23,6 +25,7 @@ const particlesLoaded = async (container) => {
 };
 
 // Stores
+const languageStore = useLanguageStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 const projectsStore = useProjectsStore();
@@ -56,17 +59,25 @@ function login() {
       setTimeout(userStore.get, 1200);
       usersStore.get();
       projectsStore.getItems();
+    } else if (response.status === 401) {
+      showLoadingBar.value = false;
+      form_pw.value = "";
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.wrongUserCreds,
+      );
     } else {
       showLoadingBar.value = false;
       form_pw.value = "";
-      notificationStore.addWarn("Wrong login credentials.");
+      notificationStore.addWarn(response.data.detail);
     }
   });
 }
 
 function enterApp() {
   showLoadingBar.value = false;
-  notificationStore.addInfo(`Welcome ${userStore.user.full_name}`);
+  notificationStore.addInfo(
+    languageStore.l.notification.info.welcomeMessage(userStore.user.full_name),
+  );
   var previousRoute = localStorage.getItem("gladosActiveRoute");
   if (previousRoute == "/login" || previousRoute == null) {
     previousRoute = "/";
@@ -128,7 +139,7 @@ onMounted(() => {
           v-on:keyup.enter="login()"
           class="input-username"
           type="text"
-          placeholder="Username"
+          :placeholder="languageStore.l.main.login.usernamePlaceholder"
           ref="userInput"
       /></Transition>
       <Transition name="fade-move">
@@ -139,7 +150,7 @@ onMounted(() => {
           v-on:keyup.enter="login()"
           class="input-password"
           type="password"
-          placeholder="Password"
+          :placeholder="languageStore.l.main.login.passwordPlaceholder"
       /></Transition>
       <Transition name="fade-move">
         <button
@@ -148,7 +159,7 @@ onMounted(() => {
           v-on:click="login()"
           class="button-login"
         >
-          Login
+          {{ languageStore.l.main.login.loginButton }}
         </button>
       </Transition>
       <Transition name="fade">
@@ -187,10 +198,7 @@ onMounted(() => {
   left: 0;
   right: 0;
 
-  background: linear-gradient(
-    $main-background-color-dark-2 30%,
-    $main-background-color
-  );
+  background: linear-gradient(rgb(25, 25, 25) 30%, rgb(10, 10, 10));
 }
 
 .login-box {
@@ -202,14 +210,14 @@ onMounted(() => {
   height: 85px;
   transform: translate(-50%, -50%);
 
-  background: $main-color;
+  background: var(--main-color);
   border-radius: 5px;
 
   text-align: center;
   padding: 15px;
   padding-top: 30px;
 
-  box-shadow: 0px 20px 30px 0px $main-background-color-dark-2;
+  box-shadow: 0px 20px 30px 0px rgb(25, 25, 25);
 
   transition: all 0.2s ease-out;
 
@@ -223,7 +231,7 @@ onMounted(() => {
     padding: 0;
     margin: 0;
     border-radius: 1000;
-    background-color: $main-background-color;
+    background-color: rgb(10, 10, 10);
   }
 }
 

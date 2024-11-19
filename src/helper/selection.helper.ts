@@ -49,14 +49,14 @@ export function getSelection(
   lineIndex: number,
   store: ItemStoreProtocol,
 ): number {
-  let tempSelectedItemIds = JSON.parse(JSON.stringify(store.getSelection()));
+  let tempSelectedItemIDs = JSON.parse(JSON.stringify(store.getSelection()));
 
   //@ts-ignore
   if (event.ctrlKey) {
-    if (tempSelectedItemIds.includes(id)) {
-      tempSelectedItemIds.splice(tempSelectedItemIds.indexOf(id), 1);
+    if (tempSelectedItemIDs.includes(id)) {
+      tempSelectedItemIDs.splice(tempSelectedItemIDs.indexOf(id), 1);
     } else {
-      tempSelectedItemIds.push(id);
+      tempSelectedItemIDs.push(id);
     }
   }
   //@ts-ignore
@@ -64,7 +64,7 @@ export function getSelection(
     const indexRange = [];
     let highEnd = 0;
     let lowEnd = 0;
-    tempSelectedItemIds = [];
+    tempSelectedItemIDs = [];
 
     if (lineIndex > index) {
       highEnd = lineIndex + 1;
@@ -78,14 +78,14 @@ export function getSelection(
       indexRange[c] = highEnd--;
     }
     for (let i = 0; i < indexRange.length; i++) {
-      tempSelectedItemIds.push(store.getItems()[indexRange[i] - 1].id);
+      tempSelectedItemIDs.push(store.getItems()[indexRange[i] - 1].id);
     }
-  } else if (!tempSelectedItemIds.includes(id)) {
-    tempSelectedItemIds = [id];
+  } else if (!tempSelectedItemIDs.includes(id)) {
+    tempSelectedItemIDs = [id];
   }
 
   lineIndex = index;
-  store.setSelection(tempSelectedItemIds);
+  store.setSelection(tempSelectedItemIDs);
 
   return lineIndex;
 }

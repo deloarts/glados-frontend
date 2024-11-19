@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
+import { useLanguageStore } from "@/stores/language";
+
 import SettingsUsersTable from "@/components/settings/SettingsUsersTable.vue";
 import SettingsUsersCreate from "@/components/settings/SettingsUsersCreate.vue";
 import SettingsUsersUpdate from "@/components/settings/SettingsUsersUpdate.vue";
+
+const languageStore = useLanguageStore();
 
 const selectedUserID = ref<number>(0);
 const mode = ref<string>("create");
@@ -22,7 +26,7 @@ watch(selectedUserID, () => {
     <div class="content">
       <div id="grid">
         <div id="registered-h1">
-          <h1>Registered Users</h1>
+          <h1>{{ languageStore.l.settings.users.banner }}</h1>
         </div>
         <div id="registered">
           <SettingsUsersTable
@@ -31,14 +35,16 @@ watch(selectedUserID, () => {
         </div>
 
         <div id="user-h1" v-if="mode == 'create'">
-          <h1>Create User</h1>
+          <h1>{{ languageStore.l.settings.users.create }}</h1>
         </div>
         <div id="user" v-if="mode == 'create'">
           <SettingsUsersCreate></SettingsUsersCreate>
         </div>
 
         <div id="user-h1" v-if="mode == 'update'">
-          <h1>Update User #{{ selectedUserID }}</h1>
+          <h1>
+            {{ languageStore.l.settings.users.update }} #{{ selectedUserID }}
+          </h1>
         </div>
         <div id="user" v-if="mode == 'update'">
           <SettingsUsersUpdate

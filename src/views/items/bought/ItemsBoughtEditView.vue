@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
 import { boughtItemsRequest } from "@/requests/items";
 
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 import { useUserStore } from "@/stores/user";
 import { useProjectsStore } from "@/stores/projects";
@@ -20,6 +21,7 @@ import WarningForForm from "@/components/common/WarningForForm.vue";
 const route = useRoute();
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 const userStore = useUserStore();
 const projectStore = useProjectsStore();
@@ -52,27 +54,27 @@ const projectActive = computed<boolean>(() => {
 });
 const warningText = computed<string | null>(() => {
   if (!projectActive.value) {
-    return "You are not allowed to edit an item of an inactive project.";
+    return languageStore.l.boughtItem.banner.notAllowedEditItemInactiveProject;
   } else if (
     !userStore.user.is_superuser &&
     !userStore.user.is_adminuser &&
     userStore.user.id != itemCreatorID.value
   ) {
-    return "You are not allowed to edit an item of another user.";
+    return languageStore.l.boughtItem.banner.notAllowedEditItemOtherUser;
   } else if (
     !userStore.user.is_superuser &&
     !userStore.user.is_adminuser &&
     itemStatus.value != statusStore.boughtItemStatus.open
   ) {
-    return "You are not allowed to edit an item that is already planned.";
+    return languageStore.l.boughtItem.banner.notAllowedEditItemPlanned;
   }
   return null;
 });
 
-onMounted(() => {
-  const itemId = route.params.id;
+onBeforeMount(() => {
+  const itemID = route.params.id;
   boughtItemsRequest
-    .getItemsId(Number(itemId))
+    .getItemsID(Number(itemID))
     .then((response) => {
       if (response.status === 200) {
         itemStatus.value = response.data.status;
@@ -80,7 +82,7 @@ onMounted(() => {
         formData.value = response.data;
       } else {
         notificationStore.addWarn(
-          `Could not fetch an item with the ID ${itemId}.`,
+          languageStore.l.notification.warn.failedFetchItem(itemID),
         );
         setTimeout(function () {
           router.push({ name: "BoughtItems" });

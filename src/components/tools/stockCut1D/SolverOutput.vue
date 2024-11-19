@@ -12,6 +12,7 @@ import {
 import { Bar } from "vue-chartjs";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
+import { useLanguageStore } from "@/stores/language";
 import { useResolutionStore } from "@/stores/resolution";
 
 ChartJS.register(
@@ -28,6 +29,7 @@ ChartJS.register(
 const props = defineProps(["solverOutput"]);
 
 // Stores
+const languageStore = useLanguageStore();
 const resolutionStore = useResolutionStore();
 
 const chartLabels = ref([""]);
@@ -162,14 +164,14 @@ function updateChart() {
   var labels = [];
 
   for (var i = 0; i < stock_items; i++) {
-    labels.push("Stock #" + (i + 1));
+    labels.push(`${languageStore.l.tools.labels.stockNumber}${i + 1}`);
   }
 
   for (var i = 0; i < max_items_in_stock_item; i++) {
     if (i > 0) {
       dataset.push({
         data: cut_widths[i],
-        label: "Cut width",
+        label: languageStore.l.tools.labels.cutWidth,
         backgroundColor: "#ff0000",
         datalabels: {
           display: false,
@@ -179,7 +181,7 @@ function updateChart() {
 
     dataset.push({
       data: inverted[i],
-      label: "Item length",
+      label: languageStore.l.tools.labels.itemLength,
       backgroundColor: chartColor[i],
     });
   }
@@ -202,7 +204,9 @@ watch(
 <template>
   <div class="scope">
     <div class="container">
-      <div class="chart-base-title">Solution</div>
+      <div class="chart-base-title">
+        {{ languageStore.l.tools.banner.solution }}
+      </div>
       <div class="wrapper">
         <Bar :data="chartData" :options="chartOptions" />
       </div>
@@ -228,7 +232,7 @@ watch(
   padding: 10px;
   margin: 4px;
 
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
   border-radius: $main-border-radius;
 }
 

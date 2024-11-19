@@ -2,6 +2,8 @@
 import { ref } from "vue";
 
 import { stockCut2DRequest } from "@/requests/tools";
+
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 
 import type {
@@ -13,6 +15,7 @@ import SolverInput from "@/components/tools/stockCut2D/SolverInput.vue";
 import SolverOutput from "@/components/tools/stockCut2D/SolverOutput.vue";
 
 // Stores
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 const solverInput = ref<StockCut2DJobSchema>({
@@ -54,7 +57,9 @@ function onSolve() {
       }, 250);
       solverOutput.value = response.data;
       solverInput.value.params = response.data.params;
-      notificationStore.addInfo(`Solved using ${solverOutput.value.cuts.length} cuts.`);
+      notificationStore.addInfo(
+        `Solved using ${solverOutput.value.cuts.length} cuts.`,
+      );
     } else if (response.status == 406) {
       notificationStore.addWarn(response.data.detail);
     } else if (response.status == 422) {
@@ -72,7 +77,9 @@ function onSolve() {
 
 function onAddItem() {
   solverInput.value.params.items.push({
-    id: `Item ${solverInput.value.params.items.length + 1}`,
+    id: `${languageStore.l.tools.labels.item} ${
+      solverInput.value.params.items.length + 1
+    }`,
     width: 100,
     height: 100,
     can_rotate: true,
@@ -81,7 +88,9 @@ function onAddItem() {
 
 function onAddPanel() {
   solverInput.value.params.panels.push({
-    id: `Panel ${solverInput.value.params.panels.length + 1}`,
+    id: `${languageStore.l.tools.labels.panel} ${
+      solverInput.value.params.panels.length + 1
+    }`,
     width: 1000,
     height: 500,
   });
@@ -115,7 +124,7 @@ function onExportPDF() {
 <template>
   <div class="scope">
     <div class="content">
-      <h1>2D Stock Cut Solver</h1>
+      <h1>{{ languageStore.l.tools.banner.stockCut2D }}</h1>
       <SolverInput
         :solver-input="solverInput"
         :solving="solving"

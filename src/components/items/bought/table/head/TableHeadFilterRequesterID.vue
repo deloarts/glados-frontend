@@ -25,8 +25,8 @@ const props = defineProps<{
     :options="usersStore.usersOptionsFilter"
     :item-store="boughtItemsStore"
     :filter-store="boughtItemsFilterStore"
-    filter-store-key="requesterId"
-    :width="props.width.requesterId"
+    filter-store-key="requesterID"
+    :width="props.width.requesterID"
   />
 </template>
 

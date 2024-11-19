@@ -154,7 +154,7 @@ export const useProjectsControlsStore = defineStore("projectsControls", () => {
     projectLink: true,
     customer: true,
     description: true,
-    designatedUser: true,
+    designatedUserID: true,
     createdDate: true,
     state: true,
   });

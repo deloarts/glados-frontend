@@ -200,16 +200,16 @@ td {
   font-family: "Segoe UI", "Arial";
   font-size: 12px;
   text-align: center;
-  color: white;
-  background: $main-background-color;
-  border: 1px solid $main-color;
+  color: var(--main-text-color);
+  background: var(--main-background-color);
+  border: 1px solid var(--main-color);
   border-radius: 0.25em;
   margin-bottom: 10px;
   transition: background 0.2s ease;
 }
 
 .list-item:hover {
-  background: $main-background-color-hover;
+  background: var(--main-background-color-hover);
 }
 
 .list-item .cell {
@@ -219,11 +219,11 @@ td {
 }
 
 .active {
-  background: $light-gray;
+  background: var(--light-gray);
 }
 
 .active:hover {
-  background: $light-gray-hover;
+  background: var(--light-gray-hover);
 }
 
 .content-wrapper {
@@ -237,9 +237,9 @@ td {
   width: 100%;
   cursor: default;
   display: table;
-  color: white;
-  background: $main-background-color;
-  border: 1px solid $main-color;
+  color: var(--main-text-color);
+  background: var(--main-background-color);
+  border: 1px solid var(--main-color);
   border-radius: 0.25em;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -251,7 +251,7 @@ td {
 }
 
 .content .item:hover {
-  background: $main-background-color-hover;
+  background: var(--main-background-color-hover);
 }
 
 .content .item .cell {
@@ -269,21 +269,21 @@ td {
 }
 
 .format-date {
-  color: $log-date;
+  color: var(--log-date);
 }
 
 .format-module {
-  color: $log-module;
+  color: var(--log-module);
   text-align: center;
 }
 
 .format-level {
-  color: $log-level;
+  color: var(--log-level);
   text-align: center;
 }
 
 .format-msg {
-  color: $log-msg;
+  color: var(--log-msg);
 }
 
 #list {

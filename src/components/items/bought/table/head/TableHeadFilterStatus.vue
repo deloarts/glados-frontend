@@ -22,7 +22,7 @@ const props = defineProps<{
   <TableHeadFilterSelect
     v-if="boughtItemsControlsStore.columns.status"
     name="Status"
-    :options="statusStore.boughtItemStatusOptionFilter"
+    v-model:options="statusStore.boughtItemStatusOptionFilter"
     :item-store="boughtItemsStore"
     :filter-store="boughtItemsFilterStore"
     filter-store-key="status"

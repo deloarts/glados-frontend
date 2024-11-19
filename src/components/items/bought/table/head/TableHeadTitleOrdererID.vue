@@ -4,8 +4,10 @@ import { computed } from "vue";
 import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
 
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import { useLanguageStore } from "@/stores/language";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
+const languageStore = useLanguageStore();
 const boughtItemsControlsStore = useBoughtItemsControlsStore();
 
 const props = defineProps<{
@@ -29,8 +31,8 @@ const computedWidth = computed<typeof boughtItemColumnWidths>({
 <template>
   <TableHeadTitle
     v-if="boughtItemsControlsStore.columns.ordererID"
-    name="Orderer"
-    v-model:width="computedWidth.ordererId"
+    :name="languageStore.l.boughtItem.table.ordererID"
+    v-model:width="computedWidth.ordererID"
   />
 </template>
 

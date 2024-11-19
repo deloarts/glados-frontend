@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import AccountPersonalAccessTokenForm from "@/components/account/AccountPersonalAccessTokenForm.vue";
+
+import { useLanguageStore } from "@/stores/language";
+
+const languageStore = useLanguageStore();
 </script>
 
 <template>
   <div class="scope">
     <div class="content">
-      <h1>Personal Access Token</h1>
+      <h1>{{ languageStore.l.account.banner.pat }}</h1>
       <AccountPersonalAccessTokenForm />
     </div>
   </div>

@@ -8,6 +8,7 @@ import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
 import { useLanguageStore } from "@/stores/language";
+import { useUserStore } from "@/stores/user";
 import { useUnitsStore } from "@/stores/units";
 import { useProjectsStore } from "@/stores/projects";
 
@@ -31,6 +32,7 @@ const createFormData = computed<BoughtItemCreateSchema>(() => props.formData);
 
 // Stores
 const languageStore = useLanguageStore();
+const userStore = useUserStore();
 const unitStore = useUnitsStore();
 const projectsStore = useProjectsStore();
 
@@ -214,7 +216,7 @@ onMounted(() => {
             :placeholder="
               languageStore.l.boughtItem.input.desiredDatePlaceholder
             "
-            dark
+            :dark="userStore.user.theme == 'dark'"
           />
         </div>
         <div id="note-general" class="grid-item-center">

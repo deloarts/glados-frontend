@@ -40,7 +40,7 @@ const particlesLoaded = async (container) => {};
 
 .scope {
   color: white;
-  background-color: $main-background-color;
+  background: linear-gradient(rgb(25, 25, 25) 30%, rgb(10, 10, 10));
   z-index: 1010;
 }
 
@@ -56,11 +56,11 @@ const particlesLoaded = async (container) => {};
 
   padding: $main-padding;
 
-  background: $main-background-color-dark;
+  background: rgb(30, 30, 30);
 
   border-width: $main-border-width;
   border-style: $main-border-style;
-  border-color: $main-border-color;
+  border-color: var(--main-color);
   border-radius: $main-border-radius;
 
   opacity: 0.95;
@@ -125,7 +125,7 @@ const particlesLoaded = async (container) => {};
   left: 0;
   right: 0;
   bottom: 0;
-  background: $main-background-color;
+  background: rgb(50, 50, 50);
   z-index: 1011;
 }
 </style>

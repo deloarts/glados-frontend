@@ -14,7 +14,7 @@ td {
 
   word-wrap: break-word;
   border-bottom: solid thin rgb(100, 100, 100);
-  border-right: solid thin $table-head-background;
+  border-right: solid thin var(--table-head-background);
 }
 
 span {

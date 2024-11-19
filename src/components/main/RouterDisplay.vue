@@ -14,6 +14,6 @@ import { RouterView } from "vue-router";
 .display {
   width: 100%;
   height: 100%;
-  background: $main-background-color;
+  background: var(--main-background-color);
 }
 </style>

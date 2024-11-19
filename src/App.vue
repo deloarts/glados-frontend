@@ -15,9 +15,11 @@ const projectsStore = useProjectsStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
 
-onBeforeMount(projectsStore.getItems);
-onBeforeMount(userStore.get);
-onBeforeMount(usersStore.get);
+onBeforeMount(() => {
+  projectsStore.getItems();
+  userStore.get();
+  usersStore.get();
+});
 </script>
 <template>
   <div id="app">
@@ -45,11 +47,11 @@ onBeforeMount(usersStore.get);
 @import "@/scss/variables.scss";
 
 html {
-  background-color: $main-background-color;
+  background-color: var(--main-background-color);
 }
 
 body {
-  background-color: $main-background-color;
+  background-color: var(--main-background-color);
 }
 
 .grid {
@@ -59,8 +61,8 @@ body {
   left: 0;
   right: 0;
 
-  color: white;
-  background: $main-background-color;
+  color: var(--main-text-color);
+  background: var(--main-background-color);
 
   display: grid;
   grid-gap: 0;

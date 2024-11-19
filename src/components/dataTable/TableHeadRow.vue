@@ -41,6 +41,6 @@ tr:nth-child(2) > th {
   min-height: 30px;
   max-height: 30px;
 
-  border-bottom: solid thin $main-background-color-dark-2;
+  border-bottom: solid thin var(--main-background-color-accent-2);
 }
 </style>

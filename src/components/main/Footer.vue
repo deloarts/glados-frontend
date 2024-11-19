@@ -27,7 +27,7 @@ const text = `v${constants.version}`;
   font-weight: thin;
 
   color: white;
-  background: $main-color;
+  background: var(--main-color);
 
   cursor: default;
 }

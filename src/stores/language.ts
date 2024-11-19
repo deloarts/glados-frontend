@@ -1,6 +1,8 @@
 import { ref, watch, onBeforeMount } from "vue";
 import { defineStore } from "pinia";
 
+import { usersRequest } from "@/requests/users";
+
 import type { AvailableOption } from "@/models/controls";
 import type { Language } from "@/models/language";
 
@@ -30,6 +32,14 @@ export const useLanguageStore = defineStore("language", () => {
     }
   }
 
+  function set(lang: "enGB" | "deAT") {
+    usersRequest.putUsersMeLanguage(lang).then((response) => {
+      if (response.status == 200) {
+        apply(response.data.language);
+      }
+    });
+  }
+
   watch(
     selected,
     () => {
@@ -53,5 +63,5 @@ export const useLanguageStore = defineStore("language", () => {
     apply(selected.value);
   });
 
-  return { l, languageOptions, apply };
+  return { l, languageOptions, set, apply };
 });

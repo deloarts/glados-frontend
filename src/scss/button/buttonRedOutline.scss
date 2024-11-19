@@ -2,9 +2,9 @@
 @import "@/scss/button/buttonBase.scss";
 
 .button:hover {
-  border: 1px solid $main-red;
+  border: 1px solid var(--main-red);
 }
 
 .icon {
-  color: $main-red;
+  color: var(--main-red);
 }

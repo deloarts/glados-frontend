@@ -33,6 +33,20 @@ export class UsersRequest {
       null,
     );
   }
+  putUsersMeLanguage(language: string) {
+    return request.put(
+      `/api/web/v1/users/me/language`,
+      requestConfig({ language: language }),
+      null,
+    );
+  }
+  putUsersMeTheme(theme: string) {
+    return request.put(
+      `/api/web/v1/users/me/theme`,
+      requestConfig({ theme: theme }),
+      null,
+    );
+  }
 }
 
 export const usersRequest = new UsersRequest();

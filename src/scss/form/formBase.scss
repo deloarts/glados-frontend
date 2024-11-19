@@ -20,7 +20,7 @@
   margin: 4px;
 
   // padding: $main-padding;
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
 
   // border-width: $main-border-width;
   // border-style: $main-border-style;
@@ -32,8 +32,8 @@
   width: 100%;
   height: 100%;
 
-  color: white;
-  background-color: $main-background-color-dark-2;
+  color: var(--main-text-color);
+  background-color: var(--input-background);
 
   padding: 0;
   padding-left: 10px;
@@ -44,7 +44,7 @@
   box-sizing: border-box;
   border-width: $main-border-width;
   border-style: $main-border-style;
-  border-color: $main-background-color-dark-2;
+  border-color: var(--input-border-color);
   border-radius: $main-border-radius;
   outline: none;
 
@@ -52,19 +52,19 @@
 }
 
 .form-base-text-input:hover {
-  background-color: $main-background-color-hover;
+  background-color: var(--main-background-color-hover);
 }
 
 .form-base-text-input:focus {
-  border-color: $main-color;
+  border-color: var(--main-color);
 }
 
 .form-base-text-input-multiline {
   width: 100%;
   height: 100%;
 
-  color: white;
-  background-color: $main-background-color-dark-2;
+  color: var(--main-text-color);
+  background-color: var(--input-background);
 
   font-size: 1.15em;
 
@@ -76,7 +76,7 @@
 
   border-width: $main-border-width;
   border-style: $main-border-style;
-  border-color: $main-background-color-dark-2;
+  border-color: var(--input-border-color);
   border-radius: $main-border-radius;
   outline: none;
 
@@ -84,11 +84,11 @@
 }
 
 .form-base-text-input-multiline:hover {
-  background-color: $main-background-color-hover;
+  background-color: var(--main-background-color-hover);
 }
 
 .form-base-text-input-multiline:focus {
-  border-color: $main-color;
+  border-color: var(--main-color);
 }
 
 .form-base-date-input {

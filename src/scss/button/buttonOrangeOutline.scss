@@ -2,9 +2,9 @@
 @import "@/scss/button/buttonBase.scss";
 
 .button:hover {
-  border: 1px solid $main-orange;
+  border: 1px solid var(--main-orange);
 }
 
 .icon {
-  color: $main-orange;
+  color: var(--main-orange);
 }

@@ -75,7 +75,7 @@ watch(
   padding: 4px;
   margin: 4px;
 
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
   border-radius: $main-border-radius;
 
   height: 178px;

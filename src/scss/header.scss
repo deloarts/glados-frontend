@@ -1,0 +1,33 @@
+@import "@/scss/variables.scss";
+
+.header-button {
+  width: 35px;
+  height: 35px;
+  padding: 2px;
+
+  background-color: transparent;
+  cursor: pointer;
+
+  display: flex;
+  vertical-align: middle;
+  text-align: center;
+  float: right;
+}
+
+.header-button-icon {
+  width: auto;
+  height: auto;
+
+  padding: 5px;
+
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid transparent;
+  border-radius: $main-border-radius;
+
+  transition: all 0.2s ease;
+}
+
+.header-button-icon:hover {
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}

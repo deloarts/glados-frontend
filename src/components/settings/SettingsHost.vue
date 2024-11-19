@@ -152,7 +152,7 @@ onMounted(getHostInformation);
 }
 
 svg {
-  color: $main-color;
+  color: var(--main-color);
   padding: 10px;
 }
 </style>

@@ -202,7 +202,7 @@ watch(files, () => {
 @import "@/scss/variables.scss";
 
 .scope {
-  color: white;
+  color: var(--main-text-color);
 }
 
 .coat {
@@ -213,7 +213,7 @@ watch(files, () => {
   left: 0;
   right: 0;
 
-  background: $main-background-color;
+  background: var(--main-background-color);
 
   opacity: 0.9;
 }
@@ -229,7 +229,7 @@ watch(files, () => {
 
   padding: $main-padding;
 
-  background: $main-background-color;
+  background: var(--main-background-color);
   border-width: $main-border-width;
   border-style: $main-border-style;
   border-color: $main-border-color;
@@ -249,11 +249,11 @@ watch(files, () => {
 
   text-align: center;
 
-  border: 1px solid $main-color;
+  border: 1px solid var(--main-color);
   border-radius: 0.25em;
 
-  color: white;
-  background: $main-background-color-dark;
+  color: var(--main-text-color);
+  background: var(--main-background-color-accent-1);
   cursor: move;
   transition: background 0.2s ease;
 }

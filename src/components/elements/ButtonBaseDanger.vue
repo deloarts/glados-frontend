@@ -27,16 +27,16 @@ const props = defineProps<{
 @import "@/scss/button/buttonBase.scss";
 
 .button {
-  background-color: $main-red;
+  background-color: var(--main-red);
 }
 
 .button:hover {
-  background-color: $main-red;
-  border: 1px solid $main-background-color-dark;
+  background-color: var(--main-red);
+  border: 1px solid var(--main-background-color-accent-1);
   filter: brightness(1.2);
 }
 
 .icon {
-  color: white;
+  color: var(--main-text-color);
 }
 </style>

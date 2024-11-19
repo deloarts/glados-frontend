@@ -138,7 +138,7 @@ select {
   border: none;
   outline: none;
 
-  color: white;
+  color: var(--main-text-color);
   background-color: transparent;
 
   font-family: Calibri;
@@ -156,13 +156,13 @@ select::-ms-expand {
 }
 
 select > option {
-  color: white;
-  background-color: $main-color;
+  color: var(--main-text-color);
+  background-color: var(--main-color);
 }
 
 select > option:hover {
-  color: white;
-  background-color: $main-color-hover;
+  color: var(--main-text-color);
+  background-color: var(--main-color-hover);
 }
 
 span {

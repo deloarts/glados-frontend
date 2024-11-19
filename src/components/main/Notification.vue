@@ -58,7 +58,7 @@ const notificationStore = useNotificationStore();
 
   font-family: $main-font;
   font-size: $main-font-size;
-  color: white;
+  color: var(--main-text-color);
 
   border-width: $main-border-width;
   border-style: $main-border-style;
@@ -76,13 +76,13 @@ const notificationStore = useNotificationStore();
 }
 
 .warning {
-  background: $main-background-color-dark;
+  background: var(--main-background-color-accent-1);
   border-color: orangered;
 }
 
 .info {
-  background: $main-background-color-dark;
-  border-color: $main-color;
+  background: var(--main-background-color-accent-1);
+  border-color: var(--main-color);
 }
 
 #grid {

@@ -39,7 +39,7 @@ const props = defineProps<{
   font-family: $main-font;
   font-size: $main-font-size;
 
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
 }
 
 .container {

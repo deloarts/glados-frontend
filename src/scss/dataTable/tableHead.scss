@@ -1,8 +1,8 @@
 @import "@/scss/variables.scss";
 
 tr {
-  color: white;
-  background: $table-head-background;
+  color: var(--main-text-color);
+  background: var(--table-head-background);
 }
 
 th {
@@ -17,8 +17,8 @@ th {
   margin-top: 0;
   margin-bottom: 0;
 
-  color: white;
-  background: $table-head-background;
+  color: var(--main-text-color);
+  background: var(--table-head-background);
 }
 
 .editing {

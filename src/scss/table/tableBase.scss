@@ -12,10 +12,10 @@
   // padding: 10px;
   margin: 4px;
 
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
 
   border-style: solid;
-  border-color: $main-background-color-dark;
+  border-color: var(--main-background-color-accent-1);
   border-width: 10px;
   border-radius: $main-border-radius;
 }
@@ -31,7 +31,7 @@ table {
   margin-top: -6px; // Remove border-spacing from top
   margin-bottom: -6px; // Remove border-spacing from bottom
 
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
 
   border-style: none;
 
@@ -53,7 +53,7 @@ th {
   font-family: "Play", "Calibri";
   font-size: 14px;
 
-  background-color: $table-head-background;
+  background-color: var(--table-head-background);
 }
 
 th:first-child {
@@ -73,23 +73,23 @@ tr {
 }
 
 tr:nth-child(odd) > td {
-  background: $table-row-odd;
+  background: var(--table-row-odd);
 }
 
 tr:nth-child(even) > td {
-  background: $table-row-even;
+  background: var(--table-row-even);
 }
 
 tr:hover > td {
-  background: $table-row-hover;
+  background: var(--table-row-hover);
 }
 
 tr.selected > td {
-  background: $table-row-active;
+  background: var(--table-row-active);
 }
 
 tr.selected:hover > td {
-  background: $table-row-active-hover;
+  background: var(--table-row-active-hover);
 }
 
 td {

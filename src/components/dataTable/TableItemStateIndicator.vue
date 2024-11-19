@@ -82,7 +82,7 @@ svg {
 }
 
 .editable {
-  color: white;
+  color: var(--main-text-color);
   height: 12px;
   width: 12px;
   vertical-align: middle;

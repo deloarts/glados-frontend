@@ -198,10 +198,7 @@ onMounted(() => {
   left: 0;
   right: 0;
 
-  background: linear-gradient(
-    $main-background-color-dark-2 30%,
-    $main-background-color
-  );
+  background: linear-gradient(rgb(25, 25, 25) 30%, rgb(10, 10, 10));
 }
 
 .login-box {
@@ -213,14 +210,14 @@ onMounted(() => {
   height: 85px;
   transform: translate(-50%, -50%);
 
-  background: $main-color;
+  background: var(--main-color);
   border-radius: 5px;
 
   text-align: center;
   padding: 15px;
   padding-top: 30px;
 
-  box-shadow: 0px 20px 30px 0px $main-background-color-dark-2;
+  box-shadow: 0px 20px 30px 0px rgb(25, 25, 25);
 
   transition: all 0.2s ease-out;
 
@@ -234,7 +231,7 @@ onMounted(() => {
     padding: 0;
     margin: 0;
     border-radius: 1000;
-    background-color: $main-background-color;
+    background-color: rgb(10, 10, 10);
   }
 }
 

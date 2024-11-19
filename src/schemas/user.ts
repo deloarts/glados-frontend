@@ -5,6 +5,7 @@ export interface UserSchema {
   full_name: string;
   email: string;
   language: "enGB" | "deAT";
+  theme: null | "dark" | "light";
   is_active: boolean;
   is_adminuser: boolean;
   is_superuser: boolean;

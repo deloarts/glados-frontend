@@ -17,12 +17,12 @@ button {
   position: relative;
   align-items: center;
 
-  color: #fff;
-  background-color: $main-background-color-dark-2;
+  color: var(--main-text-color);
+  background-color: var(--input-background);
+  border: 1px solid var(--input-border-color);
+  border-radius: $main-border-radius;
   border-style: $main-border-style;
   border-width: $main-border-width;
-  border-color: $main-background-color-dark-2;
-  border-radius: $main-border-radius;
 
   padding: 0 10px;
 
@@ -30,7 +30,7 @@ button {
 }
 
 .button:hover {
-  background-color: $main-background-color;
+  background-color: var(--main-background-color);
   border-color: $main-border-color;
 }
 
@@ -44,7 +44,7 @@ button {
 
 .icon {
   cursor: pointer;
-  color: $main-color;
+  color: var(--main-color);
   display: inline-flex;
   width: 17px;
   height: 17px;

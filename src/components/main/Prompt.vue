@@ -87,7 +87,7 @@ onUnmounted(() => {
 @import "@/scss/grid/gridBase.scss";
 
 .scope {
-  color: white;
+  color: var(--main-text-color);
 }
 
 .coat {
@@ -97,7 +97,7 @@ onUnmounted(() => {
   bottom: 0;
   left: 0;
   right: 0;
-  background: $main-background-color;
+  background: var(--main-background-color);
   opacity: 0;
 }
 
@@ -137,7 +137,7 @@ onUnmounted(() => {
 
   padding: $main-padding;
 
-  background: $main-background-color;
+  background: var(--main-background-color);
 
   border-width: $main-border-width;
   border-style: $main-border-style;

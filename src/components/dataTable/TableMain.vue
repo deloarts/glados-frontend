@@ -18,7 +18,7 @@ table {
 
   width: 100%;
   border-radius: $main-border-radius;
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
 }
 
 .wrapper {
@@ -28,10 +28,10 @@ table {
 
   position: relative;
 
-  background-color: $main-background-color-dark;
+  background-color: var(--main-background-color-accent-1);
 
   border-style: solid;
-  border-color: $main-background-color-dark;
+  border-color: var(--main-background-color-accent-1);
   border-width: 10px;
   border-radius: $main-border-radius;
 }

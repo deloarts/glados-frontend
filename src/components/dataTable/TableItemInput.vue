@@ -161,7 +161,7 @@ input {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 
-  color: white;
+  color: var(--main-text-color);
   background-color: transparent;
 
   outline: none;

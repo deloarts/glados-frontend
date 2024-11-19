@@ -37,93 +37,93 @@ tr {
   margin: 0;
   padding: 0;
   height: 24px;
-  border-bottom: solid thin $main-color;
+  border-bottom: solid thin var(--main-color);
 }
 
 tr:nth-child(even) > td {
-  color: white;
-  background: $table-row-even;
+  color: var(--main-text-color);
+  background: var(--table-row-even);
 }
 
 tr:nth-child(odd) > td {
-  color: white;
-  background: $table-row-odd;
+  color: var(--main-text-color);
+  background: var(--table-row-odd);
 }
 
 tr.open:nth-child(even) > td {
-  background: $table-background-open-even;
+  background: var(--table-background-open-even);
 }
 
 tr.open:nth-child(odd) > td {
-  background: $table-background-open-odd;
+  background: var(--table-background-open-odd);
 }
 
 tr.requested:nth-child(even) > td {
-  background: $table-background-requested-even;
+  background: var(--table-background-requested-even);
 }
 
 tr.requested:nth-child(odd) > td {
-  background: $table-background-requested-odd;
+  background: var(--table-background-requested-odd);
 }
 
 tr.ordered:nth-child(even) > td {
-  background: $table-background-ordered-even;
+  background: var(--table-background-ordered-even);
 }
 
 tr.ordered:nth-child(odd) > td {
-  background: $table-background-ordered-odd;
+  background: var(--table-background-ordered-odd);
 }
 
 tr.late:nth-child(even) > td {
-  background: $table-background-late-even;
+  background: var(--table-background-late-even);
 }
 
 tr.late:nth-child(odd) > td {
-  background: $table-background-late-odd;
+  background: var(--table-background-late-odd);
 }
 
 tr.partial:nth-child(even) > td {
-  background: $table-background-partial-even;
+  background: var(--table-background-partial-even);
 }
 
 tr.partial:nth-child(odd) > td {
-  background: $table-background-partial-odd;
+  background: var(--table-background-partial-odd);
 }
 
 tr.delivered:nth-child(even) > td {
-  background: $table-background-delivered-even;
+  background: var(--table-background-delivered-even);
 }
 
 tr.delivered:nth-child(odd) > td {
-  background: $table-background-delivered-odd;
+  background: var(--table-background-delivered-odd);
 }
 
 tr.canceled:nth-child(even) > td {
-  background: $table-background-canceled-even;
+  background: var(--table-background-canceled-even);
 }
 
 tr.canceled:nth-child(odd) > td {
-  background: $table-background-canceled-odd;
+  background: var(--table-background-canceled-odd);
 }
 
 tr.lost:nth-child(even) > td {
-  background: $table-background-lost-even;
+  background: var(--table-background-lost-even);
 }
 
 tr.lost:nth-child(odd) > td {
-  background: $table-background-lost-odd;
+  background: var(--table-background-lost-odd);
 }
 
 tr:hover > td {
-  background: $table-row-hover !important;
+  background: var(--table-row-hover) !important;
 }
 
 tr.selected > td {
-  background: $table-row-active !important;
+  background: var(--table-row-active) !important;
 }
 
 tr.selected:hover > td {
-  background: $table-row-active-hover !important;
+  background: var(--table-row-active-hover) !important;
 }
 
 tr.text-mode > td {

@@ -41,7 +41,6 @@ const notificationStore = useNotificationStore();
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/grid/gridBase.scss";
 
 .scope {
@@ -56,13 +55,13 @@ const notificationStore = useNotificationStore();
   width: 350px;
   height: 70px;
 
-  font-family: $main-font;
-  font-size: $main-font-size;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
   color: var(--main-text-color);
 
-  border-width: $main-border-width;
-  border-style: $main-border-style;
-  border-radius: $main-border-radius;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
+  border-radius: var(--main-border-radius);
 
   box-shadow:
     0 2.8px 2.2px rgba(0, 0, 0, 0.034),

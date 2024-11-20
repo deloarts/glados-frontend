@@ -77,6 +77,5 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/chart/chartBase.scss";
 </style>

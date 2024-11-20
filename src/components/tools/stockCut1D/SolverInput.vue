@@ -125,7 +125,6 @@ function removeAll() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/table/tableBase.scss";
 @import "@/scss/form/formBase.scss";
 @import "@/scss/grid/gridBase.scss";
@@ -138,7 +137,7 @@ table {
 td,
 th {
   text-align: left;
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 }
 
 input {

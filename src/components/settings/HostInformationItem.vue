@@ -24,7 +24,6 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/chart/chartBase.scss";
 @import "@/scss/grid/gridBase.scss";
 
@@ -36,8 +35,8 @@ const props = defineProps<{
   margin: 0;
   padding: 0;
 
-  font-family: $main-font;
-  font-size: $main-font-size;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
 
   background-color: var(--main-background-color-accent-1);
 }
@@ -45,10 +44,10 @@ const props = defineProps<{
 .container {
   width: 100%;
   height: 100%;
-  border-width: $main-border-width;
-  border-style: $main-border-style;
-  border-color: $main-border-color;
-  border-radius: $main-border-radius;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
+  border-color: var(--main-border-color);
+  border-radius: var(--main-border-radius);
 }
 
 #grid {

@@ -19,7 +19,6 @@ import StockCut1D from "@/components/tools/stockCut1D/StockCut1D.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/views.scss";
 @import "@/scss/grid/gridBase.scss";
 

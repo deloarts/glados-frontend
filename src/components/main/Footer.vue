@@ -14,15 +14,13 @@ const text = `v${constants.version}`;
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
-
 .footer {
   display: table;
 
   width: 100%;
   height: 100%;
 
-  font-family: $main-font-neutral;
+  font-family: var(--main-font-text);
   font-size: 0.75em;
   font-weight: thin;
 

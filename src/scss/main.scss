@@ -1,10 +1,10 @@
-@import "@/scss/variables.scss";
+
 @import "@/scss/toggle/toggle.scss";
 @import "@/assets/style/dark-theme.css";
 @import "@/assets/style/light-theme.css";
 
 :root {
-  // KEEP IN SYNC WITH DARK THEME
+  // THEME COLORS: KEEP IN SYNC WITH DARK THEME
   --main-text-color: rgb(250, 250, 250);
   --main-text-color-hover: rgb(255, 255, 255);
 
@@ -18,6 +18,10 @@
   --main-color-active: rgb(7, 155, 253);
   --main-color-active-hover: rgb(20, 161, 255);
 
+  --button-color: white;
+  --button-background: rgb(30, 30, 30);
+  --button-border-color: rgb(30, 30, 30);
+
   --input-color: white;
   --input-background: rgb(30, 30, 30);
   --input-border-color: rgb(30, 30, 30);
@@ -25,6 +29,7 @@
   --main-green: rgb(99, 219, 99);
   --main-red: red;
   --main-orange: rgb(237, 170, 0);
+  --main-grey: lightgray;
 
   --light-gray: rgb(40, 40, 40);
   --light-gray-hover: rgb(44, 44, 44);
@@ -58,12 +63,31 @@
   --table-background-lost-even: rgb(80, 30, 30);
   --table-background-lost-odd: rgb(80, 30, 30);
 
+  // DEFAULT STYLING
+  --main-padding: 20px;
+  --main-margin: 20px;
+
+  --main-border-style: solid;
+  --main-border-width: 1px;
+  --main-border-radius: 5px;
+  --main-border-color: var(--main-color);
+
+  // FONTS
+  --main-font-text: "Aptos", "Calibri", "Tahoma";
+  --main-font-text-size: 14px;
+  --main-font-head: "Play", "Aptos", "Calibri", "Tahoma";
+  --main-font-head-size: 14px;
+  --main-font-glados: "Lobster", "Play", "Aptos", "Calibri", "Tahoma";
+  --main-font-glados-size: 30px;
+
+
   transition: color 0.2s ease;
   transition: background-color 0.2s ease;
 }
 
 #app {
-  font-family: Calibri, Arial, Helvetica, sans-serif;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
 
   /* Prevent text selection */
   user-select: none;

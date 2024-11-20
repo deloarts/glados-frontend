@@ -28,6 +28,5 @@ function toggleTheme() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/header.scss";
 </style>

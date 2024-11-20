@@ -1,4 +1,4 @@
-@import "@/scss/variables.scss";
+
 
 select {
   width: 150px;
@@ -16,7 +16,7 @@ select {
   color: var(--main-text-color);
   background-color: var(--input-background);
   border: 1px solid var(--input-border-color);
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
   outline: none;
 }
 

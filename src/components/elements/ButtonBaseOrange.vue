@@ -6,7 +6,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <button class="button" :class="{ text: props.text != '' }">
+  <button :class="{ text: props.text != '' }">
     <i class="icon" :class="{ 'icon-text': props.text != '' }">
       <svg
         height="100%"
@@ -23,6 +23,5 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/button/buttonOrangeOutline.scss";
 </style>

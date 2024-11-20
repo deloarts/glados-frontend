@@ -1,4 +1,4 @@
-@import "@/scss/variables.scss";
+
 
 .dropdown {
   cursor: pointer;
@@ -17,21 +17,21 @@
   color: var(--main-text-color);
   background-color: var(--input-background);
   border: 1px solid var(--input-border-color);
-  border-radius: $main-border-radius;
-  border-style: $main-border-style;
-  border-width: $main-border-width;
+  border-radius: var(--main-border-radius);
+  border-style: var(--main-border-style);
+  border-width: var(--main-border-width);
   
   transition: all 0.2s ease-in;
 }
 
 .dropdown:hover {
   background-color: var(--main-background-color);
-  border-color: $main-border-color;
+  border-color: var(--main-border-color);
 }
 
 .dropdown-active {
   background-color: var(--main-background-color);
-  border-color: $main-border-color;
+  border-color: var(--main-border-color);
 }
 
 .inner {
@@ -69,10 +69,10 @@
   max-height: 350px;
   overflow-y: auto;
 
-  border-style: $main-border-style;
-  border-color: $main-border-color;
-  border-radius: $main-border-radius;
-  border-width: $main-border-width;
+  border-style: var(--main-border-style);
+  border-color: var(--main-border-color);
+  border-radius: var(--main-border-radius);
+  border-width: var(--main-border-width);
 
   background-color: var(--main-background-color-accent-1);
 
@@ -94,7 +94,7 @@
   vertical-align: middle;
   padding: 8px;
 
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 
   transition: all 0.2s ease;
 }
@@ -114,7 +114,7 @@
   vertical-align: middle;
   padding: 8px;
 
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 
   transition: all 0.2s ease;
 }

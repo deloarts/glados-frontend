@@ -67,7 +67,6 @@ function onSelect(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/table/tableBase.scss";
 
 #config-category {

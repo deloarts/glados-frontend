@@ -30,7 +30,7 @@ import QuickLanguage from "@/components/common/QuickLanguage.vue";
   width: 100%;
   height: 50px;
 
-  font-family: $main-font;
+  font-family: var(--main-font-text);
   font-size: 1em;
   font-weight: thin;
 
@@ -57,8 +57,8 @@ import QuickLanguage from "@/components/common/QuickLanguage.vue";
 .cell:nth-child(1) {
   text-align: left;
 
-  font-family: $main-font-2;
-  font-size: 1.75em;
+  font-family: var(--main-font-glados);
+  font-size: var(--main-font-glados-size);
   font-weight: thin;
 }
 
@@ -82,7 +82,7 @@ import QuickLanguage from "@/components/common/QuickLanguage.vue";
 .dev {
   padding: 10px;
   background-color: red;
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
   border-color: darkred;
 }
 

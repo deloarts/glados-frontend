@@ -215,7 +215,6 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/chart/chartBase.scss";
 
 .scope {
@@ -233,7 +232,7 @@ watch(
   margin: 4px;
 
   background-color: var(--main-background-color-accent-1);
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 }
 
 .wrapper {

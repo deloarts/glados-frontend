@@ -6,6 +6,7 @@ import { Doughnut } from "vue-chartjs";
 import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 
 import { useLanguageStore } from "@/stores/language";
+import { useUserStore } from "@/stores/user";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -13,7 +14,11 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const props = defineProps(["dataset"]);
 
 const languageStore = useLanguageStore();
+const userStore = useUserStore();
 
+const labelColor = computed(() => {
+  return userStore.user.theme == "dark" ? "white" : "black";
+});
 const chartLabels = ref([""]);
 const chartDataset = ref([0]);
 const chartData = computed(() => {
@@ -46,7 +51,7 @@ const chartOptions = {
     legend: {
       position: "right",
       labels: {
-        color: "white",
+        color: labelColor.value,
         font: { size: 14 },
       },
     },
@@ -94,7 +99,6 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/chart/chartBase.scss";
 
 .spinner-wrapper {

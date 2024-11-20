@@ -96,7 +96,6 @@ function onSelect(id: number) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/table/tableBase.scss";
 
 #user-id {
@@ -162,10 +161,10 @@ svg {
 }
 
 .checked {
-  color: lime;
+  color: var(--main-green);
 }
 
 .unchecked {
-  color: red;
+  color: var(--main-red);
 }
 </style>

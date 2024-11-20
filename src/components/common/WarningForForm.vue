@@ -23,7 +23,6 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/form/formBase.scss";
 @import "@/scss/grid/gridBase.scss";
 
@@ -42,7 +41,7 @@ const props = defineProps<{
 }
 
 .warning-icon {
-  color: orange;
+  color: var(--main-orange);
   height: 24px;
   width: 24px;
   vertical-align: middle;

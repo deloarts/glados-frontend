@@ -36,7 +36,6 @@ function setStart() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/grid/gridBase.scss";
 
 .scope {
@@ -47,8 +46,8 @@ function setStart() {
   margin: 0;
   padding: 0;
 
-  font-family: $main-font;
-  font-size: $main-font-size;
+  font-family: var(--main-font-head);
+  font-size: var(--main-font-head-size);
 
   background-color: var(--main-background-color-accent-1);
 }
@@ -57,10 +56,10 @@ function setStart() {
   width: calc(100% - 2px);
   height: calc(100% - 2px);
 
-  border-width: $main-border-width;
-  border-style: $main-border-style;
-  border-color: $main-border-color;
-  border-radius: $main-border-radius;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
+  border-color: var(--main-border-color);
+  border-radius: var(--main-border-radius);
 }
 
 #grid {

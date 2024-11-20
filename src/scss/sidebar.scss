@@ -1,4 +1,4 @@
-@import "@/scss/variables.scss";
+
 
 .sidebar {
   width: 100%;
@@ -30,7 +30,7 @@
   text-align: center;
 
   color: var(--main-text-color);
-  font-family: $main-font;
+  font-family: var(--main-font-text);
 }
 
 svg {
@@ -41,7 +41,7 @@ svg {
   margin: 4px;
 
   border: 1px solid transparent;
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 
   transition: background 0.2s ease;
 }
@@ -80,12 +80,13 @@ svg:hover {
   padding: 10px;
   margin-left: 55px;
 
-  font-size: 0.8em;
+  font-family: var(--main-font-head);
+  font-size: var(--main-font-head-size);
 
-  border-style: $main-border-style;
+  border-style: var(--main-border-style);
   border-color: var(--main-background-color-accent-1);
-  border-radius: $main-border-radius;
-  border-width: $main-border-width;
+  border-radius: var(--main-border-radius);
+  border-width: var(--main-border-width);
 
   background-color: var(--main-background-color-accent-2);
   transform: translateY(calc(50% - 12px));

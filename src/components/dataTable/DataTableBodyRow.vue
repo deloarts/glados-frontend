@@ -17,8 +17,6 @@ const props = withDefaults(defineProps<Props>(), {});
 </template>
 
 <style lang="scss">
-@import "@/scss/variables.scss";
-
 tr {
   margin: 0;
   padding: 0;

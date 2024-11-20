@@ -14,6 +14,7 @@ import { Bar } from "vue-chartjs";
 import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
 
 import { useLanguageStore } from "@/stores/language";
+import { useUserStore } from "@/stores/user";
 
 ChartJS.register(
   CategoryScale,
@@ -28,7 +29,11 @@ ChartJS.register(
 const props = defineProps(["dataset"]);
 
 const languageStore = useLanguageStore();
+const userStore = useUserStore();
 
+const labelColor = computed(() => {
+  return userStore.user.theme == "dark" ? "white" : "black";
+});
 const chartLabels = ref();
 const chartDatasets = ref([0]);
 const chartData = computed(() => {
@@ -41,15 +46,15 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
-    x: { ticks: { display: true, color: "white", beginAtZero: true } },
-    y: { ticks: { display: true, color: "white", beginAtZero: true } },
+    x: { ticks: { display: true, color: labelColor.value, beginAtZero: true } },
+    y: { ticks: { display: true, color: labelColor.value, beginAtZero: true } },
   },
   plugins: {
     legend: {
       display: true,
       position: "bottom",
       labels: {
-        color: "white",
+        color: labelColor.value,
         font: { size: 14 },
       },
     },
@@ -108,7 +113,6 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/chart/chartBase.scss";
 
 .spinner-wrapper {

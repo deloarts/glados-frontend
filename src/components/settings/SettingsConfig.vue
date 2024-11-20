@@ -69,7 +69,6 @@ watch(selectedConfigName, () => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/grid/gridBase.scss";
 
 .scope {

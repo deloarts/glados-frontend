@@ -60,7 +60,6 @@ onMounted(() => {
 
 <style src="@vueform/toggle/themes/default.css"></style>
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/views.scss";
 @import "@/scss/grid/gridBase.scss";
 

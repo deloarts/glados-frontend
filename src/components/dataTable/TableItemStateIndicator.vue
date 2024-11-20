@@ -50,7 +50,6 @@ const cssWidth = computed<string>(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/dataTable/tableItem.scss";
 
 td {
@@ -68,14 +67,14 @@ svg {
 }
 
 .priority {
-  color: red;
+  color: var(--main-red);
   height: 12px;
   width: 12px;
   vertical-align: middle;
 }
 
 .locked {
-  color: orange;
+  color: var(--main-orange);
   height: 12px;
   width: 12px;
   vertical-align: middle;
@@ -89,28 +88,28 @@ svg {
 }
 
 .finished {
-  color: limegreen;
+  color: var(--main-green);
   height: 12px;
   width: 12px;
   vertical-align: middle;
 }
 
 .canceled {
-  color: red;
+  color: var(--main-red);
   height: 12px;
   width: 12px;
   vertical-align: middle;
 }
 
 .lost {
-  color: lightgray;
+  color: var(--main-gray);
   height: 12px;
   width: 12px;
   vertical-align: middle;
 }
 
 .alert {
-  color: orange;
+  color: var(--main-orange);
   height: 12px;
   width: 12px;
   vertical-align: middle;

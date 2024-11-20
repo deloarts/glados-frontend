@@ -123,7 +123,7 @@ export const enGB: Language = {
     },
     button: {
       myAccount: "My Account",
-      pat: "Access Token",
+      pat: "Access Key",
       save: "Save",
       newToken: "New Token",
     },

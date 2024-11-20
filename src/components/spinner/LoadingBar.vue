@@ -22,7 +22,7 @@
   top: 0;
   left: 0;
   box-sizing: border-box;
-  border-radius: 5px;
+  border-style: var(--main-border-style);
   animation: animloader 1.2s linear infinite;
 }
 

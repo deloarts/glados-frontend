@@ -1,4 +1,4 @@
-@import "@/scss/variables.scss";
+
 
 .form-base-scope {
   width: 100%;
@@ -8,24 +8,15 @@
   margin: 0;
   padding: 0;
 
-  font-family: $main-font;
-  font-size: $main-font-size;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
 }
 
 .form-base-container {
-  // width: 100%;
-  // height: 100%;
-
   padding: 10px;
   margin: 4px;
-
-  // padding: $main-padding;
   background-color: var(--main-background-color-accent-1);
-
-  // border-width: $main-border-width;
-  // border-style: $main-border-style;
-  // border-color: $main-border-color;
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 }
 
 .form-base-text-input {
@@ -42,10 +33,10 @@
   margin: 0;
 
   box-sizing: border-box;
-  border-width: $main-border-width;
-  border-style: $main-border-style;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
   border-color: var(--input-border-color);
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
   outline: none;
 
   transition: all 0.2s ease;
@@ -74,10 +65,10 @@
   overflow: auto;
   resize: none;
 
-  border-width: $main-border-width;
-  border-style: $main-border-style;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
   border-color: var(--input-border-color);
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
   outline: none;
 
   transition: all 0.2s ease;

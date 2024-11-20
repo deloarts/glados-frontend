@@ -1,7 +1,7 @@
-@import "@/scss/variables.scss";
+
 @import "@/scss/button/buttonBase.scss";
 
-.button:hover {
+button:hover {
   border: 1px solid var(--main-green);
 }
 

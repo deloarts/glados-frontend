@@ -46,10 +46,10 @@ const props = defineProps<{
 
 <style scoped lang="scss">
 .active {
-  color: lime;
+  color: var(--main-green);
 }
 
 .inactive {
-  color: red;
+  color: var(--main-red);
 }
 </style>

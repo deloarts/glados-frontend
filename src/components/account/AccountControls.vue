@@ -43,6 +43,5 @@ function routeIsActive(currentLink: string) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/controls/controlsBase.scss";
 </style>

@@ -7,7 +7,7 @@ export interface BoughtItemControlsState {
   changelog: boolean;
   rainbow: boolean;
   fixedHeight: boolean;
-  lockCols: boolean;
+  // lockCols: boolean;
   textView: boolean;
   requestView: boolean;
 }

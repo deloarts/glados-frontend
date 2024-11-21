@@ -235,13 +235,13 @@ function onButtonClear() {
 
 function setupMobileView() {
   if (!gtMinWidthTablet.value) {
-    controlsStore.state.lockCols = false;
+    // controlsStore.state.lockCols = false;
   }
 }
 
 function setupTabletView() {
   if (!gtMinWidthDesktop.value) {
-    controlsStore.state.lockCols = false;
+    // controlsStore.state.lockCols = false;
   }
 }
 

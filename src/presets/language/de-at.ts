@@ -278,7 +278,7 @@ export const deAT: Language = {
         changelog: "Änderunsindex",
         rainbow: "Farbansicht",
         fixedHeight: "Fixe Höhe",
-        lockCols: "Fixe Spalten",
+        // lockCols: "Fixe Spalten",
         textView: "Textansicht",
         requestView: "Anforderungsansicht",
       },

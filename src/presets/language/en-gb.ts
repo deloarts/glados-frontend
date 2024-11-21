@@ -278,7 +278,7 @@ export const enGB: Language = {
         changelog: "Changelog",
         rainbow: "Rainbow",
         fixedHeight: "Fixed Height",
-        lockCols: "Lock Columns",
+        // lockCols: "Lock Columns",
         textView: "Text View",
         requestView: "Request View",
       },

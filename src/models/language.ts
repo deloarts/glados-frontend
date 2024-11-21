@@ -257,7 +257,7 @@ export interface Language {
         changelog: string;
         rainbow: string;
         fixedHeight: string;
-        lockCols: string;
+        // lockCols: string;
         textView: string;
         requestView: string;
       };

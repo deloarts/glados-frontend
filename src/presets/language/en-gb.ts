@@ -56,6 +56,8 @@ export const enGB: Language = {
       xlsxTemplateDownloadFailed: "Could not download template file.",
       xlsxUploadContentIncomplete: "EXCEL file content is incomplete.",
       xlsxProcessError: "Could not process excel file",
+      noLogForThisDay: "There is no log file for this day",
+      failedToFetchLog: "Failed to fetch the log file",
     },
   },
   main: {
@@ -399,6 +401,15 @@ export const enGB: Language = {
     logs: {
       selectorButton: "Logs",
       banner: "Log Files",
+      input: {
+        datePlaceholder: "Select Date",
+      },
+      table: {
+        number: "#",
+        timestamp: "Timestamp",
+        level: "Level",
+        msg: "Message",
+      },
     },
     users: {
       selectorButton: "Users",

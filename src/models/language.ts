@@ -38,6 +38,8 @@ export interface Language {
       xlsxTemplateDownloadFailed: string;
       xlsxUploadContentIncomplete: string;
       xlsxProcessError: string;
+      noLogForThisDay: string;
+      failedToFetchLog: string;
     };
   };
   main: {
@@ -375,6 +377,15 @@ export interface Language {
     logs: {
       selectorButton: string;
       banner: string;
+      input: {
+        datePlaceholder: string;
+      };
+      table: {
+        number: string;
+        timestamp: string;
+        level: string;
+        msg: string;
+      };
     };
     users: {
       selectorButton: string;

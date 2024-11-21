@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 // @ts-ignore
 import moment from "moment";
 
@@ -40,9 +40,10 @@ function getLogFile() {
         const content = response.data;
         let tempContent = [];
         for (let i = 0; i < content.length; i++) {
-          if (isDate(getLogContent(content[i], "date"))) {
+          const currentDate = getLogContent(content[i], "date");
+          if (currentDate.startsWith("20") && moment(currentDate).isValid()) {
             tempContent.push({
-              date: getLogContent(content[i], "date"),
+              date: currentDate,
               name: getLogContent(content[i], "name"),
               level: getLogContent(content[i], "level"),
               msg: getLogContent(content[i], "msg"),
@@ -51,13 +52,17 @@ function getLogFile() {
         }
         logFileContent.value = tempContent;
       } else if (response.status == 404) {
-        notificationStore.addInfo("There is no log file for this day");
+        notificationStore.addInfo(
+          languageStore.l.notification.warn.noLogForThisDay,
+        );
       } else {
         notificationStore.addWarn(response.data.detail);
       }
     })
     .catch(() => {
-      notificationStore.addWarn("Failed to fetch log file");
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.failedToFetchLog,
+      );
     });
 }
 
@@ -76,19 +81,14 @@ function getLogContent(line: string, type: string) {
   }
 }
 
-function isDate(input: string) {
-  const date = moment(input);
-  if (date.isValid()) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 watch(pickedDate, () => {
   if (pickedDate.value != null) {
     getLogFile();
   }
+});
+
+onMounted(() => {
+  pickedDate.value = moment();
 });
 </script>
 
@@ -97,7 +97,7 @@ watch(pickedDate, () => {
     <div class="content">
       <div id="grid">
         <div id="header">
-          <h1>Log Files</h1>
+          <h1>{{ languageStore.l.settings.logs.banner }}</h1>
         </div>
         <div id="controls">
           <SettingsLogsControls v-model:picked-date="pickedDate" />

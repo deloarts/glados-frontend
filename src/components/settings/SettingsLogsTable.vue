@@ -20,17 +20,35 @@ const usersStore = useUsersStore();
       <table class="cursor-default">
         <thead>
           <tr>
-            <th class="first sticky-col" id="log-row">#</th>
-            <th class="first sticky-col" id="log-timestamp">Timestamp</th>
-            <th class="first sticky-col" id="log-level">Level</th>
-            <th class="first sticky-col" id="log-msg">Message</th>
+            <th class="first sticky-col" id="log-row">
+              {{ languageStore.l.settings.logs.table.number }}
+            </th>
+            <th class="first sticky-col" id="log-timestamp">
+              {{ languageStore.l.settings.logs.table.timestamp }}
+            </th>
+            <th class="first sticky-col" id="log-level">
+              {{ languageStore.l.settings.logs.table.level }}
+            </th>
+            <th class="first sticky-col" id="log-msg">
+              {{ languageStore.l.settings.logs.table.msg }}
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in logFileContent" :key="index">
+          <tr v-for="(item, index) in props.logFileContent" :key="index">
             <td id="log-row">{{ index + 1 }}</td>
             <td id="log-timestamp">{{ item.date }}</td>
-            <td id="log-level">{{ item.level }}</td>
+            <td
+              id="log-level"
+              v-bind:class="{
+                'lvl-info': item.level == 'INFO',
+                'lvl-warn': item.level == 'WARNING',
+                'lvl-error': item.level == 'ERROR',
+                'lvl-crit': item.level == 'CRITICAL',
+              }"
+            >
+              {{ item.level }}
+            </td>
             <td id="log-msg">{{ item.msg }}</td>
           </tr>
         </tbody>
@@ -64,5 +82,22 @@ const usersStore = useUsersStore();
 #log-msg {
   width: 100%;
   min-width: 150px;
+}
+
+.lvl-info {
+  color: var(--main-color);
+}
+
+.lvl-warn {
+  color: var(--main-orange);
+}
+
+.lvl-error {
+  color: var(--main-red);
+}
+
+.lvl-crit {
+  color: white;
+  background-color: var(--main-red);
 }
 </style>

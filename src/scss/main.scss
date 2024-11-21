@@ -1,4 +1,3 @@
-
 @import "@/scss/toggle/toggle.scss";
 @import "@/assets/style/dark-theme.css";
 @import "@/assets/style/light-theme.css";
@@ -33,11 +32,6 @@
 
   --light-gray: rgb(40, 40, 40);
   --light-gray-hover: rgb(44, 44, 44);
-
-  --log-date: lime;
-  --log-module: darkslateblue;
-  --log-level: red;
-  --log-msg: lightgray;
 
   --table-head-background: rgb(33, 33, 33);
   --table-row-even: rgb(44, 44, 44);

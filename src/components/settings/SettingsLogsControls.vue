@@ -48,8 +48,8 @@ const formatPickedDate = (pickedDate: Date) => {
             class="form-base-date-input"
             v-model="computedPickedDate"
             :format="formatPickedDate"
-            :clearable="true"
-            placeholder="languageStore.l.settings.input.datePlaceholder"
+            :clearable="false"
+            :placeholder="languageStore.l.settings.logs.input.datePlaceholder"
             :dark="userStore.user.theme == 'dark'"
             :max-date="moment()"
           />

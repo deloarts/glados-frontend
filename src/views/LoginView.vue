@@ -183,7 +183,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/background/snow.scss";
 
 .login {
@@ -211,7 +210,7 @@ onMounted(() => {
   transform: translate(-50%, -50%);
 
   background: var(--main-color);
-  border-radius: 5px;
+  border-radius: var(--main-border-radius);
 
   text-align: center;
   padding: 15px;

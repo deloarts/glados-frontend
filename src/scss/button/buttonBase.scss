@@ -1,13 +1,8 @@
-@import "@/scss/variables.scss";
-
 button {
-}
-
-.button {
   cursor: pointer;
 
-  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.9em;
+  font-family:var(--main-font-head);
+  font-size: var(main-font-head-size);
 
   height: 32px;
   width: 42px;
@@ -17,21 +12,21 @@ button {
   position: relative;
   align-items: center;
 
-  color: var(--main-text-color);
-  background-color: var(--input-background);
-  border: 1px solid var(--input-border-color);
-  border-radius: $main-border-radius;
-  border-style: $main-border-style;
-  border-width: $main-border-width;
+  color: var(--button-color);
+  background-color: var(--button-background);
+  border: 1px solid var(--button-border-color);
+  border-radius: var(--main-border-radius);
+  border-style: var(--main-border-style);
+  border-width: var(--main-border-width);
 
   padding: 0 10px;
 
   transition: all 0.2s ease-in;
 }
 
-.button:hover {
+button:hover {
   background-color: var(--main-background-color);
-  border-color: $main-border-color;
+  border-color: var(--main-border-color);
 }
 
 .text {
@@ -39,7 +34,7 @@ button {
 }
 
 .active {
-  border-color: $main-border-color;
+  border-color: var(--main-border-color);
 }
 
 .icon {

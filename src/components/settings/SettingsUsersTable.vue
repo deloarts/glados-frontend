@@ -38,7 +38,7 @@ function onSelect(id: number) {
               {{ languageStore.l.settings.users.table.username }}
             </th>
             <th class="first sticky-col" id="full-name">
-              F{{ languageStore.l.settings.users.table.fullName }}
+              {{ languageStore.l.settings.users.table.fullName }}
             </th>
             <th class="first sticky-col" id="mail">
               {{ languageStore.l.settings.users.table.mail }}
@@ -96,7 +96,6 @@ function onSelect(id: number) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/table/tableBase.scss";
 
 #user-id {
@@ -162,10 +161,10 @@ svg {
 }
 
 .checked {
-  color: lime;
+  color: var(--main-green);
 }
 
 .unchecked {
-  color: red;
+  color: var(--main-red);
 }
 </style>

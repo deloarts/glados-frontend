@@ -12,6 +12,10 @@ html[data-theme="dark"] {
     --main-color-active: rgb(7, 155, 253);
     --main-color-active-hover: rgb(20, 161, 255);
 
+    --button-color: white;
+    --button-background: rgb(30, 30, 30);
+    --button-border-color: rgb(30, 30, 30);
+
     --input-color: white;
     --input-background: rgb(30, 30, 30);
     --input-border-color: rgb(30, 30, 30);
@@ -19,14 +23,10 @@ html[data-theme="dark"] {
     --main-green: rgb(99, 219, 99);
     --main-red: red;
     --main-orange: rgb(237, 170, 0);
+    --main-grey: lightgray;
 
     --light-gray: rgb(40, 40, 40);
     --light-gray-hover: rgb(44, 44, 44);
-
-    --log-date: lime;
-    --log-module: darkslateblue;
-    --log-level: red;
-    --log-msg: lightgray;
 
     --table-head-background: rgb(33, 33, 33);
     --table-row-even: rgb(44, 44, 44);

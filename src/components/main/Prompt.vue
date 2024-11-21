@@ -83,7 +83,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/grid/gridBase.scss";
 
 .scope {
@@ -135,20 +134,20 @@ onUnmounted(() => {
     "icon text text text"
     "empty empty btnYes btnNo";
 
-  padding: $main-padding;
+  padding: var(--main-padding);
 
   background: var(--main-background-color);
 
-  border-width: $main-border-width;
-  border-style: $main-border-style;
-  border-color: $main-border-color;
-  border-radius: $main-border-radius;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
+  border-color: var(--main-border-color);
+  border-radius: var(--main-border-radius);
 
   text-align: center;
 }
 
 .prompt-text {
-  font-family: $main-font;
+  font-family: var(--main-font-text);
   font-size: 1.2em;
 
   display: flex;
@@ -169,10 +168,6 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-button {
-  padding-top: 10px;
 }
 
 #empty {

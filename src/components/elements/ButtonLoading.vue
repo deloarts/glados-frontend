@@ -6,7 +6,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <button class="button" v-bind:class="{ text: props.text != '' }">
+  <button v-bind:class="{ text: props.text != '' }">
     <i class="icon" v-bind:class="{ 'icon-text': props.text != '' }">
       <LoadingSpinner class="spinner" />
     </i>
@@ -15,7 +15,6 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/button/buttonBase.scss";
 
 .spinner {

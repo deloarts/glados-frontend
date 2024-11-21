@@ -36,8 +36,6 @@ const particlesLoaded = async (container) => {};
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
-
 .scope {
   color: white;
   background: linear-gradient(rgb(25, 25, 25) 30%, rgb(10, 10, 10));
@@ -54,14 +52,14 @@ const particlesLoaded = async (container) => {};
   height: auto;
   transform: translate(-50%, -50%);
 
-  padding: $main-padding;
+  padding: var(--main-padding);
 
   background: rgb(30, 30, 30);
 
-  border-width: $main-border-width;
-  border-style: $main-border-style;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
   border-color: var(--main-color);
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 
   opacity: 0.95;
 

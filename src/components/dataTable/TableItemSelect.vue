@@ -118,7 +118,6 @@ function onChange(eventTarget: EventTarget) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/dataTable/tableItem.scss";
 
 td {

@@ -47,25 +47,5 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
-
-.scope {
-  height: 100%;
-  width: calc(100% - 10px);
-  padding-left: 4px;
-  padding-right: 4px;
-  border-radius: 5px;
-
-  overflow: hidden;
-}
-
-.spinner {
-  z-index: 999;
-  position: absolute;
-  width: auto;
-  height: auto;
-  left: 50vw;
-  top: 260px;
-  transform: translate(-50%, -50%);
-}
+@import "@/scss/dataTable/tableScope.scss";
 </style>

@@ -1,4 +1,4 @@
-@import "@/scss/variables.scss";
+
 
 .table-base-scope {
   width: 100%;
@@ -14,10 +14,10 @@
 
   background-color: var(--main-background-color-accent-1);
 
-  border-style: solid;
+  border-style: var(--main-border-style);
   border-color: var(--main-background-color-accent-1);
   border-width: 10px;
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 }
 
 .table-base-title {
@@ -35,7 +35,7 @@ table {
 
   border-style: none;
 
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
   border-collapse: separate;
   border-spacing: 0 6px;
 }
@@ -58,18 +58,18 @@ th {
 
 th:first-child {
   border-left-style: none;
-  border-top-left-radius: $main-border-radius;
-  border-bottom-left-radius: $main-border-radius;
+  border-top-left-radius: var(--main-border-radius);
+  border-bottom-left-radius: var(--main-border-radius);
 }
 
 th:last-child {
   border-right-style: none;
-  border-bottom-right-radius: $main-border-radius;
-  border-top-right-radius: $main-border-radius;
+  border-bottom-right-radius: var(--main-border-radius);
+  border-top-right-radius: var(--main-border-radius);
 }
 
 tr {
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 }
 
 tr:nth-child(odd) > td {
@@ -107,13 +107,13 @@ td {
 
 td:first-child {
   border-left-style: none;
-  border-top-left-radius: $main-border-radius;
-  border-bottom-left-radius: $main-border-radius;
+  border-top-left-radius: var(--main-border-radius);
+  border-bottom-left-radius: var(--main-border-radius);
 }
 
 td:last-child {
   border-right-style: none;
-  border-bottom-right-radius: $main-border-radius;
-  border-top-right-radius: $main-border-radius;
+  border-bottom-right-radius: var(--main-border-radius);
+  border-top-right-radius: var(--main-border-radius);
 }
 

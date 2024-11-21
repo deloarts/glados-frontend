@@ -9,7 +9,6 @@
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/dataTable/tableHead.scss";
 
 table {
@@ -17,7 +16,7 @@ table {
   border-spacing: 0;
 
   width: 100%;
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
   background-color: var(--main-background-color-accent-1);
 }
 
@@ -30,9 +29,9 @@ table {
 
   background-color: var(--main-background-color-accent-1);
 
-  border-style: solid;
+  border-style: var(--main-border-style);
   border-color: var(--main-background-color-accent-1);
   border-width: 10px;
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 }
 </style>

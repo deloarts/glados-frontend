@@ -38,7 +38,6 @@ const formData = ref<ProjectCreateSchema>({
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/views.scss";
 @import "@/scss/grid/gridBase.scss";
 

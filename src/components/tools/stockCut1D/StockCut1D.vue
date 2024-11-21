@@ -89,8 +89,6 @@ function onAdd() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
-
 .scope {
   width: 100%;
   height: 100%;

@@ -7,7 +7,6 @@
 </template>
 
 <style lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/dataTable/tableHead.scss";
 
 tr {

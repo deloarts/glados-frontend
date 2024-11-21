@@ -368,6 +368,6 @@ onMounted(() => {
 #note-supplier {
   grid-area: note-supplier;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
 }
 </style>

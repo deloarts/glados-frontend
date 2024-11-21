@@ -78,7 +78,6 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/dataTable/tableHead.scss";
 
 th {
@@ -93,9 +92,9 @@ select {
   color: var(--main-text-color);
   background-color: var(--input-background);
   border: 1px solid var(--input-border-color);
-  border-radius: $main-border-radius;
-  border-style: $main-border-style;
-  border-width: $main-border-width;
+  border-radius: var(--main-border-radius);
+  border-style: var(--main-border-style);
+  border-width: var(--main-border-width);
 
   outline: none;
 

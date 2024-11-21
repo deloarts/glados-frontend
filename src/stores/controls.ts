@@ -15,7 +15,7 @@ export const useBoughtItemsControlsStore = defineStore(
       changelog: false,
       rainbow: false,
       fixedHeight: true,
-      lockCols: false,
+      // lockCols: false,
       textView: false,
       requestView: false,
     });

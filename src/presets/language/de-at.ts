@@ -56,6 +56,8 @@ export const deAT: Language = {
       xlsxTemplateDownloadFailed: "Die Vorlage kann nicht geladen werden",
       xlsxUploadContentIncomplete: "Der Inhalt der Datei ist unvollständig",
       xlsxProcessError: "Fehler beim Verarbeiten der Datei",
+      noLogForThisDay: "Für diesen Tag existiert keine Log-Datei",
+      failedToFetchLog: "Fehler beim Laden der Log-Datei",
     },
   },
   main: {
@@ -276,7 +278,7 @@ export const deAT: Language = {
         changelog: "Änderunsindex",
         rainbow: "Farbansicht",
         fixedHeight: "Fixe Höhe",
-        lockCols: "Fixe Spalten",
+        // lockCols: "Fixe Spalten",
         textView: "Textansicht",
         requestView: "Anforderungsansicht",
       },
@@ -399,6 +401,15 @@ export const deAT: Language = {
     logs: {
       selectorButton: "Protokolle",
       banner: "Protokolldateien",
+      input: {
+        datePlaceholder: "Datum auswählen",
+      },
+      table: {
+        number: "#",
+        timestamp: "Zeitstempel",
+        level: "Level",
+        msg: "Eintrag",
+      },
     },
     users: {
       selectorButton: "Benutzer",

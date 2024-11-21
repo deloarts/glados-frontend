@@ -63,8 +63,6 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
-
 .scope {
   width: 100%;
   height: 200px;
@@ -76,7 +74,7 @@ watch(
   margin: 4px;
 
   background-color: var(--main-background-color-accent-1);
-  border-radius: $main-border-radius;
+  border-radius: var(--main-border-radius);
 
   height: 178px;
   overflow: auto;

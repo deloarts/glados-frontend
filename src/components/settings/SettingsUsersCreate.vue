@@ -129,7 +129,6 @@ function createUser() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/form/formBase.scss";
 @import "@/scss/grid/gridBase.scss";
 

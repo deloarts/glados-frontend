@@ -44,8 +44,6 @@ onBeforeMount(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
-
 html {
   background-color: var(--main-background-color);
 }

@@ -1,4 +1,4 @@
-@import "@/scss/variables.scss";
+
 
 h1 {
   margin-top: 20px;
@@ -12,9 +12,9 @@ h1 {
 
   background-color: var(--main-background-color-accent-1);
 
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 5px;
+  border-width: var(--main-border-width);
+  border-radius: var(--main-border-radius);
+  border-style: var(--main-border-style);
   border-color: var(--main-color);
 }
 

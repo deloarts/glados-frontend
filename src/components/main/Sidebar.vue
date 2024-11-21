@@ -153,6 +153,5 @@ function logout() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
 @import "@/scss/sidebar.scss";
 </style>

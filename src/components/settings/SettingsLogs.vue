@@ -1,56 +1,72 @@
 <script setup lang="ts">
-import { ref, nextTick, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 // @ts-ignore
 import moment from "moment";
 
 import { logsRequest } from "@/requests/logs";
-import Spinner from "@/components/spinner/LoadingSpinner.vue";
 
-const windowWidth = ref<number>(window.innerWidth);
-const loading = ref<boolean>(false);
-const logfiles = ref<Array<string>>([]);
-const logfile = ref<string>("");
-const content = ref<Array<string>>([]);
+import SettingsLogsControls from "./SettingsLogsControls.vue";
+import SettingsLogsTable from "./SettingsLogsTable.vue";
 
-function onResize() {
-  windowWidth.value = window.innerWidth;
-}
+import type { Log } from "@/models/log";
 
-function getLogs() {
-  loading.value = true;
+import { useLanguageStore } from "@/stores/language";
+import { useNotificationStore } from "@/stores/notification";
+
+const languageStore = useLanguageStore();
+const notificationStore = useNotificationStore();
+
+const pickedDate = ref<Date>(null);
+const logFileName = computed<string>(() => {
+  if (pickedDate.value != null) {
+    if (moment(pickedDate.value).isSame(moment(), "day")) {
+      return "glados.log";
+    }
+    const day = pickedDate.value.getDate();
+    const month = pickedDate.value.getMonth() + 1;
+    const year = pickedDate.value.getFullYear();
+    return `glados.${year}-${month}-${day}.log`;
+  }
+  return null;
+});
+const logFileContent = ref<Array<Log>>([]);
+
+function getLogFile() {
+  logFileContent.value = [];
   logsRequest
-    .getLogs()
+    .getLogFile(logFileName.value)
     .then((response) => {
-      logfiles.value = response.data;
-      loading.value = false;
+      if (response.status == 200) {
+        const content = response.data;
+        let tempContent = [];
+        for (let i = 0; i < content.length; i++) {
+          const currentDate = getLogContent(content[i], "date");
+          if (currentDate.startsWith("20") && moment(currentDate).isValid()) {
+            tempContent.push({
+              date: currentDate,
+              name: getLogContent(content[i], "name"),
+              level: getLogContent(content[i], "level"),
+              msg: getLogContent(content[i], "msg"),
+            });
+          }
+        }
+        logFileContent.value = tempContent;
+      } else if (response.status == 404) {
+        notificationStore.addInfo(
+          languageStore.l.notification.warn.noLogForThisDay,
+        );
+      } else {
+        notificationStore.addWarn(response.data.detail);
+      }
     })
     .catch(() => {
-      console.warn("could not get logs");
-      loading.value = false;
+      notificationStore.addWarn(
+        languageStore.l.notification.warn.failedToFetchLog,
+      );
     });
 }
 
-function getLog(filename: string) {
-  if (logfile.value == filename) {
-    logfile.value = "";
-    content.value = [];
-  } else {
-    loading.value = true;
-    logfile.value = filename;
-    logsRequest
-      .getLogFile(logfile.value)
-      .then((response) => {
-        content.value = response.data;
-        loading.value = false;
-      })
-      .catch(() => {
-        console.warn("could not get logfile");
-        loading.value = false;
-      });
-  }
-}
-
-function format(line: string, type: string) {
+function getLogContent(line: string, type: string) {
   let splitted = line.split("\t");
   if (type == "date") {
     return splitted[0];
@@ -65,68 +81,29 @@ function format(line: string, type: string) {
   }
 }
 
-function isDate(line: string) {
-  let date = moment(line.split("\t")[0]);
-  if (date.isValid()) {
-    return true;
-  } else {
-    return false;
+watch(pickedDate, () => {
+  if (pickedDate.value != null) {
+    getLogFile();
   }
-}
-
-onMounted(() => {
-  nextTick(() => {
-    window.addEventListener("resize", onResize);
-  });
-  loading.value = true;
-  getLogs();
 });
 
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", onResize);
+onMounted(() => {
+  pickedDate.value = moment();
 });
 </script>
 
 <template>
   <div class="scope">
-    <div v-if="loading && logfiles.length == 0" class="loading">
-      <spinner></spinner>
-    </div>
-    <div v-else class="wrapper">
-      <div class="files" v-bind:class="{ 'with-content': content.length != 0 }">
-        <div id="list" v-if="windowWidth >= 600 || content.length == 0">
-          <div
-            class="list-item"
-            v-bind:class="{ active: file == logfile }"
-            v-for="file in logfiles"
-            :key="file"
-            v-on:click="getLog(file)"
-          >
-            <div class="cell">
-              <div v-if="loading && file == logfile">
-                <spinner></spinner>
-              </div>
-              <div v-else>{{ file }}</div>
-            </div>
-          </div>
+    <div class="content">
+      <div id="grid">
+        <div id="header">
+          <h1>{{ languageStore.l.settings.logs.banner }}</h1>
         </div>
-        <div id="list" v-if="windowWidth < 600 && content.length > 0">
-          <div class="list-item" v-on:click="getLog(logfile)">
-            <div class="cell">Back</div>
-          </div>
+        <div id="controls">
+          <SettingsLogsControls v-model:picked-date="pickedDate" />
         </div>
-        <div id="content" class="content" v-if="content.length != 0">
-          <div class="content-wrapper">
-            <div class="item" v-for="line in content" :key="line">
-              <div v-if="isDate(line)">
-                <div class="cell format-date center">
-                  {{ format(line, "date") }}
-                </div>
-                <div class="cell format-level">{{ format(line, "level") }}</div>
-                <div class="cell format-msg">{{ format(line, "msg") }}</div>
-              </div>
-            </div>
-          </div>
+        <div id="data">
+          <SettingsLogsTable :log-file-content="logFileContent" />
         </div>
       </div>
     </div>
@@ -134,167 +111,35 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
+@import "@/scss/grid/gridBase.scss";
 
 .scope {
   width: 100%;
   height: 100%;
 }
 
-.wrapper {
-  padding: 30px;
-}
-
-.files {
-  display: grid;
-  grid-gap: 10px;
-  grid-template-areas: "list";
-
-  width: 100%;
-  height: 100%;
-
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  padding-right: 10px;
-  /* padding: 50px; */
-}
-
-.with-content {
-  grid-template-columns: 125px auto;
-  grid-template-areas: "list content";
-}
-
-@media screen and (max-width: $max-width-desktop) {
-  .with-content {
-    grid-template-columns: 100%;
-    grid-template-areas:
-      "list"
-      "content";
-  }
-}
-
-.loading {
-  display: grid;
-  padding-top: 100px;
-  padding-left: 50%;
-  margin-left: -16px;
-}
-
-table {
-  width: 100%;
-  padding-top: 50px;
-  overflow: auto;
-}
-
-td {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.list-item {
-  height: 35px;
-  width: 100%;
-  cursor: pointer;
-  display: table;
-  font-family: "Segoe UI", "Arial";
-  font-size: 12px;
-  text-align: center;
-  color: var(--main-text-color);
-  background: var(--main-background-color);
-  border: 1px solid var(--main-color);
-  border-radius: 0.25em;
-  margin-bottom: 10px;
-  transition: background 0.2s ease;
-}
-
-.list-item:hover {
-  background: var(--main-background-color-hover);
-}
-
-.list-item .cell {
-  display: table-cell;
-  vertical-align: middle;
-  width: 100%;
-}
-
-.active {
-  background: var(--light-gray);
-}
-
-.active:hover {
-  background: var(--light-gray-hover);
-}
-
-.content-wrapper {
-  overflow: auto;
-  padding: 30px;
-}
-
 .content {
-  height: auto;
-  overflow: auto;
-  width: 100%;
-  cursor: default;
-  display: table;
-  color: var(--main-text-color);
-  background: var(--main-background-color);
-  border: 1px solid var(--main-color);
-  border-radius: 0.25em;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  height: 100%;
 }
 
-.content .item {
-  display: table-row;
-  transition: background 0.2s ease;
+#grid {
+  grid-template-columns: 100%;
+  grid-template-rows: min-content min-content calc(100vh - 300px);
+  grid-template-areas:
+    "header"
+    "controls"
+    "data";
 }
 
-.content .item:hover {
-  background: var(--main-background-color-hover);
+#header {
+  grid-area: header;
 }
 
-.content .item .cell {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: left;
-  width: auto;
-  font-family: "Segoe UI", "Arial";
-  font-size: 12px;
-  padding: 5px;
+#controls {
+  grid-area: controls;
 }
 
-.center {
-  text-align: center;
-}
-
-.format-date {
-  color: var(--log-date);
-}
-
-.format-module {
-  color: var(--log-module);
-  text-align: center;
-}
-
-.format-level {
-  color: var(--log-level);
-  text-align: center;
-}
-
-.format-msg {
-  color: var(--log-msg);
-}
-
-#list {
-  grid-area: list;
-}
-
-#content {
-  grid-area: content;
-}
-
-#back {
-  grid-area: back;
+#data {
+  grid-area: data;
 }
 </style>

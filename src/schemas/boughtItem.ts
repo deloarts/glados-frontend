@@ -49,6 +49,35 @@ export interface BoughtItemCreateSchema {
   notify_on_delivery?: boolean;
 }
 
+export interface BoughtItemCreateMultiSchema {
+  project_id: number;
+  project_id_error?: string;
+  partnumber: string;
+  partnumber_error?: string;
+  order_number: string;
+  order_number_error?: string;
+  manufacturer: string;
+  manufacturer_error?: string;
+  quantity: number;
+  quantity_error?: string;
+  unit: string;
+  unit_error?: string;
+  supplier?: string;
+  supplier_error?: string;
+  group_1?: string;
+  group1_error?: string;
+  weblink?: string;
+  weblink_error?: string;
+  note_general?: string;
+  note_general_error?: string;
+  note_supplier?: string;
+  note_supplier_error?: string;
+  desired_delivery_date: Date | null;
+  desired_delivery_date_error?: string;
+  high_priority?: boolean;
+  notify_on_delivery?: boolean;
+}
+
 export interface BoughtItemUpdateSchema {
   project_id: number;
   partnumber: string;

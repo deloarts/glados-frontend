@@ -248,6 +248,7 @@ export const enGB: Language = {
     },
     button: {
       newItem: "New Item",
+      batchCreate: "Batch Create",
       editItem: "Edit Item",
       copyItem: "Copy Item",
       deleteItem: "Delete Item",
@@ -265,6 +266,7 @@ export const enGB: Language = {
       preset: "Preset",
       showAll: "Show All",
       create: "Create",
+      createAll: "Create All",
       update: "Update",
       cancel: "Cancel",
       template: "Template",

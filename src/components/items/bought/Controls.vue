@@ -14,7 +14,6 @@ import { boughtItemsRequest } from "@/requests/items";
 import { getBoughtItemsFilterParams } from "@/requests/params";
 import { camelToTitle } from "@/helper/string.helper";
 
-import ExcelImport from "@/components/items/bought/ExcelImport.vue";
 import Prompt from "@/components/main/Prompt.vue";
 import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
 import ButtonEdit from "@/components/elements/ButtonEdit.vue";
@@ -53,7 +52,6 @@ const gtMinWidthTablet = computed<boolean>(
 
 // Shows
 const showDeletePrompt = ref<boolean>(false);
-const showExcelImport = ref<boolean>(false);
 
 // Buttons
 const buttonItemCreateText = computed<string>(() => {
@@ -209,8 +207,8 @@ function onButtonDownloadExcel() {
   });
 }
 
-function onButtonUploadExcel() {
-  showExcelImport.value = true;
+function onButtonBatchCreate() {
+  router.push({ name: "NewMultiBoughtItem" });
 }
 
 function deleteItem() {
@@ -275,11 +273,11 @@ onBeforeMount(setupTabletView);
         v-model:text="buttonItemCreateText"
         v-on:click="onButtonNewItem"
       />
-      <ButtonExcel
+      <ButtonItemCreate
         class="controls-base-element"
-        :text="languageStore.l.boughtItem.button.importExcel"
+        :text="languageStore.l.boughtItem.button.batchCreate"
         v-if="gtMinWidthDesktop"
-        v-on:click="onButtonUploadExcel"
+        v-on:click="onButtonBatchCreate"
       />
       <ButtonExcel
         v-if="gtMinWidthDesktop"
@@ -450,10 +448,6 @@ onBeforeMount(setupTabletView);
         showDeletePrompt = false;
       }
     "
-  />
-  <ExcelImport
-    v-bind:on-success="boughtItemsStore.getItems"
-    v-model:show-uploader="showExcelImport"
   />
 </template>
 

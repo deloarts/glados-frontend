@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 
 import { boughtItemsRequest } from "@/requests/items";
+import { BoughtItemCreateSchema } from "@/schemas/boughtItem";
 
 import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
@@ -21,11 +22,12 @@ interface ResponseWarning {
 
 // Props & Emits
 const props = defineProps<{
+  multiData: Array<BoughtItemCreateSchema>;
   showUploader: boolean;
-  onSuccess: Function;
 }>();
 
 const emit = defineEmits<{
+  (e: "update:multiData", v: Array<BoughtItemCreateSchema>): void;
   (e: "update:showUploader", v: boolean): void;
 }>();
 
@@ -81,11 +83,16 @@ function uploadFile() {
     .then((response) => {
       uploading.value = false;
       if (response.status == 200) {
+        emit("update:showUploader", false);
+
+        const tempItems = JSON.parse(JSON.stringify(props.multiData));
+        for (let i = 0; i < response.data.length; i++) {
+          tempItems.push(response.data[i]);
+          emit("update:multiData", tempItems);
+        }
         notificationStore.addInfo(
           languageStore.l.notification.info.xlsxImportSuccess,
         );
-        props.onSuccess();
-        emit("update:showUploader", false);
       } else if (response.status == 422) {
         notificationStore.addWarn(
           languageStore.l.notification.warn.xlsxUploadContentIncomplete,

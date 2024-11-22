@@ -27,6 +27,7 @@ import AccountUpdateView from "@/views/account/AccountUpdateView.vue";
 import AccountPersonalAccessTokenView from "@/views/account/AccountPersonalAccessTokenView.vue";
 import ToolsStockCut1DView from "@/views/tools/ToolsStockCut1DView.vue";
 import ToolsStockCut2DView from "@/views/tools/ToolsStockCut2DView.vue";
+import ItemsBoughtNewMultiView from "@/views/items/bought/ItemsBoughtNewMultiView.vue";
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -76,6 +77,11 @@ const router = createRouter({
       path: "/items/bought/new",
       name: "NewBoughtItem",
       component: ItemsBoughtNewView,
+    },
+    {
+      path: "/items/bought/new-multi",
+      name: "NewMultiBoughtItem",
+      component: ItemsBoughtNewMultiView,
     },
     {
       path: "/items/bought/edit/:id",

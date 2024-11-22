@@ -227,6 +227,7 @@ export interface Language {
     };
     button: {
       newItem: string;
+      batchCreate: string;
       editItem: string;
       copyItem: string;
       deleteItem: string;
@@ -244,6 +245,7 @@ export interface Language {
       preset: string;
       showAll: string;
       create: string;
+      createAll: string;
       update: string;
       cancel: string;
       template: string;

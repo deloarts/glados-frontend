@@ -248,6 +248,7 @@ export const deAT: Language = {
     },
     button: {
       newItem: "Neuer Artikel",
+      batchCreate: "Multi-Import",
       editItem: "Bearbeiten",
       copyItem: "Kopieren",
       deleteItem: "Löschen",
@@ -265,6 +266,7 @@ export const deAT: Language = {
       preset: "Voreinstellung",
       showAll: "Zeige Alle",
       create: "Erstellen",
+      createAll: "Alle Erstellen",
       update: "Aktualisieren",
       cancel: "Abbrechen",
       template: "Vorlage",

@@ -21,6 +21,10 @@ export interface Language {
       deletedItem: Function;
       createdItem: string;
       updatedItem: Function;
+      createRowFirst: string;
+      batchImportAllCreated: string;
+      batchImportAllValidated: string;
+      batchImportValidationError: string;
       xlsxImportSuccess: string;
       selectCategoryFirst: string;
       chooseNameFirst: string;
@@ -34,10 +38,13 @@ export interface Language {
       createUpdateErrorInField: Function;
       userDataIncomplete: string;
       failedFetchItem: Function;
+      someFieldsNotFilled: string;
       failedFetchProject: Function;
       xlsxTemplateDownloadFailed: string;
       xlsxUploadContentIncomplete: string;
       xlsxProcessError: string;
+      batchImportAllFailed: string;
+      batchImportSomeFailed: string;
       noLogForThisDay: string;
       failedToFetchLog: string;
     };
@@ -227,7 +234,6 @@ export interface Language {
     };
     button: {
       newItem: string;
-      batchCreate: string;
       editItem: string;
       copyItem: string;
       deleteItem: string;
@@ -246,9 +252,13 @@ export interface Language {
       showAll: string;
       create: string;
       createAll: string;
+      validateAll: string;
       update: string;
       cancel: string;
       template: string;
+      batchCreate: string;
+      newRow: string;
+      removeAll: string;
     };
     options: {
       showAll: string;

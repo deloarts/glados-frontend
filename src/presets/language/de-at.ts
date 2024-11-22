@@ -33,6 +33,12 @@ export const deAT: Language = {
       updatedItem: (id: number) => {
         return `Artikel #${id} wurde aktualisiert`;
       },
+      createRowFirst: "Füge zuerst eine Reihe an Daten hinzu",
+      batchImportAllCreated: "Alle Artikel wurden erstellt",
+      batchImportAllValidated:
+        "Alle Artikel positiv validiert, du kannst sie nun erstellen",
+      batchImportValidationError:
+        "Einige Artikel weisen Fehler auf, bitte korrigiere diese",
       xlsxImportSuccess: "Excel-Datei erfolgreich importiert",
       selectCategoryFirst: "Wähle zuerst eine Kategorie",
       chooseNameFirst: "Gib zuerst einen Namen an",
@@ -50,12 +56,16 @@ export const deAT: Language = {
       failedFetchItem: (id: number) => {
         return `Der Artikel #${id} kann nicht geladen werden`;
       },
+      someFieldsNotFilled: "Some fields aren't filled correct",
       failedFetchProject: (id: number) => {
         return `Das Projekt #${id} kann nicht geladen werden`;
       },
       xlsxTemplateDownloadFailed: "Die Vorlage kann nicht geladen werden",
       xlsxUploadContentIncomplete: "Der Inhalt der Datei ist unvollständig",
       xlsxProcessError: "Fehler beim Verarbeiten der Datei",
+      batchImportAllFailed: "Kein Artikel wurde erstellt",
+      batchImportSomeFailed:
+        "Einige Artikel sind fehlerhaft (alle anderen wurden erstellt)",
       noLogForThisDay: "Für diesen Tag existiert keine Log-Datei",
       failedToFetchLog: "Fehler beim Laden der Log-Datei",
     },
@@ -248,7 +258,6 @@ export const deAT: Language = {
     },
     button: {
       newItem: "Neuer Artikel",
-      batchCreate: "Multi-Import",
       editItem: "Bearbeiten",
       copyItem: "Kopieren",
       deleteItem: "Löschen",
@@ -267,9 +276,13 @@ export const deAT: Language = {
       showAll: "Zeige Alle",
       create: "Erstellen",
       createAll: "Alle Erstellen",
+      validateAll: "Validieren",
       update: "Aktualisieren",
       cancel: "Abbrechen",
       template: "Vorlage",
+      batchCreate: "Multi-Import",
+      newRow: "Neue Reihe",
+      removeAll: "Alle leeren",
     },
     options: {
       showAll: "Alle",

@@ -11,6 +11,7 @@ interface Props {
   center?: boolean;
   fixedHeight?: boolean;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -18,6 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
   center: false,
   fixedHeight: false,
   required: false,
+  disabled: false,
 });
 const emit = defineEmits<{
   (e: "update:value", v: string | number | Date | null): void;
@@ -62,6 +64,7 @@ onMounted(() => {});
       v-model="computedValue"
       v-on:keyup.escape="onEscape()"
       v-on:keyup.enter="onEnter()"
+      :disabled="props.disabled"
     />
     <span class="error">{{ props.error }}</span>
   </td>

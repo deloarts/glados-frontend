@@ -49,7 +49,7 @@ export interface BoughtItemCreateSchema {
   notify_on_delivery?: boolean;
 }
 
-export interface BoughtItemCreateMultiSchema {
+export interface BoughtItemBatchImportSchema {
   project_id: number;
   project_id_error?: string;
   partnumber: string;

@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { ref, onBeforeMount, onUnmounted } from "vue";
 
-import { BoughtItemCreateSchema } from "@/schemas/boughtItem";
-
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
 
 import TableMain from "@/components/dataTable/TableMain.vue";
 import CreateItemTableHead from "./CreateItemTableHead.vue";
 import CreateItemTableBody from "./CreateItemTableBody.vue";
-
-const props = defineProps<{
-  multiData: Array<BoughtItemCreateSchema>;
-}>();
 
 // ColumnWidths
 const colW = ref<typeof boughtItemColumnWidths>();
@@ -27,10 +21,7 @@ onUnmounted(() => {});
   <div class="scope">
     <TableMain>
       <CreateItemTableHead v-model:colW="colW" />
-      <CreateItemTableBody
-        v-model:multi-data="props.multiData"
-        v-model:colW="colW"
-      />
+      <CreateItemTableBody v-model:colW="colW" />
     </TableMain>
   </div>
 </template>

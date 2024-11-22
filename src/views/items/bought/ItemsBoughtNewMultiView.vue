@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
-
-import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
-
 import ControlsNewMulti from "@/components/items/bought/ControlsNewMulti.vue";
 import CreateItemMultiTable from "@/components/items/bought/createTable/CreateItemTable.vue";
-
-// Form stuff
-const multiData = ref<Array<BoughtItemCreateSchema>>([]);
 </script>
 
 <template>
@@ -15,10 +8,10 @@ const multiData = ref<Array<BoughtItemCreateSchema>>([]);
     <div class="views-content">
       <div class="grid">
         <div id="controls" class="controls">
-          <ControlsNewMulti v-model:multi-data="multiData" />
+          <ControlsNewMulti />
         </div>
         <div id="data" class="data">
-          <CreateItemMultiTable v-model:multi-data="multiData" />
+          <CreateItemMultiTable />
         </div>
       </div>
     </div>

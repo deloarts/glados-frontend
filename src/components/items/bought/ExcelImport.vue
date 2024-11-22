@@ -1,46 +1,30 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-
-import { boughtItemsRequest } from "@/requests/items";
-import { BoughtItemCreateSchema } from "@/schemas/boughtItem";
+//@ts-ignore
+import Toggle from "@vueform/toggle/dist/toggle.js";
 
 import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
+import { useBoughtItemsBatchImportStore } from "@/stores/boughtItems";
 
-import { ErrorDetails } from "@/models/errors";
-
-import ButtonExcel from "@/components/elements/ButtonExcel.vue";
 import ButtonAbort from "@/components/elements/ButtonAbort.vue";
 import Spinner from "@/components/spinner/LoadingSpinner.vue";
 import DropZone from "@/components/elements/DropZone.vue";
 import useFileList from "@/compositions/file-list";
 
-interface ResponseWarning {
-  row: number;
-  errors: Array<ErrorDetails>;
-}
-
-// Props & Emits
 const props = defineProps<{
-  multiData: Array<BoughtItemCreateSchema>;
   showUploader: boolean;
 }>();
 
 const emit = defineEmits<{
-  (e: "update:multiData", v: Array<BoughtItemCreateSchema>): void;
   (e: "update:showUploader", v: boolean): void;
 }>();
 
-// Stores
 const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
+const boughtItemsBatchImportStore = useBoughtItemsBatchImportStore();
 
-// Files
+const serverSideValidation = ref<boolean>(false);
+
 const { files, addFiles, removeFile } = useFileList();
-
-// Handler
-let uploading = ref<boolean>(false);
-let warningsList = ref<Array<ResponseWarning>>([]);
 
 function onInputChange(e: any) {
   addFiles(e.target.files);
@@ -48,67 +32,8 @@ function onInputChange(e: any) {
 }
 
 function onAbort() {
-  uploading.value = false;
-  warningsList.value = [];
+  boughtItemsBatchImportStore.clearWarnings();
   emit("update:showUploader", false);
-}
-
-function onTemplate() {
-  boughtItemsRequest.getItemsExcelTemplate().then((response) => {
-    if (response.status == 200) {
-      let blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      let url = window.URL.createObjectURL(blob);
-      window.open(url);
-      emit("update:showUploader", false);
-    } else if (response.status == 404) {
-      notificationStore.addWarn(response.data.detail);
-    } else {
-      notificationStore.addWarn(
-        languageStore.l.notification.warn.xlsxTemplateDownloadFailed,
-      );
-    }
-  });
-}
-
-function uploadFile() {
-  uploading.value = true;
-
-  let formData = new FormData();
-  formData.append("file", files.value[0].file);
-
-  boughtItemsRequest
-    .postItemsExcel(formData)
-    .then((response) => {
-      uploading.value = false;
-      if (response.status == 200) {
-        emit("update:showUploader", false);
-
-        const tempItems = JSON.parse(JSON.stringify(props.multiData));
-        for (let i = 0; i < response.data.length; i++) {
-          tempItems.push(response.data[i]);
-          emit("update:multiData", tempItems);
-        }
-        notificationStore.addInfo(
-          languageStore.l.notification.info.xlsxImportSuccess,
-        );
-      } else if (response.status == 422) {
-        notificationStore.addWarn(
-          languageStore.l.notification.warn.xlsxUploadContentIncomplete,
-        );
-        warningsList.value = response.data.detail;
-      } else {
-        notificationStore.addWarn(response.data.detail);
-        emit("update:showUploader", false);
-      }
-    })
-    .catch((error) => {
-      notificationStore.addWarn(
-        languageStore.l.notification.warn.xlsxProcessError,
-      );
-      emit("update:showUploader", false);
-    });
 }
 
 function textErrorInput(text) {
@@ -121,7 +46,13 @@ function textErrorInput(text) {
 
 watch(files, () => {
   if (files.value.length > 0) {
-    uploadFile();
+    boughtItemsBatchImportStore
+      .importFile(files.value[0].file, !serverSideValidation.value)
+      .then((response) => {
+        if (response.status != 422) {
+          emit("update:showUploader", false);
+        }
+      });
     files.value = [];
   }
 });
@@ -131,14 +62,14 @@ watch(files, () => {
   <div class="scope" v-if="props.showUploader">
     <div class="coat" v-on:click="onAbort"></div>
     <div class="center">
-      <div v-if="warningsList.length == 0" class="dnd">
+      <div v-if="boughtItemsBatchImportStore.warnings.length == 0" class="dnd">
         <DropZone
           class="drop-area"
           @files-dropped="addFiles"
           #default="{ dropZoneActive }"
         >
           <label for="file-input">
-            <div v-if="uploading">
+            <div v-if="boughtItemsBatchImportStore.importing">
               <Spinner class="spinner"></Spinner>
             </div>
             <div v-else-if="dropZoneActive">
@@ -156,17 +87,21 @@ watch(files, () => {
             />
           </label>
         </DropZone>
-        <div>
+        <div class="drop-area-element-wrapper">
           <ButtonAbort
-            class="buttonAbort"
+            class="drop-area-elements"
             :text="languageStore.l.boughtItem.button.cancel"
             v-on:click="onAbort"
-          ></ButtonAbort>
-          <ButtonExcel
-            class="buttonTemplate"
-            :text="languageStore.l.boughtItem.button.template"
-            v-on:click="onTemplate"
-          ></ButtonExcel>
+          />
+          <div class="drop-area-elements">
+            <div class="drop-area-element-text">Server-Side Validation</div>
+          </div>
+          <div class="drop-area-elements">
+            <Toggle
+              class="drop-area-element-toggle"
+              v-model="serverSideValidation"
+            />
+          </div>
         </div>
       </div>
       <div v-else class="warnings">
@@ -175,7 +110,7 @@ watch(files, () => {
           <ol>
             <li
               class="warningsItem"
-              v-for="(warning, i) in warningsList"
+              v-for="(warning, i) in boughtItemsBatchImportStore.warnings"
               :key="i"
             >
               <span class="bold bigger"
@@ -183,7 +118,11 @@ watch(files, () => {
                 }}{{ warning.row }}:</span
               >
               <ul>
-                <li v-for="(error, j) in warningsList[i].errors" :key="j">
+                <li
+                  v-for="(error, j) in boughtItemsBatchImportStore.warnings[i]
+                    .errors"
+                  :key="j"
+                >
                   <span class="bold">{{ error.loc.join(", ") }}</span
                   >: {{ error.msg }},
                   {{ languageStore.l.boughtItem.xlsx.butReceived }}
@@ -195,7 +134,7 @@ watch(files, () => {
         </div>
         <div>
           <ButtonAbort
-            class="buttonAbort"
+            class="button-abort"
             :text="languageStore.l.boughtItem.button.cancel"
             v-on:click="onAbort"
           ></ButtonAbort>
@@ -298,19 +237,27 @@ watch(files, () => {
   font-size: 1.1em;
 }
 
-button {
-  // width: 135px;
-  // height: 35px;
+.button-abort {
+  float: right;
   margin-top: 15px;
+}
+
+.drop-area-element-wrapper {
+  padding-top: 15px;
+}
+
+.drop-area-elements {
   float: right;
 }
 
-.buttonAbort {
-  margin-left: 5px;
+.drop-area-element-toggle {
+  padding-top: 8px;
 }
 
-.buttonTemplate {
-  margin-right: 5px;
+.drop-area-element-text {
+  padding-top: 8px;
+  padding-right: 15px;
+  padding-left: 8px;
 }
 
 input {

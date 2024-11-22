@@ -33,13 +33,22 @@ export class BoughtItemsRequest {
   }
 
   // POST
+  postItemsValidate(data: object) {
+    return request.post(
+      "/api/web/v1/items/bought/validate",
+      requestConfig(null),
+      data,
+    );
+  }
   postItems(data: object) {
     return request.post("/api/web/v1/items/bought/", requestConfig(null), data);
   }
-  postItemsExcel(formData: FormData) {
+  postItemsExcel(formData: FormData, skipValidation: boolean) {
+    const params = new URLSearchParams();
+    params.append("skip_validation", String(skipValidation));
     return request.post(
       "/api/web/v1/items/bought/excel/",
-      requestConfigFileUpload(null),
+      requestConfigFileUpload(params),
       formData,
     );
   }

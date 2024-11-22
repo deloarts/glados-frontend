@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 import type { AvailableOption } from "@/models/controls";
-
-import SelectProject from "@/components/elements/SelectProject.vue";
 
 import { useProjectsStore } from "@/stores/projects";
 
@@ -91,7 +89,7 @@ onMounted(setOptionsProjects);
         {{ option.text }}
       </option>
     </select>
-    <span class="error">{{ props.error }}</span>
+    <!-- <span class="error">{{ props.error }}</span> -->
   </td>
 </template>
 

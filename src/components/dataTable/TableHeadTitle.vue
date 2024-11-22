@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 
 interface Props {
   name: string;
   value?: string;
   width?: number;
 }
-
 const props = withDefaults(defineProps<Props>(), {
   value: null,
 });
-
 const emit = defineEmits<{
   (e: "update:width", v: number | null): void;
 }>();
@@ -31,7 +29,7 @@ const cssWidth = computed<string>(() => {
   }
 });
 
-onMounted(() => {
+onBeforeMount(() => {
   initialWidth.value = Number(props.width);
 });
 </script>
@@ -39,7 +37,7 @@ onMounted(() => {
 <template>
   <th @contextmenu.prevent="" v-on:click="resized = !resized">
     <div>
-      <span>{{ props.value == null ? props.name : props.value }}</span>
+      <span>{{ props.value == null ? props.name : props.value }} </span>
     </div>
   </th>
 </template>

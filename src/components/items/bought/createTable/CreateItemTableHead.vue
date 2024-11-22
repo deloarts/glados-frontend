@@ -42,8 +42,8 @@ const computedColW = computed<typeof boughtItemColumnWidths>({
 <template>
   <thead>
     <TableHeadRow>
-      <th></th>
-      <th></th>
+      <th class="button-head"></th>
+      <th class="button-head"></th>
       <TableHeadTitleNumber v-model:width="computedColW" />
       <TableHeadTitleProjectNumber v-model:width="computedColW" />
       <TableHeadTitleProductNumber v-model:width="computedColW" />
@@ -57,10 +57,14 @@ const computedColW = computed<typeof boughtItemColumnWidths>({
       <TableHeadTitleGroup v-model:width="computedColW" />
       <TableHeadTitleNoteGeneral v-model:width="computedColW" />
       <TableHeadTitleNoteSupplier v-model:width="computedColW" />
-      <TableHeadTitleDesiredDate v-model:width="computedColW" />
       <TableHeadEmpty />
     </TableHeadRow>
   </thead>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.button-head {
+  min-width: 45px;
+  text-align: center;
+}
+</style>

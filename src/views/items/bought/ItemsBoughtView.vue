@@ -9,7 +9,7 @@ import { useBoughtItemFilterStore } from "@/stores/filter";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 import Changelog from "@/components/items/bought/Changelog.vue";
-import DataTable from "@/components/items/bought/table/DataTable.vue";
+import DataTable from "@/components/items/bought/dataTable/DataTable.vue";
 import Controls from "@/components/items/bought/Controls.vue";
 
 const router = useRouter();

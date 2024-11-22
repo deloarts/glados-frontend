@@ -24,7 +24,7 @@ export const boughtItemColumnWidths = {
   quantity: 55,
   unit: 55,
   weblink: 35,
-  partnumber: 250,
+  partnumber: 350,
   orderNumber: 200,
   manufacturer: 150,
   supplier: 150,

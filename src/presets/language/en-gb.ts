@@ -33,6 +33,12 @@ export const enGB: Language = {
       updatedItem: (id: number) => {
         return `Updated item #${id}`;
       },
+      createRowFirst: "Create a row of data first",
+      batchImportAllCreated: "All items have been created",
+      batchImportAllValidated:
+        "All items have been validated, you can create them now",
+      batchImportValidationError:
+        "Some items aren't valid, please correct them",
       xlsxImportSuccess: "EXCEL import successful",
       selectCategoryFirst: "Select a category first",
       chooseNameFirst: "Choose a name first",
@@ -50,12 +56,16 @@ export const enGB: Language = {
       failedFetchItem: (id: number) => {
         return `Could not fetch an item with the ID ${id}`;
       },
+      someFieldsNotFilled: "Some fields aren't filled correct",
       failedFetchProject: (id: number) => {
         return `Could not fetch a project with the ID ${id}`;
       },
       xlsxTemplateDownloadFailed: "Could not download template file.",
       xlsxUploadContentIncomplete: "EXCEL file content is incomplete.",
       xlsxProcessError: "Could not process excel file",
+      batchImportAllFailed: "No item has been created",
+      batchImportSomeFailed:
+        "Some items have issues (all others have been created)",
       noLogForThisDay: "There is no log file for this day",
       failedToFetchLog: "Failed to fetch the log file",
     },
@@ -265,9 +275,14 @@ export const enGB: Language = {
       preset: "Preset",
       showAll: "Show All",
       create: "Create",
+      createAll: "Create All",
+      validateAll: "Validate",
       update: "Update",
       cancel: "Cancel",
       template: "Template",
+      batchCreate: "Batch Create",
+      newRow: "New Row",
+      removeAll: "Clear All",
     },
     options: {
       showAll: "All",

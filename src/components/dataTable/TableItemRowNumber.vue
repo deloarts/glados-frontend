@@ -13,7 +13,7 @@ const notificationStore = useNotificationStore();
 
 interface Props {
   number: number;
-  id: number;
+  id?: number;
   copyUrl?: string;
   lockedIcon?: boolean;
   bellIcon?: boolean;
@@ -22,6 +22,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  id: null,
   copyUrl: null,
   lockedIcon: false,
   bellIcon: false,
@@ -35,12 +36,14 @@ const cssWidth = computed<string>(() => {
 });
 
 async function copyToClipboard() {
-  const url = `${config.localURL}/#/${props.copyUrl}?id=${props.id}`;
-  try {
-    await navigator.clipboard.writeText(url);
-    notificationStore.addInfo(`Copied item URL to clipboard`);
-  } catch ($e) {
-    notificationStore.addWarn(`Cannot copy item URL`);
+  if (props.id != null) {
+    const url = `${config.localURL}/#/${props.copyUrl}?id=${props.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      notificationStore.addInfo(`Copied item URL to clipboard`);
+    } catch ($e) {
+      notificationStore.addWarn(`Cannot copy item URL`);
+    }
   }
 }
 </script>

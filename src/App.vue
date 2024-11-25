@@ -82,7 +82,7 @@ body {
 
   display: grid;
   grid-gap: 0;
-  grid-template-rows: max-content auto 20px;
+  grid-template-rows: var(--header-height) auto var(--footer-height);
   grid-template-columns: var(--sidebar-width) auto;
   grid-template-areas:
     "header header"

@@ -20,16 +20,10 @@ const props = defineProps<{
   <TableItemRowNumber
     :number="index + 1"
     :id="item.id"
-    :width="props.width.number"
-    :fixed-height="controlsStore.state.fixedHeight"
-  />
-  <!-- <TableItemRowNumber
-    :number="index + 1"
-    :id="item.id"
     copy-url="items/bought"
     v-model:width="props.width.number"
     :fixed-height="controlsStore.state.fixedHeight"
-  /> -->
+  />
 </template>
 
 <style scoped lang="scss"></style>

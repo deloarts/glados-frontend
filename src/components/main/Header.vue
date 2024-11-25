@@ -28,7 +28,7 @@ import QuickLanguage from "@/components/common/QuickLanguage.vue";
   table-layout: fixed;
 
   width: 100%;
-  height: 50px;
+  height: var(--header-height);
 
   font-family: var(--main-font-text);
   font-size: 1em;

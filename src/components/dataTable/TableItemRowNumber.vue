@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
+import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
 
 import config from "@/config";
@@ -9,6 +10,7 @@ import IconCopy from "@/components/icons/IconCopy.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
 import IconLocked from "@/components/icons/IconLocked.vue";
 
+const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
 
 interface Props {
@@ -38,12 +40,10 @@ const cssWidth = computed<string>(() => {
 async function copyToClipboard() {
   if (props.id != null) {
     const url = `${config.localURL}/#/${props.copyUrl}?id=${props.id}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      notificationStore.addInfo(`Copied item URL to clipboard`);
-    } catch ($e) {
-      notificationStore.addWarn(`Cannot copy item URL`);
-    }
+    navigator.clipboard.writeText(url);
+    notificationStore.addInfo(
+      languageStore.l.notification.info.copiedUrlToClipboard,
+    );
   }
 }
 </script>

@@ -45,6 +45,7 @@ export const deAT: Language = {
       createNewConfig: "Neue Konfigurationsdatei wurde erstellt",
       configUpdated: "Konfiguration aktualisiert",
       configDelete: "Konfiguration gelöscht",
+      copiedUrlToClipboard: "URL wurde kopiert",
     },
     warn: {
       lostServerConnection: "Keine Verbindung zum Server",

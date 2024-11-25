@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
@@ -14,6 +14,7 @@ import IconItems from "@/components/icons/IconItems.vue";
 import IconAccount from "@/components/icons/IconAccount.vue";
 import IconTools from "@/components/icons/IconTools.vue";
 import IconSettings from "@/components/icons/IconSettings.vue";
+import IconChevronLeft from "../icons/IconChevronLeft.vue";
 
 // Router
 const route = useRoute();
@@ -22,6 +23,25 @@ const route = useRoute();
 const languageStore = useLanguageStore();
 const userStore = useUserStore();
 const resolutionStore = useResolutionStore();
+
+interface Props {
+  hideSidebar: boolean;
+}
+const props = withDefaults(defineProps<Props>(), {
+  hideSidebar: false,
+});
+const emit = defineEmits<{
+  (e: "update:hideSidebar", v: boolean): void;
+}>();
+const computedHideSidebar = computed<boolean>({
+  get() {
+    return props.hideSidebar;
+  },
+  set(newValue) {
+    emit("update:hideSidebar", newValue);
+    return newValue;
+  },
+});
 
 const is_adminuser = computed<boolean>(() => userStore.user.is_adminuser);
 const gtMinWidthTablet = computed<boolean>(
@@ -54,6 +74,22 @@ function logout() {
   localStorage.setItem("gladosTokenType", "");
   router.push({ name: "Login" });
 }
+
+function hideLabel() {
+  setTimeout(() => {
+    showLabelLogout.value = false;
+    showLabelDashboard.value = false;
+    showLabelProjects.value = false;
+    showLabelBoughtItems.value = false;
+    showLabelAccount.value = false;
+    showLabelTools.value = false;
+    showLabelSettings.value = false;
+  }, 2000);
+}
+
+watch(gtMinWidthTablet, () => {
+  computedHideSidebar.value = !gtMinWidthTablet.value;
+});
 </script>
 
 <template>
@@ -63,7 +99,7 @@ function logout() {
         ><IconLogout
           class="logout"
           v-on:click="logout()"
-          @mouseover="showLabelLogout = true"
+          @mouseover="(showLabelLogout = true), hideLabel()"
           @mouseleave="showLabelLogout = false"
         />
         <Transition>
@@ -75,7 +111,7 @@ function logout() {
       <hr />
       <router-link
         :to="'/dashboard'"
-        @mouseover="showLabelDashboard = true"
+        @mouseover="(showLabelDashboard = true), hideLabel()"
         @mouseleave="showLabelDashboard = false"
       >
         <IconDashboard v-bind:class="{ active: routeIsActive('/dashboard') }" />
@@ -87,7 +123,7 @@ function logout() {
       </router-link>
       <router-link
         :to="'/projects'"
-        @mouseover="showLabelProjects = true"
+        @mouseover="(showLabelProjects = true), hideLabel()"
         @mouseleave="showLabelProjects = false"
       >
         <IconProject v-bind:class="{ active: routeIsActive('/projects') }" />
@@ -99,7 +135,7 @@ function logout() {
       </router-link>
       <router-link
         :to="'/items/bought'"
-        @mouseover="showLabelBoughtItems = true"
+        @mouseover="(showLabelBoughtItems = true), hideLabel()"
         @mouseleave="showLabelBoughtItems = false"
       >
         <IconItems v-bind:class="{ active: routeIsActive('/items/bought') }" />
@@ -111,7 +147,7 @@ function logout() {
       </router-link>
       <router-link
         :to="'/account'"
-        @mouseover="showLabelAccount = true"
+        @mouseover="(showLabelAccount = true), hideLabel()"
         @mouseleave="showLabelAccount = false"
       >
         <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
@@ -123,7 +159,7 @@ function logout() {
       </router-link>
       <router-link
         :to="'/tools'"
-        @mouseover="showLabelTools = true"
+        @mouseover="(showLabelTools = true), hideLabel()"
         @mouseleave="showLabelTools = false"
       >
         <IconTools v-bind:class="{ active: routeIsActive('/tools') }" />
@@ -135,7 +171,7 @@ function logout() {
       </router-link>
       <router-link
         :to="'/settings'"
-        @mouseover="showLabelSettings = true"
+        @mouseover="(showLabelSettings = true), hideLabel()"
         @mouseleave="showLabelSettings = false"
       >
         <IconSettings
@@ -148,6 +184,14 @@ function logout() {
           </div>
         </Transition>
       </router-link>
+    </div>
+    <div
+      v-if="!gtMinWidthTablet"
+      @click="computedHideSidebar = !computedHideSidebar"
+      class="show-sidebar-button"
+      v-bind:class="{ 'show-sidebar-button-active': hideSidebar }"
+    >
+      <IconChevronLeft />
     </div>
   </div>
 </template>

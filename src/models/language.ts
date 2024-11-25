@@ -31,6 +31,7 @@ export interface Language {
       createNewConfig: string;
       configUpdated: string;
       configDelete: string;
+      copiedUrlToClipboard: string;
     };
     warn: {
       lostServerConnection: string;

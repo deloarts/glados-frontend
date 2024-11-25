@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
+
 import Resolution from "@/components/main/Resolution.vue";
 import Connection from "@/components/main/Connection.vue";
 import Notification from "@/components/main/Notification.vue";
@@ -8,17 +9,25 @@ import Footer from "@/components/main/Footer.vue";
 import Sidebar from "@/components/main/Sidebar.vue";
 import RouterDisplay from "@/components/main/RouterDisplay.vue";
 
+import { useResolutionStore } from "./stores/resolution";
 import { useProjectsStore } from "@/stores/projects";
 import { useUsersStore, useUserStore } from "@/stores/user";
 
+const resolutionStore = useResolutionStore();
 const projectsStore = useProjectsStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
+
+const hideSidebar = ref<boolean>(false);
 
 onBeforeMount(() => {
   projectsStore.getItems();
   userStore.get();
   usersStore.get();
+
+  if (!resolutionStore.gtMinWidthTablet) {
+    hideSidebar.value = true;
+  }
 });
 </script>
 <template>
@@ -26,17 +35,17 @@ onBeforeMount(() => {
     <Resolution />
     <Notification />
     <Connection />
-    <div class="grid">
-      <div id="header">
-        <Header title="Glados"></Header>
+    <div class="grid" v-bind:class="{ 'sidebar-hidden': hideSidebar }">
+      <div class="header">
+        <Header></Header>
       </div>
-      <div id="footer">
+      <div class="footer">
         <Footer></Footer>
       </div>
-      <div id="sidebar">
-        <Sidebar></Sidebar>
+      <div class="sidebar">
+        <Sidebar v-model:hide-sidebar="hideSidebar"></Sidebar>
       </div>
-      <div id="display">
+      <div class="display">
         <RouterDisplay></RouterDisplay>
       </div>
     </div>
@@ -64,27 +73,33 @@ body {
 
   display: grid;
   grid-gap: 0;
-  grid-template-rows: max-content auto 20px;
-  grid-template-columns: 50px auto;
+  grid-template-rows: var(--header-height) auto var(--footer-height);
+  grid-template-columns: var(--sidebar-width) auto;
   grid-template-areas:
     "header header"
     "sidebar display"
     "footer footer";
+
+  transition: 300ms;
 }
 
-#header {
+.sidebar-hidden {
+  grid-template-columns: 0px auto;
+}
+
+.header {
   grid-area: header;
 }
 
-#footer {
+.footer {
   grid-area: footer;
 }
 
-#sidebar {
+.sidebar {
   grid-area: sidebar;
 }
 
-#display {
+.display {
   grid-area: display;
   overflow-x: hidden;
   overflow-y: scroll;

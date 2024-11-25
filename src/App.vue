@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onBeforeMount } from "vue";
+import { onBeforeMount, onBeforeUnmount } from "vue";
+import { useWakeLock } from "@vueuse/core";
+
 import Resolution from "@/components/main/Resolution.vue";
 import Connection from "@/components/main/Connection.vue";
 import Notification from "@/components/main/Notification.vue";
@@ -11,6 +13,8 @@ import RouterDisplay from "@/components/main/RouterDisplay.vue";
 import { useProjectsStore } from "@/stores/projects";
 import { useUsersStore, useUserStore } from "@/stores/user";
 
+const { request, release } = useWakeLock();
+
 const projectsStore = useProjectsStore();
 const userStore = useUserStore();
 const usersStore = useUsersStore();
@@ -19,6 +23,11 @@ onBeforeMount(() => {
   projectsStore.getItems();
   userStore.get();
   usersStore.get();
+  request("screen");
+});
+
+onBeforeUnmount(() => {
+  release();
 });
 </script>
 <template>
@@ -28,7 +37,7 @@ onBeforeMount(() => {
     <Connection />
     <div class="grid">
       <div id="header">
-        <Header title="Glados"></Header>
+        <Header></Header>
       </div>
       <div id="footer">
         <Footer></Footer>

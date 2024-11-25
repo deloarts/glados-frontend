@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 
 import router from "@/router/index";
@@ -14,6 +14,7 @@ import IconItems from "@/components/icons/IconItems.vue";
 import IconAccount from "@/components/icons/IconAccount.vue";
 import IconTools from "@/components/icons/IconTools.vue";
 import IconSettings from "@/components/icons/IconSettings.vue";
+import IconChevronLeft from "../icons/IconChevronLeft.vue";
 
 // Router
 const route = useRoute();
@@ -22,6 +23,25 @@ const route = useRoute();
 const languageStore = useLanguageStore();
 const userStore = useUserStore();
 const resolutionStore = useResolutionStore();
+
+interface Props {
+  hideSidebar: boolean;
+}
+const props = withDefaults(defineProps<Props>(), {
+  hideSidebar: false,
+});
+const emit = defineEmits<{
+  (e: "update:hideSidebar", v: boolean): void;
+}>();
+const computedHideSidebar = computed<boolean>({
+  get() {
+    return props.hideSidebar;
+  },
+  set(newValue) {
+    emit("update:hideSidebar", newValue);
+    return newValue;
+  },
+});
 
 const is_adminuser = computed<boolean>(() => userStore.user.is_adminuser);
 const gtMinWidthTablet = computed<boolean>(
@@ -54,6 +74,10 @@ function logout() {
   localStorage.setItem("gladosTokenType", "");
   router.push({ name: "Login" });
 }
+
+watch(gtMinWidthTablet, () => {
+  computedHideSidebar.value = !gtMinWidthTablet.value;
+});
 </script>
 
 <template>
@@ -148,6 +172,14 @@ function logout() {
           </div>
         </Transition>
       </router-link>
+    </div>
+    <div
+      v-if="!gtMinWidthTablet"
+      @click="computedHideSidebar = !computedHideSidebar"
+      class="show-sidebar-button"
+      v-bind:class="{ 'show-sidebar-button-active': hideSidebar }"
+    >
+      <IconChevronLeft />
     </div>
   </div>
 </template>

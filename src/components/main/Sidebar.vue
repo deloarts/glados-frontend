@@ -75,6 +75,18 @@ function logout() {
   router.push({ name: "Login" });
 }
 
+function hideLabel() {
+  setTimeout(() => {
+    showLabelLogout.value = false;
+    showLabelDashboard.value = false;
+    showLabelProjects.value = false;
+    showLabelBoughtItems.value = false;
+    showLabelAccount.value = false;
+    showLabelTools.value = false;
+    showLabelSettings.value = false;
+  }, 2000);
+}
+
 watch(gtMinWidthTablet, () => {
   computedHideSidebar.value = !gtMinWidthTablet.value;
 });
@@ -87,7 +99,7 @@ watch(gtMinWidthTablet, () => {
         ><IconLogout
           class="logout"
           v-on:click="logout()"
-          @mouseover="showLabelLogout = true"
+          @mouseover="(showLabelLogout = true), hideLabel()"
           @mouseleave="showLabelLogout = false"
         />
         <Transition>
@@ -99,7 +111,7 @@ watch(gtMinWidthTablet, () => {
       <hr />
       <router-link
         :to="'/dashboard'"
-        @mouseover="showLabelDashboard = true"
+        @mouseover="(showLabelDashboard = true), hideLabel()"
         @mouseleave="showLabelDashboard = false"
       >
         <IconDashboard v-bind:class="{ active: routeIsActive('/dashboard') }" />
@@ -111,7 +123,7 @@ watch(gtMinWidthTablet, () => {
       </router-link>
       <router-link
         :to="'/projects'"
-        @mouseover="showLabelProjects = true"
+        @mouseover="(showLabelProjects = true), hideLabel()"
         @mouseleave="showLabelProjects = false"
       >
         <IconProject v-bind:class="{ active: routeIsActive('/projects') }" />
@@ -123,7 +135,7 @@ watch(gtMinWidthTablet, () => {
       </router-link>
       <router-link
         :to="'/items/bought'"
-        @mouseover="showLabelBoughtItems = true"
+        @mouseover="(showLabelBoughtItems = true), hideLabel()"
         @mouseleave="showLabelBoughtItems = false"
       >
         <IconItems v-bind:class="{ active: routeIsActive('/items/bought') }" />
@@ -135,7 +147,7 @@ watch(gtMinWidthTablet, () => {
       </router-link>
       <router-link
         :to="'/account'"
-        @mouseover="showLabelAccount = true"
+        @mouseover="(showLabelAccount = true), hideLabel()"
         @mouseleave="showLabelAccount = false"
       >
         <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
@@ -147,7 +159,7 @@ watch(gtMinWidthTablet, () => {
       </router-link>
       <router-link
         :to="'/tools'"
-        @mouseover="showLabelTools = true"
+        @mouseover="(showLabelTools = true), hideLabel()"
         @mouseleave="showLabelTools = false"
       >
         <IconTools v-bind:class="{ active: routeIsActive('/tools') }" />
@@ -159,7 +171,7 @@ watch(gtMinWidthTablet, () => {
       </router-link>
       <router-link
         :to="'/settings'"
-        @mouseover="showLabelSettings = true"
+        @mouseover="(showLabelSettings = true), hideLabel()"
         @mouseleave="showLabelSettings = false"
       >
         <IconSettings

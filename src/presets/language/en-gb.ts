@@ -45,6 +45,7 @@ export const enGB: Language = {
       createNewConfig: "Created new config file",
       configUpdated: "Updated config file",
       configDelete: "Deleted config file",
+      copiedUrlToClipboard: "Copied URL to clipboard",
     },
     warn: {
       lostServerConnection: "Lost server connection",

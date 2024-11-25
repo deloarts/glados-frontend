@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
-import { useClipboard } from "@vueuse/core";
+import { ref, computed } from "vue";
 
 import { useLanguageStore } from "@/stores/language";
 import { useNotificationStore } from "@/stores/notification";
@@ -10,9 +9,6 @@ import config from "@/config";
 import IconCopy from "@/components/icons/IconCopy.vue";
 import IconBellRing from "@/components/icons/IconBellRing.vue";
 import IconLocked from "@/components/icons/IconLocked.vue";
-
-const source = ref("");
-const { text, copy, copied, isSupported } = useClipboard({ source });
 
 const languageStore = useLanguageStore();
 const notificationStore = useNotificationStore();
@@ -44,17 +40,12 @@ const cssWidth = computed<string>(() => {
 async function copyToClipboard() {
   if (props.id != null) {
     const url = `${config.localURL}/#/${props.copyUrl}?id=${props.id}`;
-    copy(url);
-  }
-}
-
-watch(copied, () => {
-  if (copied.value) {
+    navigator.clipboard.writeText(url);
     notificationStore.addInfo(
       languageStore.l.notification.info.copiedUrlToClipboard,
     );
   }
-});
+}
 </script>
 
 <template>
@@ -66,7 +57,7 @@ watch(copied, () => {
     class="sticky"
   >
     <IconCopy
-      v-if="hover && props.copyUrl != null && isSupported"
+      v-if="hover && props.copyUrl != null"
       class="copy-icon"
     ></IconCopy>
     <IconLocked v-else-if="props.lockedIcon" class="locked-icon" />

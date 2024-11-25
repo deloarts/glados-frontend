@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onBeforeUnmount } from "vue";
-import { useWakeLock } from "@vueuse/core";
+import { ref, onBeforeMount } from "vue";
 
 import Resolution from "@/components/main/Resolution.vue";
 import Connection from "@/components/main/Connection.vue";
@@ -14,8 +13,6 @@ import { useResolutionStore } from "./stores/resolution";
 import { useProjectsStore } from "@/stores/projects";
 import { useUsersStore, useUserStore } from "@/stores/user";
 
-const { request, release } = useWakeLock();
-
 const resolutionStore = useResolutionStore();
 const projectsStore = useProjectsStore();
 const userStore = useUserStore();
@@ -28,15 +25,9 @@ onBeforeMount(() => {
   userStore.get();
   usersStore.get();
 
-  request("screen");
-
   if (!resolutionStore.gtMinWidthTablet) {
     hideSidebar.value = true;
   }
-});
-
-onBeforeUnmount(() => {
-  release();
 });
 </script>
 <template>

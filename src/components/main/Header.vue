@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import config from "@/config";
+import config from '@/config'
 
-import QuickTheme from "@/components/common/QuickTheme.vue";
-import QuickLanguage from "@/components/common/QuickLanguage.vue";
+import QuickTheme from '@/components/common/QuickTheme.vue'
+import QuickLanguage from '@/components/common/QuickLanguage.vue'
 </script>
 
 <template>
@@ -21,7 +21,7 @@ import QuickLanguage from "@/components/common/QuickLanguage.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
+@use '@/scss/variables.scss' as *;
 
 .header {
   display: table;

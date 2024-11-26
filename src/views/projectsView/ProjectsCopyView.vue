@@ -1,52 +1,52 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-import router from "@/router/index";
-import { projectsRequest } from "@/requests/projects";
+import router from '@/router/index'
+import { projectsRequest } from '@/requests/projects'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { useUserStore } from '@/stores/user'
 
-import type { ProjectCreateSchema } from "@/schemas/project";
+import type { ProjectCreateSchema } from '@/schemas/project'
 
-import ControlsNew from "@/components/projects/ControlsNew.vue";
-import UpdateForm from "@/components/projects/UpdateForm.vue";
+import ControlsNew from '@/components/projects/ControlsNew.vue'
+import UpdateForm from '@/components/projects/UpdateForm.vue'
 
 // Router
-const route = useRoute();
+const route = useRoute()
 
 // Stores
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
+const userStore = useUserStore()
 
 const formData = ref<ProjectCreateSchema>({
-  number: null,
-  product_number: null,
-  customer: null,
-  description: null,
-  designated_user_id: null,
+  number: '',
+  product_number: '',
+  customer: '',
+  description: '',
+  designated_user_id: userStore.user.id,
   is_active: true,
-});
+})
 
 onMounted(() => {
-  const projectID = route.params.id;
+  const projectID = route.params.id
   projectsRequest
     .getProjectsID(Number(projectID))
     .then((response) => {
       if (response.status === 200) {
-        formData.value = response.data;
+        formData.value = response.data
       } else {
-        notificationStore.addWarn(
-          languageStore.l.notification.warn.failedFetchProject(projectID),
-        );
+        notificationStore.addWarn(languageStore.l.notification.warn.failedFetchProject(projectID))
         setTimeout(function () {
-          router.push({ name: "Projects" });
-        }, 4000);
+          router.push({ name: 'Projects' })
+        }, 4000)
       }
     })
-    .catch((error) => {});
-});
+    .catch((error) => {})
+})
 </script>
 
 <template>
@@ -65,15 +65,15 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "controls"
-    "data";
+    'controls'
+    'data';
 }
 
 #controls {

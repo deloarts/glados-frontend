@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ControlsNewMulti from "@/components/items/bought/ControlsNewMulti.vue";
-import CreateItemMultiTable from "@/components/items/bought/createTable/CreateItemTable.vue";
+import ControlsNewMulti from '@/components/items/bought/ControlsNewMulti.vue'
+import CreateItemMultiTable from '@/components/items/bought/createTable/CreateItemTable.vue'
 </script>
 
 <template>
@@ -19,8 +19,8 @@ import CreateItemMultiTable from "@/components/items/bought/createTable/CreateIt
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 .views-content {
   height: calc(100% - 20px); // This is ugly, should be changed...
@@ -37,8 +37,8 @@ import CreateItemMultiTable from "@/components/items/bought/createTable/CreateIt
   grid-template-columns: 100%;
   grid-template-rows: min-content auto;
   grid-template-areas:
-    "controls"
-    "data";
+    'controls'
+    'data';
 }
 
 .controls {

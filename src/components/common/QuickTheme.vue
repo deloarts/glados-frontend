@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { setTheme } from "@/helper/theme.helper";
+import { useUserStore } from '@/stores/user'
+import { setTheme } from '@/helper/theme.helper'
 
-import IconThemeDark from "@/components/icons/IconThemeDark.vue";
-import IconThemeLight from "@/components/icons/IconThemeLight.vue";
+import IconThemeDark from '@/components/icons/IconThemeDark.vue'
+import IconThemeLight from '@/components/icons/IconThemeLight.vue'
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 
 function toggleTheme() {
-  if (userStore.user.theme == "dark") {
-    setTheme("light");
+  if (userStore.user.theme == 'dark') {
+    setTheme('light')
   } else {
-    setTheme("dark");
+    setTheme('dark')
   }
 }
 </script>
@@ -28,5 +28,5 @@ function toggleTheme() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/header.scss";
+@use '@/scss/header.scss';
 </style>

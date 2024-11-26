@@ -1,91 +1,84 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted } from 'vue'
 
-import type { AvailableOption } from "@/models/controls";
+import type { AvailableOption } from '@/models/controls'
 
-import { useProjectsStore } from "@/stores/projects";
+import { useProjectsStore } from '@/stores/projects'
 
-import { blur } from "@/helper/document.helper";
+import { blur } from '@/helper/document.helper'
 
-const projectsStore = useProjectsStore();
+const projectsStore = useProjectsStore()
 
-const availableOptionsProjects = ref<Array<AvailableOption>>();
+const availableOptionsProjects = ref<Array<AvailableOption>>()
 
 interface Props {
-  value: number;
-  error?: string;
-  width?: number;
-  center?: boolean;
-  fixedHeight?: boolean;
-  required?: boolean;
+  value: number
+  error?: string
+  width?: number
+  center?: boolean
+  fixedHeight?: boolean
+  required?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   center: false,
   fixedHeight: false,
   required: false,
-});
+})
 const emit = defineEmits<{
-  (e: "update:value", v: number): void;
-}>();
+  (e: 'update:value', v: number): void
+}>()
 
 const computedValue = computed<number>({
   get() {
-    return props.value;
+    return props.value
   },
   set(newValue) {
-    emit("update:value", newValue);
-    return newValue;
+    emit('update:value', newValue)
+    return newValue
   },
-});
+})
 
 const cssWidth = computed<string>(() => {
-  return String(props.width) + "px";
-});
+  return String(props.width) + 'px'
+})
 const cssCenter = computed<string>(() => {
-  return props.center ? "center" : "left";
-});
+  return props.center ? 'center' : 'left'
+})
 
 function onEscape() {
-  blur();
+  blur()
 }
 
 function onEnter() {
-  blur();
+  blur()
 }
 
 function onContextMenu() {
-  blur();
+  blur()
 }
 
 function setOptionsProjects() {
-  var temp = [];
+  var temp = []
   for (let i = 0; i < projectsStore.items.length; i++) {
     if (projectsStore.items[i].is_active) {
       temp.push({
         text: projectsStore.items[i].number,
-        value: projectsStore.items[i].id,
-      });
+        value: String(projectsStore.items[i].id),
+      })
     }
   }
-  availableOptionsProjects.value = temp;
+  availableOptionsProjects.value = temp
 }
 
-onMounted(setOptionsProjects);
+onMounted(setOptionsProjects)
 </script>
 
 <template>
   <td @contextmenu.prevent="onContextMenu()">
-    <select
-      v-model="computedValue"
-      v-bind:class="{ 'select-text': props.value == null }"
-    >
+    <select v-model="computedValue" v-bind:class="{ 'select-text': props.value == null }">
       <option value="null" disabled selected hidden>Select</option>
-      <option
-        v-for="option in availableOptionsProjects"
-        :key="option.text"
-        :value="option.value"
-      >
+      <option v-for="option in availableOptionsProjects" :key="option.text" :value="option.value">
         {{ option.text }}
       </option>
     </select>
@@ -94,7 +87,7 @@ onMounted(setOptionsProjects);
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   min-width: v-bind(cssWidth);

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const props = defineProps<{
-  title: string;
-  text: string;
-}>();
+  title: string
+  text: string
+}>()
 </script>
 
 <template>
@@ -24,8 +24,8 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/chart/chartBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/chart/chartBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 .scope {
   width: 100%;
@@ -55,8 +55,8 @@ const props = defineProps<{
   grid-template-rows: 50px 50px;
   grid-template-columns: 100px auto;
   grid-template-areas:
-    "slotElement title"
-    "slotElement text";
+    'slotElement title'
+    'slotElement text';
 }
 
 #slotElement {

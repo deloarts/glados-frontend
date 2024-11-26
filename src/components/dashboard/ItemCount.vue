@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import Vue3Autocounter from "vue3-autocounter";
+import { ref } from 'vue'
+import Vue3Autocounter from 'vue3-autocounter'
 
 // Props & Emits
 const props = defineProps<{
-  text: string;
-  count: number;
-}>();
+  text: string
+  count: number
+}>()
 
-let start = ref(0);
+let start = ref(0)
 
 function setStart() {
-  start.value = props.count;
+  start.value = props.count
 }
 </script>
 
@@ -36,7 +36,7 @@ function setStart() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/grid/gridBase.scss';
 
 .scope {
   width: 100%;
@@ -66,7 +66,7 @@ function setStart() {
   grid-gap: 0;
   grid-template-rows: auto;
   grid-template-columns: 100px auto;
-  grid-template-areas: "count text";
+  grid-template-areas: 'count text';
 }
 
 #count {

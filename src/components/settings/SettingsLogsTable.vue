@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useLanguageStore } from "@/stores/language";
-import { useUsersStore } from "@/stores/user";
+import { useLanguageStore } from '@/stores/language'
+import { useUsersStore } from '@/stores/user'
 
-import type { Log } from "@/models/log";
+import type { Log } from '@/models/log'
 
 // Props & Emits
 const props = defineProps<{
-  logFileContent: Array<Log>;
-}>();
+  logFileContent: Array<Log>
+}>()
 
 // Store
-const languageStore = useLanguageStore();
-const usersStore = useUsersStore();
+const languageStore = useLanguageStore()
+const usersStore = useUsersStore()
 </script>
 
 <template>
@@ -58,7 +58,7 @@ const usersStore = useUsersStore();
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/table/tableBase.scss";
+@use '@/scss/table/tableBase.scss';
 
 #log-row {
   width: 35px;

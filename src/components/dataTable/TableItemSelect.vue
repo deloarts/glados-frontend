@@ -1,34 +1,35 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue'
 
-import type { AvailableOption } from "@/models/controls";
-import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
-import type { FilterStoreProtocol } from "@/protocols/filterStoreProtocol";
+import type { AvailableOption } from '@/models/controls'
+import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
+import type { FilterStoreProtocol } from '@/protocols/filterStoreProtocol'
 
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from '@/stores/user'
 
-import { blur } from "@/helper/document.helper";
-import { capitalizeFirstLetter } from "@/helper/string.helper";
-import { updateSelectedTableElement } from "@/helper/selection.helper";
+import { blur } from '@/helper/document.helper'
+import { capitalizeFirstLetter } from '@/helper/string.helper'
+import { updateSelectedTableElement } from '@/helper/selection.helper'
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 
 interface Props {
-  name: string;
-  value: string | number | Date | null;
-  options: Array<AvailableOption>;
-  updateMethod: Function;
-  displayValue?: string;
-  itemStore?: ItemStoreProtocol;
-  filterStore?: FilterStoreProtocol;
-  filterStoreKey?: string;
-  width?: number;
-  center?: boolean;
-  fixedHeight?: boolean;
-  editMode?: boolean;
+  name: string
+  value: string | number | Date | null
+  options: Array<AvailableOption>
+  updateMethod?: Function | null
+  displayValue?: string | null
+  itemStore?: ItemStoreProtocol | null
+  filterStore?: FilterStoreProtocol | null
+  filterStoreKey?: string | null
+  width?: number
+  center?: boolean
+  fixedHeight?: boolean
+  editMode?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  updateMethod: null,
   displayValue: null,
   itemStore: null,
   filterStore: null,
@@ -36,47 +37,53 @@ const props = withDefaults(defineProps<Props>(), {
   center: false,
   fixedHeight: false,
   editMode: false,
-});
+})
 const emit = defineEmits<{
-  (e: "update:filterStore", v: FilterStoreProtocol): void;
-}>();
+  (e: 'update:filterStore', v: FilterStoreProtocol | null): void
+}>()
 
-const computedFilterStore = computed<FilterStoreProtocol>({
+const computedFilterStore = computed<FilterStoreProtocol | null>({
   get() {
-    return props.filterStore;
+    return props.filterStore
   },
   set(newValue) {
-    emit("update:filterStore", newValue.state);
-    return newValue;
+    emit('update:filterStore', newValue ? newValue.state : null)
+    return newValue
   },
-});
+})
 
 const cssWidth = computed<string>(() => {
-  return String(props.width) + "px";
-});
+  return String(props.width) + 'px'
+})
 const cssCenter = computed<string>(() => {
-  return props.center ? "center" : "left";
-});
+  return props.center ? 'center' : 'left'
+})
 
 function onEscape() {
-  blur();
+  blur()
 }
 
 function onContextMenu() {
-  blur();
   if (
-    props.value &&
-    props.itemStore &&
-    props.filterStore &&
-    props.filterStoreKey
+    !props.value ||
+    !props.itemStore ||
+    !props.filterStore ||
+    !props.filterStoreKey ||
+    !computedFilterStore.value
   ) {
-    computedFilterStore.value.state[props.filterStoreKey] = String(props.value);
-    props.itemStore.getItems();
+    return
   }
+
+  blur()
+  computedFilterStore.value.state[props.filterStoreKey] = String(props.value)
+  props.itemStore.getItems()
 }
 
-function onChange(eventTarget: EventTarget) {
-  blur();
+function onChange(eventTarget: EventTarget | null) {
+  if (!props.updateMethod || !props.itemStore) {
+    return
+  }
+  blur()
   updateSelectedTableElement(
     props.name,
     //@ts-ignore
@@ -84,41 +91,32 @@ function onChange(eventTarget: EventTarget) {
     props.value,
     props.updateMethod,
     props.itemStore,
-  );
+  )
 }
 </script>
 
 <template>
   <td @contextmenu.prevent="onContextMenu()">
     <select
-      v-if="
-        props.editMode &&
-        (userStore.user.is_superuser || userStore.user.is_adminuser)
-      "
+      v-if="props.editMode && (userStore.user.is_superuser || userStore.user.is_adminuser)"
       :value="props.value"
       v-on:keyup.escape="onEscape()"
       v-on:change="onChange($event.target)"
     >
-      <option
-        v-for="(option, index) in props.options"
-        :key="index"
-        :value="option.value"
-      >
+      <option v-for="(option, index) in props.options" :key="index" :value="option.value">
         {{ option.text }}
       </option>
     </select>
     <div v-else v-bind:class="{ 'fix-height': props.fixedHeight }">
       <span>{{
-        capitalizeFirstLetter(
-          String(props.displayValue ? props.displayValue : props.value),
-        )
+        capitalizeFirstLetter(String(props.displayValue ? props.displayValue : props.value))
       }}</span>
     </div>
   </td>
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   min-width: v-bind(cssWidth);

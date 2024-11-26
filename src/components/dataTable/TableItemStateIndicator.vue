@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue'
 
-import IconAlert from "@/components/icons/IconAlert.vue";
-import IconCheck from "@/components/icons/IconCheck.vue";
-import IconBellRing from "@/components/icons/IconBellRing.vue";
-import IconLocked from "@/components/icons/IconLocked.vue";
-import IconEdit from "@/components/icons/IconEdit.vue";
-import IconCancel from "@/components/icons/IconCancel.vue";
-import IconGhost from "@/components/icons/IconGhost.vue";
+import IconAlert from '@/components/icons/IconAlert.vue'
+import IconCheck from '@/components/icons/IconCheck.vue'
+import IconBellRing from '@/components/icons/IconBellRing.vue'
+import IconLocked from '@/components/icons/IconLocked.vue'
+import IconEdit from '@/components/icons/IconEdit.vue'
+import IconCancel from '@/components/icons/IconCancel.vue'
+import IconGhost from '@/components/icons/IconGhost.vue'
 
 interface Props {
-  priority?: boolean;
-  locked?: boolean;
-  editable?: boolean;
-  finished?: boolean;
-  canceled?: boolean;
-  lost?: boolean;
-  alert?: boolean;
-  width?: number;
-  fixedHeight?: boolean;
+  priority?: boolean
+  locked?: boolean
+  editable?: boolean
+  finished?: boolean
+  canceled?: boolean
+  lost?: boolean
+  alert?: boolean
+  width?: number
+  fixedHeight?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -30,11 +30,11 @@ const props = withDefaults(defineProps<Props>(), {
   lost: false,
   alert: false,
   fixedHeight: false,
-});
+})
 
 const cssWidth = computed<string>(() => {
-  return String(props.width) + "px";
-});
+  return String(props.width) + 'px'
+})
 </script>
 
 <template>
@@ -50,7 +50,7 @@ const cssWidth = computed<string>(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   min-width: v-bind(cssWidth);

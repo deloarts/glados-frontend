@@ -1,6 +1,6 @@
-import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
+import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
 
-import { useNotificationStore } from "@/stores/notification";
+import { useNotificationStore } from '@/stores/notification'
 
 export function updateSelectedTableElement(
   elementName: String,
@@ -9,36 +9,37 @@ export function updateSelectedTableElement(
   updateMethod: Function,
   store: ItemStoreProtocol,
 ) {
-  const notificationStore = useNotificationStore();
-  const ids = store.getSelection();
+  const notificationStore = useNotificationStore()
+  const ids = store.getSelection()
 
   if (newValue == null || (ids.length == 1 && newValue == currentValue)) {
-    return;
+    return
   }
 
-  let c = 0;
-  let confirmation = true;
+  let c = 0
+  let confirmation = true
 
   if (ids.length > 1) {
     confirmation = confirm(
       `Do you want to change the ${elementName} of ${ids.length} items to '${newValue}'?`,
-    );
+    )
   }
   if (confirmation) {
     for (let i = 0; i < ids.length; i++) {
-      const id = ids[i];
+      const id = ids[i]
+      //@ts-ignore
       updateMethod(id, newValue).then((response) => {
-        c++;
+        c++
         if (response.status != 200) {
-          notificationStore.addWarn(response.data.detail);
+          notificationStore.addWarn(response.data.detail)
         }
         if (c == ids.length) {
-          store.getItems();
+          store.getItems()
         }
-      });
+      })
     }
   } else {
-    store.getItems();
+    store.getItems()
   }
 }
 
@@ -49,43 +50,43 @@ export function getSelection(
   lineIndex: number,
   store: ItemStoreProtocol,
 ): number {
-  let tempSelectedItemIDs = JSON.parse(JSON.stringify(store.getSelection()));
+  let tempSelectedItemIDs = JSON.parse(JSON.stringify(store.getSelection()))
 
   //@ts-ignore
   if (event.ctrlKey) {
     if (tempSelectedItemIDs.includes(id)) {
-      tempSelectedItemIDs.splice(tempSelectedItemIDs.indexOf(id), 1);
+      tempSelectedItemIDs.splice(tempSelectedItemIDs.indexOf(id), 1)
     } else {
-      tempSelectedItemIDs.push(id);
+      tempSelectedItemIDs.push(id)
     }
   }
   //@ts-ignore
   else if (event.shiftKey) {
-    const indexRange = [];
-    let highEnd = 0;
-    let lowEnd = 0;
-    tempSelectedItemIDs = [];
+    const indexRange = []
+    let highEnd = 0
+    let lowEnd = 0
+    tempSelectedItemIDs = []
 
     if (lineIndex > index) {
-      highEnd = lineIndex + 1;
-      lowEnd = index + 1;
+      highEnd = lineIndex + 1
+      lowEnd = index + 1
     } else {
-      highEnd = index + 1;
-      lowEnd = lineIndex + 1;
+      highEnd = index + 1
+      lowEnd = lineIndex + 1
     }
-    let c = highEnd - lowEnd + 1;
+    let c = highEnd - lowEnd + 1
     while (c--) {
-      indexRange[c] = highEnd--;
+      indexRange[c] = highEnd--
     }
     for (let i = 0; i < indexRange.length; i++) {
-      tempSelectedItemIDs.push(store.getItems()[indexRange[i] - 1].id);
+      tempSelectedItemIDs.push(store.getItems()[indexRange[i] - 1].id)
     }
   } else if (!tempSelectedItemIDs.includes(id)) {
-    tempSelectedItemIDs = [id];
+    tempSelectedItemIDs = [id]
   }
 
-  lineIndex = index;
-  store.setSelection(tempSelectedItemIDs);
+  lineIndex = index
+  store.setSelection(tempSelectedItemIDs)
 
-  return lineIndex;
+  return lineIndex
 }

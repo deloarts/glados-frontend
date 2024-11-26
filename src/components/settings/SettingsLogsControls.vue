@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from 'vue'
 // @ts-ignore
-import moment from "moment";
+import moment from 'moment'
 
-import Datepicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
-import { useLanguageStore } from "@/stores/language";
-import { useUserStore } from "@/stores/user";
+import { useLanguageStore } from '@/stores/language'
+import { useUserStore } from '@/stores/user'
 
-const languageStore = useLanguageStore();
-const userStore = useUserStore();
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
 
 interface Props {
-  pickedDate: Date;
+  pickedDate: Date | null
 }
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {})
 
 const emit = defineEmits<{
-  (e: "update:pickedDate", v: Date | null): void;
-}>();
+  (e: 'update:pickedDate', v: Date | null): void
+}>()
 
-const computedPickedDate = computed<Date>({
+const computedPickedDate = computed<Date | null>({
   get() {
-    return props.pickedDate;
+    return props.pickedDate
   },
   set(newValue) {
-    emit("update:pickedDate", newValue);
-    return newValue;
+    emit('update:pickedDate', newValue)
+    return newValue
   },
-});
+})
 
 const formatPickedDate = (pickedDate: Date) => {
-  const day = pickedDate.getDate();
-  const month = pickedDate.getMonth() + 1;
-  const year = pickedDate.getFullYear();
-  return `${day}.${month}.${year}`;
-};
+  const day = pickedDate.getDate()
+  const month = pickedDate.getMonth() + 1
+  const year = pickedDate.getFullYear()
+  return `${day}.${month}.${year}`
+}
 </script>
 
 <template>
@@ -60,13 +60,13 @@ const formatPickedDate = (pickedDate: Date) => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-rows: 40px;
   grid-template-columns: auto;
-  grid-template-areas: "date";
+  grid-template-areas: 'date';
 }
 
 #date {

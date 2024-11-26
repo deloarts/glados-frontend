@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue'
 
-import type { StockCut1DJobSchema } from "@/schemas/stockCut1d";
+import type { StockCut1DJobSchema } from '@/schemas/stockCut1d'
 
-import ButtonPlus from "@/components/elements/ButtonPlus.vue";
-import ButtonSolve from "@/components/elements/ButtonSolve.vue";
-import ButtonLoading from "@/components/elements/ButtonLoading.vue";
-import IconDelete from "@/components/icons/IconDelete.vue";
+import ButtonPlus from '@/components/elements/ButtonPlus.vue'
+import ButtonSolve from '@/components/elements/ButtonSolve.vue'
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
+import IconDelete from '@/components/icons/IconDelete.vue'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
 const props = defineProps<{
-  solverInput: StockCut1DJobSchema;
-  solving: boolean;
-  onSolve: Function;
-  onAdd: Function;
-}>();
+  solverInput: StockCut1DJobSchema
+  solving: boolean
+  onSolve: Function
+  onAdd: Function
+}>()
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 
-const solverInput = computed<StockCut1DJobSchema>(() => props.solverInput);
+const solverInput = computed<StockCut1DJobSchema>(() => props.solverInput)
 
 function removeRow(index: number) {
-  let target_sizes = [];
+  let target_sizes = []
   for (var i = 0; i < solverInput.value.target_sizes.length; i++) {
     if (i != index) {
-      target_sizes.push(solverInput.value.target_sizes[i]);
+      target_sizes.push(solverInput.value.target_sizes[i])
     }
   }
-  solverInput.value.target_sizes = target_sizes;
+  solverInput.value.target_sizes = target_sizes
 }
 function removeAll() {
-  solverInput.value.target_sizes = [{ length: 0, quantity: 0 }];
+  solverInput.value.target_sizes = [{ length: 0, quantity: 0 }]
 }
 </script>
 
@@ -40,16 +40,10 @@ function removeAll() {
     <div class="form-base-container">
       <div id="grid" class="grid-command">
         <div id="btn-add">
-          <ButtonPlus
-            v-on:click="props.onAdd()"
-            :text="languageStore.l.tools.buttons.add"
-          />
+          <ButtonPlus v-on:click="props.onAdd()" :text="languageStore.l.tools.buttons.add" />
         </div>
         <div id="btn-solve">
-          <ButtonLoading
-            v-if="props.solving"
-            :text="languageStore.l.tools.buttons.solving"
-          />
+          <ButtonLoading v-if="props.solving" :text="languageStore.l.tools.buttons.solving" />
           <ButtonSolve
             v-else
             v-on:click="props.onSolve()"
@@ -68,22 +62,14 @@ function removeAll() {
           {{ languageStore.l.tools.labels.stockLength }}
         </div>
         <div id="stock-length" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            type="number"
-            v-model="solverInput.max_length"
-          />
+          <input class="form-base-text-input" type="number" v-model="solverInput.max_length" />
         </div>
 
         <div id="cut-width-text" class="grid-item-left">
           {{ languageStore.l.tools.labels.cutWidth }}
         </div>
         <div id="cut-width" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            type="number"
-            v-model="solverInput.cut_width"
-          />
+          <input class="form-base-text-input" type="number" v-model="solverInput.cut_width" />
         </div>
       </div>
     </div>
@@ -125,9 +111,9 @@ function removeAll() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/table/tableBase.scss";
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/table/tableBase.scss';
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 table {
   max-width: 600px;
@@ -179,14 +165,14 @@ svg {
   grid-template-rows: 40px 40px;
   grid-template-columns: 130px auto;
   grid-template-areas:
-    "stock-length-text stock-length"
-    "cut-width-text cut-width";
+    'stock-length-text stock-length'
+    'cut-width-text cut-width';
 }
 
 .grid-command {
   grid-template-rows: 32px;
   grid-template-columns: min-content min-content;
-  grid-template-areas: "btn-add btn-solve";
+  grid-template-areas: 'btn-add btn-solve';
 }
 
 #btn-solve {

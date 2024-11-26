@@ -1,31 +1,28 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
 interface Props {
-  text?: string;
-  hideWhenClicked?: boolean;
+  text?: string
+  hideWhenClicked?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   hideWhenClicked: true,
-});
-const state = ref(false);
+})
+const state = ref(false)
 
 function onClickButton() {
-  state.value = !state.value;
+  state.value = !state.value
 }
 
 function onClickDropDown() {
   if (props.hideWhenClicked) {
-    state.value = false;
+    state.value = false
   }
 }
 </script>
 
 <template>
-  <button
-    class="dropdown"
-    v-bind:class="{ 'dropdown-active': state, text: props.text != '' }"
-  >
+  <button class="dropdown" v-bind:class="{ 'dropdown-active': state, text: props.text != '' }">
     <div class="inner" v-on:click="onClickButton()">
       <i class="icon" v-bind:class="{ 'icon-text': props.text != '' }">
         <svg
@@ -51,7 +48,7 @@ function onClickDropDown() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dropdown/dropdownBase.scss";
+@use '@/scss/dropdown/dropdownBase.scss';
 
 .v-enter-active,
 .v-leave-active {

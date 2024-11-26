@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { baseParticles } from "@/presets/particles";
-import { loadFull } from "tsparticles";
+import { baseParticles } from '@/presets/particles'
+import { loadFull } from 'tsparticles'
 
-import IconWarning from "@/components/icons/IconWarning.vue";
+import IconWarning from '@/components/icons/IconWarning.vue'
 
-// Props & Emits
-const props = defineProps(["show", "text"]);
+const props = defineProps(['show', 'text'])
 
-// Particles
+// @ts-ignore
 const particlesInit = async (engine) => {
-  await loadFull(engine);
-};
-const particlesLoaded = async (container) => {};
+  await loadFull(engine)
+}
+// @ts-ignore
+const particlesLoaded = async (container) => {}
 </script>
 
 <template>
@@ -95,7 +95,7 @@ const particlesLoaded = async (container) => {};
 }
 
 .text {
-  font-family: "Play", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.5em;
 
   position: relative;

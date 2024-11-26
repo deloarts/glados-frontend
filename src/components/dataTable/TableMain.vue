@@ -9,7 +9,7 @@
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableHead.scss";
+@use '@/scss/dataTable/tableHead.scss';
 
 table {
   border-collapse: separate;

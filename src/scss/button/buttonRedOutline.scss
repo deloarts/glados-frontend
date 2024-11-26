@@ -1,5 +1,5 @@
 
-@import "@/scss/button/buttonBase.scss";
+@use"@/scss/button/buttonBase.scss";
 
 button:hover {
   border: 1px solid var(--main-red);

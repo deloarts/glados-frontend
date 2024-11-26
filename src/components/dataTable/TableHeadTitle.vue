@@ -1,37 +1,37 @@
 <script setup lang="ts">
-import { ref, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount } from 'vue'
 
 interface Props {
-  name: string;
-  value?: string;
-  width?: number;
+  name: string
+  value?: string | null
+  width?: number
 }
 const props = withDefaults(defineProps<Props>(), {
   value: null,
-});
+})
 const emit = defineEmits<{
-  (e: "update:width", v: number | null): void;
-}>();
+  (e: 'update:width', v: number | null): void
+}>()
 
-const initialWidth = ref<number>(0);
-const resized = ref<boolean>(false);
+const initialWidth = ref<number>(0)
+const resized = ref<boolean>(false)
 
 const cssMinWidth = computed<string>(() => {
-  return String(initialWidth.value) + "px";
-});
+  return String(initialWidth.value) + 'px'
+})
 const cssWidth = computed<string>(() => {
   if (resized.value) {
-    emit("update:width", null);
-    return "min-content";
+    emit('update:width', null)
+    return 'min-content'
   } else {
-    emit("update:width", initialWidth.value);
-    return String(props.width) + "px";
+    emit('update:width', initialWidth.value)
+    return String(props.width) + 'px'
   }
-});
+})
 
 onBeforeMount(() => {
-  initialWidth.value = Number(props.width);
-});
+  initialWidth.value = Number(props.width)
+})
 </script>
 
 <template>
@@ -43,7 +43,7 @@ onBeforeMount(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableHead.scss";
+@use '@/scss/dataTable/tableHead.scss';
 
 th {
   min-width: v-bind(cssMinWidth);

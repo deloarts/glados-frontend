@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ToolsControls from "@/components/tools/ToolsControls.vue";
-import StockCut1D from "@/components/tools/stockCut1D/StockCut1D.vue";
+import ToolsControls from '@/components/tools/ToolsControls.vue'
+import StockCut1D from '@/components/tools/stockCut1D/StockCut1D.vue'
 </script>
 
 <template>
@@ -19,15 +19,15 @@ import StockCut1D from "@/components/tools/stockCut1D/StockCut1D.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "controls"
-    "display";
+    'controls'
+    'display';
 }
 
 #controls {

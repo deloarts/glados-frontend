@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
+import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   width: min-content;

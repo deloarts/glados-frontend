@@ -9,9 +9,9 @@ $grad: (
 );
 
 @for $i from 0 to $d {
-    $v: random(4) + 2;
-    $a: random(5) * .1 + .5;
-    $grad: $grad, radial-gradient($v+px $v+px at (random($w - $v * 2) + $v)+px (random($w - $v * 2) + $v)+px,
+    $v: math.random(4) + 2;
+    $a: math.random(5) * .1 + .5;
+    $grad: $grad, radial-gradient($v+px $v+px at (math.random($w - $v * 2) + $v)+px (math.random($w - $v * 2) + $v)+px,
             rgba(255, 255, 255, $a) 50%,
             rgba(0, 0, 0, 0)) !global;
 }

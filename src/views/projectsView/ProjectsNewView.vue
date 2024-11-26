@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import type { ProjectCreateSchema } from "@/schemas/project";
+import type { ProjectCreateSchema } from '@/schemas/project'
 
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from '@/stores/user'
 
-import ControlsNew from "@/components/projects/ControlsNew.vue";
-import CreateForm from "@/components/projects/CreateForm.vue";
+import ControlsNew from '@/components/projects/ControlsNew.vue'
+import CreateForm from '@/components/projects/CreateForm.vue'
 
 // Stores
-const userStore = useUserStore();
+const userStore = useUserStore()
 
 // Form stuff
 const formData = ref<ProjectCreateSchema>({
-  number: null,
-  product_number: null,
-  customer: null,
-  description: null,
+  number: '',
+  product_number: '',
+  customer: '',
+  description: '',
   designated_user_id: userStore.user.id,
   is_active: true,
-});
+})
 </script>
 
 <template>
@@ -38,15 +38,15 @@ const formData = ref<ProjectCreateSchema>({
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "controls"
-    "data";
+    'controls'
+    'data';
 }
 
 #controls {

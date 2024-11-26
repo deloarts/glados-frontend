@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { useLanguageStore } from "@/stores/language";
-import { useUsersStore } from "@/stores/user";
+import { useLanguageStore } from '@/stores/language'
+import { useUsersStore } from '@/stores/user'
 
-import IconCheckboxBlank from "@/components/icons/IconCheckboxBlank.vue";
-import IconCheckboxMarked from "@/components/icons/IconCheckboxMarked.vue";
+import IconCheckboxBlank from '@/components/icons/IconCheckboxBlank.vue'
+import IconCheckboxMarked from '@/components/icons/IconCheckboxMarked.vue'
 
 // Props & Emits
 const props = defineProps<{
-  selectedUserID: number;
-}>();
+  selectedUserID: number
+}>()
 const emit = defineEmits<{
-  (e: "update:selectedUserID", v: number): void;
-}>();
+  (e: 'update:selectedUserID', v: number): void
+}>()
 
 // Store
-const languageStore = useLanguageStore();
-const usersStore = useUsersStore();
+const languageStore = useLanguageStore()
+const usersStore = useUsersStore()
 
 function onSelect(id: number) {
   if (props.selectedUserID == id) {
-    id = 0;
+    id = 0
   }
-  emit("update:selectedUserID", id);
+  emit('update:selectedUserID', id)
 }
 </script>
 
@@ -96,7 +96,7 @@ function onSelect(id: number) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/table/tableBase.scss";
+@use '@/scss/table/tableBase.scss';
 
 #user-id {
   width: 35px;

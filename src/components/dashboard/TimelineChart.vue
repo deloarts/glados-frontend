@@ -1,5 +1,5 @@
-<script setup>
-import { ref, onMounted, watch, computed } from "vue";
+<script setup lang="ts">
+import { ref, onMounted, watch, computed } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -8,40 +8,33 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-} from "chart.js";
-import { Bar } from "vue-chartjs";
+} from 'chart.js'
+import { Bar } from 'vue-chartjs'
 
-import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
+import LoadingSpinner from '@/components/spinner/LoadingSpinner.vue'
 
-import { useLanguageStore } from "@/stores/language";
-import { useUserStore } from "@/stores/user";
+import { useLanguageStore } from '@/stores/language'
+import { useUserStore } from '@/stores/user'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 // Props & Emits
-const props = defineProps(["dataset"]);
+const props = defineProps(['dataset'])
 
-const languageStore = useLanguageStore();
-const userStore = useUserStore();
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
 
 const labelColor = computed(() => {
-  return userStore.user.theme == "dark" ? "white" : "black";
-});
-const chartLabels = ref();
-const chartDatasets = ref([0]);
+  return userStore.user.theme == 'dark' ? 'white' : 'black'
+})
+const chartLabels = ref()
+const chartDatasets = ref([0])
 const chartData = computed(() => {
   return {
     labels: chartLabels.value,
     datasets: chartDatasets.value,
-  };
-});
+  }
+})
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -52,7 +45,7 @@ const chartOptions = {
   plugins: {
     legend: {
       display: true,
-      position: "bottom",
+      position: 'bottom',
       labels: {
         color: labelColor.value,
         font: { size: 14 },
@@ -62,42 +55,42 @@ const chartOptions = {
       display: false,
     },
   },
-};
+}
 
 function updateChart() {
   if (props.dataset != null) {
-    var datasets = [];
+    var datasets = []
 
     datasets.push({
       data: props.dataset.created,
       label: languageStore.l.dashboard.labels.created,
-      backgroundColor: "#25CCF7",
-    });
+      backgroundColor: '#25CCF7',
+    })
     datasets.push({
       data: props.dataset.ordered,
       label: languageStore.l.dashboard.labels.ordered,
-      backgroundColor: "#cec000",
-    });
+      backgroundColor: '#cec000',
+    })
     datasets.push({
       data: props.dataset.delivered,
       label: languageStore.l.dashboard.labels.delivered,
-      backgroundColor: "#32CD32",
-    });
+      backgroundColor: '#32CD32',
+    })
 
-    chartLabels.value = props.dataset.months;
-    chartDatasets.value = datasets;
+    chartLabels.value = props.dataset.months
+    chartDatasets.value = datasets
   }
 }
 
 onMounted(() => {
-  updateChart();
-});
+  updateChart()
+})
 watch(
   () => props.dataset,
   () => {
-    updateChart();
+    updateChart()
   },
-);
+)
 </script>
 
 <template>
@@ -113,7 +106,7 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/chart/chartBase.scss";
+@use '@/scss/chart/chartBase.scss';
 
 .spinner-wrapper {
   width: 100%;

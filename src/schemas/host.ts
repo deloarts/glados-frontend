@@ -1,63 +1,63 @@
 export interface HostConfigBoughtItemsUnitsSchema {
-  default: string;
-  values: Array<string>;
+  default: string | null
+  values: Array<string>
 }
 
 export interface HostConfigBoughtItemsStatusSchema {
-  open: string;
-  requested: string;
-  ordered: string;
-  late: string;
-  partial: string;
-  delivered: string;
-  canceled: string;
-  lost: string;
+  open: string
+  requested: string
+  ordered: string
+  late: string
+  partial: string
+  delivered: string
+  canceled: string
+  lost: string
 }
 
 export interface HostConfigBoughtItemsFilterSchema {
-  limit: string;
-  ignoreDelivered: boolean;
-  ignoreCanceled: boolean;
-  ignoreLost: boolean;
-  highPriority: boolean | null;
-  creatorID: number;
-  createdDate: Date;
-  changedDateFrom: Date;
-  desiredDate: Date;
-  requesterID: number;
-  requestedDate: Date;
-  ordererID: number;
-  orderedDate: Date;
-  expectedDate: Date;
-  deliveredDate: Date;
-  sortBy: string;
-  id: number;
-  status: string;
-  projectNumber: string;
-  projectCustomer: string;
-  projectDescription: string;
-  productNumber: string;
-  quantity: number;
-  unit: string;
-  partnumber: string;
-  orderNumber: string;
-  manufacturer: string;
-  supplier: string;
-  group1: string;
-  noteGeneral: string;
-  noteSupplier: string;
-  storagePlace: string;
-  receiverID: number;
+  limit: string | null
+  ignoreDelivered: boolean | null
+  ignoreCanceled: boolean | null
+  ignoreLost: boolean | null
+  highPriority: boolean | null
+  creatorID: number | null
+  createdDate: Date | null
+  changedDateFrom: Date | null
+  desiredDate: Date | null
+  requesterID: number | null
+  requestedDate: Date | null
+  ordererID: number | null
+  orderedDate: Date | null
+  expectedDate: Date | null
+  deliveredDate: Date | null
+  sortBy: string | null
+  id: number | null
+  status: string | null
+  projectNumber: string | null
+  projectCustomer: string | null
+  projectDescription: string | null
+  productNumber: string | null
+  quantity: number | null
+  unit: string | null
+  partnumber: string | null
+  orderNumber: string | null
+  manufacturer: string | null
+  supplier: string | null
+  group1: string | null
+  noteGeneral: string | null
+  noteSupplier: string | null
+  storagePlace: string | null
+  receiverID: number | null
 }
 
 export interface HostConfigProjectFilterSchema {
-  skip: number;
-  limit: number;
-  id: number;
-  number: string;
-  productNumber: string;
-  customer: string;
-  description: string;
-  isActive: boolean;
-  designatedUserID: number;
+  skip: number | null
+  limit: number | null
+  id: number | null
+  number: string | null
+  productNumber: string | null
+  customer: string | null
+  description: string | null
+  isActive: boolean | null
+  designatedUserID: number | null
 }

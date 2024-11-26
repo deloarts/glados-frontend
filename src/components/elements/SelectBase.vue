@@ -1,15 +1,16 @@
 <script setup lang="ts">
 const props = defineProps<{
-  selection: string;
-  options: Array<string>;
-}>();
+  selection: string
+  options: Array<string>
+}>()
 
 const emit = defineEmits<{
-  (e: "update:selection", v: string): void;
-}>();
+  (e: 'update:selection', v: string): void
+}>()
 
-function onChange(event) {
-  emit("update:selection", event.target.value);
+function onChange(event: Event) {
+  //@ts-ignore
+  emit('update:selection', event.target.value)
 }
 </script>
 
@@ -24,5 +25,5 @@ function onChange(event) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/select/selectForm.scss";
+@use '@/scss/select/selectForm.scss';
 </style>

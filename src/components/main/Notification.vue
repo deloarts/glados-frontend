@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import {
-  infoType,
-  useNotificationStore,
-  warningType,
-} from "@/stores/notification";
+import { infoType, useNotificationStore, warningType } from '@/stores/notification'
 
-import IconWarning from "@/components/icons/IconWarning.vue";
-import IconInfo from "@/components/icons/IconInfo.vue";
+import IconWarning from '@/components/icons/IconWarning.vue'
+import IconInfo from '@/components/icons/IconInfo.vue'
 
-const notificationStore = useNotificationStore();
+const notificationStore = useNotificationStore()
 </script>
 
 <template>
@@ -23,9 +19,7 @@ const notificationStore = useNotificationStore();
           info: notification.type == infoType,
         }"
         v-bind:style="{
-          top: `${
-            -20 + (notificationStore.notifications.length - index) * 80
-          }px`,
+          top: `${-20 + (notificationStore.notifications.length - index) * 80}px`,
         }"
       >
         <div id="grid">
@@ -41,7 +35,7 @@ const notificationStore = useNotificationStore();
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/grid/gridBase.scss';
 
 .scope {
   overflow: hidden;
@@ -88,7 +82,7 @@ const notificationStore = useNotificationStore();
   gap: 0;
   grid-template-rows: 70px;
   grid-template-columns: 70px auto;
-  grid-template-areas: "icon text";
+  grid-template-areas: 'icon text';
 }
 
 #icon {

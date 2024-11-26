@@ -1,34 +1,44 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import { useWakeLock } from '@vueuse/core'
 
-import Resolution from "@/components/main/Resolution.vue";
-import Connection from "@/components/main/Connection.vue";
-import Notification from "@/components/main/Notification.vue";
-import Header from "@/components/main/Header.vue";
-import Footer from "@/components/main/Footer.vue";
-import Sidebar from "@/components/main/Sidebar.vue";
-import RouterDisplay from "@/components/main/RouterDisplay.vue";
+import Resolution from '@/components/main/Resolution.vue'
+import Connection from '@/components/main/Connection.vue'
+import Notification from '@/components/main/Notification.vue'
+import Header from '@/components/main/Header.vue'
+import Footer from '@/components/main/Footer.vue'
+import Sidebar from '@/components/main/Sidebar.vue'
+import RouterDisplay from '@/components/main/RouterDisplay.vue'
 
-import { useResolutionStore } from "./stores/resolution";
-import { useProjectsStore } from "@/stores/projects";
-import { useUsersStore, useUserStore } from "@/stores/user";
+import { useResolutionStore } from './stores/resolution'
+import { useProjectsStore } from '@/stores/projects'
+import { useUsersStore, useUserStore } from '@/stores/user'
 
-const resolutionStore = useResolutionStore();
-const projectsStore = useProjectsStore();
-const userStore = useUserStore();
-const usersStore = useUsersStore();
+const resolutionStore = useResolutionStore()
+const projectsStore = useProjectsStore()
+const userStore = useUserStore()
+const usersStore = useUsersStore()
 
-const hideSidebar = ref<boolean>(false);
+const hideSidebar = ref<boolean>(false)
+const { isSupported, isActive, forceRequest, request, release } = useWakeLock()
 
 onBeforeMount(() => {
-  projectsStore.getItems();
-  userStore.get();
-  usersStore.get();
+  projectsStore.getItems()
+  userStore.get()
+  usersStore.get()
 
   if (!resolutionStore.gtMinWidthTablet) {
-    hideSidebar.value = true;
+    hideSidebar.value = true
   }
-});
+
+  if (isSupported) {
+    request('screen')
+  }
+})
+
+onBeforeUnmount(() => {
+  release()
+})
 </script>
 <template>
   <div id="app">
@@ -76,9 +86,9 @@ body {
   grid-template-rows: var(--header-height) auto var(--footer-height);
   grid-template-columns: var(--sidebar-width) auto;
   grid-template-areas:
-    "header header"
-    "sidebar display"
-    "footer footer";
+    'header header'
+    'sidebar display'
+    'footer footer';
 
   transition: 300ms;
 }

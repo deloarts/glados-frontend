@@ -1,234 +1,206 @@
 <script setup lang="ts">
-import { ref, watch, computed, onBeforeMount } from "vue";
-import Toggle from "@vueform/toggle/dist/toggle.js";
+import { ref, watch, computed, onBeforeMount } from 'vue'
+import Toggle from '@vueform/toggle'
 
-import router from "@/router/index";
-import { useLanguageStore } from "@/stores/language";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useBoughtItemFilterStore } from "@/stores/filter";
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useNotificationStore } from "@/stores/notification";
-import { useUserStore } from "@/stores/user";
-import { useResolutionStore } from "@/stores/resolution";
-import { boughtItemsRequest } from "@/requests/items";
-import { getBoughtItemsFilterParams } from "@/requests/params";
-import { camelToTitle } from "@/helper/string.helper";
+import router from '@/router/index'
+import { useLanguageStore } from '@/stores/language'
+import { useBoughtItemsControlsStore } from '@/stores/controls'
+import { useBoughtItemFilterStore } from '@/stores/filter'
+import { useBoughtItemsStore } from '@/stores/boughtItems'
+import { useNotificationStore } from '@/stores/notification'
+import { useUserStore } from '@/stores/user'
+import { useResolutionStore } from '@/stores/resolution'
+import { boughtItemsRequest } from '@/requests/items'
+import { getBoughtItemsFilterParams } from '@/requests/params'
+import { camelToTitle } from '@/helper/string.helper'
 
-import Prompt from "@/components/main/Prompt.vue";
-import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
-import ButtonEdit from "@/components/elements/ButtonEdit.vue";
-import ButtonCopy from "@/components/elements/ButtonCopy.vue";
-import ButtonDelete from "@/components/elements/ButtonDelete.vue";
-import ButtonExcel from "@/components/elements/ButtonExcel.vue";
-import ButtonSync from "@/components/elements/ButtonSync.vue";
-import ButtonSyncOff from "@/components/elements/ButtonSyncOff.vue";
-import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue";
-import ButtonFilterSave from "@/components/elements/ButtonFilterSave.vue";
-import ButtonFilterLoad from "@/components/elements/ButtonFilterLoad.vue";
-import ButtonClear from "@/components/elements/ButtonClear.vue";
-import ButtonShowInitial from "@/components/elements/ButtonShowInitial.vue";
-import DropDownTableView from "@/components/elements/DropDownTableView.vue";
-import DropDownTableColumns from "@/components/elements/DropDownTableColumns.vue";
-import SelectPreText from "@/components/elements/SelectPreText.vue";
+import Prompt from '@/components/main/Prompt.vue'
+import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
+import ButtonEdit from '@/components/elements/ButtonEdit.vue'
+import ButtonCopy from '@/components/elements/ButtonCopy.vue'
+import ButtonDelete from '@/components/elements/ButtonDelete.vue'
+import ButtonExcel from '@/components/elements/ButtonExcel.vue'
+import ButtonSync from '@/components/elements/ButtonSync.vue'
+import ButtonSyncOff from '@/components/elements/ButtonSyncOff.vue'
+import ButtonFilterClear from '@/components/elements/ButtonFilterClear.vue'
+import ButtonFilterSave from '@/components/elements/ButtonFilterSave.vue'
+import ButtonFilterLoad from '@/components/elements/ButtonFilterLoad.vue'
+import ButtonClear from '@/components/elements/ButtonClear.vue'
+import ButtonShowInitial from '@/components/elements/ButtonShowInitial.vue'
+import DropDownTableView from '@/components/elements/DropDownTableView.vue'
+import DropDownTableColumns from '@/components/elements/DropDownTableColumns.vue'
+import SelectPreText from '@/components/elements/SelectPreText.vue'
 
-import type { AvailableOption } from "@/models/controls";
+import type { AvailableOption } from '@/models/controls'
 
 // Stores
-const languageStore = useLanguageStore();
-const boughtItemsStore = useBoughtItemsStore();
-const controlsStore = useBoughtItemsControlsStore();
-const filterStore = useBoughtItemFilterStore();
-const notificationStore = useNotificationStore();
-const resolutionStore = useResolutionStore();
-const userStore = useUserStore();
+const languageStore = useLanguageStore()
+const boughtItemsStore = useBoughtItemsStore()
+const controlsStore = useBoughtItemsControlsStore()
+const filterStore = useBoughtItemFilterStore()
+const notificationStore = useNotificationStore()
+const resolutionStore = useResolutionStore()
+const userStore = useUserStore()
 
-const is_guestuser = computed<boolean>(() => userStore.user.is_guestuser);
-const gtMinWidthDesktop = computed<boolean>(
-  () => resolutionStore.gtMinWidthDesktop,
-);
-const gtMinWidthTablet = computed<boolean>(
-  () => resolutionStore.gtMinWidthTablet,
-);
+const is_guestuser = computed<boolean>(() => userStore.user.is_guestuser)
+const gtMinWidthDesktop = computed<boolean>(() => resolutionStore.gtMinWidthDesktop)
+const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
 
 // Shows
-const showDeletePrompt = ref<boolean>(false);
+const showDeletePrompt = ref<boolean>(false)
 
 // Buttons
 const buttonItemCreateText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.boughtItem.button.newItem
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.newItem : ''
+})
 const buttonItemEditText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.boughtItem.button.editItem
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.editItem : ''
+})
 const buttonItemCopyText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.boughtItem.button.copyItem
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.copyItem : ''
+})
 const buttonSyncText = computed<string>(() => {
-  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.sync : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.sync : ''
+})
 const buttonViewsText = computed<string>(() => {
-  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.views : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.views : ''
+})
 const buttonColumnsText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.boughtItem.button.columns
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.columns : ''
+})
 const buttonClearFilterText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.boughtItem.button.clearFilter
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.clearFilter : ''
+})
 
 // Selections
 const availableOptionsLimit: Array<AvailableOption> = [
-  { text: "50", value: "50" },
-  { text: "100", value: "100" },
-  { text: "250", value: "250" },
-  { text: "500", value: "500" },
-];
+  { text: '50', value: '50' },
+  { text: '100', value: '100' },
+  { text: '250', value: '250' },
+  { text: '500', value: '500' },
+]
 const availableOptionsOrderBy = computed<Array<AvailableOption>>(() => {
   return [
-    { text: languageStore.l.boughtItem.options.orderBy.id, value: "id" },
+    { text: languageStore.l.boughtItem.options.orderBy.id, value: 'id' },
     {
       text: languageStore.l.boughtItem.options.orderBy.created,
-      value: "created",
+      value: 'created',
     },
     {
       text: languageStore.l.boughtItem.options.orderBy.project,
-      value: "project",
+      value: 'project',
     },
     {
       text: languageStore.l.boughtItem.options.orderBy.product,
-      value: "productNumber",
+      value: 'productNumber',
     },
-    { text: languageStore.l.boughtItem.options.orderBy.group, value: "group1" },
+    { text: languageStore.l.boughtItem.options.orderBy.group, value: 'group1' },
     {
       text: languageStore.l.boughtItem.options.orderBy.manufacturer,
-      value: "manufacturer",
+      value: 'manufacturer',
     },
     {
       text: languageStore.l.boughtItem.options.orderBy.supplier,
-      value: "supplier",
+      value: 'supplier',
     },
-  ];
-});
+  ]
+})
 const availableOptionsFilterPresets = computed<Array<AvailableOption>>(() => {
-  let presets = [];
+  let presets = []
   for (const key in filterStore.presets) {
-    presets.push({ text: camelToTitle(key), value: key });
+    presets.push({ text: camelToTitle(key), value: key })
   }
-  return presets;
-});
-const selectedOptionFilterPreset = ref<string>("");
+  return presets
+})
+const selectedOptionFilterPreset = ref<string>('')
 
 function saveFilter() {
-  filterStore.saveMy();
-  boughtItemsStore.getItems();
-  notificationStore.addInfo(languageStore.l.notification.info.savedNewFilter);
+  filterStore.saveMy()
+  boughtItemsStore.getItems()
+  notificationStore.addInfo(languageStore.l.notification.info.savedNewFilter)
 }
 
 function loadFilter() {
-  filterStore.loadMy();
-  boughtItemsStore.getItems();
+  filterStore.loadMy()
+  boughtItemsStore.getItems()
 }
 
 function clearFilter() {
-  selectedOptionFilterPreset.value = "";
-  filterStore.reset();
-  boughtItemsStore.getItems();
-  console.log("Cleared filter");
+  selectedOptionFilterPreset.value = ''
+  filterStore.reset()
+  boughtItemsStore.getItems()
+  console.log('Cleared filter')
 }
 
 function onButtonNewItem() {
-  router.push({ name: "NewBoughtItem" });
+  router.push({ name: 'NewBoughtItem' })
 }
 
 function onButtonEdit() {
   if (boughtItemsStore.getSelection().length == 0) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.selectItemFirst,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.selectItemFirst)
   } else if (boughtItemsStore.getSelection().length != 1) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.onlyEditOneItem,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.onlyEditOneItem)
   } else {
-    router.push(`/items/bought/edit/${boughtItemsStore.getSelection()[0]}`);
+    router.push(`/items/bought/edit/${boughtItemsStore.getSelection()[0]}`)
   }
 }
 
 function onButtonCopy() {
   if (boughtItemsStore.getSelection().length == 0) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.selectItemFirst,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.selectItemFirst)
   } else if (boughtItemsStore.getSelection().length != 1) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.onlyCopyOneItem,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.onlyCopyOneItem)
   } else {
-    router.push(`/items/bought/copy/${boughtItemsStore.getSelection()[0]}`);
+    router.push(`/items/bought/copy/${boughtItemsStore.getSelection()[0]}`)
   }
 }
 
 function onButtonDelete() {
   if (boughtItemsStore.getSelection().length == 0) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.selectItemFirst,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.selectItemFirst)
   } else if (boughtItemsStore.getSelection().length != 1) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.onlyDeleteOneItem,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.onlyDeleteOneItem)
   } else {
-    showDeletePrompt.value = true;
+    showDeletePrompt.value = true
   }
 }
 
 function onButtonDownloadExcel() {
-  const params = getBoughtItemsFilterParams(filterStore.state);
+  const params = getBoughtItemsFilterParams(filterStore.state)
   boughtItemsRequest.getItemsExcel(params).then((response) => {
     if (response.status == 200) {
       let blob = new Blob([response.data], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         }),
-        url = window.URL.createObjectURL(blob);
-      window.open(url);
+        url = window.URL.createObjectURL(blob)
+      window.open(url)
     } else {
-      notificationStore.addWarn(response.data.detail);
+      notificationStore.addWarn(response.data.detail)
     }
-  });
+  })
 }
 
 function onButtonBatchCreate() {
-  router.push({ name: "NewMultiBoughtItem" });
+  router.push({ name: 'NewMultiBoughtItem' })
 }
 
 function deleteItem() {
-  const itemID = boughtItemsStore.getSelection()[0];
+  const itemID = boughtItemsStore.getSelection()[0]
   boughtItemsRequest.deleteItemsID(itemID).then((response) => {
     if (response.status === 200) {
-      notificationStore.addInfo(
-        languageStore.l.notification.info.deletedItem(itemID),
-      );
-      boughtItemsStore.getItems();
+      notificationStore.addInfo(languageStore.l.notification.info.deletedItem(itemID))
+      boughtItemsStore.getItems()
     } else {
-      notificationStore.addWarn(response.data.detail);
+      notificationStore.addWarn(response.data.detail)
     }
-  });
-  showDeletePrompt.value = false;
+  })
+  showDeletePrompt.value = false
 }
 
 function onButtonClear() {
-  boughtItemsStore.clearSelection();
-  boughtItemsStore.getItems();
+  boughtItemsStore.clearSelection()
+  boughtItemsStore.getItems()
 }
 
 function setupMobileView() {
@@ -244,30 +216,26 @@ function setupTabletView() {
 }
 
 watch(selectedOptionFilterPreset, () => {
-  const name = selectedOptionFilterPreset.value;
-  filterStore.applyPreset(name);
-  boughtItemsStore.getItems();
-});
+  const name = selectedOptionFilterPreset.value
+  filterStore.applyPreset(name)
+  boughtItemsStore.getItems()
+})
 
 watch(gtMinWidthTablet, () => {
-  setupMobileView();
-});
+  setupMobileView()
+})
 
 watch(gtMinWidthDesktop, () => {
-  setupTabletView();
-});
+  setupTabletView()
+})
 
-onBeforeMount(setupMobileView);
-onBeforeMount(setupTabletView);
+onBeforeMount(setupMobileView)
+onBeforeMount(setupTabletView)
 </script>
 
 <template>
   <div class="controls-base-scope">
-    <div
-      id="item-controls"
-      v-if="!is_guestuser"
-      class="controls-base-container"
-    >
+    <div id="item-controls" v-if="!is_guestuser" class="controls-base-container">
       <ButtonItemCreate
         class="controls-base-element"
         v-model:text="buttonItemCreateText"
@@ -346,10 +314,7 @@ onBeforeMount(setupTabletView);
           }}</span>
         </div>
         <div class="drop-down-toggle-item">
-          <Toggle
-            v-model="filterStore.state.ignoreLost"
-            @change="boughtItemsStore.getItems()"
-          />
+          <Toggle v-model="filterStore.state.ignoreLost" @change="boughtItemsStore.getItems()" />
           <span class="drop-down-toggle-item-text">{{
             languageStore.l.boughtItem.options.views.ignoreLost
           }}</span>
@@ -445,12 +410,12 @@ onBeforeMount(setupTabletView);
     v-bind:on-yes="deleteItem"
     v-bind:on-no="
       () => {
-        showDeletePrompt = false;
+        showDeletePrompt = false
       }
     "
   />
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/controls/controlsBase.scss";
+@use '@/scss/controls/controlsBase.scss';
 </style>

@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import ButtonBlade from "@/components/elements/ButtonBlade.vue";
+import ButtonBlade from '@/components/elements/ButtonBlade.vue'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
 // Router
-const route = useRoute();
+const route = useRoute()
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 
 function routeIsActive(currentLink: string) {
-  let activeRoute = route.path;
-  if (activeRoute != "/login") {
-    localStorage.setItem("gladosActiveRoute", activeRoute);
+  let activeRoute = route.path
+  if (activeRoute != '/login') {
+    localStorage.setItem('gladosActiveRoute', activeRoute)
   }
   if (activeRoute.includes(currentLink)) {
-    return true;
+    return true
   } else {
-    return false;
+    return false
   }
 }
 </script>
@@ -44,5 +44,5 @@ function routeIsActive(currentLink: string) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/controls/controlsBase.scss";
+@use '@/scss/controls/controlsBase.scss';
 </style>

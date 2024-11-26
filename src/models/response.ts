@@ -1,6 +1,6 @@
-import { ErrorDetails } from "@/models/errors";
+import type { ErrorDetails } from '@/models/errors'
 
 export interface ResponseWarning {
-  row: number;
-  errors: Array<ErrorDetails>;
+  row: number
+  errors: Array<ErrorDetails>
 }

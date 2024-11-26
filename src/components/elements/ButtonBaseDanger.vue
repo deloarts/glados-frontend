@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const props = defineProps<{
-  svgPath: string;
-  text?: string;
-}>();
+  svgPath: string
+  text?: string
+}>()
 </script>
 
 <template>
@@ -23,7 +23,7 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/button/buttonBase.scss";
+@use '@/scss/button/buttonBase.scss';
 
 button {
   background-color: var(--main-red);

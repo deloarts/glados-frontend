@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
+import LoadingSpinner from '@/components/spinner/LoadingSpinner.vue'
 const props = defineProps<{
-  text: string;
-}>();
+  text: string
+}>()
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/button/buttonBase.scss";
+@use '@/scss/button/buttonBase.scss';
 
 .spinner {
   position: absolute;

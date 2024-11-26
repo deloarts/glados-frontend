@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import IconWarning from "@/components/icons/IconWarning.vue";
+import IconWarning from '@/components/icons/IconWarning.vue'
 
 // Props & Emits
 const props = defineProps<{
-  text: string;
-}>();
+  text: string
+}>()
 </script>
 
 <template>
@@ -23,13 +23,13 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 .grid {
   grid-template-rows: 40px;
   grid-template-columns: 50px auto;
-  grid-template-areas: "grid-area-icon grid-area-text";
+  grid-template-areas: 'grid-area-icon grid-area-text';
 }
 
 .grid-area-icon {

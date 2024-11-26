@@ -1,86 +1,90 @@
-import { ref, watch, onBeforeMount } from "vue";
-import { defineStore } from "pinia";
+import { ref, watch, onBeforeMount } from 'vue'
+import { defineStore } from 'pinia'
 
-import constants from "@/constants";
-import { hostRequest } from "@/requests/host";
+import constants from '@/constants'
+import { hostRequest } from '@/requests/host'
 
-import type { AvailableOption } from "@/models/controls";
-import type { HostConfigBoughtItemsStatusSchema } from "@/schemas/host";
+import type { AvailableOption } from '@/models/controls'
+import type { HostConfigBoughtItemsStatusSchema } from '@/schemas/host'
 
-import { useLanguageStore } from "./language";
+import { useLanguageStore } from './language'
 
-export const useStatusStore = defineStore("status", () => {
-  const _languageStore = useLanguageStore();
+export const useStatusStore = defineStore('status', () => {
+  const _languageStore = useLanguageStore()
 
-  const loading = ref(false);
+  const loading = ref(false)
   const boughtItemStatus = ref<HostConfigBoughtItemsStatusSchema>({
-    open: null,
-    requested: null,
-    ordered: null,
-    late: null,
-    partial: null,
-    delivered: null,
-    canceled: null,
-    lost: null,
-  });
-  const boughtItemStatusOption = ref<Array<AvailableOption>>([]);
-  const boughtItemStatusOptionFilter = ref<Array<AvailableOption>>([]);
+    open: '',
+    requested: '',
+    ordered: '',
+    late: '',
+    partial: '',
+    delivered: '',
+    canceled: '',
+    lost: '',
+  })
+  const boughtItemStatusOption = ref<Array<AvailableOption>>([])
+  const boughtItemStatusOptionFilter = ref<Array<AvailableOption>>([])
 
   async function get() {
-    console.log("Status store requesting data ...");
-    loading.value = true;
+    console.log('Status store requesting data ...')
+    loading.value = true
 
     return hostRequest.getConfigItemsBoughtStatus().then((response) => {
-      loading.value = false;
+      loading.value = false
       if (response.status === 200) {
-        boughtItemStatus.value = response.data;
+        boughtItemStatus.value = response.data
 
-        const tempOptions = [];
+        const tempOptions = []
         const tempFilter = [
           {
             text: _languageStore.l.boughtItem.options.showAll,
             value: null,
           },
-        ];
+        ]
         for (const key in boughtItemStatus.value) {
           tempOptions.push({
+            //@ts-ignore
             text: _languageStore.l.boughtItem.options.status[key],
+            //@ts-ignore
             value: boughtItemStatus.value[key],
-          });
+          })
           tempFilter.push({
+            //@ts-ignore
             text: _languageStore.l.boughtItem.options.status[key],
+            //@ts-ignore
             value: boughtItemStatus.value[key],
-          });
+          })
         }
-        boughtItemStatusOption.value = tempOptions;
-        boughtItemStatusOptionFilter.value = tempFilter;
-        console.log("Status store got data from server.");
-        return response;
+        boughtItemStatusOption.value = tempOptions
+        boughtItemStatusOptionFilter.value = tempFilter
+        console.log('Status store got data from server.')
+        return response
       }
-    });
+    })
   }
 
   function fetch() {
     get().then(() => {
-      setTimeout(fetch.bind(this), constants.patchServerConfigInterval);
-    });
+      setTimeout(fetch, constants.patchServerConfigInterval)
+    })
   }
 
   watch(
     () => _languageStore.l,
     () => {
-      get();
+      get()
     },
-  );
+  )
 
   onBeforeMount(() => {
-    fetch();
-  });
+    fetch()
+  })
 
   return {
     loading,
     boughtItemStatus,
     boughtItemStatusOption,
     boughtItemStatusOptionFilter,
-  };
-});
+  }
+})

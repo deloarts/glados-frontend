@@ -5,7 +5,7 @@
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   min-width: 0px;

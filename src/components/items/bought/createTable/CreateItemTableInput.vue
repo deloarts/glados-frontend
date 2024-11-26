@@ -1,60 +1,60 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted } from 'vue'
 
-import { blur } from "@/helper/document.helper";
+import { blur } from '@/helper/document.helper'
 
 interface Props {
-  value: string | number | Date | null;
-  error?: string;
-  type?: string;
-  width?: number;
-  center?: boolean;
-  fixedHeight?: boolean;
-  required?: boolean;
-  disabled?: boolean;
+  value: string | number | Date | null
+  error?: string
+  type?: string
+  width?: number
+  center?: boolean
+  fixedHeight?: boolean
+  required?: boolean
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  type: "text",
+  type: 'text',
   center: false,
   fixedHeight: false,
   required: false,
   disabled: false,
-});
+})
 const emit = defineEmits<{
-  (e: "update:value", v: string | number | Date | null): void;
-}>();
+  (e: 'update:value', v: string | number | Date | null): void
+}>()
 
 const computedValue = computed<string | number | Date | null>({
   get() {
-    return props.value;
+    return props.value
   },
   set(newValue) {
-    emit("update:value", newValue);
-    return newValue;
+    emit('update:value', newValue)
+    return newValue
   },
-});
+})
 
 const cssWidth = computed<string>(() => {
-  return String(props.width) + "px";
-});
+  return String(props.width) + 'px'
+})
 const cssCenter = computed<string>(() => {
-  return props.center ? "center" : "left";
-});
+  return props.center ? 'center' : 'left'
+})
 
 function onEscape() {
-  blur();
+  blur()
 }
 
 function onEnter() {
-  blur();
+  blur()
 }
 
 function onContextMenu() {
-  blur();
+  blur()
 }
 
-onMounted(() => {});
+onMounted(() => {})
 </script>
 
 <template>
@@ -71,7 +71,7 @@ onMounted(() => {});
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   min-width: v-bind(cssWidth);
@@ -107,7 +107,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import SettingsControls from "@/components/settings/SettingsControls.vue";
-import SettingsUsers from "@/components/settings/SettingsUsers.vue";
+import SettingsControls from '@/components/settings/SettingsControls.vue'
+import SettingsUsers from '@/components/settings/SettingsUsers.vue'
 </script>
 
 <template>
@@ -19,15 +19,15 @@ import SettingsUsers from "@/components/settings/SettingsUsers.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "controls"
-    "display";
+    'controls'
+    'display';
 }
 
 #controls {

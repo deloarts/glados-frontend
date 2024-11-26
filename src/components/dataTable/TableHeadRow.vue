@@ -7,7 +7,7 @@
 </template>
 
 <style lang="scss">
-@import "@/scss/dataTable/tableHead.scss";
+@use '@/scss/dataTable/tableHead.scss';
 
 tr {
   margin: 0;
@@ -16,8 +16,8 @@ tr {
 }
 
 tr > th {
-  font-family: "Calibri";
-  text-align: "center";
+  font-family: 'Calibri';
+  text-align: 'center';
   font-weight: normal;
   font-size: 14px;
 }
@@ -29,7 +29,7 @@ tr:nth-child(1) > th {
   min-height: 40px;
   max-height: 40px;
 
-  font-family: "Play", "Calibri";
+  font-family: 'Play', 'Calibri';
   font-weight: bold;
 }
 

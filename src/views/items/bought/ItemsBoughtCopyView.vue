@@ -1,59 +1,57 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-import router from "@/router/index";
-import { boughtItemsRequest } from "@/requests/items";
+import router from '@/router/index'
+import { boughtItemsRequest } from '@/requests/items'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
 
-import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
+import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
 
-import ControlsNew from "@/components/items/bought/ControlsNew.vue";
-import UpdateItemForm from "@/components/items/bought/UpdateItemForm.vue";
+import ControlsNew from '@/components/items/bought/ControlsNew.vue'
+import UpdateItemForm from '@/components/items/bought/UpdateItemForm.vue'
 
 // Router
-const route = useRoute();
+const route = useRoute()
 
 // Stores
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
 
 const formData = ref<BoughtItemCreateSchema>({
-  high_priority: null,
+  high_priority: false,
   notify_on_delivery: false,
-  project_id: null,
-  quantity: null,
-  unit: null,
-  partnumber: null,
-  order_number: null,
+  project_id: 0,
+  quantity: 0,
+  unit: '',
+  partnumber: '',
+  order_number: '',
   supplier: null,
-  manufacturer: null,
+  manufacturer: '',
   note_general: null,
   note_supplier: null,
   desired_delivery_date: null,
-});
+})
 
 onMounted(() => {
-  const itemID = route.params.id;
+  const itemID = route.params.id
 
   boughtItemsRequest
     .getItemsID(Number(itemID))
     .then((response) => {
       if (response.status === 200) {
-        formData.value = response.data;
+        formData.value = response.data
       } else {
-        notificationStore.addWarn(
-          languageStore.l.notification.warn.failedFetchItem(itemID),
-        );
+        notificationStore.addWarn(languageStore.l.notification.warn.failedFetchItem(itemID))
         setTimeout(function () {
-          router.push({ name: "BoughtItems" });
-        }, 4000);
+          router.push({ name: 'BoughtItems' })
+        }, 4000)
       }
     })
-    .catch((error) => {});
-});
+    .catch((error) => {})
+})
 </script>
 
 <template>
@@ -72,15 +70,15 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "controls"
-    "data";
+    'controls'
+    'data';
 }
 
 #controls {

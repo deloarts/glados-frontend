@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from "vue";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "vue-chartjs";
+import { ref, onMounted, watch, computed } from 'vue'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Doughnut } from 'vue-chartjs'
 
-import type { DiscSpace } from "@/models/host";
+import type { DiscSpace } from '@/models/host'
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 // Props & Emits
 const props = defineProps<{
-  dataset: DiscSpace;
-}>();
+  dataset: DiscSpace
+}>()
 
-const chartLabels = ref<Array<string>>([""]);
-const chartDataset = ref<Array<number>>([0]);
+const chartLabels = ref<Array<string>>([''])
+const chartDataset = ref<Array<number>>([0])
 const chartData = computed(() => {
   return {
     labels: chartLabels.value,
     datasets: [
       {
-        backgroundColor: ["#007acc", "#282828"],
-        borderColor: ["#007acc", "#007acc"],
+        backgroundColor: ['#007acc', '#282828'],
+        borderColor: ['#007acc', '#007acc'],
         data: chartDataset.value,
       },
     ],
-  };
-});
+  }
+})
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -41,35 +41,36 @@ const chartOptions = {
     },
     tooltip: {
       callbacks: {
-        label: function (data) {
-          console.log(data);
-          return data.formattedValue + " GiB";
+        label: function (data: any) {
+          console.log(data)
+          return data.formattedValue + ' GiB'
         },
       },
     },
   },
-};
+}
 
 function updateChart() {
-  var data = [];
-  var labels = [];
+  var data = []
+  var labels = []
   for (const key in props.dataset) {
-    labels.push(key);
-    data.push(props.dataset[key]);
+    labels.push(key)
+    //@ts-ignore
+    data.push(props.dataset[key])
   }
-  chartLabels.value = labels;
-  chartDataset.value = data;
+  chartLabels.value = labels
+  chartDataset.value = data
 }
 
 onMounted(() => {
-  updateChart();
-});
+  updateChart()
+})
 watch(
   () => props.dataset,
   () => {
-    updateChart();
+    updateChart()
   },
-);
+)
 </script>
 
 <template>
@@ -77,5 +78,5 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/chart/chartBase.scss";
+@use '@/scss/chart/chartBase.scss';
 </style>

@@ -1,58 +1,58 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted } from 'vue'
 
-import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
-import type { FilterStoreProtocol } from "@/protocols/filterStoreProtocol";
+import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
+import type { FilterStoreProtocol } from '@/protocols/filterStoreProtocol'
 
-import { blur } from "@/helper/document.helper";
+import { blur } from '@/helper/document.helper'
 
 interface Props {
-  name: string;
-  itemStore: ItemStoreProtocol;
-  filterStore: FilterStoreProtocol;
-  filterStoreKey: string;
-  placeholder?: string;
-  type?: string;
-  width?: number;
+  name: string
+  itemStore: ItemStoreProtocol
+  filterStore: FilterStoreProtocol
+  filterStoreKey: string
+  placeholder?: string
+  type?: string
+  width?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: "Filter",
-  type: "text",
-});
+  placeholder: 'Filter',
+  type: 'text',
+})
 
-const inputModel = ref<string | number | Date | null>();
+const inputModel = ref<string | number | Date | null>(null)
 const cssWidth = computed<string>(() => {
-  return String(props.width) + "px";
-});
+  return String(props.width) + 'px'
+})
 
 function onEscape() {
-  blur();
+  blur()
 }
 
 function onEnter() {
-  blur();
-  props.filterStore.set(props.filterStoreKey, inputModel.value);
-  props.itemStore.getItems();
+  blur()
+  props.filterStore.set(props.filterStoreKey, inputModel.value)
+  props.itemStore.getItems()
 }
 
 function onContextMenu() {
-  blur();
-  props.filterStore.set(props.filterStoreKey, null);
-  props.itemStore.getItems();
+  blur()
+  props.filterStore.set(props.filterStoreKey, null)
+  props.itemStore.getItems()
 }
 
 onMounted(() => {
-  inputModel.value = props.filterStore.state[props.filterStoreKey];
-});
+  inputModel.value = props.filterStore.state[props.filterStoreKey]
+})
 
 watch(
   () => props.filterStore.state[props.filterStoreKey],
   () => {
-    inputModel.value = props.filterStore.state[props.filterStoreKey];
+    inputModel.value = props.filterStore.state[props.filterStoreKey]
   },
   { deep: true },
-);
+)
 </script>
 
 <template>
@@ -75,7 +75,7 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableHead.scss";
+@use '@/scss/dataTable/tableHead.scss';
 
 th {
   min-width: v-bind(cssWidth);

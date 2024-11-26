@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { useLanguageStore } from "@/stores/language";
-import { useBoughtItemFilterStore } from "@/stores/filter";
+import { useLanguageStore } from '@/stores/language'
+import { useBoughtItemFilterStore } from '@/stores/filter'
 
-import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+import type { HostConfigBoughtItemsFilterSchema } from '@/schemas/host'
 
 // Props & Emits
 const props = defineProps<{
-  selectedConfigValue: HostConfigBoughtItemsFilterSchema;
-  selectedConfigName: string;
-  selectedConfigCategory: string;
-}>();
+  selectedConfigValue: HostConfigBoughtItemsFilterSchema
+  selectedConfigName: string
+  selectedConfigCategory: string
+}>()
 const emit = defineEmits<{
-  (e: "update:selectedConfigValue", v: HostConfigBoughtItemsFilterSchema): void;
-  (e: "update:selectedConfigName", v: string): void;
-  (e: "update:selectedConfigCategory", v: string): void;
-}>();
+  (e: 'update:selectedConfigValue', v: HostConfigBoughtItemsFilterSchema): void
+  (e: 'update:selectedConfigName', v: string): void
+  (e: 'update:selectedConfigCategory', v: string): void
+}>()
 
 // Store
-const languageStore = useLanguageStore();
-const boughtItemsFilterStore = useBoughtItemFilterStore();
+const languageStore = useLanguageStore()
+const boughtItemsFilterStore = useBoughtItemFilterStore()
 
 function onSelect(
-  name: string | number,
+  name: string | number | null,
   category: string,
   value: HostConfigBoughtItemsFilterSchema,
 ) {
   if (props.selectedConfigName == String(name)) {
-    name = null;
+    name = null
   }
-  emit("update:selectedConfigValue", value);
-  emit("update:selectedConfigName", String(name));
-  emit("update:selectedConfigCategory", category);
+  emit('update:selectedConfigValue', value)
+  emit('update:selectedConfigName', String(name))
+  emit('update:selectedConfigCategory', category)
 }
 </script>
 
@@ -67,7 +67,7 @@ function onSelect(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/table/tableBase.scss";
+@use '@/scss/table/tableBase.scss';
 
 #config-category {
   width: 60px;

@@ -1,95 +1,92 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted } from 'vue'
 // @ts-ignore
-import moment from "moment";
+import moment from 'moment'
 
-import { logsRequest } from "@/requests/logs";
+import { logsRequest } from '@/requests/logs'
 
-import SettingsLogsControls from "./SettingsLogsControls.vue";
-import SettingsLogsTable from "./SettingsLogsTable.vue";
+import SettingsLogsControls from './SettingsLogsControls.vue'
+import SettingsLogsTable from './SettingsLogsTable.vue'
 
-import type { Log } from "@/models/log";
+import type { Log } from '@/models/log'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
 
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
 
-const pickedDate = ref<Date>(null);
-const logFileName = computed<string>(() => {
+const pickedDate = ref<Date | null>(null)
+const logFileName = computed<string | null>(() => {
   if (pickedDate.value != null) {
-    if (moment(pickedDate.value).isSame(moment(), "day")) {
-      return "glados.log";
+    if (moment(pickedDate.value).isSame(moment(), 'day')) {
+      return 'glados.log'
     }
-    const day = pickedDate.value.getDate();
-    const month = pickedDate.value.getMonth() + 1;
-    const year = pickedDate.value.getFullYear();
-    return `glados.${year}-${month}-${day}.log`;
+    const day = pickedDate.value.getDate()
+    const month = pickedDate.value.getMonth() + 1
+    const year = pickedDate.value.getFullYear()
+    return `glados.${year}-${month}-${day}.log`
   }
-  return null;
-});
-const logFileContent = ref<Array<Log>>([]);
+  return null
+})
+const logFileContent = ref<Array<Log>>([])
 
 function getLogFile() {
-  logFileContent.value = [];
+  logFileContent.value = []
   logsRequest
     .getLogFile(logFileName.value)
     .then((response) => {
       if (response.status == 200) {
-        const content = response.data;
-        let tempContent = [];
+        const content = response.data
+        let tempContent = []
         for (let i = 0; i < content.length; i++) {
-          const currentDate = getLogContent(content[i], "date");
-          if (currentDate.startsWith("20") && moment(currentDate).isValid()) {
+          const currentDate = getLogContent(content[i], 'date')
+          if (currentDate.startsWith('20') && moment(currentDate).isValid()) {
             tempContent.push({
               date: currentDate,
-              name: getLogContent(content[i], "name"),
-              level: getLogContent(content[i], "level"),
-              msg: getLogContent(content[i], "msg"),
-            });
+              name: getLogContent(content[i], 'name'),
+              level: getLogContent(content[i], 'level'),
+              msg: getLogContent(content[i], 'msg'),
+            })
           }
         }
-        logFileContent.value = tempContent;
+        logFileContent.value = tempContent
       } else if (response.status == 404) {
-        notificationStore.addInfo(
-          languageStore.l.notification.warn.noLogForThisDay,
-        );
+        notificationStore.addInfo(languageStore.l.notification.warn.noLogForThisDay)
       } else {
-        notificationStore.addWarn(response.data.detail);
+        notificationStore.addWarn(response.data.detail)
       }
     })
     .catch(() => {
-      notificationStore.addWarn(
-        languageStore.l.notification.warn.failedToFetchLog,
-      );
-    });
+      notificationStore.addWarn(languageStore.l.notification.warn.failedToFetchLog)
+    })
 }
 
 function getLogContent(line: string, type: string) {
-  let splitted = line.split("\t");
-  if (type == "date") {
-    return splitted[0];
-  } else if (type == "name") {
-    return splitted[1];
-  } else if (type == "level") {
-    return splitted[2];
-  } else if (type == "msg") {
-    return splitted[3];
+  let splitted = line.split('\t')
+  if (type == 'date') {
+    return splitted[0]
+  } else if (type == 'name') {
+    return splitted[1]
+  } else if (type == 'level') {
+    return splitted[2]
+  } else if (type == 'msg') {
+    return splitted[3]
   } else {
-    return line;
+    return line
   }
 }
 
 watch(pickedDate, () => {
   if (pickedDate.value != null) {
-    getLogFile();
+    getLogFile()
   }
-});
+})
 
 onMounted(() => {
-  pickedDate.value = moment();
-});
+  //@ts-ignore
+  pickedDate.value = moment()
+})
 </script>
 
 <template>
@@ -111,7 +108,7 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/grid/gridBase.scss';
 
 .scope {
   width: 100%;
@@ -126,9 +123,9 @@ onMounted(() => {
   grid-template-columns: 100%;
   grid-template-rows: min-content min-content calc(100vh - 300px);
   grid-template-areas:
-    "header"
-    "controls"
-    "data";
+    'header'
+    'controls'
+    'data';
 }
 
 #header {

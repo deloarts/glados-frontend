@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import AccountPersonalAccessTokenForm from "@/components/account/AccountPersonalAccessTokenForm.vue";
+import AccountPersonalAccessTokenForm from '@/components/account/AccountPersonalAccessTokenForm.vue'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 </script>
 
 <template>

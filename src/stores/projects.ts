@@ -62,10 +62,10 @@ export const useProjectsStore = defineStore("projects", () => {
   function fetchItems() {
     if (paused.value) {
       console.log("Project store is paused.");
-      setTimeout(fetchItems.bind(this), constants.patchProjectsStoreInterval);
+      setTimeout(fetchItems, constants.patchProjectsStoreInterval);
     } else {
       get().then(() => {
-        setTimeout(fetchItems.bind(this), constants.patchProjectsStoreInterval);
+        setTimeout(fetchItems, constants.patchProjectsStoreInterval);
       });
     }
   }

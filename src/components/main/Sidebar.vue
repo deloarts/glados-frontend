@@ -1,95 +1,93 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
-import { useRoute } from "vue-router";
+import { ref, watch, computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-import router from "@/router/index";
-import { useLanguageStore } from "@/stores/language";
-import { useUserStore } from "@/stores/user";
-import { useResolutionStore } from "@/stores/resolution";
+import router from '@/router/index'
+import { useLanguageStore } from '@/stores/language'
+import { useUserStore } from '@/stores/user'
+import { useResolutionStore } from '@/stores/resolution'
 
-import IconLogout from "@/components/icons/IconLogout.vue";
-import IconDashboard from "@/components/icons/IconDashboard.vue";
-import IconProject from "@/components/icons/IconProject.vue";
-import IconItems from "@/components/icons/IconItems.vue";
-import IconAccount from "@/components/icons/IconAccount.vue";
-import IconTools from "@/components/icons/IconTools.vue";
-import IconSettings from "@/components/icons/IconSettings.vue";
-import IconChevronLeft from "../icons/IconChevronLeft.vue";
+import IconLogout from '@/components/icons/IconLogout.vue'
+import IconDashboard from '@/components/icons/IconDashboard.vue'
+import IconProject from '@/components/icons/IconProject.vue'
+import IconItems from '@/components/icons/IconItems.vue'
+import IconAccount from '@/components/icons/IconAccount.vue'
+import IconTools from '@/components/icons/IconTools.vue'
+import IconSettings from '@/components/icons/IconSettings.vue'
+import IconChevronLeft from '../icons/IconChevronLeft.vue'
 
 // Router
-const route = useRoute();
+const route = useRoute()
 
 // Store
-const languageStore = useLanguageStore();
-const userStore = useUserStore();
-const resolutionStore = useResolutionStore();
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
+const resolutionStore = useResolutionStore()
 
 interface Props {
-  hideSidebar: boolean;
+  hideSidebar: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   hideSidebar: false,
-});
+})
 const emit = defineEmits<{
-  (e: "update:hideSidebar", v: boolean): void;
-}>();
+  (e: 'update:hideSidebar', v: boolean): void
+}>()
 const computedHideSidebar = computed<boolean>({
   get() {
-    return props.hideSidebar;
+    return props.hideSidebar
   },
   set(newValue) {
-    emit("update:hideSidebar", newValue);
-    return newValue;
+    emit('update:hideSidebar', newValue)
+    return newValue
   },
-});
+})
 
-const is_adminuser = computed<boolean>(() => userStore.user.is_adminuser);
-const gtMinWidthTablet = computed<boolean>(
-  () => resolutionStore.gtMinWidthTablet,
-);
+const is_adminuser = computed<boolean>(() => userStore.user.is_adminuser)
+const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
 
 // States
-const showLabelLogout = ref<boolean>(false);
-const showLabelDashboard = ref<boolean>(false);
-const showLabelProjects = ref<boolean>(false);
-const showLabelBoughtItems = ref<boolean>(false);
-const showLabelAccount = ref<boolean>(false);
-const showLabelTools = ref<boolean>(false);
-const showLabelSettings = ref<boolean>(false);
+const showLabelLogout = ref<boolean>(false)
+const showLabelDashboard = ref<boolean>(false)
+const showLabelProjects = ref<boolean>(false)
+const showLabelBoughtItems = ref<boolean>(false)
+const showLabelAccount = ref<boolean>(false)
+const showLabelTools = ref<boolean>(false)
+const showLabelSettings = ref<boolean>(false)
 
-function routeIsActive(currentLink) {
-  let activeRoute = route.path;
-  if (activeRoute != "/login") {
-    localStorage.setItem("gladosActiveRoute", activeRoute);
+function routeIsActive(currentLink: string) {
+  let activeRoute = route.path
+  if (activeRoute != '/login') {
+    localStorage.setItem('gladosActiveRoute', activeRoute)
   }
   if (activeRoute.includes(currentLink)) {
-    return true;
+    return true
   } else {
-    return false;
+    return false
   }
 }
 
 function logout() {
-  localStorage.setItem("gladosTokenValue", "");
-  localStorage.setItem("gladosTokenType", "");
-  router.push({ name: "Login" });
+  localStorage.setItem('gladosTokenValue', '')
+  localStorage.setItem('gladosTokenType', '')
+  router.push({ name: 'Login' })
 }
 
 function hideLabel() {
   setTimeout(() => {
-    showLabelLogout.value = false;
-    showLabelDashboard.value = false;
-    showLabelProjects.value = false;
-    showLabelBoughtItems.value = false;
-    showLabelAccount.value = false;
-    showLabelTools.value = false;
-    showLabelSettings.value = false;
-  }, 2000);
+    showLabelLogout.value = false
+    showLabelDashboard.value = false
+    showLabelProjects.value = false
+    showLabelBoughtItems.value = false
+    showLabelAccount.value = false
+    showLabelTools.value = false
+    showLabelSettings.value = false
+  }, 2000)
 }
 
 watch(gtMinWidthTablet, () => {
-  computedHideSidebar.value = !gtMinWidthTablet.value;
-});
+  computedHideSidebar.value = !gtMinWidthTablet.value
+})
 </script>
 
 <template>
@@ -197,5 +195,5 @@ watch(gtMinWidthTablet, () => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/sidebar.scss";
+@use '@/scss/sidebar.scss';
 </style>

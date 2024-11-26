@@ -1,110 +1,106 @@
 <script setup lang="ts">
-import { ref, watch, computed, onBeforeMount } from "vue";
+import { ref, watch, computed, onBeforeMount } from 'vue'
 //@ts-ignore
-import moment, { lang } from "moment";
-import Toggle from "@vueform/toggle/dist/toggle.js";
-import Datepicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
+import moment from 'moment'
+import Toggle from '@vueform/toggle'
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
-import { useLanguageStore } from "@/stores/language";
-import { useUserStore } from "@/stores/user";
-import { useUnitsStore } from "@/stores/units";
-import { useProjectsStore } from "@/stores/projects";
+import { useLanguageStore } from '@/stores/language'
+import { useUserStore } from '@/stores/user'
+import { useUnitsStore } from '@/stores/units'
+import { useProjectsStore } from '@/stores/projects'
 
-import type { BoughtItemUpdateSchema } from "@/schemas/boughtItem";
-import type { AvailableOption } from "@/models/controls";
+import type { BoughtItemUpdateSchema } from '@/schemas/boughtItem'
+import type { AvailableOption } from '@/models/controls'
 
-import SelectBase from "@/components/elements/SelectBase.vue";
-import SelectProject from "@/components/elements/SelectProject.vue";
+import SelectBase from '@/components/elements/SelectBase.vue'
+import SelectProject from '@/components/elements/SelectProject.vue'
 
 // Props & Emits
 const props = defineProps<{
-  formData: BoughtItemUpdateSchema;
-}>();
+  formData: BoughtItemUpdateSchema
+}>()
 
 const emit = defineEmits<{
-  (e: "update:formData", v: BoughtItemUpdateSchema): void;
-}>();
+  (e: 'update:formData', v: BoughtItemUpdateSchema): void
+}>()
 
 // Computed
-const updateFormData = computed<BoughtItemUpdateSchema>(() => props.formData);
+const updateFormData = computed<BoughtItemUpdateSchema>(() => props.formData)
 
 // Stores
-const languageStore = useLanguageStore();
-const userStore = useUserStore();
-const unitStore = useUnitsStore();
-const projectsStore = useProjectsStore();
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
+const unitStore = useUnitsStore()
+const projectsStore = useProjectsStore()
 
 // Options
-let availableOptionsProjectsActive: Array<AvailableOption> = [];
-let availableOptionsProjectsInactive: Array<AvailableOption> = [];
+let availableOptionsProjectsActive: Array<AvailableOption> = []
+let availableOptionsProjectsInactive: Array<AvailableOption> = []
 
 // Dates
-const pickedDesiredDate = ref<Date>(null);
+const pickedDesiredDate = ref<Date | null>(null)
 const formatDesiredDate = (pickedDesiredDate: Date) => {
-  const day = pickedDesiredDate.getDate();
-  const month = pickedDesiredDate.getMonth() + 1;
-  const year = pickedDesiredDate.getFullYear();
-  return `${day}.${month}.${year}`;
-};
+  const day = pickedDesiredDate.getDate()
+  const month = pickedDesiredDate.getMonth() + 1
+  const year = pickedDesiredDate.getFullYear()
+  return `${day}.${month}.${year}`
+}
 
 function setOptionsProjects() {
-  var tempActive = [];
-  var tempInactive = [];
+  var tempActive = []
+  var tempInactive = []
   for (let i = 0; i < projectsStore.items.length; i++) {
     if (projectsStore.items[i].is_active) {
       tempActive.push({
         text: `${projectsStore.items[i].number} - ${projectsStore.items[i].customer} - ${projectsStore.items[i].description}`,
-        value: projectsStore.items[i].id,
-      });
+        value: String(projectsStore.items[i].id),
+      })
     } else {
       tempInactive.push({
         text: `${projectsStore.items[i].number} - ${projectsStore.items[i].customer} - ${projectsStore.items[i].description}`,
-        value: projectsStore.items[i].id,
-      });
+        value: String(projectsStore.items[i].id),
+      })
     }
   }
-  availableOptionsProjectsActive = tempActive;
-  availableOptionsProjectsInactive = tempInactive;
+  availableOptionsProjectsActive = tempActive
+  availableOptionsProjectsInactive = tempInactive
 }
 
 watch(
   () => updateFormData,
   () => {
-    let data = updateFormData.value;
-    if (
-      data.desired_delivery_date != null &&
-      data.desired_delivery_date != undefined
-    ) {
-      const date = Date.parse(String(data.desired_delivery_date));
-      pickedDesiredDate.value = new Date(date);
+    let data = updateFormData.value
+    if (data.desired_delivery_date != null && data.desired_delivery_date != undefined) {
+      const date = Date.parse(String(data.desired_delivery_date))
+      pickedDesiredDate.value = new Date(date)
     }
-    emit("update:formData", data);
+    emit('update:formData', data)
   },
   { deep: true },
-);
+)
 
 watch(pickedDesiredDate, () => {
-  let data = updateFormData.value;
+  let data = updateFormData.value
   if (pickedDesiredDate.value instanceof Date) {
-    data.desired_delivery_date = moment(pickedDesiredDate.value).format(
-      "YYYY-MM-DD",
-    );
+    //@ts-ignore
+    data.desired_delivery_date = moment(pickedDesiredDate.value).format('YYYY-MM-DD')
   } else {
-    data.desired_delivery_date = null;
+    data.desired_delivery_date = null
   }
-  emit("update:formData", data);
-});
+  emit('update:formData', data)
+})
 
 watch(
   () => projectsStore.$state,
   () => {
-    setOptionsProjects();
+    setOptionsProjects()
   },
   { deep: true },
-);
+)
 
-onBeforeMount(setOptionsProjects);
+onBeforeMount(setOptionsProjects)
 </script>
 
 <template>
@@ -121,12 +117,8 @@ onBeforeMount(setOptionsProjects);
         <div id="product-number" class="grid-item-center">
           <input
             class="form-base-text-input"
-            v-bind:value="
-              projectsStore.getProductNumber(updateFormData.project_id)
-            "
-            :placeholder="
-              languageStore.l.boughtItem.input.productNumberPlaceholder
-            "
+            v-bind:value="projectsStore.getProductNumber(updateFormData.project_id)"
+            :placeholder="languageStore.l.boughtItem.input.productNumberPlaceholder"
             readonly
           />
         </div>
@@ -148,27 +140,21 @@ onBeforeMount(setOptionsProjects);
           <input
             class="form-base-text-input"
             v-model="updateFormData.partnumber"
-            :placeholder="
-              languageStore.l.boughtItem.input.partnumberPlaceholder
-            "
+            :placeholder="languageStore.l.boughtItem.input.partnumberPlaceholder"
           />
         </div>
         <div id="order-number" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.order_number"
-            :placeholder="
-              languageStore.l.boughtItem.input.orderNumberPlaceholder
-            "
+            :placeholder="languageStore.l.boughtItem.input.orderNumberPlaceholder"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="updateFormData.manufacturer"
-            :placeholder="
-              languageStore.l.boughtItem.input.manufacturerPlaceholder
-            "
+            :placeholder="languageStore.l.boughtItem.input.manufacturerPlaceholder"
           />
         </div>
         <div id="supplier" class="grid-item-center">
@@ -198,9 +184,7 @@ onBeforeMount(setOptionsProjects);
             v-model="pickedDesiredDate"
             :format="formatDesiredDate"
             :clearable="true"
-            :placeholder="
-              languageStore.l.boughtItem.input.desiredDatePlaceholder
-            "
+            :placeholder="languageStore.l.boughtItem.input.desiredDatePlaceholder"
             :dark="userStore.user.theme == 'dark'"
           />
         </div>
@@ -208,18 +192,14 @@ onBeforeMount(setOptionsProjects);
           <textarea
             class="form-base-text-input-multiline"
             v-model="updateFormData.note_general"
-            :placeholder="
-              languageStore.l.boughtItem.input.noteGeneralPlaceholder
-            "
+            :placeholder="languageStore.l.boughtItem.input.noteGeneralPlaceholder"
           ></textarea>
         </div>
         <div id="note-supplier" class="grid-item-center">
           <textarea
             class="form-base-text-input-multiline"
             v-model="updateFormData.note_supplier"
-            :placeholder="
-              languageStore.l.boughtItem.input.noteSupplierPlaceholder
-            "
+            :placeholder="languageStore.l.boughtItem.input.noteSupplierPlaceholder"
           ></textarea>
         </div>
         <div id="notify" class="grid-item-center">
@@ -240,26 +220,26 @@ onBeforeMount(setOptionsProjects);
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/variables.scss";
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/variables.scss' as *;
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 .grid {
   grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
   grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
-    "project project project note-general"
-    "product-number product-number product-number note-general"
-    "quantity quantity unit note-general"
-    "partnumber partnumber partnumber note-general"
-    "order-number order-number order-number note-general"
-    "manufacturer manufacturer manufacturer note-supplier"
-    "supplier supplier supplier note-supplier"
-    "group group group note-supplier"
-    "weblink weblink weblink note-supplier"
-    "desired desired desired note-supplier"
-    "notify notify-text notify-text notify-text"
-    "priority priority-text priority-text priority-text";
+    'project project project note-general'
+    'product-number product-number product-number note-general'
+    'quantity quantity unit note-general'
+    'partnumber partnumber partnumber note-general'
+    'order-number order-number order-number note-general'
+    'manufacturer manufacturer manufacturer note-supplier'
+    'supplier supplier supplier note-supplier'
+    'group group group note-supplier'
+    'weblink weblink weblink note-supplier'
+    'desired desired desired note-supplier'
+    'notify notify-text notify-text notify-text'
+    'priority priority-text priority-text priority-text';
 }
 
 @media screen and (max-width: $max-width-desktop) {
@@ -267,20 +247,20 @@ onBeforeMount(setOptionsProjects);
     grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
     grid-template-columns: 50px auto 150px;
     grid-template-areas:
-      "project project project"
-      "product-number product-number product-number"
-      "quantity quantity unit"
-      "partnumber partnumber partnumber"
-      "order-number order-number order-number"
-      "manufacturer manufacturer manufacturer"
-      "supplier supplier supplier"
-      "group group group"
-      "weblink weblink weblink"
-      "desired desired desired"
-      "note-general note-general note-general"
-      "note-supplier note-supplier note-supplier"
-      "notify notify-text notify-text"
-      "priority priority-text priority-text";
+      'project project project'
+      'product-number product-number product-number'
+      'quantity quantity unit'
+      'partnumber partnumber partnumber'
+      'order-number order-number order-number'
+      'manufacturer manufacturer manufacturer'
+      'supplier supplier supplier'
+      'group group group'
+      'weblink weblink weblink'
+      'desired desired desired'
+      'note-general note-general note-general'
+      'note-supplier note-supplier note-supplier'
+      'notify notify-text notify-text'
+      'priority priority-text priority-text';
   }
 }
 

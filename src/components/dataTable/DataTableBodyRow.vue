@@ -1,9 +1,9 @@
 <script setup lang="ts">
 interface Props {
-  selected: boolean;
+  selected: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {})
 </script>
 
 <template>

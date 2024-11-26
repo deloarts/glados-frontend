@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AccountControls from "@/components/account/AccountControls.vue";
-import AccountUpdate from "@/components/account/AccountUpdate.vue";
+import AccountControls from '@/components/account/AccountControls.vue'
+import AccountUpdate from '@/components/account/AccountUpdate.vue'
 </script>
 
 <template>
@@ -19,15 +19,15 @@ import AccountUpdate from "@/components/account/AccountUpdate.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "controls"
-    "display";
+    'controls'
+    'display';
 }
 
 #controls {

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue'
 
-import IconExternalLink from "@/components/icons/IconExternalLink.vue";
+import IconExternalLink from '@/components/icons/IconExternalLink.vue'
 
 interface Props {
-  name: string;
-  value: string;
-  displayIcon?: boolean;
-  width?: number;
-  center?: boolean;
-  fixedHeight?: boolean;
-  newTab?: boolean;
+  name: string
+  value: string | null
+  displayIcon?: boolean
+  width?: number
+  center?: boolean
+  fixedHeight?: boolean
+  newTab?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -18,24 +18,20 @@ const props = withDefaults(defineProps<Props>(), {
   center: false,
   fixedHeight: false,
   newTab: true,
-});
+})
 
 const cssWidth = computed<string>(() => {
-  return String(props.width) + "px";
-});
+  return String(props.width) + 'px'
+})
 const cssCenter = computed<string>(() => {
-  return props.center ? "center" : "left";
-});
+  return props.center ? 'center' : 'left'
+})
 </script>
 
 <template>
   <td @contextmenu.prevent="">
     <div v-bind:class="{ 'fix-height': props.fixedHeight }">
-      <a
-        v-if="props.value"
-        v-bind:href="props.value"
-        :target="props.newTab ? '_blank' : '_self'"
-      >
+      <a v-if="props.value" v-bind:href="props.value" :target="props.newTab ? '_blank' : '_self'">
         <IconExternalLink v-if="props.displayIcon" class="weblink-icon" />
         <span v-else>{{ props.value }}</span>
       </a>
@@ -44,7 +40,7 @@ const cssCenter = computed<string>(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   min-width: v-bind(cssWidth);

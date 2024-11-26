@@ -1,72 +1,64 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted } from 'vue'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
-import { usersRequest } from "@/requests/users";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { usersRequest } from '@/requests/users'
 
-import type { UserUpdateSchema } from "@/schemas/user";
+import type { UserUpdateSchema } from '@/schemas/user'
 
-import Toggle from "@vueform/toggle/dist/toggle.js";
-import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
+import Toggle from '@vueform/toggle'
+import ButtonUserUpdate from '@/components/elements/ButtonUserUpdate.vue'
 
 // Props & Emits
 const props = defineProps<{
-  selectedUserID: number;
-}>();
+  selectedUserID: number
+}>()
 
 // Stores
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
 
 const formData = ref<UserUpdateSchema>({
   is_active: false,
   is_superuser: false,
   is_adminuser: false,
   is_guestuser: false,
-  username: "",
-  full_name: "",
-  email: "",
-  password: "",
-  language: null,
-});
-const isSystemuser = ref<boolean>(false);
+  username: '',
+  full_name: '',
+  email: '',
+  password: '',
+  language: 'enGB',
+})
+const isSystemuser = ref<boolean>(false)
 
 function getUser() {
   usersRequest.getUsersID(props.selectedUserID).then((response) => {
-    formData.value = response.data;
-    isSystemuser.value = response.data.is_systemuser;
-  });
+    formData.value = response.data
+    isSystemuser.value = response.data.is_systemuser
+  })
 }
 
 function updateUser() {
   if (isSystemuser.value) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.cannotUpdateSystemUser,
-    );
-    return;
+    notificationStore.addInfo(languageStore.l.notification.info.cannotUpdateSystemUser)
+    return
   }
 
-  usersRequest
-    .putUsers(props.selectedUserID, formData.value)
-    .then((response) => {
-      getUser();
-      if (response.status == 200) {
-        notificationStore.addInfo(
-          languageStore.l.notification.info.updatedUserData,
-        );
-        // } else if (response.status == 403) {
-        //   notificationStore.addWarn("Not enough permission"
-        // } else if (response.status == 404) {
-        //   notificationStore.addWarn("User not found");
-      } else if (response.status == 422) {
-        notificationStore.addWarn(
-          languageStore.l.notification.warn.userDataIncomplete,
-        );
-      } else {
-        notificationStore.addWarn(response.data.detail);
-      }
-    });
+  usersRequest.putUsers(props.selectedUserID, formData.value).then((response) => {
+    getUser()
+    if (response.status == 200) {
+      notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
+      // } else if (response.status == 403) {
+      //   notificationStore.addWarn("Not enough permission"
+      // } else if (response.status == 404) {
+      //   notificationStore.addWarn("User not found");
+    } else if (response.status == 422) {
+      notificationStore.addWarn(languageStore.l.notification.warn.userDataIncomplete)
+    } else {
+      notificationStore.addWarn(response.data.detail)
+    }
+  })
 }
 
 watch(
@@ -78,19 +70,19 @@ watch(
         is_superuser: false,
         is_adminuser: false,
         is_guestuser: false,
-        username: "",
-        full_name: "",
-        email: "",
-        password: "",
-        language: null,
-      };
+        username: '',
+        full_name: '',
+        email: '',
+        password: '',
+        language: 'enGB',
+      }
     } else {
-      getUser();
+      getUser()
     }
   },
-);
+)
 
-onMounted(() => getUser());
+onMounted(() => getUser())
 </script>
 
 <template>
@@ -126,9 +118,7 @@ onMounted(() => getUser());
             class="form-base-text-input"
             v-model="formData.username"
             type="text"
-            :placeholder="
-              languageStore.l.settings.users.input.usernamePlaceholder
-            "
+            :placeholder="languageStore.l.settings.users.input.usernamePlaceholder"
             :disabled="isSystemuser"
           />
         </div>
@@ -136,9 +126,7 @@ onMounted(() => getUser());
           <input
             class="form-base-text-input"
             v-model="formData.full_name"
-            :placeholder="
-              languageStore.l.settings.users.input.fullNamePlaceholder
-            "
+            :placeholder="languageStore.l.settings.users.input.fullNamePlaceholder"
           />
         </div>
         <div id="email" class="grid-item-center">
@@ -152,9 +140,7 @@ onMounted(() => getUser());
           <input
             class="form-base-text-input"
             v-model="formData.password"
-            :placeholder="
-              languageStore.l.settings.users.input.passwordPlaceholder
-            "
+            :placeholder="languageStore.l.settings.users.input.passwordPlaceholder"
             :disabled="isSystemuser"
           />
         </div>
@@ -170,22 +156,22 @@ onMounted(() => getUser());
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
   grid-template-areas:
-    "username username"
-    "full-name full-name"
-    "email email"
-    "password password"
-    "active active-text"
-    "guestuser guestuser-text"
-    "superuser superuser-text"
-    "adminuser adminuser-text"
-    "btn btn";
+    'username username'
+    'full-name full-name'
+    'email email'
+    'password password'
+    'active active-text'
+    'guestuser guestuser-text'
+    'superuser superuser-text'
+    'adminuser adminuser-text'
+    'btn btn';
 }
 
 #btn {

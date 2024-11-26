@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue'
 
-import type { UserSchema } from "@/schemas/user";
+import type { UserSchema } from '@/schemas/user'
 
 interface Props {
-  selection: number;
-  options: Array<UserSchema>;
-  placeholder?: string;
+  selection: number
+  options: Array<UserSchema>
+  placeholder?: string | null
 }
 const props = withDefaults(defineProps<Props>(), {
   placeholder: null,
-});
+})
 const emit = defineEmits<{
-  (e: "update:selection", v: number): void;
-}>();
+  (e: 'update:selection', v: number): void
+}>()
 
 const computedSelection = computed<number>({
   get() {
-    return props.selection;
+    return props.selection
   },
   set(newValue) {
-    emit("update:selection", newValue);
-    return newValue;
+    emit('update:selection', newValue)
+    return newValue
   },
-});
+})
 
-function onChange(event) {
+function onChange(event: Event) {
   // computedSelection.value = event.target.value;
 }
 </script>
@@ -34,13 +34,9 @@ function onChange(event) {
   <div class="box">
     <select v-model="computedSelection" @change="onChange">
       <option value="null" disabled selected hidden>
-        {{ props.placeholder ? props.placeholder : "User" }}
+        {{ props.placeholder ? props.placeholder : 'User' }}
       </option>
-      <option
-        v-for="option in props.options"
-        :key="option.full_name"
-        :value="option.id"
-      >
+      <option v-for="option in props.options" :key="option.full_name" :value="option.id">
         {{ option.full_name }}
       </option>
     </select>
@@ -48,7 +44,7 @@ function onChange(event) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/select/selectForm.scss";
+@use '@/scss/select/selectForm.scss';
 
 select {
   width: 100%;

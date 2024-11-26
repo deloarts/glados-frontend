@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
+import { useClipboard } from '@vueuse/core'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -12,6 +13,9 @@ import IconLocked from '@/components/icons/IconLocked.vue'
 
 const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
+
+const source = ref('')
+const { text, copy, copied, isSupported } = useClipboard({ source })
 
 interface Props {
   number: number
@@ -40,10 +44,15 @@ const cssWidth = computed<string>(() => {
 async function copyToClipboard() {
   if (props.id != null) {
     const url = `${config.localURL}/#/${props.copyUrl}?id=${props.id}`
-    navigator.clipboard.writeText(url)
-    notificationStore.addInfo(languageStore.l.notification.info.copiedUrlToClipboard)
+    copy(url)
   }
 }
+
+watch(copied, () => {
+  if (copied.value === true) {
+    notificationStore.addInfo(languageStore.l.notification.info.copiedUrlToClipboard)
+  }
+})
 </script>
 
 <template>
@@ -54,7 +63,7 @@ async function copyToClipboard() {
     @mouseleave="hover = false"
     class="sticky"
   >
-    <IconCopy v-if="hover && props.copyUrl != null" class="copy-icon"></IconCopy>
+    <IconCopy v-if="hover && props.copyUrl != null && isSupported" class="copy-icon"></IconCopy>
     <IconLocked v-else-if="props.lockedIcon" class="locked-icon" />
     <IconBellRing v-else-if="props.bellIcon" class="bell-icon" />
     <div v-else v-bind:class="{ 'fix-height': props.fixedHeight }">

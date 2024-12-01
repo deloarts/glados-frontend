@@ -1,6 +1,6 @@
 export default {
-  version: "0.11.1",
-  serverVersion: "0.11.0",
+  version: '0.11.1',
+  serverVersion: '0.11.0',
 
   // Media
   minWidth: 400,
@@ -20,7 +20,7 @@ export default {
   fetchDashboardDataAfter: 5000,
 
   // API definition
-  apiAccessToken: "/api/web/v1/login/access-token",
-  apiGetHostTime: "/api/web/v1/host/time",
-  apiGetHostVersion: "/api/web/v1/host/version",
-};
+  apiAccessToken: '/api/web/v1/login/access-token',
+  apiGetHostTime: '/api/web/v1/host/time',
+  apiGetHostVersion: '/api/web/v1/host/version',
+}

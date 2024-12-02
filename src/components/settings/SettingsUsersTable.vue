@@ -43,21 +43,25 @@ function onSelect(id: number) {
             <th class="first sticky-col" id="mail">
               {{ languageStore.l.settings.users.table.mail }}
             </th>
-            <th class="first sticky-col" id="active">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.active }}
             </th>
-            <th class="first sticky-col" id="superuser">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.superUser }}
             </th>
-            <th class="first sticky-col" id="superuser">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.adminUser }}
             </th>
-            <th class="first sticky-col" id="superuser">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.guestUser }}
+            </th>
+            <th class="first sticky-col" id="checkbox">
+              {{ languageStore.l.settings.users.table.rfid }}
             </th>
             <th class="first sticky-col" id="created">
               {{ languageStore.l.settings.users.table.createdDate }}
             </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -71,23 +75,28 @@ function onSelect(id: number) {
             <td id="username" class="sticky-col">{{ user.username }}</td>
             <td id="full-name" class="sticky-col">{{ user.full_name }}</td>
             <td id="mail" class="sticky-col">{{ user.email }}</td>
-            <td id="active" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_active" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
-            <td id="superuser" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_superuser" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
-            <td id="adminuser" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_adminuser" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
-            <td id="guestuser" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_guestuser" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
+            <td id="checkbox" class="sticky-col">
+              <IconCheckboxMarked v-if="user.hashed_rfid" class="checked" />
+              <IconCheckboxBlank v-else class="unchecked" />
+            </td>
             <td id="created" class="sticky-col">{{ user.created }}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -111,37 +120,16 @@ function onSelect(id: number) {
 }
 
 #full-name {
-  width: 150px;
-  min-width: 150px;
+  width: 200px;
+  min-width: 200px;
 }
 
 #mail {
-  width: 150px;
-  min-width: 150px;
+  width: 200px;
+  min-width: 200px;
 }
 
-#active {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-#superuser {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-#adminuser {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-#guestuser {
+#checkbox {
   width: 80px;
   min-width: 80px;
   max-width: 80px;

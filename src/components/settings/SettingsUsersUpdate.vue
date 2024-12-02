@@ -29,6 +29,7 @@ const formData = ref<UserUpdateSchema>({
   email: '',
   password: '',
   language: 'enGB',
+  rfid: null,
 })
 const isSystemuser = ref<boolean>(false)
 
@@ -75,6 +76,7 @@ watch(
         email: '',
         password: '',
         language: 'enGB',
+        rfid: null,
       }
     } else {
       getUser()
@@ -144,6 +146,14 @@ onMounted(() => getUser())
             :disabled="isSystemuser"
           />
         </div>
+        <div id="rfid" class="grid-item-center">
+          <input
+            class="form-base-text-input"
+            v-model="formData.rfid"
+            :placeholder="languageStore.l.settings.users.input.rfidPlaceholder"
+            :disabled="isSystemuser"
+          />
+        </div>
         <div id="btn">
           <ButtonUserUpdate
             v-on:click="updateUser"
@@ -160,13 +170,14 @@ onMounted(() => getUser())
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
+  grid-template-rows: 40px 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
   grid-template-areas:
     'username username'
     'full-name full-name'
     'email email'
     'password password'
+    'rfid rfid'
     'active active-text'
     'guestuser guestuser-text'
     'superuser superuser-text'
@@ -220,6 +231,10 @@ onMounted(() => getUser())
 
 #password {
   grid-area: password;
+}
+
+#rfid {
+  grid-area: rfid;
 }
 
 #email {

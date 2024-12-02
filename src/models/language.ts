@@ -113,6 +113,7 @@ export interface Language {
       myAccount: string
       pat: string
       patCreationWarning: string
+      rfidInfo: string
     }
     button: {
       myAccount: string
@@ -417,6 +418,7 @@ export interface Language {
         fullNamePlaceholder: string
         mailPlaceholder: string
         passwordPlaceholder: string
+        rfidPlaceholder: string
       }
       toggle: {
         active: string
@@ -433,6 +435,7 @@ export interface Language {
         superUser: string
         adminUser: string
         guestUser: string
+        rfid: string
         createdDate: string
       }
     }

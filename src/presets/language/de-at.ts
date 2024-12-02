@@ -132,6 +132,7 @@ export const deAT: Language = {
       pat: 'Personalisierter Schlüssel',
       patCreationWarning:
         'Beim Erstellen eines neuen Schlüssels wird der aktuelle Schlüssel ungültig.',
+      rfidInfo: 'Zu deinem Konto ist ein RFID-Chip zugewiesen',
     },
     button: {
       myAccount: 'Mein Konto',
@@ -438,6 +439,7 @@ export const deAT: Language = {
         fullNamePlaceholder: 'Vollständiger Name',
         mailPlaceholder: 'E-Mail',
         passwordPlaceholder: 'Passwort (mindestens 8 Zeichen)',
+        rfidPlaceholder: 'RFID',
       },
       toggle: {
         active: 'Aktiv',
@@ -454,6 +456,7 @@ export const deAT: Language = {
         superUser: 'Superuser',
         adminUser: 'Admin',
         guestUser: 'Gast',
+        rfid: 'RFID',
         createdDate: 'Erstelldatum',
       },
     },

@@ -23,6 +23,7 @@ const formData = ref<UserCreateSchema>({
   full_name: '',
   email: '',
   password: '',
+  rfid: null,
 })
 
 function createUser() {
@@ -38,6 +39,7 @@ function createUser() {
         full_name: '',
         email: '',
         password: '',
+        rfid: null,
       }
       // } else if (response.status == 403) {
       //   notificationStore.addWarn("Not enough permission");
@@ -109,6 +111,13 @@ function createUser() {
             :placeholder="languageStore.l.settings.users.input.passwordPlaceholder"
           />
         </div>
+        <div id="rfid" class="grid-item-center">
+          <input
+            class="form-base-text-input"
+            v-model="formData.rfid"
+            :placeholder="languageStore.l.settings.users.input.rfidPlaceholder"
+          />
+        </div>
         <div id="btn">
           <ButtonUserCreate
             v-on:click="createUser"
@@ -125,13 +134,14 @@ function createUser() {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
+  grid-template-rows: 40px 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
   grid-template-areas:
     'username username'
     'full-name full-name'
     'email email'
     'password password'
+    'rfid rfid'
     'active active-text'
     'guestuser guestuser-text'
     'superuser superuser-text'
@@ -185,6 +195,10 @@ function createUser() {
 
 #password {
   grid-area: password;
+}
+
+#rfid {
+  grid-area: rfid;
 }
 
 #email {

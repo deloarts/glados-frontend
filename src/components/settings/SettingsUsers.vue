@@ -86,5 +86,6 @@ watch(selectedUserID, () => {
 
 #user-h1 {
   grid-area: user-h1;
+  padding-top: 20px;
 }
 </style>

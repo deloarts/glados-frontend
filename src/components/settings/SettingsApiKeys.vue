@@ -85,5 +85,6 @@ watch(selectedKeyID, () => {
 
 #key-h1 {
   grid-area: key-h1;
+  padding-top: 20px;
 }
 </style>

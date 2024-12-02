@@ -131,6 +131,7 @@ export const enGB: Language = {
       myAccount: 'My Account',
       pat: 'Personal Access Token',
       patCreationWarning: 'Creating a new token renders the current token invalid.',
+      rfidInfo: 'There is a RFID tag linked to this account',
     },
     button: {
       myAccount: 'My Account',
@@ -437,6 +438,7 @@ export const enGB: Language = {
         fullNamePlaceholder: 'Full Name',
         mailPlaceholder: 'Mail',
         passwordPlaceholder: 'Password (at least 8 characters)',
+        rfidPlaceholder: 'RFID',
       },
       toggle: {
         active: 'Active',
@@ -453,6 +455,7 @@ export const enGB: Language = {
         superUser: 'Superuser',
         adminUser: 'Admin',
         guestUser: 'Guest',
+        rfid: 'RFID',
         createdDate: 'Created',
       },
     },

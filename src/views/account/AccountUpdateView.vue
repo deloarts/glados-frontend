@@ -45,8 +45,8 @@ const userStore = useUserStore()
   grid-area: grid-area-controls;
 }
 
-.grid-area-warning {
-  grid-area: grid-area-warning;
+.grid-area-info {
+  grid-area: grid-area-info;
 }
 
 .grid-area-display {

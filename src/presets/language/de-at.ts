@@ -44,6 +44,8 @@ export const deAT: Language = {
       configUpdated: 'Konfiguration aktualisiert',
       configDelete: 'Konfiguration gelöscht',
       copiedUrlToClipboard: 'URL wurde kopiert',
+      createdApiKey: 'API Schlüssel wurde erstellt',
+      deletedApiKey: 'API Schlüssel wurde gelöscht',
     },
     warn: {
       lostServerConnection: 'Keine Verbindung zum Server',
@@ -66,6 +68,7 @@ export const deAT: Language = {
       batchImportSomeFailed: 'Einige Artikel sind fehlerhaft (alle anderen wurden erstellt)',
       noLogForThisDay: 'Für diesen Tag existiert keine Log-Datei',
       failedToFetchLog: 'Fehler beim Laden der Log-Datei',
+      apiKeyDataIncomplete: 'Daten unvollständig',
     },
   },
   main: {
@@ -458,7 +461,23 @@ export const deAT: Language = {
       selectorButton: 'API-Schlüssel',
       banner: 'API-Schlüsselverwaltung',
       create: 'Schlüssel erstellen',
-      update: 'Schlüssel ändern',
+      show: 'Schlüssel einsehen',
+      button: {
+        create: 'Erstellen',
+        delete: 'Löschen',
+      },
+      input: {
+        namePlaceholder: 'Name',
+        ExpirationDatePlaceholder: 'Ablaufdatum',
+      },
+      table: {
+        id: 'ID',
+        name: 'Name',
+        apiKey: 'Schlüssel',
+        created: 'Erstelldatum',
+        expirationDate: 'Ablaufdatum',
+        state: 'Status',
+      },
     },
   },
 }

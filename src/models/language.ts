@@ -32,6 +32,8 @@ export interface Language {
       configUpdated: string
       configDelete: string
       copiedUrlToClipboard: string
+      createdApiKey: string
+      deletedApiKey: string
     }
     warn: {
       lostServerConnection: string
@@ -48,6 +50,7 @@ export interface Language {
       batchImportSomeFailed: string
       noLogForThisDay: string
       failedToFetchLog: string
+      apiKeyDataIncomplete: string
     }
   }
   main: {
@@ -437,7 +440,23 @@ export interface Language {
       selectorButton: string
       banner: string
       create: string
-      update: string
+      show: string
+      button: {
+        create: string
+        delete: string
+      }
+      input: {
+        namePlaceholder: string
+        ExpirationDatePlaceholder: string
+      }
+      table: {
+        id: string
+        name: string
+        apiKey: string
+        created: string
+        expirationDate: string
+        state: string
+      }
     }
   }
 }

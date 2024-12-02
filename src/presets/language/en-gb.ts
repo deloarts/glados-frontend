@@ -4,7 +4,7 @@ export const enGB: Language = {
   notification: {
     info: {
       reconnectedToServer: 'Reconnected to the server',
-      welcomeMessage: (name: string) => {
+      welcomeMessage: (name: '') => {
         return `Welcome ${name}`
       },
       savedNewFilter: 'Saved new filter',
@@ -44,11 +44,13 @@ export const enGB: Language = {
       configUpdated: 'Updated config file',
       configDelete: 'Deleted config file',
       copiedUrlToClipboard: 'Copied URL to clipboard',
+      createdApiKey: 'Created API key',
+      deletedApiKey: 'Deleted API key',
     },
     warn: {
       lostServerConnection: 'Lost server connection',
       wrongUserCreds: 'Wrong login credentials',
-      createUpdateErrorInField: (loc: string, msg: string) => {
+      createUpdateErrorInField: (loc: '', msg: '') => {
         return `Error in field '${loc}': ${msg}`
       },
       userDataIncomplete: 'User data incomplete',
@@ -66,6 +68,7 @@ export const enGB: Language = {
       batchImportSomeFailed: 'Some items have issues (all others have been created)',
       noLogForThisDay: 'There is no log file for this day',
       failedToFetchLog: 'Failed to fetch the log file',
+      apiKeyDataIncomplete: 'Data incomplete',
     },
   },
   main: {
@@ -457,7 +460,23 @@ export const enGB: Language = {
       selectorButton: 'API Keys',
       banner: 'API Key Management',
       create: 'Create Key',
-      update: 'Update Key',
+      show: 'Show Key',
+      button: {
+        create: 'Create',
+        delete: 'Delete',
+      },
+      input: {
+        namePlaceholder: 'Name',
+        ExpirationDatePlaceholder: 'Expiration Date',
+      },
+      table: {
+        id: 'ID',
+        name: 'Name',
+        apiKey: 'Key',
+        created: 'Created',
+        expirationDate: 'Expires',
+        state: 'State',
+      },
     },
   },
 }

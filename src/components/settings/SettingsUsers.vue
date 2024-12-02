@@ -29,21 +29,21 @@ watch(selectedUserID, () => {
           <h1>{{ languageStore.l.settings.users.banner }}</h1>
         </div>
         <div id="registered">
-          <SettingsUsersTable v-model:selectedUserID="selectedUserID"></SettingsUsersTable>
+          <SettingsUsersTable v-model:selectedUserID="selectedUserID" />
         </div>
 
         <div id="user-h1" v-if="mode == 'create'">
           <h1>{{ languageStore.l.settings.users.create }}</h1>
         </div>
         <div id="user" v-if="mode == 'create'">
-          <SettingsUsersCreate></SettingsUsersCreate>
+          <SettingsUsersCreate />
         </div>
 
         <div id="user-h1" v-if="mode == 'update'">
           <h1>{{ languageStore.l.settings.users.update }} #{{ selectedUserID }}</h1>
         </div>
         <div id="user" v-if="mode == 'update'">
-          <SettingsUsersUpdate v-model:selectedUserID="selectedUserID"></SettingsUsersUpdate>
+          <SettingsUsersUpdate v-model:selectedUserID="selectedUserID" />
         </div>
       </div>
     </div>

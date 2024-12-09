@@ -464,6 +464,7 @@ export const enGB: Language = {
       banner: 'API Key Management',
       create: 'Create Key',
       show: 'Show Key',
+      warningMsg: 'API keys grant access to the system. Use with caution!',
       button: {
         create: 'Create',
         delete: 'Delete',

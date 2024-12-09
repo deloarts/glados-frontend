@@ -4,6 +4,7 @@ export interface ApiKeysSchema {
   api_key: string
   created: Date
   expiration_date: Date
+  expired: boolean
 }
 
 export interface ApiKeysCreateSchema {

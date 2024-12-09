@@ -72,8 +72,8 @@ onMounted(() => {
             <td id="api-key" class="sticky-col">{{ shortKey(item.api_key) }}</td>
             <td id="created" class="sticky-col">{{ item.created }}</td>
             <td id="expires" class="sticky-col">{{ item.expiration_date }}</td>
-            <td id="state" class="sticky-col">
-              {{ moment(item.expiration_date) > moment() ? 'Active' : 'Expired' }}
+            <td id="state" class="sticky-col active" v-bind:class="{ expired: item.expired }">
+              {{ item.expired ? 'Expired' : 'Active' }}
             </td>
             <td></td>
           </tr>
@@ -130,11 +130,11 @@ svg {
   height: 15px;
 }
 
-.checked {
+.active {
   color: var(--main-green);
 }
 
-.unchecked {
+.expired {
   color: var(--main-red);
 }
 </style>

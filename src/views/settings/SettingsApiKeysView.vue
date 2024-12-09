@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import SettingsControls from '@/components/settings/SettingsControls.vue'
 import SettingsApiKeys from '@/components/settings/SettingsApiKeys.vue'
+import WarningForForm from '@/components/common/WarningForForm.vue'
+
+import { useLanguageStore } from '@/stores/language'
+const languageStore = useLanguageStore()
 </script>
 
 <template>
@@ -12,6 +16,9 @@ import SettingsApiKeys from '@/components/settings/SettingsApiKeys.vue'
         </div>
         <div id="display">
           <SettingsApiKeys />
+        </div>
+        <div class="grid-area-warning">
+          <WarningForForm :text="languageStore.l.settings.apiKeys.warningMsg" />
         </div>
       </div>
     </div>

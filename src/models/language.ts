@@ -444,6 +444,7 @@ export interface Language {
       banner: string
       create: string
       show: string
+      warningMsg: string
       button: {
         create: string
         delete: string

@@ -465,6 +465,8 @@ export const deAT: Language = {
       banner: 'API-Schlüsselverwaltung',
       create: 'Schlüssel erstellen',
       show: 'Schlüssel einsehen',
+      warningMsg:
+        'API Schlüssel erlauben Zugriff auf das System. Verwende die Schlüssel mit Vorsicht!',
       button: {
         create: 'Erstellen',
         delete: 'Löschen',

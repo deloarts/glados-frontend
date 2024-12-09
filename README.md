@@ -5,9 +5,7 @@ Frontend for the glados project.
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
 ![version](https://img.shields.io/badge/Version-0.11.1-orange.svg?style=for-the-badge)
 ![backend](https://img.shields.io/badge/Backend-0.11.0-orange.svg?style=for-the-badge)
-
-![node](https://img.shields.io/badge/node-v16-blue.svg?style=for-the-badge)
-![vue](https://img.shields.io/badge/vue%2Fcli-v4.5-blue.svg?style=for-the-badge)
+![node](https://img.shields.io/badge/node-v22-blue.svg?style=for-the-badge)
 ![OS](https://img.shields.io/badge/OS-UNIX-blue.svg?style=for-the-badge)
 
 Glados is a resource planning software with a web ui. The backend is located at [github.com/deloarts/glados-backend](https://github.com/deloarts/glados-backend).
@@ -76,23 +74,9 @@ sudo apt update -y
 ### 1.3.1 install node
 
 ```bash
-curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
-```
-
-Verify the sources with:
-
-```bash
-cat /etc/apt/sources.list.d/nodesource.list
-
-# This should create the output:
-deb https://deb.nodesource.com/node_16.x bullseye main
-deb-src https://deb.nodesource.com/node_16.x bullseye main
-```
-
-Now install node:
-
-```bash
-sudo apt install nodejs -y
+curl -fsSL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
+sudo -E bash nodesource_setup.sh
+sudo apt-get install -y nodejs
 ```
 
 Verify the version with:
@@ -101,7 +85,7 @@ Verify the version with:
 node -v
 
 # This should create an output similar to this:
-v16.19.0
+v22.11.0
 ```
 
 #### 1.3.2 install git

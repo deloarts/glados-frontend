@@ -1,8 +1,8 @@
 # glados frontend
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
-![version](https://img.shields.io/badge/Version-0.11.1-orange.svg?style=for-the-badge)
-![backend](https://img.shields.io/badge/Backend-0.11.0-orange.svg?style=for-the-badge)
+![version](https://img.shields.io/badge/Version-0.12.0-orange.svg?style=for-the-badge)
+![backend](https://img.shields.io/badge/Backend-0.12.0-orange.svg?style=for-the-badge)
 ![node](https://img.shields.io/badge/node-v22-blue.svg?style=for-the-badge)
 ![OS](https://img.shields.io/badge/OS-UNIX-blue.svg?style=for-the-badge)
 
@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.12.0**: Add rfid to user. Add api key endpoint.  
 **v0.11.0**: Add batch import view.  
 **v0.10.1**: Fix color issues. Update log view.  
 **v0.10.0**: Add language and theme.  

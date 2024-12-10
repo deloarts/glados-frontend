@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ButtonDelete from "@/components/elements/ButtonDelete.vue";
+import ButtonDelete from '@/components/elements/ButtonDelete.vue'
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import ButtonDelete from "@/components/elements/ButtonDelete.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   width: min-content;

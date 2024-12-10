@@ -1,89 +1,79 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
-import { hostRequest } from "@/requests/host";
+import { hostRequest } from '@/requests/host'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
-import { useBoughtItemFilterStore } from "@/stores/filter";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { useBoughtItemFilterStore } from '@/stores/filter'
 
-import type { HostConfigBoughtItemsFilterSchema } from "@/schemas/host";
+import type { HostConfigBoughtItemsFilterSchema } from '@/schemas/host'
 
-import Prompt from "@/components/main/Prompt.vue";
-import ButtonSave from "@/components/elements/ButtonSave.vue";
-import ButtonDelete from "@/components/elements/ButtonDelete.vue";
+import Prompt from '@/components/main/Prompt.vue'
+import ButtonSave from '@/components/elements/ButtonSave.vue'
+import ButtonDelete from '@/components/elements/ButtonDelete.vue'
 
 // Props & Emits
 const props = defineProps<{
-  selectedConfigValue: HostConfigBoughtItemsFilterSchema;
-  selectedConfigName: string;
-  selectedConfigCategory: string;
-}>();
+  selectedConfigValue: HostConfigBoughtItemsFilterSchema
+  selectedConfigName: string
+  selectedConfigCategory: string
+}>()
 const emit = defineEmits<{
-  (e: "update:selectedConfigValue", v: HostConfigBoughtItemsFilterSchema): void;
-  (e: "update:selectedConfigName", v: string): void;
-  (e: "update:selectedConfigCategory", v: string): void;
-}>();
+  (e: 'update:selectedConfigValue', v: HostConfigBoughtItemsFilterSchema): void
+  (e: 'update:selectedConfigName', v: string | null): void
+  (e: 'update:selectedConfigCategory', v: string | null): void
+}>()
 
 // Stores
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
-const boughtItemsFilterStore = useBoughtItemFilterStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
+const boughtItemsFilterStore = useBoughtItemFilterStore()
 
-const showDeletePrompt = ref<boolean>(false);
-const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(
-  props.selectedConfigValue,
-);
+const showDeletePrompt = ref<boolean>(false)
+const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(props.selectedConfigValue)
 
 function updateConfig() {
-  let data = defaultJson.value;
-  if (typeof data == "string") data = JSON.parse(data);
+  let data = defaultJson.value
+  if (typeof data == 'string') data = JSON.parse(data)
 
-  if (props.selectedConfigCategory == "boughItemFilterPreset") {
-    hostRequest
-      .putConfigItemsBoughtFilter(props.selectedConfigName, data)
-      .then((response) => {
-        if (response.status === 200) {
-          notificationStore.addInfo(
-            languageStore.l.notification.info.configUpdated,
-          );
-          boughtItemsFilterStore.get();
-          emit("update:selectedConfigName", null);
-        } else {
-          notificationStore.addWarn(response.data.detail);
-        }
-      });
+  if (props.selectedConfigCategory == 'boughItemFilterPreset') {
+    hostRequest.putConfigItemsBoughtFilter(props.selectedConfigName, data).then((response) => {
+      if (response.status === 200) {
+        notificationStore.addInfo(languageStore.l.notification.info.configUpdated)
+        boughtItemsFilterStore.get()
+        emit('update:selectedConfigName', null)
+      } else {
+        notificationStore.addWarn(response.data.detail)
+      }
+    })
   } else {
-    notificationStore.addWarn("Category not available");
+    notificationStore.addWarn('Category not available')
   }
 }
 
 function deleteConfig() {
-  if (props.selectedConfigCategory == "boughItemFilterPreset") {
-    hostRequest
-      .deleteConfigItemsBoughtFilter(props.selectedConfigName)
-      .then((response) => {
-        if (response.status === 200) {
-          emit("update:selectedConfigName", null);
-          boughtItemsFilterStore.get();
-          notificationStore.addInfo(
-            languageStore.l.notification.info.configDelete,
-          );
-        } else {
-          notificationStore.addWarn(response.data.detail);
-        }
-      });
+  if (props.selectedConfigCategory == 'boughItemFilterPreset') {
+    hostRequest.deleteConfigItemsBoughtFilter(props.selectedConfigName).then((response) => {
+      if (response.status === 200) {
+        emit('update:selectedConfigName', null)
+        boughtItemsFilterStore.get()
+        notificationStore.addInfo(languageStore.l.notification.info.configDelete)
+      } else {
+        notificationStore.addWarn(response.data.detail)
+      }
+    })
   } else {
-    notificationStore.addWarn("Category not available");
+    notificationStore.addWarn('Category not available')
   }
 }
 
 watch(
   () => props.selectedConfigValue,
   () => {
-    defaultJson.value = props.selectedConfigValue;
+    defaultJson.value = props.selectedConfigValue
   },
-);
+)
 </script>
 
 <template>
@@ -117,15 +107,15 @@ watch(
     v-bind:on-yes="deleteConfig"
     v-bind:on-no="
       () => {
-        showDeletePrompt = false;
+        showDeletePrompt = false
       }
     "
   />
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 .controls {
   margin-bottom: 15px;
@@ -145,7 +135,7 @@ watch(
 .grid-command {
   grid-template-rows: 32px;
   grid-template-columns: min-content 130px min-content;
-  grid-template-areas: "btn-update btn-delete";
+  grid-template-areas: 'btn-update btn-delete';
 }
 
 #btn-update {

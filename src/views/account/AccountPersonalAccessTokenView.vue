@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import AccountControls from "@/components/account/AccountControls.vue";
-import AccountPersonalAccessToken from "@/components/account/AccountPersonalAccessToken.vue";
-import WarningForForm from "@/components/common/WarningForForm.vue";
+import AccountControls from '@/components/account/AccountControls.vue'
+import AccountPersonalAccessToken from '@/components/account/AccountPersonalAccessToken.vue'
+import WarningForForm from '@/components/common/WarningForForm.vue'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 </script>
 
 <template>
@@ -19,9 +19,7 @@ const languageStore = useLanguageStore();
           <AccountPersonalAccessToken />
         </div>
         <div class="grid-area-warning">
-          <WarningForForm
-            :text="languageStore.l.account.banner.patCreationWarning"
-          />
+          <WarningForForm :text="languageStore.l.account.banner.patCreationWarning" />
         </div>
       </div>
     </div>
@@ -29,16 +27,16 @@ const languageStore = useLanguageStore();
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 .grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto auto;
   grid-template-areas:
-    "grid-area-controls"
-    "grid-area-display"
-    "grid-area-warning";
+    'grid-area-controls'
+    'grid-area-display'
+    'grid-area-warning';
 }
 
 .grid-area-controls {

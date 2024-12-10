@@ -1,67 +1,65 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import router from "@/router/index";
+import router from '@/router/index'
 
-import { boughtItemsRequest } from "@/requests/items";
+import { boughtItemsRequest } from '@/requests/items'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
-import { useBoughtItemsBatchImportStore } from "@/stores/boughtItems";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { useBoughtItemsBatchImportStore } from '@/stores/boughtItems'
 
-import ExcelImport from "@/components/items/bought/ExcelImport.vue";
+import ExcelImport from '@/components/items/bought/ExcelImport.vue'
 
-import ButtonLoading from "@/components/elements/ButtonLoading.vue";
-import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
-import ButtonAbort from "@/components/elements/ButtonAbort.vue";
-import ButtonDelete from "@/components/elements/ButtonDelete.vue";
-import ButtonPlus from "@/components/elements/ButtonPlus.vue";
-import ButtonExcel from "@/components/elements/ButtonExcel.vue";
-import ButtonCheck from "@/components/elements/ButtonCheck.vue";
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
+import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
+import ButtonAbort from '@/components/elements/ButtonAbort.vue'
+import ButtonDelete from '@/components/elements/ButtonDelete.vue'
+import ButtonPlus from '@/components/elements/ButtonPlus.vue'
+import ButtonExcel from '@/components/elements/ButtonExcel.vue'
+import ButtonCheck from '@/components/elements/ButtonCheck.vue'
 
 // Stores
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
-const boughtItemBatchImportStore = useBoughtItemsBatchImportStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
+const boughtItemBatchImportStore = useBoughtItemsBatchImportStore()
 
-const showExcelImport = ref<boolean>(false);
+const showExcelImport = ref<boolean>(false)
 
 function onCreate() {
-  boughtItemBatchImportStore.createAll();
+  boughtItemBatchImportStore.createAll()
 }
 
 function onValidate() {
-  boughtItemBatchImportStore.validateAll();
+  boughtItemBatchImportStore.validateAll()
 }
 
 function onAbort() {
-  router.push({ name: "BoughtItems" });
+  router.push({ name: 'BoughtItems' })
 }
 
 function onNewRow() {
-  boughtItemBatchImportStore.addEmptyRow();
+  boughtItemBatchImportStore.addEmptyRow()
 }
 
 function onRemoveAll() {
-  boughtItemBatchImportStore.clearItems();
+  boughtItemBatchImportStore.clearItems()
 }
 
 function onTemplate() {
   boughtItemsRequest.getItemsExcelTemplate().then((response) => {
     if (response.status == 200) {
       let blob = new Blob([response.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      let url = window.URL.createObjectURL(blob);
-      window.open(url);
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      })
+      let url = window.URL.createObjectURL(blob)
+      window.open(url)
     } else if (response.status == 404) {
-      notificationStore.addWarn(response.data.detail);
+      notificationStore.addWarn(response.data.detail)
     } else {
-      notificationStore.addWarn(
-        languageStore.l.notification.warn.xlsxTemplateDownloadFailed,
-      );
+      notificationStore.addWarn(languageStore.l.notification.warn.xlsxTemplateDownloadFailed)
     }
-  });
+  })
 }
 </script>
 
@@ -79,10 +77,7 @@ function onTemplate() {
         v-on:click="showExcelImport = true"
       />
       <ButtonLoading
-        v-if="
-          boughtItemBatchImportStore.validating ||
-          boughtItemBatchImportStore.creating
-        "
+        v-if="boughtItemBatchImportStore.validating || boughtItemBatchImportStore.creating"
         class="controls-base-element"
         :text="
           boughtItemBatchImportStore.validating
@@ -126,5 +121,5 @@ function onTemplate() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/controls/controlsBase.scss";
+@use '@/scss/controls/controlsBase.scss';
 </style>

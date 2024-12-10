@@ -1,135 +1,127 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount, computed, watch } from "vue";
-import { baseParticles } from "@/presets/particles";
-import { loadFull } from "tsparticles";
+import { ref, onMounted, onBeforeMount, computed, watch } from 'vue'
+import { baseParticles } from '@/presets/particles'
+import { loadFull } from 'tsparticles'
 //@ts-ignore
-import moment from "moment";
-import router from "@/router/index";
+import moment from 'moment'
+import router from '@/router/index'
 
-import { request } from "@/requests/index";
+import { request } from '@/requests/index'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
-import { useProjectsStore } from "@/stores/projects";
-import { useUsersStore, useUserStore } from "@/stores/user";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { useProjectsStore } from '@/stores/projects'
+import { useUsersStore, useUserStore } from '@/stores/user'
 
-import LoadingBar from "@/components/spinner/LoadingBar.vue";
+import LoadingBar from '@/components/spinner/LoadingBar.vue'
 
-// Particles
+// @ts-ignore
 const particlesInit = async (engine) => {
-  console.log("Init Particles...");
-  await loadFull(engine);
-};
+  console.log('Init Particles...')
+  await loadFull(engine)
+}
+// @ts-ignore
 const particlesLoaded = async (container) => {
-  console.log("Particles container loaded", container);
-};
+  console.log('Particles container loaded', container)
+}
 
 // Stores
-const languageStore = useLanguageStore();
-const userStore = useUserStore();
-const usersStore = useUsersStore();
-const projectsStore = useProjectsStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
+const usersStore = useUsersStore()
+const projectsStore = useProjectsStore()
+const notificationStore = useNotificationStore()
 
-const logoutCooldown = ref<boolean>(false);
-const expandBox = ref<boolean>(false);
-const expandFull = ref<boolean>(false);
-const showLoadingBar = ref<boolean>(true);
-const showInputUsername = ref<boolean>(false);
-const showInputPassword = ref<boolean>(false);
-const showButtonLogin = ref<boolean>(false);
+const logoutCooldown = ref<boolean>(false)
+const expandBox = ref<boolean>(false)
+const expandFull = ref<boolean>(false)
+const showLoadingBar = ref<boolean>(true)
+const showInputUsername = ref<boolean>(false)
+const showInputPassword = ref<boolean>(false)
+const showButtonLogin = ref<boolean>(false)
 
 const hasRequiredData = computed<boolean>(() => {
-  return (
-    logoutCooldown.value &&
-    usersStore.users.length > 0 &&
-    userStore.user.id != null
-  );
-});
-const userInput = ref(null);
-const currentMonth = moment().month();
+  return logoutCooldown.value && usersStore.users.length > 0 && userStore.user.id != null
+})
+const userInput = ref(null)
+const currentMonth = moment().month()
 
-const form_user = ref<string>("");
-const form_pw = ref<string>("");
+const form_user = ref<string>('')
+const form_pw = ref<string>('')
 
 function login() {
-  showLoadingBar.value = true;
+  showLoadingBar.value = true
   request.login(form_user.value, form_pw.value).then((response) => {
     if (response.status === 200) {
-      setTimeout(userStore.get, 1200);
-      usersStore.get();
-      projectsStore.getItems();
-    } else if (response.status === 401) {
-      showLoadingBar.value = false;
-      form_pw.value = "";
-      notificationStore.addWarn(
-        languageStore.l.notification.warn.wrongUserCreds,
-      );
+      setTimeout(userStore.get, 1200)
+      usersStore.get()
+      projectsStore.getItems()
+    } else if (response.status === 422) {
+      showLoadingBar.value = false
+      form_pw.value = ''
+      notificationStore.addWarn(languageStore.l.notification.warn.wrongUserCreds)
     } else {
-      showLoadingBar.value = false;
-      form_pw.value = "";
-      notificationStore.addWarn(response.data.detail);
+      showLoadingBar.value = false
+      form_pw.value = ''
+      notificationStore.addWarn(response.data.detail)
     }
-  });
+  })
 }
 
 function enterApp() {
-  showLoadingBar.value = false;
+  showLoadingBar.value = false
   notificationStore.addInfo(
     languageStore.l.notification.info.welcomeMessage(userStore.user.full_name),
-  );
-  var previousRoute = localStorage.getItem("gladosActiveRoute");
-  if (previousRoute == "/login" || previousRoute == null) {
-    previousRoute = "/";
+  )
+  var previousRoute = localStorage.getItem('gladosActiveRoute')
+  if (previousRoute == '/login' || previousRoute == null) {
+    previousRoute = '/'
   }
-  router.push(previousRoute);
+  router.push(previousRoute)
 }
 
 watch(hasRequiredData, () => {
   if (hasRequiredData.value) {
-    showInputUsername.value = false;
-    showInputPassword.value = false;
-    showButtonLogin.value = false;
+    showInputUsername.value = false
+    showInputPassword.value = false
+    showButtonLogin.value = false
     setTimeout(() => {
-      expandFull.value = true;
-    }, 250);
-    setTimeout(enterApp.bind(this), 590);
+      expandFull.value = true
+    }, 250)
+    setTimeout(enterApp.bind(this), 590)
   }
-});
+})
 
 onBeforeMount(() => {
-  userStore.logout();
-  usersStore.clear();
-  projectsStore.clear();
-});
+  userStore.logout()
+  usersStore.clear()
+  projectsStore.clear()
+})
 onMounted(() => {
   setTimeout(() => {
-    logoutCooldown.value = true;
-  }, 100);
+    logoutCooldown.value = true
+  }, 100)
 
   setTimeout(() => {
-    showLoadingBar.value = false;
-    expandBox.value = true;
+    showLoadingBar.value = false
+    expandBox.value = true
     setTimeout(() => {
-      showInputUsername.value = expandBox.value;
-    }, 100);
+      showInputUsername.value = expandBox.value
+    }, 100)
     setTimeout(() => {
-      showInputPassword.value = expandBox.value;
-    }, 220);
+      showInputPassword.value = expandBox.value
+    }, 220)
     setTimeout(() => {
-      showButtonLogin.value = expandBox.value;
-    }, 340);
-  }, 1500);
-});
+      showButtonLogin.value = expandBox.value
+    }, 340)
+  }, 1500)
+})
 </script>
 
 <template>
   <div class="login">
     <div class="coat"></div>
-    <div
-      class="login-box"
-      v-bind:class="{ expanded: expandBox, full: expandFull }"
-    >
+    <div class="login-box" v-bind:class="{ expanded: expandBox, full: expandFull }">
       <h1 v-if="!expandFull" v-bind:class="{ expanded: expandBox }">Glados</h1>
       <Transition name="fade-move">
         <input
@@ -183,7 +175,7 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/background/snow.scss";
+@use '@/scss/background/snow.scss';
 
 .login {
   color: white;
@@ -241,7 +233,7 @@ onMounted(() => {
 }
 
 h1 {
-  font-family: "Lobster", "Segoe UI", "Arial";
+  font-family: 'Lobster', 'Segoe UI', 'Arial';
   font-size: 3em;
   font-weight: thin;
   padding: 0;
@@ -278,7 +270,7 @@ button {
   left: 25px;
   right: 25px;
 
-  font-family: "Play", "Segoe UI", "Arial";
+  font-family: 'Play', 'Segoe UI', 'Arial';
   font-weight: 700;
 
   height: 30px;

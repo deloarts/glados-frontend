@@ -1,46 +1,47 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 //@ts-ignore
-import Toggle from "@vueform/toggle/dist/toggle.js";
+import Toggle from '@vueform/toggle/dist/toggle.js'
 
-import { useLanguageStore } from "@/stores/language";
-import { useBoughtItemsBatchImportStore } from "@/stores/boughtItems";
+import { useLanguageStore } from '@/stores/language'
+import { useBoughtItemsBatchImportStore } from '@/stores/boughtItems'
 
-import ButtonAbort from "@/components/elements/ButtonAbort.vue";
-import Spinner from "@/components/spinner/LoadingSpinner.vue";
-import DropZone from "@/components/elements/DropZone.vue";
-import useFileList from "@/compositions/file-list";
+import ButtonAbort from '@/components/elements/ButtonAbort.vue'
+import Spinner from '@/components/spinner/LoadingSpinner.vue'
+import DropZone from '@/components/elements/DropZone.vue'
+//@ts-ignore
+import useFileList from '@/compositions/file-list'
 
 const props = defineProps<{
-  showUploader: boolean;
-}>();
+  showUploader: boolean
+}>()
 
 const emit = defineEmits<{
-  (e: "update:showUploader", v: boolean): void;
-}>();
+  (e: 'update:showUploader', v: boolean): void
+}>()
 
-const languageStore = useLanguageStore();
-const boughtItemsBatchImportStore = useBoughtItemsBatchImportStore();
+const languageStore = useLanguageStore()
+const boughtItemsBatchImportStore = useBoughtItemsBatchImportStore()
 
-const serverSideValidation = ref<boolean>(false);
+const serverSideValidation = ref<boolean>(false)
 
-const { files, addFiles, removeFile } = useFileList();
+const { files, addFiles, removeFile } = useFileList()
 
 function onInputChange(e: any) {
-  addFiles(e.target.files);
-  e.target.value = null; // reset so that selecting the same file again will still cause it to recognize this change
+  addFiles(e.target.files)
+  e.target.value = null // reset so that selecting the same file again will still cause it to recognize this change
 }
 
 function onAbort() {
-  boughtItemsBatchImportStore.clearWarnings();
-  emit("update:showUploader", false);
+  boughtItemsBatchImportStore.clearWarnings()
+  emit('update:showUploader', false)
 }
 
-function textErrorInput(text) {
+function textErrorInput(text: string | null) {
   if (text == null) {
-    return languageStore.l.boughtItem.xlsx.anEmptyCell;
+    return languageStore.l.boughtItem.xlsx.anEmptyCell
   } else {
-    return text;
+    return text
   }
 }
 
@@ -50,12 +51,12 @@ watch(files, () => {
       .importFile(files.value[0].file, !serverSideValidation.value)
       .then((response) => {
         if (response.status != 422) {
-          emit("update:showUploader", false);
+          emit('update:showUploader', false)
         }
-      });
-    files.value = [];
+      })
+    files.value = []
   }
-});
+})
 </script>
 
 <template>
@@ -63,11 +64,7 @@ watch(files, () => {
     <div class="coat" v-on:click="onAbort"></div>
     <div class="center">
       <div v-if="boughtItemsBatchImportStore.warnings.length == 0" class="dnd">
-        <DropZone
-          class="drop-area"
-          @files-dropped="addFiles"
-          #default="{ dropZoneActive }"
-        >
+        <DropZone class="drop-area" @files-dropped="addFiles" #default="{ dropZoneActive }">
           <label for="file-input">
             <div v-if="boughtItemsBatchImportStore.importing">
               <Spinner class="spinner"></Spinner>
@@ -78,13 +75,7 @@ watch(files, () => {
             <div v-else>
               <span>{{ languageStore.l.boughtItem.xlsx.dragHere }}</span>
             </div>
-            <input
-              type="file"
-              id="file-input"
-              :accept="'.xlsx'"
-              multiple
-              @change="onInputChange"
-            />
+            <input type="file" id="file-input" :accept="'.xlsx'" multiple @change="onInputChange" />
           </label>
         </DropZone>
         <div class="drop-area-element-wrapper">
@@ -97,10 +88,7 @@ watch(files, () => {
             <div class="drop-area-element-text">Server-Side Validation</div>
           </div>
           <div class="drop-area-elements">
-            <Toggle
-              class="drop-area-element-toggle"
-              v-model="serverSideValidation"
-            />
+            <Toggle class="drop-area-element-toggle" v-model="serverSideValidation" />
           </div>
         </div>
       </div>
@@ -114,16 +102,11 @@ watch(files, () => {
               :key="i"
             >
               <span class="bold bigger"
-                >{{ languageStore.l.boughtItem.xlsx.errorInRow
-                }}{{ warning.row }}:</span
+                >{{ languageStore.l.boughtItem.xlsx.errorInRow }}{{ warning.row }}:</span
               >
               <ul>
-                <li
-                  v-for="(error, j) in boughtItemsBatchImportStore.warnings[i]
-                    .errors"
-                  :key="j"
-                >
-                  <span class="bold">{{ error.loc.join(", ") }}</span
+                <li v-for="(error, j) in boughtItemsBatchImportStore.warnings[i].errors" :key="j">
+                  <span class="bold">{{ error.loc.join(', ') }}</span
                   >: {{ error.msg }},
                   {{ languageStore.l.boughtItem.xlsx.butReceived }}
                   <em>{{ textErrorInput(error.input) }}</em>
@@ -265,7 +248,7 @@ input {
 }
 
 h1 {
-  font-family: "Play", "Segoe UI", "Arial";
+  font-family: 'Play', 'Segoe UI', 'Arial';
   font-size: 1.5em;
   font-weight: thin;
 }

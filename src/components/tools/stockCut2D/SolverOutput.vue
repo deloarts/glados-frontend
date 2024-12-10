@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { onMounted, watch } from "vue";
+import { onMounted, watch } from 'vue'
 
-import type { StockCut2DResultSchema } from "@/schemas/stockCut2D";
+import type { StockCut2DResultSchema } from '@/schemas/stockCut2D'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
 // Props & Emits
 const props = defineProps<{
-  solverOutput: StockCut2DResultSchema;
-}>();
+  solverOutput: StockCut2DResultSchema
+}>()
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 
-onMounted(() => {});
+onMounted(() => {})
 watch(
   () => props.solverOutput,
   () => {},
-);
+)
 </script>
 
 <template>
@@ -66,8 +66,8 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/table/tableBase.scss";
-@import "@/scss/form/formBase.scss";
+@use '@/scss/table/tableBase.scss';
+@use '@/scss/form/formBase.scss';
 
 table {
   max-width: 600px;

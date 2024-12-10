@@ -1,21 +1,22 @@
 <script setup lang="ts">
 interface Option {
-  text: string;
-  value: string | number | null;
+  text: string
+  value: string | number | null
 }
 
 const props = defineProps<{
-  selection: string;
-  options: Array<Option>;
-  text: string;
-}>();
+  selection: string
+  options: Array<Option>
+  text: string
+}>()
 
 const emit = defineEmits<{
-  (e: "update:selection", v: string): void;
-}>();
+  (e: 'update:selection', v: string): void
+}>()
 
-function onChange(event) {
-  emit("update:selection", event.target.value);
+function onChange(event: Event) {
+  //@ts-ignore
+  emit('update:selection', event.target.value)
 }
 </script>
 
@@ -24,12 +25,12 @@ function onChange(event) {
     <select v-model="props.selection" @change="onChange">
       <option selected disabled value="">{{ text }}</option>
       <option v-for="option in props.options" :value="option.value">
-        {{ props.text }} {{ option.text == "" ? "-" : option.text }}
+        {{ props.text }} {{ option.text == '' ? '-' : option.text }}
       </option>
     </select>
   </div>
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/select/selectBase.scss";
+@use '@/scss/select/selectBase.scss';
 </style>

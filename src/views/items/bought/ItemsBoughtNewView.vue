@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
+import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
 
-import ControlsNew from "@/components/items/bought/ControlsNew.vue";
-import CreateItemForm from "@/components/items/bought/CreateItemForm.vue";
+import ControlsNew from '@/components/items/bought/ControlsNew.vue'
+import CreateItemForm from '@/components/items/bought/CreateItemForm.vue'
 
 // Form stuff
 const formData = ref<BoughtItemCreateSchema>({
   high_priority: false,
   notify_on_delivery: false,
-  project_id: null,
-  quantity: null,
-  unit: null,
-  partnumber: null,
-  order_number: null,
+  project_id: 0,
+  quantity: 0,
+  unit: '',
+  partnumber: '',
+  order_number: '',
   supplier: null,
-  manufacturer: null,
+  manufacturer: '',
   group_1: null,
   weblink: null,
   note_general: null,
   note_supplier: null,
   desired_delivery_date: null,
-});
+})
 </script>
 
 <template>
@@ -41,15 +41,15 @@ const formData = ref<BoughtItemCreateSchema>({
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-columns: 100%;
   grid-template-rows: auto auto;
   grid-template-areas:
-    "controls"
-    "data";
+    'controls'
+    'data';
 }
 
 #controls {

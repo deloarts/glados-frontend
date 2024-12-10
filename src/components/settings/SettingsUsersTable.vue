@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { useLanguageStore } from "@/stores/language";
-import { useUsersStore } from "@/stores/user";
+import { useLanguageStore } from '@/stores/language'
+import { useUsersStore } from '@/stores/user'
 
-import IconCheckboxBlank from "@/components/icons/IconCheckboxBlank.vue";
-import IconCheckboxMarked from "@/components/icons/IconCheckboxMarked.vue";
+import IconCheckboxBlank from '@/components/icons/IconCheckboxBlank.vue'
+import IconCheckboxMarked from '@/components/icons/IconCheckboxMarked.vue'
 
 // Props & Emits
 const props = defineProps<{
-  selectedUserID: number;
-}>();
+  selectedUserID: number
+}>()
 const emit = defineEmits<{
-  (e: "update:selectedUserID", v: number): void;
-}>();
+  (e: 'update:selectedUserID', v: number): void
+}>()
 
 // Store
-const languageStore = useLanguageStore();
-const usersStore = useUsersStore();
+const languageStore = useLanguageStore()
+const usersStore = useUsersStore()
 
 function onSelect(id: number) {
   if (props.selectedUserID == id) {
-    id = 0;
+    id = 0
   }
-  emit("update:selectedUserID", id);
+  emit('update:selectedUserID', id)
 }
 </script>
 
@@ -43,21 +43,25 @@ function onSelect(id: number) {
             <th class="first sticky-col" id="mail">
               {{ languageStore.l.settings.users.table.mail }}
             </th>
-            <th class="first sticky-col" id="active">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.active }}
             </th>
-            <th class="first sticky-col" id="superuser">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.superUser }}
             </th>
-            <th class="first sticky-col" id="superuser">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.adminUser }}
             </th>
-            <th class="first sticky-col" id="superuser">
+            <th class="first sticky-col" id="checkbox">
               {{ languageStore.l.settings.users.table.guestUser }}
+            </th>
+            <th class="first sticky-col" id="checkbox">
+              {{ languageStore.l.settings.users.table.rfid }}
             </th>
             <th class="first sticky-col" id="created">
               {{ languageStore.l.settings.users.table.createdDate }}
             </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -71,23 +75,28 @@ function onSelect(id: number) {
             <td id="username" class="sticky-col">{{ user.username }}</td>
             <td id="full-name" class="sticky-col">{{ user.full_name }}</td>
             <td id="mail" class="sticky-col">{{ user.email }}</td>
-            <td id="active" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_active" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
-            <td id="superuser" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_superuser" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
-            <td id="adminuser" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_adminuser" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
-            <td id="guestuser" class="sticky-col">
+            <td id="checkbox" class="sticky-col">
               <IconCheckboxMarked v-if="user.is_guestuser" class="checked" />
               <IconCheckboxBlank v-else class="unchecked" />
             </td>
+            <td id="checkbox" class="sticky-col">
+              <IconCheckboxMarked v-if="user.hashed_rfid" class="checked" />
+              <IconCheckboxBlank v-else class="unchecked" />
+            </td>
             <td id="created" class="sticky-col">{{ user.created }}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -96,7 +105,7 @@ function onSelect(id: number) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/table/tableBase.scss";
+@use '@/scss/table/tableBase.scss';
 
 #user-id {
   width: 35px;
@@ -111,37 +120,16 @@ function onSelect(id: number) {
 }
 
 #full-name {
-  width: 150px;
-  min-width: 150px;
+  width: 200px;
+  min-width: 200px;
 }
 
 #mail {
-  width: 150px;
-  min-width: 150px;
+  width: 200px;
+  min-width: 200px;
 }
 
-#active {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-#superuser {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-#adminuser {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-#guestuser {
+#checkbox {
   width: 80px;
   min-width: 80px;
   max-width: 80px;

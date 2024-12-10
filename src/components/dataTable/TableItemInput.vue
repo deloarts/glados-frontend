@@ -1,121 +1,138 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted } from 'vue'
 
-import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
-import type { FilterStoreProtocol } from "@/protocols/filterStoreProtocol";
+import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
+import type { FilterStoreProtocol } from '@/protocols/filterStoreProtocol'
 
-import { useUserStore } from "@/stores/user";
-import { useResolutionStore } from "@/stores/resolution";
+import { useUserStore } from '@/stores/user'
+import { useResolutionStore } from '@/stores/resolution'
 
-import { blur } from "@/helper/document.helper";
-import { updateSelectedTableElement } from "@/helper/selection.helper";
+import { blur } from '@/helper/document.helper'
+import { updateSelectedTableElement } from '@/helper/selection.helper'
 
-const userStore = useUserStore();
-const resolutionStore = useResolutionStore();
+const userStore = useUserStore()
+const resolutionStore = useResolutionStore()
 
 interface Props {
-  name: string;
-  value: string | number | Date | null;
-  updateMethod: Function;
-  itemStore?: ItemStoreProtocol;
-  filterStore?: FilterStoreProtocol;
-  filterStoreKey?: string;
-  type?: string;
-  width?: number;
-  center?: boolean;
-  fixedHeight?: boolean;
-  editMode?: boolean;
+  name: string
+  value: string | number | Date | null
+  updateMethod?: Function | null
+  itemStore?: ItemStoreProtocol | null
+  filterStore?: FilterStoreProtocol | null
+  filterStoreKey?: string | null
+  type?: string
+  width?: number
+  center?: boolean
+  fixedHeight?: boolean
+  editMode?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  updateMethod: null,
   itemStore: null,
   filterStore: null,
   filterStoreKey: null,
-  type: "text",
+  type: 'text',
   center: false,
   fixedHeight: false,
   editMode: false,
-});
+})
 const emit = defineEmits<{
-  (e: "update:filterStore", v: FilterStoreProtocol): void;
-}>();
+  (e: 'update:filterStore', v: FilterStoreProtocol | null): void
+}>()
 
-const computedFilterStore = computed<FilterStoreProtocol>({
+const computedFilterStore = computed<FilterStoreProtocol | null>({
   get() {
-    return props.filterStore;
+    return props.filterStore
   },
   set(newValue) {
-    emit("update:filterStore", newValue.state);
-    return newValue;
+    emit('update:filterStore', newValue ? newValue.state : null)
+    return newValue
   },
-});
+})
 
-const gtMinWidthTablet = computed<boolean>(
-  () => resolutionStore.gtMinWidthTablet,
-);
+const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
 
-const hasFocus = ref<boolean>(false);
-const inputModel = ref<string | number | Date | null>();
+const hasFocus = ref<boolean>(false)
+const inputModel = ref<string | number | Date | null>(null)
 const cssWidth = computed<string>(() => {
-  return String(props.width) + "px";
-});
+  return String(props.width) + 'px'
+})
 const cssCenter = computed<string>(() => {
-  return props.center ? "center" : "left";
-});
+  return props.center ? 'center' : 'left'
+})
 
 function onEscape() {
-  blur();
+  blur()
 }
 
 function onEnter() {
-  blur();
+  if (!props.updateMethod || !props.itemStore) {
+    return
+  }
+  blur()
   updateSelectedTableElement(
     props.name,
     inputModel.value,
     props.value,
     props.updateMethod,
     props.itemStore,
-  );
+  )
 }
 
 function onContextMenu() {
-  blur();
   if (
-    props.value &&
-    props.itemStore &&
-    props.filterStore &&
-    props.filterStoreKey
+    !props.value ||
+    !props.itemStore ||
+    !props.filterStore ||
+    !props.filterStoreKey ||
+    !computedFilterStore.value
   ) {
-    computedFilterStore.value.state[props.filterStoreKey] = String(
-      inputModel.value,
-    );
-    props.itemStore.getItems();
+    return
+  }
+
+  blur()
+  computedFilterStore.value.state[props.filterStoreKey] = String(inputModel.value)
+  props.itemStore.getItems()
+}
+
+function onFocusIn() {
+  hasFocus.value = true
+  if (props.itemStore) {
+    props.itemStore.pause(true)
+  }
+}
+
+function onFocusOut() {
+  hasFocus.value = false
+  if (props.itemStore) {
+    props.itemStore.pause(false)
   }
 }
 
 onMounted(() => {
-  inputModel.value = props.value;
-});
+  inputModel.value = props.value
+})
 
 watch(
   () => props.value,
   () => {
     if (!hasFocus.value) {
-      inputModel.value = props.value;
+      inputModel.value = props.value
     }
   },
-);
+)
 
 watch(
   () => hasFocus.value,
   () => {
     if (hasFocus.value) {
-      inputModel.value = JSON.parse(JSON.stringify(props.value));
+      inputModel.value = JSON.parse(JSON.stringify(props.value))
     } else {
-      inputModel.value = props.value;
+      inputModel.value = props.value
     }
   },
-);
+)
 </script>
 
 <template>
@@ -132,8 +149,8 @@ watch(
         v-model="inputModel"
         v-on:keyup.escape="onEscape()"
         v-on:keyup.enter="onEnter()"
-        @focusin="props.itemStore.pause(true), (hasFocus = true)"
-        @focusout="props.itemStore.pause(false), (hasFocus = false)"
+        @focusin="onFocusIn()"
+        @focusout="onFocusOut()"
         v-bind:class="{ editing: props.value != inputModel }"
       />
     </div>
@@ -144,7 +161,7 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableItem.scss";
+@use '@/scss/dataTable/tableItem.scss';
 
 td {
   min-width: v-bind(cssWidth);
@@ -180,7 +197,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 </style>

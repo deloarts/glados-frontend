@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue'
 
 interface Props {
-  text?: string;
-  rotate?: boolean;
+  text?: string
+  rotate?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   rotate: false,
-});
+})
 
-const sync = ref(false);
+const sync = ref(false)
 watch(
   () => props.rotate,
   () => {
     if (props.rotate) {
-      sync.value = true;
+      sync.value = true
     } else {
       setTimeout(() => {
-        sync.value = false;
-      }, 2000);
+        sync.value = false
+      }, 2000)
     }
   },
-);
+)
 </script>
 
 <template>
@@ -45,7 +45,7 @@ watch(
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/button/buttonBase.scss";
+@use '@/scss/button/buttonBase.scss';
 
 .rotate {
   animation-name: synching;

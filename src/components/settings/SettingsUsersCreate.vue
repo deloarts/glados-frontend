@@ -1,56 +1,56 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
-import { usersRequest } from "@/requests/users";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { usersRequest } from '@/requests/users'
 
-import type { UserCreateSchema } from "@/schemas/user";
+import type { UserCreateSchema } from '@/schemas/user'
 
-import Toggle from "@vueform/toggle/dist/toggle.js";
-import ButtonUserCreate from "@/components/elements/ButtonUserCreate.vue";
+import Toggle from '@vueform/toggle'
+import ButtonUserCreate from '@/components/elements/ButtonUserCreate.vue'
 
 // Stores
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
 
 const formData = ref<UserCreateSchema>({
   is_active: false,
   is_superuser: false,
   is_adminuser: false,
   is_guestuser: false,
-  username: "",
-  full_name: "",
-  email: "",
-  password: "",
-});
+  username: '',
+  full_name: '',
+  email: '',
+  password: '',
+  rfid: null,
+})
 
 function createUser() {
   usersRequest.postUsers(formData.value).then((response) => {
     if (response.status == 200) {
-      notificationStore.addInfo(languageStore.l.notification.info.createdUser);
+      notificationStore.addInfo(languageStore.l.notification.info.createdUser)
       formData.value = {
         is_active: false,
         is_superuser: false,
         is_adminuser: false,
         is_guestuser: false,
-        username: "",
-        full_name: "",
-        email: "",
-        password: "",
-      };
+        username: '',
+        full_name: '',
+        email: '',
+        password: '',
+        rfid: null,
+      }
       // } else if (response.status == 403) {
       //   notificationStore.addWarn("Not enough permission");
       // } else if (response.status == 406) {
       //   notificationStore.addWarn(response.data.detail);
     } else if (response.status == 422) {
-      notificationStore.addWarn(
-        languageStore.l.notification.warn.userDataIncomplete,
-      );
+      notificationStore.addWarn(languageStore.l.notification.warn.userDataIncomplete)
     } else {
-      notificationStore.addWarn(response.data.detail);
+      notificationStore.addWarn(response.data.detail)
     }
-  });
+  })
 }
 </script>
 
@@ -87,18 +87,14 @@ function createUser() {
             class="form-base-text-input"
             v-model="formData.username"
             type="text"
-            :placeholder="
-              languageStore.l.settings.users.input.usernamePlaceholder
-            "
+            :placeholder="languageStore.l.settings.users.input.usernamePlaceholder"
           />
         </div>
         <div id="full-name" class="grid-item-center">
           <input
             class="form-base-text-input"
             v-model="formData.full_name"
-            :placeholder="
-              languageStore.l.settings.users.input.fullNamePlaceholder
-            "
+            :placeholder="languageStore.l.settings.users.input.fullNamePlaceholder"
           />
         </div>
         <div id="email" class="grid-item-center">
@@ -112,9 +108,14 @@ function createUser() {
           <input
             class="form-base-text-input"
             v-model="formData.password"
-            :placeholder="
-              languageStore.l.settings.users.input.passwordPlaceholder
-            "
+            :placeholder="languageStore.l.settings.users.input.passwordPlaceholder"
+          />
+        </div>
+        <div id="rfid" class="grid-item-center">
+          <input
+            class="form-base-text-input"
+            v-model="formData.rfid"
+            :placeholder="languageStore.l.settings.users.input.rfidPlaceholder"
           />
         </div>
         <div id="btn">
@@ -129,22 +130,23 @@ function createUser() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 35px 35px 35px 35px 40px;
+  grid-template-rows: 40px 40px 40px 40px 40px 35px 35px 35px 35px 40px;
   grid-template-columns: 50px auto;
   grid-template-areas:
-    "username username"
-    "full-name full-name"
-    "email email"
-    "password password"
-    "active active-text"
-    "guestuser guestuser-text"
-    "superuser superuser-text"
-    "adminuser adminuser-text"
-    "btn btn";
+    'username username'
+    'full-name full-name'
+    'email email'
+    'password password'
+    'rfid rfid'
+    'active active-text'
+    'guestuser guestuser-text'
+    'superuser superuser-text'
+    'adminuser adminuser-text'
+    'btn btn';
 }
 
 #btn {
@@ -193,6 +195,10 @@ function createUser() {
 
 #password {
   grid-area: password;
+}
+
+#rfid {
+  grid-area: rfid;
 }
 
 #email {

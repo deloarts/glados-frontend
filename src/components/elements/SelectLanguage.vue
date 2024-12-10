@@ -1,36 +1,32 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 
 interface Props {
-  selection: "enGB" | "deAT";
+  selection: 'enGB' | 'deAT'
 }
-const props = withDefaults(defineProps<Props>(), {});
+const props = withDefaults(defineProps<Props>(), {})
 const emit = defineEmits<{
-  (e: "update:selection", v: "enGB" | "deAT"): void;
-}>();
-const computedSelection = computed<"enGB" | "deAT">({
+  (e: 'update:selection', v: 'enGB' | 'deAT'): void
+}>()
+const computedSelection = computed<'enGB' | 'deAT'>({
   get() {
-    return props.selection;
+    return props.selection
   },
   set(newValue) {
-    emit("update:selection", newValue);
-    return newValue;
+    emit('update:selection', newValue)
+    return newValue
   },
-});
+})
 </script>
 
 <template>
   <div class="box">
     <select v-model="computedSelection">
-      <option
-        v-for="option in languageStore.languageOptions"
-        :key="option.value"
-        :value="option.value"
-      >
+      <option v-for="option in languageStore.languageOptions" :value="option.value">
         {{ option.text }}
       </option>
     </select>
@@ -38,7 +34,7 @@ const computedSelection = computed<"enGB" | "deAT">({
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/select/selectForm.scss";
+@use '@/scss/select/selectForm.scss';
 
 select {
   width: 100%;

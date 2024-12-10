@@ -1,146 +1,120 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import Toggle from "@vueform/toggle/dist/toggle.js";
+import { ref, computed } from 'vue'
+import Toggle from '@vueform/toggle'
 
-import router from "@/router/index";
-import { projectsRequest } from "@/requests/projects";
-import { camelToTitle } from "@/helper/string.helper";
+import router from '@/router/index'
+import { projectsRequest } from '@/requests/projects'
+import { camelToTitle } from '@/helper/string.helper'
 
-import { useLanguageStore } from "@/stores/language";
-import { useProjectsStore } from "@/stores/projects";
-import { useProjectFilterStore } from "@/stores/filter";
-import { useNotificationStore } from "@/stores/notification";
-import { useUserStore } from "@/stores/user";
-import { useResolutionStore } from "@/stores/resolution";
-import { useProjectsControlsStore } from "@/stores/controls";
+import { useLanguageStore } from '@/stores/language'
+import { useProjectsStore } from '@/stores/projects'
+import { useProjectFilterStore } from '@/stores/filter'
+import { useNotificationStore } from '@/stores/notification'
+import { useUserStore } from '@/stores/user'
+import { useResolutionStore } from '@/stores/resolution'
+import { useProjectsControlsStore } from '@/stores/controls'
 
-import Prompt from "@/components/main/Prompt.vue";
-import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
-import ButtonFilterClear from "@/components/elements/ButtonFilterClear.vue";
-import ButtonEdit from "@/components/elements/ButtonEdit.vue";
-import ButtonDelete from "@/components/elements/ButtonDelete.vue";
-import ButtonSync from "@/components/elements/ButtonSync.vue";
-import ButtonSyncOff from "../elements/ButtonSyncOff.vue";
-import ButtonClear from "@/components/elements/ButtonClear.vue";
-import DropDownTableColumns from "../elements/DropDownTableColumns.vue";
-import DropDownTableView from "../elements/DropDownTableView.vue";
+import Prompt from '@/components/main/Prompt.vue'
+import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
+import ButtonFilterClear from '@/components/elements/ButtonFilterClear.vue'
+import ButtonEdit from '@/components/elements/ButtonEdit.vue'
+import ButtonDelete from '@/components/elements/ButtonDelete.vue'
+import ButtonSync from '@/components/elements/ButtonSync.vue'
+import ButtonSyncOff from '../elements/ButtonSyncOff.vue'
+import ButtonClear from '@/components/elements/ButtonClear.vue'
+import DropDownTableColumns from '../elements/DropDownTableColumns.vue'
+import DropDownTableView from '../elements/DropDownTableView.vue'
 
 // Stores
-const languageStore = useLanguageStore();
-const projectStore = useProjectsStore();
-const projectFilterStore = useProjectFilterStore();
-const notificationStore = useNotificationStore();
-const resolutionStore = useResolutionStore();
-const userStore = useUserStore();
-const projectsControlsStore = useProjectsControlsStore();
+const languageStore = useLanguageStore()
+const projectStore = useProjectsStore()
+const projectFilterStore = useProjectFilterStore()
+const notificationStore = useNotificationStore()
+const resolutionStore = useResolutionStore()
+const userStore = useUserStore()
+const projectsControlsStore = useProjectsControlsStore()
 
-const enableControls = computed<boolean>(() => !userStore.user.is_guestuser);
-const gtMinWidthDesktop = computed<boolean>(
-  () => resolutionStore.gtMinWidthDesktop,
-);
-const gtMinWidthTablet = computed<boolean>(
-  () => resolutionStore.gtMinWidthTablet,
-);
+const enableControls = computed<boolean>(() => !userStore.user.is_guestuser)
+const gtMinWidthDesktop = computed<boolean>(() => resolutionStore.gtMinWidthDesktop)
+const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
 
 // Shows
-const showDeletePrompt = ref<boolean>(false);
+const showDeletePrompt = ref<boolean>(false)
 
 // Buttons
 const buttonCreateText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.project.button.newProject
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.project.button.newProject : ''
+})
 const buttonEditText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.project.button.editProject
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.project.button.editProject : ''
+})
 const buttonDeleteText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.project.button.deleteProject
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.project.button.deleteProject : ''
+})
 const buttonSyncText = computed<string>(() => {
-  return gtMinWidthTablet.value ? languageStore.l.project.button.sync : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.project.button.sync : ''
+})
 const buttonViewsText = computed<string>(() => {
-  return gtMinWidthTablet.value ? languageStore.l.project.button.views : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.project.button.views : ''
+})
 const buttonColumnsText = computed<string>(() => {
-  return gtMinWidthTablet.value ? languageStore.l.project.button.columns : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.project.button.columns : ''
+})
 const buttonClearFilterText = computed<string>(() => {
-  return gtMinWidthTablet.value
-    ? languageStore.l.project.button.clearFilter
-    : "";
-});
+  return gtMinWidthTablet.value ? languageStore.l.project.button.clearFilter : ''
+})
 
 function onButtonNew() {
-  router.push({ name: "NewProject" });
+  router.push({ name: 'NewProject' })
 }
 
 function onButtonEdit() {
   if (projectStore.getSelection().length == 0) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.selectProjectFirst,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.selectProjectFirst)
   } else if (projectStore.getSelection().length != 1) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.onlyEditOneProject,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.onlyEditOneProject)
   } else {
-    router.push(`/projects/edit/${projectStore.getSelection()[0]}`);
+    router.push(`/projects/edit/${projectStore.getSelection()[0]}`)
   }
 }
 
 function onButtonDelete() {
   if (projectStore.getSelection().length == 0) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.selectProjectFirst,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.selectProjectFirst)
   } else if (projectStore.getSelection().length != 1) {
-    notificationStore.addInfo(
-      languageStore.l.notification.info.onlyDeleteOneProject,
-    );
+    notificationStore.addInfo(languageStore.l.notification.info.onlyDeleteOneProject)
   } else {
-    showDeletePrompt.value = true;
+    showDeletePrompt.value = true
   }
 }
 
 function deleteItem() {
-  const projectID = projectStore.getSelection()[0];
+  const projectID = projectStore.getSelection()[0]
   projectsRequest.deleteProjects(projectID).then((response) => {
     if (response.status === 200) {
-      notificationStore.addInfo(
-        languageStore.l.notification.info.deletedProject(projectID),
-      );
-      projectStore.getItems();
+      notificationStore.addInfo(languageStore.l.notification.info.deletedProject(projectID))
+      projectStore.getItems()
     } else {
-      notificationStore.addWarn(response.data.detail);
+      notificationStore.addWarn(response.data.detail)
     }
-  });
-  showDeletePrompt.value = false;
+  })
+  showDeletePrompt.value = false
 }
 
 function onButtonClear() {
-  projectStore.clearSelection();
-  projectStore.getItems();
+  projectStore.clearSelection()
+  projectStore.getItems()
 }
 
 function clearFilter() {
-  projectFilterStore.reset();
-  projectStore.getItems();
+  projectFilterStore.reset()
+  projectStore.getItems()
 }
 </script>
 
 <template>
   <div class="controls-base-scope">
-    <div
-      id="item-controls"
-      v-if="enableControls"
-      class="controls-base-container"
-    >
+    <div id="item-controls" v-if="enableControls" class="controls-base-container">
       <ButtonItemCreate
         class="controls-base-element"
         :text="buttonCreateText"
@@ -227,12 +201,12 @@ function clearFilter() {
     v-bind:on-yes="deleteItem"
     v-bind:on-no="
       () => {
-        showDeletePrompt = false;
+        showDeletePrompt = false
       }
     "
   />
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/controls/controlsBase.scss";
+@use '@/scss/controls/controlsBase.scss';
 </style>

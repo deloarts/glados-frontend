@@ -1,35 +1,33 @@
 <script setup lang="ts">
-import router from "@/router/index";
-import { boughtItemsRequest } from "@/requests/items";
+import router from '@/router/index'
+import { boughtItemsRequest } from '@/requests/items'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
-import { useBoughtItemsStore } from "@/stores/boughtItems";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { useBoughtItemsStore } from '@/stores/boughtItems'
 
-import type { BoughtItemCreateSchema } from "@/schemas/boughtItem";
+import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
 
-import ButtonItemCreate from "@/components/elements/ButtonItemCreate.vue";
-import ButtonAbort from "@/components/elements/ButtonAbort.vue";
+import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
+import ButtonAbort from '@/components/elements/ButtonAbort.vue'
 
 const props = defineProps<{
-  formData: BoughtItemCreateSchema;
-}>();
+  formData: BoughtItemCreateSchema
+}>()
 
 // Stores
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
-const boughtItemsStore = useBoughtItemsStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
+const boughtItemsStore = useBoughtItemsStore()
 
 function onCreate() {
   boughtItemsRequest
     .postItems(props.formData)
     .then((response) => {
       if (response.status === 200) {
-        notificationStore.addInfo(
-          languageStore.l.notification.info.createdItem,
-        );
-        boughtItemsStore.getItems();
-        router.push({ name: "BoughtItems" });
+        notificationStore.addInfo(languageStore.l.notification.info.createdItem)
+        boughtItemsStore.getItems()
+        router.push({ name: 'BoughtItems' })
       }
       // else if (response.status === 403) {
       //   notificationStore.addWarn("Not enough permission"
@@ -40,19 +38,19 @@ function onCreate() {
             response.data.detail[0].loc[1],
             response.data.detail[0].msg,
           ),
-        );
+        )
       } else {
-        notificationStore.addWarn(response.data.detail);
+        notificationStore.addWarn(response.data.detail)
       }
     })
     .catch((error) => {
-      console.log(error);
-      notificationStore.addWarn(error);
-    });
+      console.log(error)
+      notificationStore.addWarn(error)
+    })
 }
 
 function onAbort() {
-  router.push({ name: "BoughtItems" });
+  router.push({ name: 'BoughtItems' })
 }
 </script>
 
@@ -74,5 +72,5 @@ function onAbort() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/controls/controlsBase.scss";
+@use '@/scss/controls/controlsBase.scss';
 </style>

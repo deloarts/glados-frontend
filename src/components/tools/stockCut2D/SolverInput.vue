@@ -1,55 +1,55 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue'
 
-import type { StockCut2DJobSchema } from "@/schemas/stockCut2D";
+import type { StockCut2DJobSchema } from '@/schemas/stockCut2D'
 
-import ButtonPlus from "@/components/elements/ButtonPlus.vue";
-import ButtonSolve from "@/components/elements/ButtonSolve.vue";
-import ButtonLoading from "@/components/elements/ButtonLoading.vue";
-import ButtonDownload from "@/components/elements/ButtonDownload.vue";
-import IconDelete from "@/components/icons/IconDelete.vue";
-import SelectBase from "@/components/elements/SelectBase.vue";
-import Toggle from "@vueform/toggle/dist/toggle.js";
+import ButtonPlus from '@/components/elements/ButtonPlus.vue'
+import ButtonSolve from '@/components/elements/ButtonSolve.vue'
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
+import ButtonDownload from '@/components/elements/ButtonDownload.vue'
+import IconDelete from '@/components/icons/IconDelete.vue'
+import SelectBase from '@/components/elements/SelectBase.vue'
+import Toggle from '@vueform/toggle'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
 const props = defineProps<{
-  solverInput: StockCut2DJobSchema;
-  solving: boolean;
-  solved: boolean;
-  onSolve: Function;
-  onAddItem: Function;
-  onAddPanel: Function;
-  onExportPdf: Function;
-}>();
+  solverInput: StockCut2DJobSchema
+  solving: boolean
+  solved: boolean
+  onSolve: Function
+  onAddItem: Function
+  onAddPanel: Function
+  onExportPdf: Function
+}>()
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 
-const solverInput = computed<StockCut2DJobSchema>(() => props.solverInput);
-const solverMethods = ["greedy", "forward_greedy"];
+const solverInput = computed<StockCut2DJobSchema>(() => props.solverInput)
+const solverMethods = ['greedy', 'forward_greedy']
 
 function removePanelRow(index: number) {
-  let panels = [];
+  let panels = []
   for (var i = 0; i < solverInput.value.params.panels.length; i++) {
     if (i != index) {
-      panels.push(solverInput.value.params.panels[i]);
+      panels.push(solverInput.value.params.panels[i])
     }
   }
-  solverInput.value.params.panels = panels;
+  solverInput.value.params.panels = panels
 }
 function removeAllPanels() {
   solverInput.value.params.panels = [
     { id: `${languageStore.l.tools.labels.panel} 1`, width: 100, height: 100 },
-  ];
+  ]
 }
 function removeItemRow(index: number) {
-  let items = [];
+  let items = []
   for (var i = 0; i < solverInput.value.params.items.length; i++) {
     if (i != index) {
-      items.push(solverInput.value.params.items[i]);
+      items.push(solverInput.value.params.items[i])
     }
   }
-  solverInput.value.params.items = items;
+  solverInput.value.params.items = items
 }
 function removeAllItems() {
   solverInput.value.params.items = [
@@ -59,7 +59,7 @@ function removeAllItems() {
       height: 100,
       can_rotate: true,
     },
-  ];
+  ]
 }
 </script>
 
@@ -80,10 +80,7 @@ function removeAllItems() {
           />
         </div>
         <div id="btn-solve">
-          <ButtonLoading
-            v-if="props.solving"
-            :text="languageStore.l.tools.buttons.solving"
-          />
+          <ButtonLoading v-if="props.solving" :text="languageStore.l.tools.buttons.solving" />
           <ButtonSolve
             v-else
             v-on:click="props.onSolve()"
@@ -108,10 +105,7 @@ function removeAllItems() {
           {{ languageStore.l.tools.labels.solverMethod }}
         </div>
         <div id="method" class="grid-item-left">
-          <SelectBase
-            v-model:selection="solverInput.method"
-            :options="solverMethods"
-          />
+          <SelectBase v-model:selection="solverInput.method" :options="solverMethods" />
         </div>
 
         <div id="cut-width-text" class="grid-item-left">
@@ -223,9 +217,9 @@ function removeAllItems() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/table/tableBase.scss";
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/table/tableBase.scss';
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 table {
   max-width: 600px;
@@ -276,16 +270,16 @@ svg {
 .grid-command {
   grid-template-rows: 32px;
   grid-template-columns: min-content min-content min-content min-content;
-  grid-template-areas: "btn-add-panel btn-add-item btn-solve btn-export-pdf";
+  grid-template-areas: 'btn-add-panel btn-add-item btn-solve btn-export-pdf';
 }
 
 .grid-input {
   grid-template-rows: 40px 40px 40px;
   grid-template-columns: 130px auto;
   grid-template-areas:
-    "method-text method"
-    "cut-width-text cut-width"
-    "min-usage-text min-usage";
+    'method-text method'
+    'cut-width-text cut-width'
+    'min-usage-text min-usage';
 }
 
 #btn-solve {

@@ -1,28 +1,26 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { usersRequest } from "@/requests/users";
+import { ref } from 'vue'
+import { usersRequest } from '@/requests/users'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
 
-import ButtonNewPersonalAccessToken from "@/components/elements/ButtonNewPersonalAccessToken.vue";
+import ButtonNewPersonalAccessToken from '@/components/elements/ButtonNewPersonalAccessToken.vue'
 
-const languageStore = useLanguageStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
 
-let personalAccessToken = ref<string>("");
+let personalAccessToken = ref<string>('')
 
 function newToken() {
   usersRequest.putUsersMePAT().then((response) => {
     if (response.status == 200) {
-      notificationStore.addInfo(
-        languageStore.l.notification.info.createdNewPAT,
-      );
-      personalAccessToken.value = response.data;
+      notificationStore.addInfo(languageStore.l.notification.info.createdNewPAT)
+      personalAccessToken.value = response.data
     } else {
-      notificationStore.addWarn(response.data.detail);
+      notificationStore.addWarn(response.data.detail)
     }
-  });
+  })
 }
 </script>
 
@@ -51,15 +49,15 @@ function newToken() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-rows: 40px auto;
   grid-template-columns: auto;
   grid-template-areas:
-    "token"
-    "btn";
+    'token'
+    'btn';
 }
 
 #btn {

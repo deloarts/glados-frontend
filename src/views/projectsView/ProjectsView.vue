@@ -1,52 +1,50 @@
 <script setup lang="ts">
-import { onMounted, onBeforeMount } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { onMounted, onBeforeMount } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useProjectsStore } from "@/stores/projects";
-import { useProjectFilterStore } from "@/stores/filter";
+import { useBoughtItemsControlsStore } from '@/stores/controls'
+import { useProjectsStore } from '@/stores/projects'
+import { useProjectFilterStore } from '@/stores/filter'
 
-import DataTable from "@/components/projects/table/DataTable.vue";
-import Controls from "@/components/projects/Controls.vue";
+import DataTable from '@/components/projects/table/DataTable.vue'
+import Controls from '@/components/projects/Controls.vue'
 
-const router = useRouter();
-const route = useRoute();
+const router = useRouter()
+const route = useRoute()
 
-const projectsStore = useProjectsStore();
-const projectFilterStore = useProjectFilterStore();
-const controlsStore = useBoughtItemsControlsStore();
+const projectsStore = useProjectsStore()
+const projectFilterStore = useProjectFilterStore()
+const controlsStore = useBoughtItemsControlsStore()
 
 onBeforeMount(() => {
-  projectFilterStore.reset();
-  projectsStore.getItems();
-});
+  projectFilterStore.reset()
+  projectsStore.getItems()
+})
 
 onMounted(() => {
   if (route.query != null) {
-    projectsStore.clear();
+    projectsStore.clear()
   }
 
   // Apply id query
   if (route.query.id != null && !isNaN(Number(route.query.id))) {
-    projectFilterStore.state.id = Number(route.query.id);
+    projectFilterStore.state.id = Number(route.query.id)
   }
   // Apply project number query
   if (route.query.projectNumber != null) {
-    projectFilterStore.state.number = String(route.query.projectNumber);
+    projectFilterStore.state.number = String(route.query.projectNumber)
   }
 
-  projectsStore.getItems();
-  router.replace({ query: null });
-});
+  projectsStore.getItems()
+  //@ts-ignore
+  router.replace({ query: null })
+})
 </script>
 
 <template>
   <div class="views-scope">
     <div class="views-content">
-      <div
-        class="grid"
-        v-bind:class="{ 'show-changelog': controlsStore.state.changelog }"
-      >
+      <div class="grid" v-bind:class="{ 'show-changelog': controlsStore.state.changelog }">
         <div id="controls" class="controls">
           <Controls />
         </div>
@@ -60,8 +58,8 @@ onMounted(() => {
 
 <style src="@vueform/toggle/themes/default.css"></style>
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
 .views-content {
   height: calc(100% - 20px); // This is ugly, should be changed...
@@ -78,8 +76,8 @@ onMounted(() => {
   grid-template-columns: 100%;
   grid-template-rows: min-content auto;
   grid-template-areas:
-    "controls"
-    "data";
+    'controls'
+    'data';
 }
 
 .controls {

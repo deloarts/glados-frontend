@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import type { AvailableOption } from "@/models/controls";
+import type { AvailableOption } from '@/models/controls'
 
-import { useLanguageStore } from "@/stores/language";
-const languageStore = useLanguageStore();
+import { useLanguageStore } from '@/stores/language'
+const languageStore = useLanguageStore()
 
 const props = defineProps<{
-  selection: number;
-  optionsActive: Array<AvailableOption>;
-  optionsInactive: Array<AvailableOption>;
-}>();
+  selection: number
+  optionsActive: Array<AvailableOption>
+  optionsInactive: Array<AvailableOption>
+}>()
 
 const emit = defineEmits<{
-  (e: "update:selection", v: number): void;
-}>();
+  (e: 'update:selection', v: number): void
+}>()
 
-function onChange(event) {
-  emit("update:selection", event.target.value);
+function onChange(event: Event) {
+  //@ts-ignore
+  emit('update:selection', event.target.value)
 }
 </script>
 
@@ -25,11 +26,7 @@ function onChange(event) {
       <option value="null" disabled selected hidden>
         {{ languageStore.l.boughtItem.input.projectNumberPlaceholder }}
       </option>
-      <option
-        v-for="option in props.optionsActive"
-        :key="option.text"
-        :value="option.value"
-      >
+      <option v-for="option in props.optionsActive" :key="option.text" :value="option.value">
         {{ option.text }}
       </option>
       <option
@@ -46,7 +43,7 @@ function onChange(event) {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/select/selectForm.scss";
+@use '@/scss/select/selectForm.scss';
 
 select {
   width: 100%;

@@ -1,20 +1,18 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onUnmounted } from "vue";
+import { ref, onBeforeMount } from 'vue'
 
-import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import { boughtItemColumnWidths } from '@/presets/columnWidth'
 
-import TableMain from "@/components/dataTable/TableMain.vue";
-import CreateItemTableHead from "./CreateItemTableHead.vue";
-import CreateItemTableBody from "./CreateItemTableBody.vue";
+import TableMain from '@/components/dataTable/TableMain.vue'
+import CreateItemTableHead from './CreateItemTableHead.vue'
+import CreateItemTableBody from './CreateItemTableBody.vue'
 
-// ColumnWidths
-const colW = ref<typeof boughtItemColumnWidths>();
+//@ts-ignore
+const colW = ref<typeof boughtItemColumnWidths>(null)
 
 onBeforeMount(() => {
-  colW.value = JSON.parse(JSON.stringify(boughtItemColumnWidths));
-});
-
-onUnmounted(() => {});
+  colW.value = JSON.parse(JSON.stringify(boughtItemColumnWidths))
+})
 </script>
 
 <template>
@@ -27,5 +25,5 @@ onUnmounted(() => {});
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/dataTable/tableScope.scss";
+@use '@/scss/dataTable/tableScope.scss';
 </style>

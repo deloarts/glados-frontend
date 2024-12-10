@@ -1,19 +1,19 @@
 // @ts-ignore
-import moment from "moment";
+import moment from 'moment'
 
-export function calcDiffInWeeks(fromDate: Date, toDate: Date) {
+export function calcDiffInWeeks(fromDate: Date | null, toDate: Date | null) {
   if (fromDate == null || toDate == null) {
-    return "";
+    return ''
   }
-  const to = moment(toDate);
-  const from = moment(fromDate);
-  return to.diff(from, "week");
+  const to = moment(toDate)
+  const from = moment(fromDate)
+  return to.diff(from, 'week')
 }
 
-export function calcDiffInWeeksFromToday(toDate: Date) {
+export function calcDiffInWeeksFromToday(toDate: Date | null) {
   if (toDate == null) {
-    return "";
+    return ''
   }
-  const to = moment(toDate);
-  return to.diff(moment(), "week");
+  const to = moment(toDate)
+  return to.diff(moment(), 'week')
 }

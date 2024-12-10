@@ -1,44 +1,40 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import { usersRequest } from "@/requests/users";
+import { usersRequest } from '@/requests/users'
 
-import { useLanguageStore } from "@/stores/language";
-import { useNotificationStore } from "@/stores/notification";
-import { useUserStore } from "@/stores/user";
+import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
+import { useUserStore } from '@/stores/user'
 
-import type { UserUpdateSchema } from "@/schemas/user";
+import type { UserUpdateSchema } from '@/schemas/user'
 
-import ButtonUserUpdate from "@/components/elements/ButtonUserUpdate.vue";
-import SelectLanguage from "@/components/elements/SelectLanguage.vue";
+import ButtonUserUpdate from '@/components/elements/ButtonUserUpdate.vue'
+import SelectLanguage from '@/components/elements/SelectLanguage.vue'
 
-const languageStore = useLanguageStore();
-const userStore = useUserStore();
-const notificationStore = useNotificationStore();
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
+const notificationStore = useNotificationStore()
 
 let formUserUpdate = ref<UserUpdateSchema>({
   username: userStore.user.username,
   full_name: userStore.user.full_name,
   email: userStore.user.email,
   language: userStore.user.language,
-});
+})
 
 function updateUser() {
   usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
     if (response.status == 200) {
-      userStore.user = response.data;
-      languageStore.apply(userStore.user.language);
-      notificationStore.addInfo(
-        languageStore.l.notification.info.updatedUserData,
-      );
+      userStore.user = response.data
+      languageStore.apply(userStore.user.language)
+      notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
     } else if (response.status == 422) {
-      notificationStore.addWarn(
-        languageStore.l.notification.warn.userDataIncomplete,
-      );
+      notificationStore.addWarn(languageStore.l.notification.warn.userDataIncomplete)
     } else {
-      notificationStore.addWarn(response.data.detail);
+      notificationStore.addWarn(response.data.detail)
     }
-  });
+  })
 }
 </script>
 
@@ -80,10 +76,7 @@ function updateUser() {
           <SelectLanguage v-model:selection="formUserUpdate.language" />
         </div>
         <div id="btn">
-          <ButtonUserUpdate
-            v-on:click="updateUser"
-            :text="languageStore.l.account.button.save"
-          />
+          <ButtonUserUpdate v-on:click="updateUser" :text="languageStore.l.account.button.save" />
         </div>
       </div>
     </div>
@@ -91,19 +84,19 @@ function updateUser() {
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/form/formBase.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/form/formBase.scss';
+@use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-rows: 40px 40px 40px 40px auto;
   grid-template-columns: 50px auto;
   grid-template-areas:
-    "username username"
-    "full-name full-name"
-    "email email"
-    "password password"
-    "language language"
-    "btn btn";
+    'username username'
+    'full-name full-name'
+    'email email'
+    'password password'
+    'language language'
+    'btn btn';
 }
 
 #btn {

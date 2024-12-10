@@ -1,17 +1,27 @@
 <script setup lang="ts">
-import AccountControls from "@/components/account/AccountControls.vue";
-import AccountUpdate from "@/components/account/AccountUpdate.vue";
+import AccountControls from '@/components/account/AccountControls.vue'
+import AccountUpdate from '@/components/account/AccountUpdate.vue'
+import InfoForForm from '@/components/common/InfoForForm.vue'
+
+import { useLanguageStore } from '@/stores/language'
+import { useUserStore } from '@/stores/user'
+
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
 </script>
 
 <template>
   <div class="views-scope">
     <div class="views-content">
-      <div id="grid">
-        <div id="controls">
+      <div class="grid">
+        <div class="grid-area-controls">
           <AccountControls />
         </div>
-        <div id="display">
+        <div class="grid-area-display">
           <AccountUpdate />
+        </div>
+        <div class="grid-area-info" v-if="userStore.user.hashed_rfid">
+          <InfoForForm :text="languageStore.l.account.banner.rfidInfo" />
         </div>
       </div>
     </div>
@@ -19,23 +29,28 @@ import AccountUpdate from "@/components/account/AccountUpdate.vue";
 </template>
 
 <style scoped lang="scss">
-@import "@/scss/views.scss";
-@import "@/scss/grid/gridBase.scss";
+@use '@/scss/views.scss';
+@use '@/scss/grid/gridBase.scss';
 
-#grid {
+.grid {
   grid-template-columns: 100%;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
-    "controls"
-    "display";
+    'grid-area-controls'
+    'grid-area-display'
+    'grid-area-info';
 }
 
-#controls {
-  grid-area: controls;
+.grid-area-controls {
+  grid-area: grid-area-controls;
 }
 
-#display {
-  grid-area: display;
+.grid-area-info {
+  grid-area: grid-area-info;
+}
+
+.grid-area-display {
+  grid-area: grid-area-display;
 }
 
 ::-webkit-scrollbar {

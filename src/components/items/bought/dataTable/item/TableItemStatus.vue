@@ -1,34 +1,35 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed } from 'vue'
 
-import type { BoughtItemSchema } from "@/schemas/boughtItem";
+import type { BoughtItemSchema } from '@/schemas/boughtItem'
 
-import TableItemSelect from "@/components/dataTable/TableItemSelect.vue";
+import TableItemSelect from '@/components/dataTable/TableItemSelect.vue'
 
-import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import { boughtItemColumnWidths } from '@/presets/columnWidth'
 
-import { boughtItemsRequest } from "@/requests/items";
+import { boughtItemsRequest } from '@/requests/items'
 
-import { useLanguageStore } from "@/stores/language";
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useStatusStore } from "@/stores/status";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
-import { useBoughtItemFilterStore } from "@/stores/filter";
+import { useLanguageStore } from '@/stores/language'
+import { useBoughtItemsStore } from '@/stores/boughtItems'
+import { useStatusStore } from '@/stores/status'
+import { useBoughtItemsControlsStore } from '@/stores/controls'
+import { useBoughtItemFilterStore } from '@/stores/filter'
 
-const languageStore = useLanguageStore();
-const boughtItemsStore = useBoughtItemsStore();
-const controlsStore = useBoughtItemsControlsStore();
-const boughtItemFilterStore = useBoughtItemFilterStore();
-const statusStore = useStatusStore();
+const languageStore = useLanguageStore()
+const boughtItemsStore = useBoughtItemsStore()
+const controlsStore = useBoughtItemsControlsStore()
+const boughtItemFilterStore = useBoughtItemFilterStore()
+const statusStore = useStatusStore()
 
 const props = defineProps<{
-  item: BoughtItemSchema;
-  width: typeof boughtItemColumnWidths;
-}>();
+  item: BoughtItemSchema
+  width: typeof boughtItemColumnWidths
+}>()
 
 const computedStatus = computed<string>(() => {
-  return languageStore.l.boughtItem.options.status[props.item.status];
-});
+  //@ts-ignore
+  return languageStore.l.boughtItem.options.status[props.item.status]
+})
 </script>
 
 <template>

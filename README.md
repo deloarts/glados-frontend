@@ -1,16 +1,13 @@
 # glados frontend
 
-Frontend for the glados project.
-
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
 ![version](https://img.shields.io/badge/Version-0.11.1-orange.svg?style=for-the-badge)
 ![backend](https://img.shields.io/badge/Backend-0.11.0-orange.svg?style=for-the-badge)
 ![node](https://img.shields.io/badge/node-v22-blue.svg?style=for-the-badge)
 ![OS](https://img.shields.io/badge/OS-UNIX-blue.svg?style=for-the-badge)
 
-> ✏️ Glados is a resource planning software with a web ui. The backend is located at [github.com/deloarts/glados-backend](https://github.com/deloarts/glados-backend).
->
 > ✏️ Glados is in use at my company for handling bought items. Its meant to be the interface between the engineering department and the purchase department. Therefore this software must reach certain requirements, which cannot be changed due to company guidelines.
+
 Table of contents:
 
 - [glados frontend](#glados-frontend)
@@ -25,7 +22,15 @@ Table of contents:
 
 ## 1 introduction
 
+Glados is a resource planning software with a web ui: *Create and manage your projects and items with ease, keep your purchase process in perfect order*.
+
+Glados is a free open source software, so feel free to use it if it fits your needs. Glados is still in development and has not reached major version 1.0.0 yet, meaning it can change in its appearance and functionality at any time without notice.
+
+![Device Mockup](/docs/images/device-mockup.png)
+
 How to use glados? See [USAGE.md](/docs/USAGE.md).
+
+The backend is located at [github.com/deloarts/glados-backend](https://github.com/deloarts/glados-backend).
 
 ## 2 installation
 

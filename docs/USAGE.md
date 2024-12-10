@@ -85,7 +85,7 @@ Glados provides a `rainbow view` which allows the user to use different colors f
 
 Glados provides a `changelog view`. This allows all user to see what changes an item has made since its creation. Enable the changelog-view by clicking on the `Views` button.
 
-![Bought Items Changelog View](/docs/images/bought-items-changelog.gif)
+![Bought Items Changelog View](/docs/images/bought-items-changelog.png)
 
 ### 4.1 creating a bought item
 

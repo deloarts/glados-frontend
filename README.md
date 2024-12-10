@@ -14,36 +14,26 @@ Frontend for the glados project.
 Table of contents:
 
 - [glados frontend](#glados-frontend)
-  - [1 installation](#1-installation)
-    - [1.1 requirements](#11-requirements)
-    - [1.2 setup](#12-setup)
-  - [2 update](#2-update)
-  - [3 developing](#3-developing)
-    - [3.1 repository](#31-repository)
-      - [3.1.1 cloning](#311-cloning)
-      - [3.1.2 main branch protection](#312-main-branch-protection)
-      - [3.1.3 branch naming convention](#313-branch-naming-convention)
-      - [3.1.4 issues](#314-issues)
-    - [3.2 npm](#32-npm)
-      - [3.2.1 project setup](#321-project-setup)
-      - [3.2.2 compile and hot-reload for development](#322-compile-and-hot-reload-for-development)
-      - [3.2.3 type-check, compile and minify for production](#323-type-check-compile-and-minify-for-production)
-      - [3.2.4 lint with ESLint](#324-lint-with-eslint)
-    - [3.3 vite config](#33-vite-config)
-    - [3.4 recommended ide setup](#34-recommended-ide-setup)
-      - [3.4.1 type support for `.vue` imports in TS](#341-type-support-for-vue-imports-in-ts)
-    - [3.5 new revision checklist](#35-new-revision-checklist)
-  - [4 license](#4-license)
-  - [5 changelog](#5-changelog)
-  - [6 to do](#6-to-do)
+  - [1 introduction](#1-introduction)
+  - [2 installation](#2-installation)
+    - [2.1 requirements](#21-requirements)
+    - [2.2 setup](#22-setup)
+  - [3 update](#3-update)
+  - [4 developing](#4-developing)
+  - [5 license](#5-license)
+  - [6 changelog](#6-changelog)
 
-## 1 installation
+## 1 introduction
+
+How to use glados? See [USAGE.md](/docs/USAGE.md).
+
+## 2 installation
 
 For a guided installation see [INSTALL.md](/docs/INSTALL.md)
 
 > ✏️ Frontend and backend require the same major and minor version to work together
 
-### 1.1 requirements
+### 2.1 requirements
 
 - Unix (tested on Debian 11)
 - Approx. 250GB free space
@@ -51,26 +41,26 @@ For a guided installation see [INSTALL.md](/docs/INSTALL.md)
 - Web server
 - Node v22
 
-### 1.2 setup
+### 2.2 setup
 
 - recommended installation folder: `/opt/glados/glados-frontend/`
 - use the latest git tag
 - copy the [config.sample.ts](/src/config.sample.ts) file and paste it as `config.ts` file, then edit it to fit your needs
 - `npm install`, `npm run build` and `npm run deploy`
 
-## 2 update
+## 3 update
 
 For a guided update process see [UPDATE.md](/docs/UPDATE.md)
 
-## 3 developing
+## 4 developing
 
 For contributors: [DEV.md](/docs/DEV.md)
 
-## 4 license
+## 5 license
 
-No license.
+MIT
 
-## 5 changelog
+## 6 changelog
 
 **v0.11.0**: Add batch import view.  
 **v0.10.1**: Fix color issues. Update log view.  
@@ -108,7 +98,3 @@ No license.
 **v0.1.2**: Add order by ID.  
 **v0.1.1**: Minor improvements.  
 **v0.1.0**: Initial commit.
-
-## 6 to do
-
-Using VS Code [Comment Anchors](https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors) to keep track of to-dos.

@@ -15,7 +15,7 @@
     - [3.4 recommended ide setup](#34-recommended-ide-setup)
     - [4.1 type support for `.vue` imports in TS](#41-type-support-for-vue-imports-in-ts)
     - [3.5 new revision checklist](#35-new-revision-checklist)
-
+  - [4 to do](#4-to-do)
 
 ## 1 repository
 
@@ -106,3 +106,7 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 3. Check **lint** output: `npm run lint`
 4. Check if app can be built: `npm run build`
 5. Lock **dependencies**: `npm install --package-lock-only`
+
+## 4 to do
+
+Using VS Code [Comment Anchors](https://marketplace.visualstudio.com/items?itemName=ExodiusStudios.comment-anchors) to keep track of to-dos.

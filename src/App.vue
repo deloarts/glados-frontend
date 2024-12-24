@@ -20,7 +20,7 @@ const userStore = useUserStore()
 const usersStore = useUsersStore()
 
 const hideSidebar = ref<boolean>(false)
-const { isSupported, isActive, forceRequest, request, release } = useWakeLock()
+const { isSupported, request, release } = useWakeLock()
 
 onBeforeMount(() => {
   projectsStore.getItems()

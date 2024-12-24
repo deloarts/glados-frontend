@@ -12,8 +12,11 @@ import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useProjectsStore } from '@/stores/projects'
 import { useUsersStore, useUserStore } from '@/stores/user'
+import { useRfidAuthStore } from '@/stores/rfidAuth'
 
 import LoadingBar from '@/components/spinner/LoadingBar.vue'
+import IconBroadcast from '@/components/icons/IconBroadcast.vue'
+import IconBroadcastOff from '@/components/icons/IconBroadcastOff.vue'
 
 // @ts-ignore
 const particlesInit = async (engine) => {
@@ -31,6 +34,7 @@ const userStore = useUserStore()
 const usersStore = useUsersStore()
 const projectsStore = useProjectsStore()
 const notificationStore = useNotificationStore()
+const rfidAuthStore = useRfidAuthStore()
 
 const logoutCooldown = ref<boolean>(false)
 const expandBox = ref<boolean>(false)
@@ -163,6 +167,15 @@ onMounted(() => {
       </Transition>
     </div>
   </div>
+
+  <IconBroadcastOff
+    v-if="rfidAuthStore.connectionOK && !rfidAuthStore.readerOK"
+    class="rfid-auth"
+  />
+  <IconBroadcast
+    v-else-if="rfidAuthStore.connectionOK && rfidAuthStore.readerOK"
+    class="rfid-auth"
+  />
 
   <Particles
     v-if="currentMonth > 1 && currentMonth < 11"
@@ -303,6 +316,19 @@ button:hover {
   font-size: 0.75em;
   font-weight: thin;
   color: white;
+}
+
+.rfid-auth {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 22px;
+  height: 22px;
+
+  color: white;
+
+  z-index: 1002;
 }
 
 #tsparticles {

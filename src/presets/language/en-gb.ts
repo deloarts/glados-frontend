@@ -394,7 +394,7 @@ export const enGB: Language = {
       dbDiscSpace: 'Database Disc Space',
       backupDiscSpace: 'Backup Disc Space',
       freeOf: ' free of ',
-      notMounted: 'Not',
+      notMounted: 'Not mounted',
     },
     config: {
       selectorButton: 'Config',

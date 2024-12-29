@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.12.2**: Allow private network.  
 **v0.12.1**: Add rfid auth to login.  
 **v0.12.0**: Add rfid to user. Add api key endpoint.  
 **v0.11.0**: Add batch import view.  

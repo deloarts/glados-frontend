@@ -11,6 +11,7 @@ export function requestConfig(urlSearchParams: any) {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': '*',
+      'Access-Control-Allow-Private-Network': true,
       Authorization: `${tokenType} ${tokenValue}`,
     },
   }
@@ -24,6 +25,7 @@ export function requestConfigFileUpload(urlSearchParams: any) {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': '*',
+      'Access-Control-Allow-Private-Network': true,
       Authorization: `${tokenType} ${tokenValue}`,
       'Content-Type': 'multipart/form-data',
     },
@@ -39,6 +41,7 @@ export function requestConfigPdfDownload(urlSearchParams: any) {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': '*',
+      'Access-Control-Allow-Private-Network': true,
       Authorization: `${tokenType} ${tokenValue}`,
       'Content-Disposition': 'attachment; filename=cut_solution.pdf',
       Accept: 'application/pdf',
@@ -55,6 +58,7 @@ export function requestConfigXlsxDownload(urlSearchParams: any) {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': '*',
+      'Access-Control-Allow-Private-Network': true,
       Authorization: `${tokenType} ${tokenValue}`,
       'Content-Disposition': 'attachment; filename=glados.xlsx',
       'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

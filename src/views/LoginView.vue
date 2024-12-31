@@ -8,6 +8,7 @@ import router from '@/router/index'
 
 import { request } from '@/requests/index'
 import config from '@/config'
+import constants from '@/constants'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -185,6 +186,7 @@ onMounted(() => {
     v-else-if="rfidAuthStore.connectionOK && rfidAuthStore.readerOK"
     class="rfid-auth"
   />
+  <div class="version">{{ `v${constants.version}` }}</div>
 
   <Particles
     v-if="currentMonth > 1 && currentMonth < 11"
@@ -252,6 +254,24 @@ onMounted(() => {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.version {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min-content;
+  height: min-content;
+  // transform: translateX(-50%);
+
+  padding: 4px;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.75em;
+  font-weight: thin;
+  color: white;
+
+  z-index: 1002;
 }
 
 h1 {
@@ -330,13 +350,6 @@ button:hover {
 
 .button-login {
   bottom: 25px;
-}
-
-.version {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.75em;
-  font-weight: thin;
-  color: white;
 }
 
 .rfid-auth {

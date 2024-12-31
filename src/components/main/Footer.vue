@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import constants from "@/constants";
+import { ref } from 'vue'
+import constants from '@/constants'
+import config from '@/config'
 
-const hover = ref<boolean>(false);
-const text = `v${constants.version}`;
+const hover = ref<boolean>(false)
 </script>
 
 <template>
   <div class="footer" @mouseover="hover = true" @mouseleave="hover = false">
-    <span v-if="hover">the cake is a lie</span>
-    <span v-else>{{ text }}</span>
+    <span v-if="hover">{{ `v${constants.version}` }}</span>
+    <span v-else>{{ config.company }}</span>
   </div>
 </template>
 
@@ -21,7 +21,7 @@ const text = `v${constants.version}`;
   height: 100%;
 
   font-family: var(--main-font-text);
-  font-size: 0.75em;
+  font-size: 0.9em;
   font-weight: thin;
 
   color: white;

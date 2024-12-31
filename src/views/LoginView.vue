@@ -7,6 +7,7 @@ import moment from 'moment'
 import router from '@/router/index'
 
 import { request } from '@/requests/index'
+import config from '@/config'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -40,6 +41,7 @@ const logoutCooldown = ref<boolean>(false)
 const expandBox = ref<boolean>(false)
 const expandFull = ref<boolean>(false)
 const showLoadingBar = ref<boolean>(true)
+const showCompanyName = ref<boolean>(false)
 const showInputUsername = ref<boolean>(false)
 const showInputPassword = ref<boolean>(false)
 const showButtonLogin = ref<boolean>(false)
@@ -86,6 +88,7 @@ function enterApp() {
 
 watch(hasRequiredData, () => {
   if (hasRequiredData.value) {
+    showCompanyName.value = false
     showInputUsername.value = false
     showInputPassword.value = false
     showButtonLogin.value = false
@@ -110,6 +113,9 @@ onMounted(() => {
     showLoadingBar.value = false
     expandBox.value = true
     setTimeout(() => {
+      showCompanyName.value = expandBox.value
+    }, 50)
+    setTimeout(() => {
       showInputUsername.value = expandBox.value
     }, 100)
     setTimeout(() => {
@@ -127,6 +133,9 @@ onMounted(() => {
     <div class="coat"></div>
     <div class="login-box" v-bind:class="{ expanded: expandBox, full: expandFull }">
       <h1 v-if="!expandFull" v-bind:class="{ expanded: expandBox }">Glados</h1>
+      <Transition name="fade-move">
+        <h2 key="companyName" v-if="showCompanyName && !expandFull">{{ config.company }}</h2>
+      </Transition>
       <Transition name="fade-move">
         <input
           key="inputUsername"
@@ -210,7 +219,7 @@ onMounted(() => {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 300px;
+  width: 270px;
   height: 85px;
   transform: translate(-50%, -50%);
 
@@ -250,6 +259,7 @@ h1 {
   font-size: 3em;
   font-weight: thin;
   padding: 0;
+  padding-top: 5px;
   // padding-bottom: 30px;
   margin: 0;
 
@@ -258,6 +268,17 @@ h1 {
   &.expanded {
     padding-top: 35px;
   }
+}
+
+h2 {
+  font-family: 'Play', 'Segoe UI', 'Arial';
+  font-size: 1.1em;
+  font-weight: thin;
+  padding: 0;
+  padding-top: 20px;
+  margin: 0;
+
+  transition: all 0.2s ease-out;
 }
 
 input {

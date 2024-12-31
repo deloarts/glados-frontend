@@ -119,10 +119,10 @@ const particlesLoaded = async (container) => {}
 
 #tsparticles {
   position: absolute;
-  top: var(--header-height);
+  top: 0;
   left: 0;
   right: 0;
-  bottom: var(--footer-height);
+  bottom: 0;
   background: rgb(50, 50, 50);
   z-index: 1011;
 }

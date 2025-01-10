@@ -3,7 +3,7 @@ export default {
   serverVersion: '0.12.2',
 
   // Media
-  minWidth: 400,
+  minWidth: 370,
   minWidthTablet: 900,
   minWidthDesktop: 1300,
 

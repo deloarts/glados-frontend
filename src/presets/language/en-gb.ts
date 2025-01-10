@@ -73,8 +73,11 @@ export const enGB: Language = {
   },
   main: {
     serverVersionNotSupported: 'Server Version Not Supported',
+    serverVersionNotSupportedSub: 'Try refreshing the page or contact the administrator',
     noServerConnection: 'No Server Connection',
+    noServerConnectionSub: 'The connection will be re-established automatically',
     screenResolutionNotSupported: 'Screen Resolution Not Supported',
+    screenResolutionNotSupportedSub: 'Please use a device with a higher resolution',
     promptYes: 'Yes',
     promptNo: 'No',
     login: {

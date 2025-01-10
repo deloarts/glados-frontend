@@ -55,8 +55,11 @@ export interface Language {
   }
   main: {
     serverVersionNotSupported: string
+    serverVersionNotSupportedSub: string
     noServerConnection: string
+    noServerConnectionSub: string
     screenResolutionNotSupported: string
+    screenResolutionNotSupportedSub: string
     promptYes: string
     promptNo: string
     login: {

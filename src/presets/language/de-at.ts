@@ -73,8 +73,11 @@ export const deAT: Language = {
   },
   main: {
     serverVersionNotSupported: 'Server Version nicht unterstützt',
+    serverVersionNotSupportedSub: 'Bitte aktualisiere die Seite',
     noServerConnection: 'Keine Serververbindung',
+    noServerConnectionSub: 'Die Verbindung wird automatisch wiederhergestellt',
     screenResolutionNotSupported: 'Bildschirmauflösung nicht unterstützt',
+    screenResolutionNotSupportedSub: 'Das Endgerät verfügt nicht über die nötige Breite',
     promptYes: 'Ja',
     promptNo: 'Nein',
     login: {

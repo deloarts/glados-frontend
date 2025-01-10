@@ -3,6 +3,14 @@ import config from '@/config'
 
 import QuickTheme from '@/components/common/QuickTheme.vue'
 import QuickLanguage from '@/components/common/QuickLanguage.vue'
+
+interface Props {
+  showQuickMenu?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showQuickMenu: true,
+})
 </script>
 
 <template>
@@ -13,8 +21,8 @@ import QuickLanguage from '@/components/common/QuickLanguage.vue'
         <span class="dev" v-if="config.debug">DEBUG MODE</span>
       </div>
       <div class="cell">
-        <QuickLanguage />
-        <QuickTheme />
+        <QuickLanguage v-if="props.showQuickMenu" />
+        <QuickTheme v-if="props.showQuickMenu" />
       </div>
     </div>
   </div>

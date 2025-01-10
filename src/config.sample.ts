@@ -1,8 +1,13 @@
 export default {
   debug: false,
   company: 'Company Name',
-  server: 'http://localhost:5000',
-  localURL: 'http://localhost:4000',
-  rfidAuthUrl: 'ws://localhost:5400',
-  pat_expire_minutes: 43200,
+  build: {
+    base: '/',
+  },
+  url: {
+    backend: 'http://localhost:5000',
+    domain: 'http://localhost:4000',
+    rfidAuth: 'ws://localhost:5500',
+  },
+  patExpireMinutes: 43200,
 }

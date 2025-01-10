@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import config from "@/config";
+import config from '@/config'
 
-import type { ProjectSchema } from "@/schemas/project";
+import type { ProjectSchema } from '@/schemas/project'
 
-import TableItemLink from "@/components/dataTable/TableItemLink.vue";
+import TableItemLink from '@/components/dataTable/TableItemLink.vue'
 
-import { projectsColumnWidths } from "@/presets/columnWidth";
+import { projectsColumnWidths } from '@/presets/columnWidth'
 
-import { useProjectsControlsStore } from "@/stores/controls";
+import { useProjectsControlsStore } from '@/stores/controls'
 
-const projectsControlsStore = useProjectsControlsStore();
+const projectsControlsStore = useProjectsControlsStore()
 
 const props = defineProps<{
-  item: ProjectSchema;
-  width: typeof projectsColumnWidths;
-}>();
+  item: ProjectSchema
+  width: typeof projectsColumnWidths
+}>()
 </script>
 
 <template>
   <TableItemLink
     v-if="projectsControlsStore.columns.projectLink"
     name="Weblink"
-    :value="`${config.localURL}/#/items/bought?projectNumber=${props.item.number}`"
+    :value="`${config.url.domain}/#/items/bought?projectNumber=${props.item.number}`"
     :display-icon="true"
     :center="true"
     :width="props.width.projectLink"

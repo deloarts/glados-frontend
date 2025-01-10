@@ -21,6 +21,7 @@ const notificationStore = useNotificationStore()
 
 const showBox = ref<boolean>(false)
 const text = ref<string>('')
+const sub = ref<string>('')
 
 function onReconnection() {
   showBox.value = false
@@ -48,6 +49,7 @@ function watchServerConnection() {
         ) {
           console.error('Server version is not supported.')
           text.value = languageStore.l.main.serverVersionNotSupported
+          sub.value = languageStore.l.main.serverVersionNotSupportedSub
           showBox.value = true
         } else if (showBox.value) {
           onReconnection()
@@ -61,6 +63,7 @@ function watchServerConnection() {
       if (error.status == undefined) {
         console.error('Lost server connection.')
         text.value = languageStore.l.main.noServerConnection
+        sub.value = languageStore.l.main.noServerConnectionSub
         showBox.value = true
       }
       setTimeout(watchServerConnection, 1000)
@@ -80,7 +83,11 @@ watch(route, () => {
 </script>
 
 <template>
-  <FullScreenWarning v-model:show="showBox" v-model:text="text"></FullScreenWarning>
+  <FullScreenWarning
+    v-model:show="showBox"
+    v-model:text="text"
+    v-model:sub="sub"
+  ></FullScreenWarning>
 </template>
 
 <style scoped lang="scss"></style>

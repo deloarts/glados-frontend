@@ -68,7 +68,7 @@ export function requestConfigXlsxDownload(urlSearchParams: any) {
 
 export class Request {
   login(username: string, password: string) {
-    const url = config.server + constants.apiAccessToken
+    const url = config.url.backend + constants.apiAccessToken
     const params = new URLSearchParams()
     params.append('username', username)
     params.append('password', password)
@@ -86,7 +86,7 @@ export class Request {
   }
 
   loginByRFID(rfid: string, apiKey: string) {
-    const url = `${config.server}/api/key/v1/login/rfid/${rfid}`
+    const url = `${config.url.backend}/api/key/v1/login/rfid/${rfid}`
     const requestConfig = {
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -107,7 +107,7 @@ export class Request {
   }
 
   get(api: string, params: any) {
-    const url = config.server + api
+    const url = config.url.backend + api
 
     console.log(`Sending get request to ${url} with params`, params)
     return axios
@@ -126,7 +126,7 @@ export class Request {
   }
 
   post(api: string, params: any, data: any) {
-    const url = config.server + api
+    const url = config.url.backend + api
 
     console.log(`Sending post request to ${url} with params ${String(params)} and data${data}`)
     return axios
@@ -145,7 +145,7 @@ export class Request {
   }
 
   put(api: string, params: any, data: any) {
-    const url = config.server + api
+    const url = config.url.backend + api
 
     console.log(`Sending put request to ${url} with params ${String(params)} and data${data}`)
     return axios
@@ -164,7 +164,7 @@ export class Request {
   }
 
   delete(api: string, params: any) {
-    const url = config.server + api
+    const url = config.url.backend + api
 
     console.log(`Sending delete request to ${url} with params ${String(params)}`)
     return axios

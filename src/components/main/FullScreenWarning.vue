@@ -2,9 +2,11 @@
 import { baseParticles } from '@/presets/particles'
 import { loadFull } from 'tsparticles'
 
+import Header from '@/components/main/Header.vue'
+import Footer from '@/components/main/Footer.vue'
 import IconWarning from '@/components/icons/IconWarning.vue'
 
-const props = defineProps(['show', 'text'])
+const props = defineProps(['show', 'text', 'sub'])
 
 // @ts-ignore
 const particlesInit = async (engine) => {
@@ -16,16 +18,30 @@ const particlesLoaded = async (container) => {}
 
 <template>
   <div class="scope" v-if="props.show">
-    <div class="center">
-      <div class="wrapper">
-        <div class="icon">
-          <IconWarning></IconWarning>
-        </div>
-        <div class="text">
-          <span>{{ props.text }}</span>
+    <div class="grid">
+      <div class="header">
+        <Header :show-quick-menu="false"></Header>
+      </div>
+      <div class="footer">
+        <Footer></Footer>
+      </div>
+      <div class="content">
+        <div class="center">
+          <div class="wrapper">
+            <div class="icon">
+              <IconWarning></IconWarning>
+            </div>
+            <div class="text">
+              <span>{{ props.text }}</span>
+            </div>
+            <div class="sub-text">
+              <span>{{ props.sub }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
     <Particles
       id="tsparticles"
       :particlesInit="particlesInit"
@@ -58,7 +74,7 @@ const particlesLoaded = async (container) => {}
 
   border-width: var(--main-border-width);
   border-style: var(--main-border-style);
-  border-color: var(--main-color);
+  border-color: var(--main-orange-red);
   border-radius: var(--main-border-radius);
 
   opacity: 0.95;
@@ -67,7 +83,9 @@ const particlesLoaded = async (container) => {}
 }
 
 .wrapper {
-  width: 200px;
+  min-width: 140px;
+  max-width: 200px;
+  width: auto;
   height: auto;
   overflow: auto;
   text-align: left;
@@ -95,12 +113,24 @@ const particlesLoaded = async (container) => {}
 }
 
 .text {
-  font-family: 'Play', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1.5em;
+  font-family: var(--main-font-head);
+  font-size: 1.3em;
 
   position: relative;
   width: 100%;
   height: 75px;
+
+  text-align: center;
+  // margin-top: 10px;
+}
+
+.sub-text {
+  font-family: var(--main-font-text);
+  font-size: 1em;
+
+  position: relative;
+  width: 100%;
+  height: min-content;
 
   text-align: center;
   // margin-top: 10px;
@@ -117,13 +147,51 @@ const particlesLoaded = async (container) => {}
   transform: translate(-50%, -50%);
 }
 
+.grid {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  color: var(--main-text-color);
+  background: var(--main-background-color);
+
+  display: grid;
+  grid-gap: 0;
+  grid-template-rows: var(--header-height) auto var(--footer-height);
+  grid-template-columns: var(--sidebar-width) auto;
+  grid-template-areas:
+    'header header'
+    'content content'
+    'footer footer';
+
+  transition: 300ms;
+}
+
+.header {
+  grid-area: header;
+  z-index: 1012;
+}
+
+.footer {
+  grid-area: footer;
+  z-index: 1012;
+}
+
+.content {
+  grid-area: content;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
 #tsparticles {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgb(50, 50, 50);
+  background: linear-gradient(rgb(25, 25, 25) 30%, rgb(10, 10, 10));
   z-index: 1011;
 }
 </style>

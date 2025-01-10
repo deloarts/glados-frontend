@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.12.4**: Update config file, refactor warning view.  
 **v0.12.3**: Add company name to config file.  
 **v0.12.2**: Allow private network.  
 **v0.12.1**: Add rfid auth to login.  

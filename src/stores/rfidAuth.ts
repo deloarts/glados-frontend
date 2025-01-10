@@ -25,7 +25,7 @@ export const useRfidAuthStore = defineStore('rfidAuth', () => {
   const readerOK = ref<boolean>(false)
 
   onMounted(() => {
-    wsConnection = new WebSocket(`${config.rfidAuthUrl}/rfid-auth/${connectionID}`)
+    wsConnection = new WebSocket(`${config.url.rfidAuth}/rfid-auth/${connectionID}`)
 
     wsConnection.onmessage = (event: MessageEvent) => {
       const data: RfidAuthSchema = JSON.parse(event.data)

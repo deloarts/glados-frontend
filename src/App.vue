@@ -47,7 +47,7 @@ onBeforeUnmount(() => {
     <Connection />
     <div class="grid" v-bind:class="{ 'sidebar-hidden': hideSidebar }">
       <div class="header">
-        <Header></Header>
+        <Header :show-quick-menu="userStore.user.id != null"></Header>
       </div>
       <div class="footer">
         <Footer></Footer>

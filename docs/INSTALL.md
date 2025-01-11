@@ -72,7 +72,7 @@ cd glados-frontend
 git checkout {TAG_NAME}
 ```
 
-Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.12.4`.
+Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.12.5`.
 
 > ✏️ You can use this command to update the app as well. Just modify the tag name.
 >
@@ -87,6 +87,7 @@ Copy the [config.sample.ts](/src/config.sample.ts) file located in the `src` fol
 key | value | description
 --- | --- | ---
 debug | `boolean` | Wether or not the app is in debug mode. Disable for production
+demo | `boolean` | Wether or not the app is in demo mode
 company | `string` | The company name which is shown in the footer
 build/base | `string` | The apps base path relative from the domain
 url/backend | `string` | The backend address. Can be empty if the backend handles static file requests

@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import { ref, onBeforeMount, onBeforeUnmount, onMounted } from 'vue'
 import { useWakeLock } from '@vueuse/core'
 
+import config from './config'
 import Resolution from '@/components/main/Resolution.vue'
 import Connection from '@/components/main/Connection.vue'
 import Notification from '@/components/main/Notification.vue'
+import BrowserSupport from '@/components/main/BrowserSupport.vue'
+import WarningBanner from '@/components/main/WarningBanner.vue'
 import Header from '@/components/main/Header.vue'
 import Footer from '@/components/main/Footer.vue'
 import Sidebar from '@/components/main/Sidebar.vue'
@@ -20,6 +23,7 @@ const userStore = useUserStore()
 const usersStore = useUsersStore()
 
 const hideSidebar = ref<boolean>(false)
+const hideWarningBanner = ref<boolean>(true)
 const { isSupported, request, release } = useWakeLock()
 
 onBeforeMount(() => {
@@ -39,13 +43,28 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
   release()
 })
+
+onMounted(() => {
+  if (config.demo) {
+    setTimeout(() => {
+      hideWarningBanner.value = false
+    }, 1000)
+  }
+})
 </script>
 <template>
   <div id="app">
     <Resolution />
+    <BrowserSupport />
     <Notification />
     <Connection />
-    <div class="grid" v-bind:class="{ 'sidebar-hidden': hideSidebar }">
+    <div
+      class="grid"
+      v-bind:class="{ 'sidebar-hidden': hideSidebar, 'banner-hidden': hideWarningBanner }"
+    >
+      <div class="banner">
+        <WarningBanner></WarningBanner>
+      </div>
       <div class="header">
         <Header :show-quick-menu="userStore.user.id != null"></Header>
       </div>
@@ -83,9 +102,10 @@ body {
 
   display: grid;
   grid-gap: 0;
-  grid-template-rows: var(--header-height) auto var(--footer-height);
+  grid-template-rows: var(--demo-height) var(--header-height) auto var(--footer-height);
   grid-template-columns: var(--sidebar-width) auto;
   grid-template-areas:
+    'banner banner'
     'header header'
     'sidebar display'
     'footer footer';
@@ -93,8 +113,16 @@ body {
   transition: 300ms;
 }
 
+.banner-hidden {
+  grid-template-rows: 0px var(--header-height) auto var(--footer-height);
+}
+
 .sidebar-hidden {
   grid-template-columns: 0px auto;
+}
+
+.banner {
+  grid-area: banner;
 }
 
 .header {

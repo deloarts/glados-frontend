@@ -6,6 +6,7 @@ import config from './config'
 import Resolution from '@/components/main/Resolution.vue'
 import Connection from '@/components/main/Connection.vue'
 import Notification from '@/components/main/Notification.vue'
+import BrowserSupport from '@/components/main/BrowserSupport.vue'
 import WarningBanner from '@/components/main/WarningBanner.vue'
 import Header from '@/components/main/Header.vue'
 import Footer from '@/components/main/Footer.vue'
@@ -54,6 +55,7 @@ onMounted(() => {
 <template>
   <div id="app">
     <Resolution />
+    <BrowserSupport />
     <Notification />
     <Connection />
     <div

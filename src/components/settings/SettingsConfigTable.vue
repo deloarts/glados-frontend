@@ -29,7 +29,7 @@ function onSelect(
     name = null
   }
   emit('update:selectedConfigValue', value)
-  emit('update:selectedConfigName', String(name))
+  emit('update:selectedConfigName', name)
   emit('update:selectedConfigCategory', category)
 }
 </script>

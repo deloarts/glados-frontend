@@ -200,6 +200,7 @@ export interface Language {
       unit: string
       weblink: string
       partnumber: string
+      name: string
       orderNumber: string
       manufacturer: string
       supplier: string

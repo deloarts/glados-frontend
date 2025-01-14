@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+import config from "@/config";
 import TableHeadTitle from "@/components/dataTable/TableHeadTitle.vue";
 
 import { boughtItemColumnWidths } from "@/presets/columnWidth";
@@ -31,7 +32,7 @@ const computedWidth = computed<typeof boughtItemColumnWidths>({
 <template>
   <TableHeadTitle
     v-if="boughtItemsControlsStore.columns.partnumber"
-    :name="languageStore.l.boughtItem.table.partnumber"
+    :name="config.items.displayPartnumberAsName ? languageStore.l.boughtItem.table.name : languageStore.l.boughtItem.table.partnumber"
     v-model:width="computedWidth.partnumber"
   />
 </template>

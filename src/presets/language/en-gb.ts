@@ -219,6 +219,7 @@ export const enGB: Language = {
       unit: 'Unit',
       weblink: 'Link',
       partnumber: 'Part Number',
+      name: 'Item Name',
       orderNumber: 'Order Number',
       manufacturer: 'Manufacturer',
       supplier: 'Supplier',

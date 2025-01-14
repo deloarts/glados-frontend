@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.12.6** Add option to disable naming convention. Fix json editor.  
 **v0.12.5**: Add demo mode and browser support warning.  
 **v0.12.4**: Update config file, refactor warning view.  
 **v0.12.3**: Add company name to config file.  

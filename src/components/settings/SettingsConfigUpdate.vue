@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
+import JsonEditor from 'vue3-ts-jsoneditor';
 
 import { hostRequest } from '@/requests/host'
 
 import { useLanguageStore } from '@/stores/language'
+import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 import { useBoughtItemFilterStore } from '@/stores/filter'
 
@@ -27,8 +29,13 @@ const emit = defineEmits<{
 
 // Stores
 const languageStore = useLanguageStore()
+const userStore = useUserStore()
 const notificationStore = useNotificationStore()
 const boughtItemsFilterStore = useBoughtItemFilterStore()
+
+const jsonEditDarkTheme = computed<boolean>(() => {
+  return userStore.user.theme == 'dark' ? true : false
+})
 
 const showDeletePrompt = ref<boolean>(false)
 const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(props.selectedConfigValue)
@@ -96,7 +103,7 @@ watch(
     </div>
 
     <div class="form-base-container editor">
-      <JsonEditor mode="tree" v-model="defaultJson" />
+      <JsonEditor v-model="defaultJson" mode="text" :mainMenuBar="false" :darkTheme="jsonEditDarkTheme"/>
     </div>
   </div>
 

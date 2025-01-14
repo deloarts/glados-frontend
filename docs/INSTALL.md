@@ -72,7 +72,7 @@ cd glados-frontend
 git checkout {TAG_NAME}
 ```
 
-Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.12.5`.
+Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.12.6`.
 
 > ✏️ You can use this command to update the app as well. Just modify the tag name.
 >
@@ -89,6 +89,8 @@ key | value | description
 debug | `boolean` | Wether or not the app is in debug mode. Disable for production
 demo | `boolean` | Wether or not the app is in demo mode
 company | `string` | The company name which is shown in the footer
+items/nameIsPartnumber | `boolean` | If set to `false`, the partnumber will be set as `name - order number - manufacturer`. If `true` the partnumber will be just the name
+items/displayPartnumberAsName | `boolean` | Wether to show `Name` or `Partnumber` in the data table header
 build/base | `string` | The apps base path relative from the domain
 url/backend | `string` | The backend address. Can be empty if the backend handles static file requests
 url/domain | `string` | The URL under which glados is reachable (e.g. `glados.company.local` on your intranet)

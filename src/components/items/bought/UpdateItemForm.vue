@@ -6,6 +6,7 @@ import Toggle from '@vueform/toggle'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
+import config from '@/config'
 import { useLanguageStore } from '@/stores/language'
 import { useUserStore } from '@/stores/user'
 import { useUnitsStore } from '@/stores/units'
@@ -28,6 +29,13 @@ const emit = defineEmits<{
 
 // Computed
 const updateFormData = computed<BoughtItemUpdateSchema>(() => props.formData)
+const namePlaceholder = computed<String>(() => {
+  if (config.items.displayPartnumberAsName) {
+    return languageStore.l.boughtItem.input.namePlaceholder
+  } else {
+    return languageStore.l.boughtItem.input.partnumberPlaceholder
+  }
+})
 
 // Stores
 const languageStore = useLanguageStore()
@@ -140,7 +148,7 @@ onBeforeMount(setOptionsProjects)
           <input
             class="form-base-text-input"
             v-model="updateFormData.partnumber"
-            :placeholder="languageStore.l.boughtItem.input.partnumberPlaceholder"
+            :placeholder="namePlaceholder"
           />
         </div>
         <div id="order-number" class="grid-item-center">

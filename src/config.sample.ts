@@ -2,6 +2,10 @@ export default {
   debug: false,
   demo: false,
   company: 'Company Name',
+  items: {
+    nameIsPartnumber: true,
+    displayPartnumberAsName: false,
+  },
   build: {
     base: '/',
   },

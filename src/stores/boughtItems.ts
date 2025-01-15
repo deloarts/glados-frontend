@@ -11,20 +11,24 @@ import { useBoughtItemFilterStore } from '@/stores/filter'
 import { useUnitsStore } from '@/stores/units'
 
 // import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
+import type { PageSchema } from '@/schemas/page'
 import type { BoughtItemSchema } from '@/schemas/boughtItem'
 import type { BoughtItemBatchImportSchema } from '@/schemas/boughtItem'
 import type { ResponseWarning } from '@/models/response'
 
 export const useBoughtItemsStore = defineStore('boughtItems', () => {
   const _filterStore = useBoughtItemFilterStore()
+  const _currentTotalAmount = ref<number>(0)
 
   const loading = ref<boolean>(false)
   const paused = ref<boolean>(false)
   const items = ref<Array<BoughtItemSchema>>([])
+  const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
     items.value = []
+    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
     selectedIDs.value = []
   }
 
@@ -39,6 +43,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
 
   function clearItems() {
     items.value = []
+    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
   }
 
   function getSelection(): Array<number> {
@@ -61,8 +66,22 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     return boughtItemsRequest.getItems(params).then((response) => {
       loading.value = false
       if (response.status === 200) {
-        items.value = response.data
+        items.value = response.data.items
+        page.value = {
+          total: response.data.total,
+          limit: response.data.limit,
+          skip: response.data.skip,
+          pages: response.data.pages == 0 ? 1 : response.data.pages,
+          current: response.data.limit == 0 ? 1 : response.data.skip / response.data.limit,
+        }
         console.log('Bought Items store got data from server.')
+
+        if (response.data.total != _currentTotalAmount.value) {
+          console.log('Bought Items store total amount changed.')
+          _currentTotalAmount.value = response.data.total
+          _filterStore.state.skip = 0
+        }
+        
       }
       return response
     })
@@ -79,6 +98,17 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     }
   }
 
+  watch(
+    () =>_filterStore.state.limit,
+    async () => {
+      console.log('Bought Items store limit changed.')
+      _filterStore.state.skip = 0
+      clear()
+      await get()
+    },
+    { deep: true },
+  )
+
   onBeforeMount(() => {
     clear()
     fetchItems()
@@ -88,6 +118,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     loading,
     paused,
     items,
+    page,
     clear,
     pause,
     getItems,

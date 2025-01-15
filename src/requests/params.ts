@@ -8,8 +8,11 @@ export function getBoughtItemsFilterParams(
 ) {
   const params = new URLSearchParams();
 
-  if (filter.limit != "" && filter.limit != undefined) {
-    params.append("limit", filter.limit);
+  if (filter.limit != null && filter.limit != undefined) {
+    params.append("limit", String(filter.limit));
+  }
+  if (filter.skip != null && filter.limit != undefined) {
+    params.append("skip", String(filter.skip));
   }
   if (filter.ignoreDelivered) {
     params.append("ignore_delivered", String(filter.ignoreDelivered));

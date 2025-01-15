@@ -17,7 +17,8 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   const loading = ref<boolean>(false)
   const presets = ref<BoughtItemPreset>({})
   const state = ref<HostConfigBoughtItemsFilterSchema>({
-    limit: '100',
+    limit: 25,
+    skip: null,
     ignoreDelivered: false,
     ignoreCanceled: false,
     ignoreLost: false,
@@ -59,7 +60,7 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
 
   function reset() {
     state.value = {
-      limit: '100',
+      limit: 25,
       ignoreDelivered: false,
       ignoreCanceled: false,
       ignoreLost: false,

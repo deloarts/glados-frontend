@@ -84,7 +84,7 @@ function multiSelect(event: Event, id: number, index: number) {
       v-on:click="multiSelect($event, item.id, index)"
     >
       <TableItemNumber
-        :index="index"
+        :index="index + boughtItemsStore.page.current * boughtItemsStore.page.limit"
         :item="item"
         v-model:width="computedColW"
       />

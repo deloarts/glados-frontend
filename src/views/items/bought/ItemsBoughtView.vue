@@ -11,6 +11,7 @@ import { useBoughtItemsControlsStore } from '@/stores/controls'
 import Changelog from '@/components/items/bought/Changelog.vue'
 import DataTable from '@/components/items/bought/dataTable/DataTable.vue'
 import Controls from '@/components/items/bought/Controls.vue'
+import ControlsPage from '@/components/items/bought/ControlsPage.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -56,6 +57,9 @@ onMounted(() => {
         <div id="data" class="data">
           <DataTable />
         </div>
+        <div id="controls-page" class="controls">
+          <ControlsPage />
+        </div>
         <div id="changelog" class="changelog" v-if="controlsStore.state.changelog">
           <Changelog />
         </div>
@@ -82,17 +86,19 @@ onMounted(() => {
 
   grid-gap: 10px;
   grid-template-columns: 100%;
-  grid-template-rows: min-content auto;
-  grid-template-areas:
-    'controls'
-    'data';
-}
-
-.show-changelog {
-  grid-template-rows: min-content auto 200px;
+  grid-template-rows: min-content auto min-content;
   grid-template-areas:
     'controls'
     'data'
+    'controls-page';
+}
+
+.show-changelog {
+  grid-template-rows: min-content auto min-content 200px;
+  grid-template-areas:
+    'controls'
+    'data'
+    'controls-page'
     'changelog';
 }
 
@@ -108,6 +114,9 @@ onMounted(() => {
 // grid
 #controls {
   grid-area: controls;
+}
+#controls-page {
+  grid-area: controls-page;
 }
 
 #data {

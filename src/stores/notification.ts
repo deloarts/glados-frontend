@@ -1,6 +1,5 @@
 import { ref, onMounted } from 'vue'
 import { defineStore } from 'pinia'
-// @ts-ignore
 import moment from 'moment'
 
 export const warningType = 'warning'
@@ -18,9 +17,7 @@ export const useNotificationStore = defineStore('notification', () => {
 
   function add(type: string, message: string) {
     notifications.value.push({
-      //@ts-ignore
       create: moment(),
-      //@ts-ignore
       destroy: moment().add(4, 'seconds'),
       type: type,
       message: message,
@@ -43,7 +40,6 @@ export const useNotificationStore = defineStore('notification', () => {
     setInterval(() => {
       const items: Array<notificationItem> = []
       for (let i = 0; i < notifications.value.length; i++) {
-        //@ts-ignore
         if (notifications.value[i].destroy > moment()) {
           items.push(notifications.value[i])
         }

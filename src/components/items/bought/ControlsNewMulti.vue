@@ -49,10 +49,10 @@ function onRemoveAll() {
 function onTemplate() {
   boughtItemsRequest.getItemsExcelTemplate().then((response) => {
     if (response.status == 200) {
-      let blob = new Blob([response.data], {
+      const blob = new Blob([response.data], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       })
-      let url = window.URL.createObjectURL(blob)
+      const url = window.URL.createObjectURL(blob)
       window.open(url)
     } else if (response.status == 404) {
       notificationStore.addWarn(response.data.detail)

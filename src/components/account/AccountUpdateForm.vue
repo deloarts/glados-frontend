@@ -16,7 +16,7 @@ const languageStore = useLanguageStore()
 const userStore = useUserStore()
 const notificationStore = useNotificationStore()
 
-let formUserUpdate = ref<UserUpdateSchema>({
+const formUserUpdate = ref<UserUpdateSchema>({
   username: userStore.user.username,
   full_name: userStore.user.full_name,
   email: userStore.user.email,

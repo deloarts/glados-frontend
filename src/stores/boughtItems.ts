@@ -56,7 +56,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     selectedIDs.value = []
   }
 
-  async function get(): Promise<any> {
+  async function get(): Promise<void> {
     console.log('Bought Items store requesting data ...')
     loading.value = true
 
@@ -178,7 +178,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     for (let i = 0; i < tempMultiData.length; i++) {
       temp.push(tempMultiData[i])
     }
-    //@ts-ignore
     items.value = temp
   }
 
@@ -186,7 +185,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     items.value.splice(index, 1)
   }
 
-  async function createItem(index: number): Promise<any> {
+  async function createItem(index: number): Promise<void> {
     return boughtItemsRequest
       .postItems(items.value[index])
       .then((response) => {
@@ -199,7 +198,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
           for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
             const key = `${response.data.detail[errIdx].loc[1]}_error`
             const value = response.data.detail[errIdx].msg
-            //@ts-ignore
             items.value[index][key] = value
           }
         } else {
@@ -231,7 +229,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
           for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
             const key = `${response.data.detail[errIdx].loc[1]}_error`
             const value = response.data.detail[errIdx].msg
-            //@ts-ignore
             items.value[i][key] = value
           }
         } else {
@@ -272,7 +269,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
               for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
                 const key = `${response.data.detail[errIdx].loc[1]}_error`
                 const value = response.data.detail[errIdx].msg
-                //@ts-ignore
                 items.value[firstNotFailedItemIdx][key] = value
               }
             } else {
@@ -296,7 +292,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     }
   }
 
-  async function importFile(file: File, serverSideValidation: boolean): Promise<any> {
+  async function importFile(file: File, serverSideValidation: boolean): Promise<void> {
     importing.value = true
     const formData = new FormData()
     formData.append('file', file)
@@ -320,7 +316,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
         }
         return response
       })
-      .catch((error) => {
+      .catch(() => {
         importing.value = false
         _notificationStore.addWarn(_languageStore.l.notification.warn.xlsxProcessError)
       })

@@ -14,7 +14,7 @@ import { useUserStore } from '@/stores/user'
 import { useResolutionStore } from '@/stores/resolution'
 import { useProjectsControlsStore } from '@/stores/controls'
 
-import Prompt from '@/components/main/Prompt.vue'
+import Prompt from '@/components/main/UserPrompt.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonFilterClear from '@/components/elements/ButtonFilterClear.vue'
 import ButtonEdit from '@/components/elements/ButtonEdit.vue'

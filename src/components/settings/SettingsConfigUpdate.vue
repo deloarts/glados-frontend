@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import JsonEditor from 'vue3-ts-jsoneditor';
+import JsonEditor from 'vue3-ts-jsoneditor'
 
 import { hostRequest } from '@/requests/host'
 
@@ -11,7 +11,7 @@ import { useBoughtItemFilterStore } from '@/stores/filter'
 
 import type { HostConfigBoughtItemsFilterSchema } from '@/schemas/host'
 
-import Prompt from '@/components/main/Prompt.vue'
+import Prompt from '@/components/main/UserPrompt.vue'
 import ButtonSave from '@/components/elements/ButtonSave.vue'
 import ButtonDelete from '@/components/elements/ButtonDelete.vue'
 
@@ -103,7 +103,12 @@ watch(
     </div>
 
     <div class="form-base-container editor">
-      <JsonEditor v-model="defaultJson" mode="text" :mainMenuBar="false" :darkTheme="jsonEditDarkTheme"/>
+      <JsonEditor
+        v-model="defaultJson"
+        mode="text"
+        :mainMenuBar="false"
+        :darkTheme="jsonEditDarkTheme"
+      />
     </div>
   </div>
 

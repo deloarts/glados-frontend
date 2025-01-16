@@ -54,7 +54,6 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   })
 
   function set(key: string, value: string | number | Date | null) {
-    //@ts-ignore
     state.value[key] = value
   }
 
@@ -229,7 +228,6 @@ export const useProjectFilterStore = defineStore('projectFilter', () => {
   }
 
   function set(key: string, value: string | number | Date | null) {
-    //@ts-ignore
     state.value[key] = value
   }
 

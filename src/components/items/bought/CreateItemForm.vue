@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onBeforeMount } from 'vue'
-//@ts-ignore
 import moment from 'moment'
-//@ts-ignore
 import Toggle from '@vueform/toggle'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -30,7 +28,7 @@ const emit = defineEmits<{
 
 // Computed
 const createFormData = computed<BoughtItemCreateSchema>(() => props.formData)
-const namePlaceholder = computed<String>(() => {
+const namePlaceholder = computed<string>(() => {
   if (config.items.displayPartnumberAsName) {
     return languageStore.l.boughtItem.input.namePlaceholder
   } else if (config.items.nameIsPartnumber) {
@@ -87,7 +85,7 @@ function buildPartnumber() {
       createFormData.value.manufacturer
   }
 
-  let data = createFormData.value
+  const data = createFormData.value
   data.partnumber = partnumber
 
   emit('update:formData', data)
@@ -95,8 +93,8 @@ function buildPartnumber() {
 
 watch(
   () => createFormData,
-  (current, previous) => {
-    let data = createFormData.value
+  () => {
+    const data = createFormData.value
     if (data.desired_delivery_date != null && data.desired_delivery_date != undefined) {
       const date = Date.parse(String(data.desired_delivery_date))
       pickedDesiredDate.value = new Date(date)
@@ -112,23 +110,14 @@ watch(name, () => {
 })
 
 watch(pickedDesiredDate, () => {
-  let data = createFormData.value
+  const data = createFormData.value
   if (pickedDesiredDate.value instanceof Date) {
-    //@ts-ignore
     data.desired_delivery_date = moment(pickedDesiredDate.value).format('YYYY-MM-DD')
   } else {
     data.desired_delivery_date = null
   }
   emit('update:formData', data)
 })
-
-// watch(
-//   () => projectsStore.$state,
-//   () => {
-//     setOptionsProjects()
-//   },
-//   { deep: true },
-// )
 
 onBeforeMount(setOptionsProjects)
 

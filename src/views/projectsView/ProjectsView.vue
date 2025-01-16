@@ -7,7 +7,7 @@ import { useProjectsStore } from '@/stores/projects'
 import { useProjectFilterStore } from '@/stores/filter'
 
 import DataTable from '@/components/projects/table/DataTable.vue'
-import Controls from '@/components/projects/Controls.vue'
+import Controls from '@/components/projects/ControlsMain.vue'
 import ControlsPage from '@/components/common/ControlsPage.vue'
 
 const router = useRouter()
@@ -36,8 +36,7 @@ onMounted(() => {
   }
 
   projectsStore.getItems()
-  //@ts-ignore
-  router.replace({ query: null })
+  router.replace({ query: undefined })
 })
 </script>
 

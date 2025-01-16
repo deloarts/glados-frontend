@@ -11,7 +11,7 @@ const route = useRoute()
 const languageStore = useLanguageStore()
 
 function routeIsActive(currentLink: string) {
-  let activeRoute = route.path
+  const activeRoute = route.path
   if (activeRoute != '/login') {
     localStorage.setItem('gladosActiveRoute', activeRoute)
   }

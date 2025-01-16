@@ -7,9 +7,9 @@ import { useBoughtItemsStore } from '@/stores/boughtItems'
 import { useBoughtItemFilterStore } from '@/stores/filter'
 import { useBoughtItemsControlsStore } from '@/stores/controls'
 
-import Changelog from '@/components/items/bought/Changelog.vue'
+import Changelog from '@/components/items/bought/ChangeLog.vue'
 import DataTable from '@/components/items/bought/dataTable/DataTable.vue'
-import Controls from '@/components/items/bought/Controls.vue'
+import Controls from '@/components/items/bought/ControlsMain.vue'
 import ControlsPage from '@/components/common/ControlsPage.vue'
 
 const router = useRouter()
@@ -39,8 +39,7 @@ onMounted(() => {
   }
 
   boughtItemsStore.getItems()
-  //@ts-ignore
-  router.replace({ query: null })
+  router.replace({ query: undefined })
 })
 </script>
 

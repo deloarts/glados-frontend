@@ -7,7 +7,7 @@ import { useApiKeysStore } from '@/stores/apiKeys'
 import { apiKeysRequest } from '@/requests/apiKeys'
 
 import ButtonDelete from '@/components/elements/ButtonDelete.vue'
-import Prompt from '@/components/main/Prompt.vue'
+import Prompt from '@/components/main/UserPrompt.vue'
 
 const props = defineProps<{
   selectedKeyID: number

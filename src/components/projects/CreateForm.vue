@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { watch, computed } from 'vue'
-//@ts-ignore
 import Toggle from '@vueform/toggle'
 
 import { useLanguageStore } from '@/stores/language'

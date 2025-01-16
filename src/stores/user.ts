@@ -16,15 +16,10 @@ export const useUserStore = defineStore('user', () => {
 
   const loading = ref<boolean>(false)
   const user = ref<UserSchema>({
-    //@ts-ignore
     id: null,
-    //@ts-ignore
     created: null,
-    //@ts-ignore
     username: null,
-    //@ts-ignore
     full_name: null,
-    //@ts-ignore
     email: null,
     language: 'enGB',
     theme: 'dark',
@@ -39,15 +34,10 @@ export const useUserStore = defineStore('user', () => {
     localStorage.setItem('gladosTokenValue', '')
     localStorage.setItem('gladosTokenType', '')
     user.value = {
-      //@ts-ignore
       id: null,
-      //@ts-ignore
       created: null,
-      //@ts-ignore
       username: null,
-      //@ts-ignore
       full_name: null,
-      //@ts-ignore
       email: null,
       language: 'enGB',
       theme: 'dark',
@@ -138,7 +128,6 @@ export const useUsersStore = defineStore('users', () => {
           })
           tempUsersOptionsFilter.push({
             text: users.value[i].full_name,
-            //@ts-ignore
             value: users.value[i].id,
           })
         }

@@ -39,8 +39,8 @@ function watchServerConnection() {
     .get(constants.apiGetHostVersion, requestConfig(null))
     .then((response) => {
       if (response.status === 200) {
-        var serverVersion = response.data.version.split('.')
-        var requiredVersion = constants.serverVersion.split('.')
+        const serverVersion = response.data.version.split('.')
+        const requiredVersion = constants.serverVersion.split('.')
 
         if (
           serverVersion[0] != requiredVersion[0] ||

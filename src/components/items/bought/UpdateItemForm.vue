@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, watch, computed, onBeforeMount } from 'vue'
-//@ts-ignore
 import moment from 'moment'
 import Toggle from '@vueform/toggle'
 import Datepicker from '@vuepic/vue-datepicker'
@@ -29,7 +28,7 @@ const emit = defineEmits<{
 
 // Computed
 const updateFormData = computed<BoughtItemUpdateSchema>(() => props.formData)
-const namePlaceholder = computed<String>(() => {
+const namePlaceholder = computed<string>(() => {
   if (config.items.displayPartnumberAsName) {
     return languageStore.l.boughtItem.input.namePlaceholder
   } else {
@@ -57,18 +56,18 @@ const formatDesiredDate = (pickedDesiredDate: Date) => {
 }
 
 function setOptionsProjects() {
-  var tempActive = []
-  var tempInactive = []
-  for (let i = 0; i < projectsStore.items.length; i++) {
-    if (projectsStore.items[i].is_active) {
+  const tempActive = []
+  const tempInactive = []
+  for (let i = 0; i < projectsStore.all.length; i++) {
+    if (projectsStore.all[i].is_active) {
       tempActive.push({
-        text: `${projectsStore.items[i].number} - ${projectsStore.items[i].customer} - ${projectsStore.items[i].description}`,
-        value: String(projectsStore.items[i].id),
+        text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
+        value: String(projectsStore.all[i].id),
       })
     } else {
       tempInactive.push({
-        text: `${projectsStore.items[i].number} - ${projectsStore.items[i].customer} - ${projectsStore.items[i].description}`,
-        value: String(projectsStore.items[i].id),
+        text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
+        value: String(projectsStore.all[i].id),
       })
     }
   }
@@ -79,7 +78,7 @@ function setOptionsProjects() {
 watch(
   () => updateFormData,
   () => {
-    let data = updateFormData.value
+    const data = updateFormData.value
     if (data.desired_delivery_date != null && data.desired_delivery_date != undefined) {
       const date = Date.parse(String(data.desired_delivery_date))
       pickedDesiredDate.value = new Date(date)
@@ -90,23 +89,14 @@ watch(
 )
 
 watch(pickedDesiredDate, () => {
-  let data = updateFormData.value
+  const data = updateFormData.value
   if (pickedDesiredDate.value instanceof Date) {
-    //@ts-ignore
     data.desired_delivery_date = moment(pickedDesiredDate.value).format('YYYY-MM-DD')
   } else {
     data.desired_delivery_date = null
   }
   emit('update:formData', data)
 })
-
-watch(
-  () => projectsStore.$state,
-  () => {
-    setOptionsProjects()
-  },
-  { deep: true },
-)
 
 onBeforeMount(setOptionsProjects)
 </script>

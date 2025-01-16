@@ -17,7 +17,8 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   const loading = ref<boolean>(false)
   const presets = ref<BoughtItemPreset>({})
   const state = ref<HostConfigBoughtItemsFilterSchema>({
-    limit: '100',
+    limit: 25,
+    skip: null,
     ignoreDelivered: false,
     ignoreCanceled: false,
     ignoreLost: false,
@@ -53,13 +54,13 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   })
 
   function set(key: string, value: string | number | Date | null) {
-    //@ts-ignore
     state.value[key] = value
   }
 
   function reset() {
     state.value = {
-      limit: '100',
+      limit: 25,
+      skip: null,
       ignoreDelivered: false,
       ignoreCanceled: false,
       ignoreLost: false,
@@ -114,6 +115,7 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
       const p = presets.value[name]
       state.value = {
         limit: p.limit,
+        skip: null,
         ignoreDelivered: p.ignoreDelivered,
         ignoreCanceled: p.ignoreCanceled,
         ignoreLost: p.ignoreLost,
@@ -203,8 +205,8 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
 
 export const useProjectFilterStore = defineStore('projectFilter', () => {
   const state = ref<HostConfigProjectFilterSchema>({
+    limit: 25,
     skip: null,
-    limit: null,
     id: null,
     number: null,
     productNumber: null,
@@ -213,16 +215,26 @@ export const useProjectFilterStore = defineStore('projectFilter', () => {
     isActive: null,
     designatedUserID: null,
   })
+  const all: HostConfigProjectFilterSchema = {
+    limit: null,
+    skip: null,
+    id: null,
+    number: null,
+    productNumber: null,
+    customer: null,
+    description: null,
+    isActive: null,
+    designatedUserID: null,
+  }
 
   function set(key: string, value: string | number | Date | null) {
-    //@ts-ignore
     state.value[key] = value
   }
 
   function reset() {
     state.value = {
+      limit: 25,
       skip: null,
-      limit: null,
       id: null,
       number: null,
       productNumber: null,
@@ -237,5 +249,5 @@ export const useProjectFilterStore = defineStore('projectFilter', () => {
     reset()
   })
 
-  return { state, set, reset }
+  return { state, all, set, reset }
 })

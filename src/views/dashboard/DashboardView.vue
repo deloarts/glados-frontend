@@ -71,7 +71,7 @@ function autoFetchBoughtItemStatus() {
     const params = getBoughtItemsFilterParams(filter)
     boughtItemsRequest.getItems(params).then((response) => {
       if (response.status == 200) {
-        const data = response.data
+        const data = response.data.items
 
         let usersDataset = {}
         let boughtItems = {
@@ -197,7 +197,7 @@ function autoFetchBoughtItemTimeline() {
     const params = getBoughtItemsFilterParams(filter)
     boughtItemsRequest.getItems(params).then((response) => {
       if (response.status == 200) {
-        const data = response.data
+        const data = response.data.items
         let dataset = {
           months: [
             languageStore.l.dashboard.months.january,

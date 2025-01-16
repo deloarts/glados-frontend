@@ -12,7 +12,7 @@ const projectsStore = useProjectsStore()
 const availableOptionsProjects = ref<Array<AvailableOption>>()
 
 interface Props {
-  value: number
+  value: number | null
   error?: string
   width?: number
   center?: boolean
@@ -26,10 +26,10 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
 })
 const emit = defineEmits<{
-  (e: 'update:value', v: number): void
+  (e: 'update:value', v: number | null): void
 }>()
 
-const computedValue = computed<number>({
+const computedValue = computed<number | null>({
   get() {
     return props.value
   },
@@ -46,25 +46,17 @@ const cssCenter = computed<string>(() => {
   return props.center ? 'center' : 'left'
 })
 
-function onEscape() {
-  blur()
-}
-
-function onEnter() {
-  blur()
-}
-
 function onContextMenu() {
   blur()
 }
 
 function setOptionsProjects() {
-  var temp = []
-  for (let i = 0; i < projectsStore.items.length; i++) {
-    if (projectsStore.items[i].is_active) {
+  const temp = []
+  for (let i = 0; i < projectsStore.all.length; i++) {
+    if (projectsStore.all[i].is_active) {
       temp.push({
-        text: projectsStore.items[i].number,
-        value: String(projectsStore.items[i].id),
+        text: projectsStore.all[i].number,
+        value: String(projectsStore.all[i].id),
       })
     }
   }

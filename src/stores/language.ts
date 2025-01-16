@@ -56,7 +56,6 @@ export const useLanguageStore = defineStore('language', () => {
     } else {
       selected.value = 'enGB'
     }
-    // @ts-ignore
     apply(selected.value)
   })
 

@@ -4,7 +4,7 @@ import {
   createWebHashHistory,
 } from "vue-router";
 
-import Redirect from "@/components/main/Redirect.vue";
+import Redirect from "@/components/main/RedirectDefault.vue";
 import RedirectSettings from "@/components/main/RedirectSettings.vue";
 import RedirectAccount from "@/components/main/RedirectAccount.vue";
 import RedirectTools from "@/components/main/RedirectTools.vue";

@@ -1,47 +1,31 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { boughtItemColumnWidths } from '@/presets/columnWidth'
 
-import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import { useBoughtItemsBatchImportStore } from '@/stores/boughtItems'
+import { useProjectsStore } from '@/stores/projects'
 
-import { useBoughtItemsBatchImportStore } from "@/stores/boughtItems";
-import { useProjectsStore } from "@/stores/projects";
+import TableItemEmpty from '@/components/dataTable/TableItemEmpty.vue'
+import DataTableBodyRow from '@/components/dataTable/DataTableBodyRow.vue'
+import TableItemRowNumber from '@/components/dataTable/TableItemRowNumber.vue'
 
-import TableItemEmpty from "@/components/dataTable/TableItemEmpty.vue";
-import DataTableBodyRow from "@/components/dataTable/DataTableBodyRow.vue";
-import TableItemRowNumber from "@/components/dataTable/TableItemRowNumber.vue";
+import CreateItemTableInput from './CreateItemTableInput.vue'
+import CreateItemTableSelectProject from './CreateItemTableSelectProject.vue'
+import CreateItemTableButtonCreate from './CreateItemTableButtonCreate.vue'
+import CreateItemTableButtonDelete from './CreateItemTableButtonDelete.vue'
 
-import CreateItemTableInput from "./CreateItemTableInput.vue";
-import CreateItemTableSelectProject from "./CreateItemTableSelectProject.vue";
-import CreateItemTableButtonCreate from "./CreateItemTableButtonCreate.vue";
-import CreateItemTableButtonDelete from "./CreateItemTableButtonDelete.vue";
-
-const boughtItemBatchImportStore = useBoughtItemsBatchImportStore();
-const projectsStore = useProjectsStore();
+const boughtItemBatchImportStore = useBoughtItemsBatchImportStore()
+const projectsStore = useProjectsStore()
 
 const props = defineProps<{
-  colW: typeof boughtItemColumnWidths;
-}>();
-// const emit = defineEmits<{
-//   (e: "update:colW", v: typeof boughtItemColumnWidths): void;
-// }>();
-
-// const computedColW = computed<typeof boughtItemColumnWidths>({
-//   get() {
-//     return props.colW;
-//   },
-//   set(newValue) {
-//     alert(newValue);
-//     emit("update:colW", newValue);
-//     return newValue;
-//   },
-// });
+  colW: typeof boughtItemColumnWidths
+}>()
 
 function onDelete(index: number) {
-  boughtItemBatchImportStore.removeItem(index);
+  boughtItemBatchImportStore.removeItem(index)
 }
 
 function onCreate(index: number) {
-  boughtItemBatchImportStore.createItem(index);
+  boughtItemBatchImportStore.createItem(index)
 }
 </script>
 

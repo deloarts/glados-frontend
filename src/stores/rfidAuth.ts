@@ -45,11 +45,11 @@ export const useRfidAuthStore = defineStore('rfidAuth', () => {
       }
     }
 
-    wsConnection.onopen = (event: Event) => {
+    wsConnection.onopen = () => {
       readerOK.value = false
       connectionOK.value = true
     }
-    wsConnection.onclose = (event: Event) => {
+    wsConnection.onclose = () => {
       readerOK.value = false
       connectionOK.value = false
     }

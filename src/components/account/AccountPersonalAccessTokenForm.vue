@@ -10,7 +10,7 @@ import ButtonNewPersonalAccessToken from '@/components/elements/ButtonNewPersona
 const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
 
-let personalAccessToken = ref<string>('')
+const personalAccessToken = ref<string>('')
 
 function newToken() {
   usersRequest.putUsersMePAT().then((response) => {

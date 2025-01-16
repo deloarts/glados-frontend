@@ -56,7 +56,7 @@ const showLabelTools = ref<boolean>(false)
 const showLabelSettings = ref<boolean>(false)
 
 function routeIsActive(currentLink: string) {
-  let activeRoute = route.path
+  const activeRoute = route.path
   if (activeRoute != '/login') {
     localStorage.setItem('gladosActiveRoute', activeRoute)
   }

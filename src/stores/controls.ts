@@ -53,15 +53,13 @@ export const useBoughtItemsControlsStore = defineStore('boughtItemsControls', ()
 
   function enableAllColumns() {
     for (const key in columns.value) {
-      //@ts-ignore
-      columns.value[key] = true
+      columns.value[key as keyof BoughtItemControlsColumns] = true
     }
   }
 
   function disableAllColumns() {
     for (const key in columns.value) {
-      //@ts-ignore
-      columns.value[key] = false
+      columns.value[key as keyof BoughtItemControlsColumns] = false
     }
   }
 
@@ -115,9 +113,8 @@ export const useBoughtItemsControlsStore = defineStore('boughtItemsControls', ()
     if (lsState != null) {
       const tempState = JSON.parse(lsState)
       for (const [key, value] of Object.entries(tempState)) {
-        if (key in state.value) {
-          //@ts-ignore
-          state.value[key] = value
+        if (key in state.value && typeof value === 'boolean') {
+          state.value[key as keyof BoughtItemControlsState] = value
         }
       }
       console.log('Got bought items controls state from local storage.')
@@ -125,9 +122,8 @@ export const useBoughtItemsControlsStore = defineStore('boughtItemsControls', ()
     if (lsColumns != null) {
       const tempColumns = JSON.parse(lsColumns)
       for (const [key, value] of Object.entries(tempColumns)) {
-        if (key in columns.value) {
-          //@ts-ignore
-          columns.value[key] = value
+        if (key in columns.value && typeof value === 'boolean') {
+          columns.value[key as keyof BoughtItemControlsColumns] = value
         }
       }
       console.log('Got bought items controls columns from local storage.')

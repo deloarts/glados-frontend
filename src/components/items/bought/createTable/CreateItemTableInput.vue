@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 
 import { blur } from '@/helper/document.helper'
 

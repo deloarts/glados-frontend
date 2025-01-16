@@ -22,10 +22,7 @@ const logFileName = computed<string | null>(() => {
     if (moment(pickedDate.value).isSame(moment(), 'day')) {
       return 'glados.log'
     }
-    const day = pickedDate.value.getDate()
-    const month = pickedDate.value.getMonth() + 1
-    const year = pickedDate.value.getFullYear()
-    return `glados.${year}-${month}-${day}.log`
+    return `glados.${pickedDate.value?.toISOString().split('T')[0]}.log`
   }
   return null
 })
@@ -38,7 +35,7 @@ function getLogFile() {
     .then((response) => {
       if (response.status == 200) {
         const content = response.data
-        let tempContent = []
+        const tempContent = []
         for (let i = 0; i < content.length; i++) {
           const currentDate = getLogContent(content[i], 'date')
           if (currentDate.startsWith('20') && moment(currentDate).isValid()) {
@@ -63,7 +60,7 @@ function getLogFile() {
 }
 
 function getLogContent(line: string, type: string) {
-  let splitted = line.split('\t')
+  const splitted = line.split('\t')
   if (type == 'date') {
     return splitted[0]
   } else if (type == 'name') {
@@ -84,7 +81,6 @@ watch(pickedDate, () => {
 })
 
 onMounted(() => {
-  //@ts-ignore
   pickedDate.value = moment()
 })
 </script>

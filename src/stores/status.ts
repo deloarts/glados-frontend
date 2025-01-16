@@ -44,15 +44,11 @@ export const useStatusStore = defineStore('status', () => {
         ]
         for (const key in boughtItemStatus.value) {
           tempOptions.push({
-            //@ts-ignore
             text: _languageStore.l.boughtItem.options.status[key],
-            //@ts-ignore
             value: boughtItemStatus.value[key],
           })
           tempFilter.push({
-            //@ts-ignore
             text: _languageStore.l.boughtItem.options.status[key],
-            //@ts-ignore
             value: boughtItemStatus.value[key],
           })
         }

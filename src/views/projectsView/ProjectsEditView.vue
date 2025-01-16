@@ -60,7 +60,7 @@ onBeforeMount(() => {
         }, 4000)
       }
     })
-    .catch((error) => {})
+    .catch(() => {})
 })
 </script>
 

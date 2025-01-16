@@ -25,11 +25,9 @@ const languageStore = useLanguageStore()
 const x = ref<string>('')
 const y = ref<string>('')
 
-function eventMouseMove(event: Event) {
+function eventMouseMove(event: MouseEvent) {
   if (props.atMouse) {
-    //@ts-ignore
     x.value = `${event.pageX + 10}px`
-    //@ts-ignore
     y.value = `${event.pageY + 10}px`
   } else {
     x.value = '50%'

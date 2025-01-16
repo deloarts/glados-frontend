@@ -45,7 +45,7 @@ onMounted(() => {
         }, 4000)
       }
     })
-    .catch((error) => {})
+    .catch(() => {})
 })
 </script>
 

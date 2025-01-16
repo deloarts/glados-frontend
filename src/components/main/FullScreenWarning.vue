@@ -2,17 +2,15 @@
 import { baseParticles } from '@/presets/particles'
 import { loadFull } from 'tsparticles'
 
-import Header from '@/components/main/Header.vue'
-import Footer from '@/components/main/Footer.vue'
+import Header from '@/components/main/PageHeader.vue'
+import Footer from '@/components/main/PageFooter.vue'
 import IconWarning from '@/components/icons/IconWarning.vue'
 
 const props = defineProps(['show', 'text', 'sub'])
 
-// @ts-ignore
 const particlesInit = async (engine) => {
   await loadFull(engine)
 }
-// @ts-ignore
 const particlesLoaded = async (container) => {}
 </script>
 

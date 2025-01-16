@@ -7,8 +7,7 @@ import TableMain from '@/components/dataTable/TableMain.vue'
 import CreateItemTableHead from './CreateItemTableHead.vue'
 import CreateItemTableBody from './CreateItemTableBody.vue'
 
-//@ts-ignore
-const colW = ref<typeof boughtItemColumnWidths>(null)
+const colW = ref<typeof boughtItemColumnWidths>({} as typeof boughtItemColumnWidths)
 
 onBeforeMount(() => {
   colW.value = JSON.parse(JSON.stringify(boughtItemColumnWidths))

@@ -14,16 +14,19 @@ import { useUserStore } from '@/stores/user'
 import { useResolutionStore } from '@/stores/resolution'
 import { useProjectsControlsStore } from '@/stores/controls'
 
-import Prompt from '@/components/main/Prompt.vue'
+import Prompt from '@/components/main/UserPrompt.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonFilterClear from '@/components/elements/ButtonFilterClear.vue'
 import ButtonEdit from '@/components/elements/ButtonEdit.vue'
 import ButtonDelete from '@/components/elements/ButtonDelete.vue'
 import ButtonSync from '@/components/elements/ButtonSync.vue'
-import ButtonSyncOff from '../elements/ButtonSyncOff.vue'
+import ButtonSyncOff from '@/components/elements/ButtonSyncOff.vue'
 import ButtonClear from '@/components/elements/ButtonClear.vue'
-import DropDownTableColumns from '../elements/DropDownTableColumns.vue'
-import DropDownTableView from '../elements/DropDownTableView.vue'
+import DropDownTableColumns from '@/components/elements/DropDownTableColumns.vue'
+import DropDownTableView from '@/components/elements/DropDownTableView.vue'
+import SelectPreText from '@/components/elements/SelectPreText.vue'
+
+import type { AvailableOption } from '@/models/controls'
 
 // Stores
 const languageStore = useLanguageStore()
@@ -63,6 +66,14 @@ const buttonColumnsText = computed<string>(() => {
 const buttonClearFilterText = computed<string>(() => {
   return gtMinWidthTablet.value ? languageStore.l.project.button.clearFilter : ''
 })
+
+// Selections
+const availableOptionsLimit: Array<AvailableOption> = [
+  { text: '10', value: '10' },
+  { text: '25', value: '25' },
+  { text: '50', value: '50' },
+  { text: '100', value: '100' },
+]
 
 function onButtonNew() {
   router.push({ name: 'NewProject' })
@@ -190,6 +201,15 @@ function clearFilter() {
         :text="buttonClearFilterText"
         v-on:click="clearFilter"
       ></ButtonFilterClear>
+
+      <SelectPreText
+        v-if="gtMinWidthDesktop"
+        class="controls-base-element"
+        text="Limit"
+        v-model:selection="projectFilterStore.state.limit"
+        v-on:update:selection="projectStore.getItems()"
+        :options="availableOptionsLimit"
+      />
     </div>
   </div>
 

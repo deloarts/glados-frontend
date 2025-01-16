@@ -14,7 +14,7 @@ import { boughtItemsRequest } from '@/requests/items'
 import { getBoughtItemsFilterParams } from '@/requests/params'
 import { camelToTitle } from '@/helper/string.helper'
 
-import Prompt from '@/components/main/Prompt.vue'
+import Prompt from '@/components/main/UserPrompt.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonEdit from '@/components/elements/ButtonEdit.vue'
 import ButtonCopy from '@/components/elements/ButtonCopy.vue'
@@ -74,10 +74,10 @@ const buttonClearFilterText = computed<string>(() => {
 
 // Selections
 const availableOptionsLimit: Array<AvailableOption> = [
+  { text: '10', value: '10' },
+  { text: '25', value: '25' },
   { text: '50', value: '50' },
   { text: '100', value: '100' },
-  { text: '250', value: '250' },
-  { text: '500', value: '500' },
 ]
 const availableOptionsOrderBy = computed<Array<AvailableOption>>(() => {
   return [
@@ -106,7 +106,7 @@ const availableOptionsOrderBy = computed<Array<AvailableOption>>(() => {
   ]
 })
 const availableOptionsFilterPresets = computed<Array<AvailableOption>>(() => {
-  let presets = []
+  const presets = []
   for (const key in filterStore.presets) {
     presets.push({ text: camelToTitle(key), value: key })
   }
@@ -170,7 +170,7 @@ function onButtonDownloadExcel() {
   const params = getBoughtItemsFilterParams(filterStore.state)
   boughtItemsRequest.getItemsExcel(params).then((response) => {
     if (response.status == 200) {
-      let blob = new Blob([response.data], {
+      const blob = new Blob([response.data], {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         }),
         url = window.URL.createObjectURL(blob)

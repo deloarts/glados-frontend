@@ -94,6 +94,12 @@ export const enGB: Language = {
       tools: 'Tools',
       settings: 'Settings',
     },
+    pagination: {
+      first: 'First',
+      previous: 'Previous',
+      next: 'Next',
+      last: 'Last',
+    },
   },
   dashboard: {
     boughtItemStatus: 'Bought Items Status',

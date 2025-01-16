@@ -2,7 +2,7 @@
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
 ![version](https://img.shields.io/github/v/release/deloarts/glados-frontend?style=for-the-badge&color=orange)
-![backend](https://img.shields.io/badge/Backend-0.12.*-orange.svg?style=for-the-badge)
+![backend](https://img.shields.io/badge/Backend-0.13.*-orange.svg?style=for-the-badge)
 ![node](https://img.shields.io/badge/node-v22-blue.svg?style=for-the-badge)
 ![OS](https://img.shields.io/badge/OS-UNIX-blue.svg?style=for-the-badge)
 
@@ -67,7 +67,8 @@ MIT
 
 ## 6 changelog
 
-**v0.12.6** Add option to disable naming convention. Fix json editor.  
+**v0.13.0**: Add pagination. Fix log view.  
+**v0.12.6**: Add option to disable naming convention. Fix json editor.  
 **v0.12.5**: Add demo mode and browser support warning.  
 **v0.12.4**: Update config file, refactor warning view.  
 **v0.12.3**: Add company name to config file.  

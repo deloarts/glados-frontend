@@ -10,7 +10,7 @@ import { useNotificationStore } from '@/stores/notification'
 import { useBoughtItemFilterStore } from '@/stores/filter'
 import { useUnitsStore } from '@/stores/units'
 
-// import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
+import type { PageSchema } from '@/schemas/page'
 import type { BoughtItemSchema } from '@/schemas/boughtItem'
 import type { BoughtItemBatchImportSchema } from '@/schemas/boughtItem'
 import type { ResponseWarning } from '@/models/response'
@@ -21,10 +21,12 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
   const loading = ref<boolean>(false)
   const paused = ref<boolean>(false)
   const items = ref<Array<BoughtItemSchema>>([])
+  const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
     items.value = []
+    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
     selectedIDs.value = []
   }
 
@@ -39,6 +41,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
 
   function clearItems() {
     items.value = []
+    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
   }
 
   function getSelection(): Array<number> {
@@ -53,7 +56,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     selectedIDs.value = []
   }
 
-  async function get(): Promise<any> {
+  async function get(): Promise<void> {
     console.log('Bought Items store requesting data ...')
     loading.value = true
 
@@ -61,7 +64,14 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     return boughtItemsRequest.getItems(params).then((response) => {
       loading.value = false
       if (response.status === 200) {
-        items.value = response.data
+        items.value = response.data.items
+        page.value = {
+          total: response.data.total,
+          limit: response.data.limit,
+          skip: response.data.skip,
+          pages: response.data.pages,
+          current: response.data.current,
+        }
         console.log('Bought Items store got data from server.')
       }
       return response
@@ -79,6 +89,27 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     }
   }
 
+  watch(
+    () => _filterStore.state.limit,
+    async () => {
+      console.log('Bought Items store limit value changed.')
+      _filterStore.state.skip = 0
+      clear()
+      await get()
+    },
+    { deep: true },
+  )
+
+  watch(
+    () => _filterStore.state,
+    async () => {
+      console.log('Bought Items store value changed.')
+      clear()
+      await get()
+    },
+    { deep: true },
+  )
+
   onBeforeMount(() => {
     clear()
     fetchItems()
@@ -88,6 +119,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     loading,
     paused,
     items,
+    page,
     clear,
     pause,
     getItems,
@@ -146,7 +178,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     for (let i = 0; i < tempMultiData.length; i++) {
       temp.push(tempMultiData[i])
     }
-    //@ts-ignore
     items.value = temp
   }
 
@@ -154,7 +185,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     items.value.splice(index, 1)
   }
 
-  async function createItem(index: number): Promise<any> {
+  async function createItem(index: number): Promise<void> {
     return boughtItemsRequest
       .postItems(items.value[index])
       .then((response) => {
@@ -167,7 +198,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
           for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
             const key = `${response.data.detail[errIdx].loc[1]}_error`
             const value = response.data.detail[errIdx].msg
-            //@ts-ignore
             items.value[index][key] = value
           }
         } else {
@@ -199,7 +229,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
           for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
             const key = `${response.data.detail[errIdx].loc[1]}_error`
             const value = response.data.detail[errIdx].msg
-            //@ts-ignore
             items.value[i][key] = value
           }
         } else {
@@ -240,7 +269,6 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
               for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
                 const key = `${response.data.detail[errIdx].loc[1]}_error`
                 const value = response.data.detail[errIdx].msg
-                //@ts-ignore
                 items.value[firstNotFailedItemIdx][key] = value
               }
             } else {
@@ -264,7 +292,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     }
   }
 
-  async function importFile(file: File, serverSideValidation: boolean): Promise<any> {
+  async function importFile(file: File, serverSideValidation: boolean): Promise<void> {
     importing.value = true
     const formData = new FormData()
     formData.append('file', file)
@@ -288,7 +316,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
         }
         return response
       })
-      .catch((error) => {
+      .catch(() => {
         importing.value = false
         _notificationStore.addWarn(_languageStore.l.notification.warn.xlsxProcessError)
       })

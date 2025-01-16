@@ -15,7 +15,8 @@ export interface HostConfigBoughtItemsStatusSchema {
 }
 
 export interface HostConfigBoughtItemsFilterSchema {
-  limit: string | null
+  limit: number | null
+  skip: number | null
   ignoreDelivered: boolean | null
   ignoreCanceled: boolean | null
   ignoreLost: boolean | null

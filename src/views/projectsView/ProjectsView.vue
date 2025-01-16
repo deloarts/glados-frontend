@@ -8,6 +8,7 @@ import { useProjectFilterStore } from '@/stores/filter'
 
 import DataTable from '@/components/projects/table/DataTable.vue'
 import Controls from '@/components/projects/Controls.vue'
+import ControlsPage from '@/components/common/ControlsPage.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -17,8 +18,7 @@ const projectFilterStore = useProjectFilterStore()
 const controlsStore = useBoughtItemsControlsStore()
 
 onBeforeMount(() => {
-  projectFilterStore.reset()
-  projectsStore.getItems()
+  projectsStore.getAll()
 })
 
 onMounted(() => {
@@ -51,6 +51,9 @@ onMounted(() => {
         <div id="data" class="data">
           <DataTable />
         </div>
+        <div id="controls-page" class="controls">
+          <ControlsPage :item-store="projectsStore" :filter-store="projectFilterStore" />
+        </div>
       </div>
     </div>
   </div>
@@ -74,10 +77,11 @@ onMounted(() => {
 
   grid-gap: 10px;
   grid-template-columns: 100%;
-  grid-template-rows: min-content auto;
+  grid-template-rows: min-content auto min-content;
   grid-template-areas:
     'controls'
-    'data';
+    'data'
+    'controls-page';
 }
 
 .controls {

@@ -5,7 +5,7 @@ interface Option {
 }
 
 const props = defineProps<{
-  selection: string
+  selection: string | number | null
   options: Array<Option>
   text: string
 }>()

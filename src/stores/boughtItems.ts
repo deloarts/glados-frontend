@@ -10,7 +10,6 @@ import { useNotificationStore } from '@/stores/notification'
 import { useBoughtItemFilterStore } from '@/stores/filter'
 import { useUnitsStore } from '@/stores/units'
 
-// import type { ItemStoreProtocol } from "@/protocols/itemStoreProtocol";
 import type { PageSchema } from '@/schemas/page'
 import type { BoughtItemSchema } from '@/schemas/boughtItem'
 import type { BoughtItemBatchImportSchema } from '@/schemas/boughtItem'

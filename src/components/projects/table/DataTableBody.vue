@@ -1,55 +1,49 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue'
 
-import { useProjectsStore } from "@/stores/projects";
+import { useProjectsStore } from '@/stores/projects'
 
-import { getSelection } from "@/helper/selection.helper";
+import { getSelection } from '@/helper/selection.helper'
 
-import { projectsColumnWidths } from "@/presets/columnWidth";
+import { projectsColumnWidths } from '@/presets/columnWidth'
 
-import DataTableBodyRow from "@/components/dataTable/DataTableBodyRow.vue";
-import TableItemEmpty from "@/components/dataTable/TableItemEmpty.vue";
+import DataTableBodyRow from '@/components/dataTable/DataTableBodyRow.vue'
+import TableItemEmpty from '@/components/dataTable/TableItemEmpty.vue'
 
-import TableItemNumber from "./item/TableItemNumber.vue";
-import TableItemID from "./item/TableItemID.vue";
-import TableItemProjectNumber from "./item/TableItemProjectNumber.vue";
-import TableItemProductNumber from "./item/TableItemProductNumber.vue";
-import TableItemProjectLink from "./item/TableItemProjectLink.vue";
-import TableItemCustomer from "./item/TableItemCustomer.vue";
-import TableItemDescription from "./item/TableItemDescription.vue";
-import TableItemDesignatedUser from "./item/TableItemDesignatedUser.vue";
-import TableItemCreatedDate from "./item/TableItemCreatedDate.vue";
-import TableItemState from "./item/TableItemState.vue";
+import TableItemNumber from './item/TableItemNumber.vue'
+import TableItemID from './item/TableItemID.vue'
+import TableItemProjectNumber from './item/TableItemProjectNumber.vue'
+import TableItemProductNumber from './item/TableItemProductNumber.vue'
+import TableItemProjectLink from './item/TableItemProjectLink.vue'
+import TableItemCustomer from './item/TableItemCustomer.vue'
+import TableItemDescription from './item/TableItemDescription.vue'
+import TableItemDesignatedUser from './item/TableItemDesignatedUser.vue'
+import TableItemCreatedDate from './item/TableItemCreatedDate.vue'
+import TableItemState from './item/TableItemState.vue'
 
-const projectsStore = useProjectsStore();
+const projectsStore = useProjectsStore()
 
 const props = defineProps<{
-  colW: typeof projectsColumnWidths;
-}>();
+  colW: typeof projectsColumnWidths
+}>()
 const emit = defineEmits<{
-  (e: "update:colW", v: typeof projectsColumnWidths): void;
-}>();
+  (e: 'update:colW', v: typeof projectsColumnWidths): void
+}>()
 
 const computedColW = computed<typeof projectsColumnWidths>({
   get() {
-    return props.colW;
+    return props.colW
   },
   set(newValue) {
-    emit("update:colW", newValue);
-    return newValue;
+    emit('update:colW', newValue)
+    return newValue
   },
-});
+})
 
 // Selection
-const lineIndex = ref<number>(0);
+const lineIndex = ref<number>(0)
 function multiSelect(event: Event, id: number, index: number) {
-  lineIndex.value = getSelection(
-    event,
-    id,
-    index,
-    lineIndex.value,
-    projectsStore,
-  );
+  lineIndex.value = getSelection(event, id, index, lineIndex.value, projectsStore)
 }
 </script>
 
@@ -62,7 +56,7 @@ function multiSelect(event: Event, id: number, index: number) {
       v-on:click="multiSelect($event, item.id, index)"
     >
       <TableItemNumber
-        :index="index"
+        :index="index + (projectsStore.page.current - 1) * projectsStore.page.limit"
         :item="item"
         v-model:width="computedColW"
       />

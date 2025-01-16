@@ -3,7 +3,6 @@ import { onMounted, onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 import { useProjectsStore } from '@/stores/projects'
-import { useProjectFilterStore } from '@/stores/filter'
 import { useBoughtItemsStore } from '@/stores/boughtItems'
 import { useBoughtItemFilterStore } from '@/stores/filter'
 import { useBoughtItemsControlsStore } from '@/stores/controls'
@@ -17,14 +16,12 @@ const router = useRouter()
 const route = useRoute()
 
 const projectsStore = useProjectsStore()
-const projectFilterStore = useProjectFilterStore()
 const boughtItemsStore = useBoughtItemsStore()
 const controlsStore = useBoughtItemsControlsStore()
 const boughtItemFilterStore = useBoughtItemFilterStore()
 
 onBeforeMount(() => {
-  projectFilterStore.reset()
-  projectsStore.getItems()
+  projectsStore.getAll()
 })
 
 onMounted(() => {

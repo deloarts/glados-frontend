@@ -59,12 +59,12 @@ const formatDesiredDate = (pickedDesiredDate: Date) => {
 }
 
 function setOptionsProjects() {
-  var temp = []
-  for (let i = 0; i < projectsStore.items.length; i++) {
-    if (projectsStore.items[i].is_active) {
+  const temp = []
+  for (let i = 0; i < projectsStore.all.length; i++) {
+    if (projectsStore.all[i].is_active) {
       temp.push({
-        text: `${projectsStore.items[i].number} - ${projectsStore.items[i].customer} - ${projectsStore.items[i].description}`,
-        value: String(projectsStore.items[i].id),
+        text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
+        value: String(projectsStore.all[i].id),
       })
     }
   }
@@ -79,12 +79,12 @@ function buildPartnumber() {
   if (config.items.nameIsPartnumber) {
     partnumber = name.value
   } else {
-  partnumber =
-    name.value +
-    ' - ' +
-    createFormData.value.order_number +
-    ' - ' +
-    createFormData.value.manufacturer
+    partnumber =
+      name.value +
+      ' - ' +
+      createFormData.value.order_number +
+      ' - ' +
+      createFormData.value.manufacturer
   }
 
   let data = createFormData.value
@@ -122,13 +122,13 @@ watch(pickedDesiredDate, () => {
   emit('update:formData', data)
 })
 
-watch(
-  () => projectsStore.$state,
-  () => {
-    setOptionsProjects()
-  },
-  { deep: true },
-)
+// watch(
+//   () => projectsStore.$state,
+//   () => {
+//     setOptionsProjects()
+//   },
+//   { deep: true },
+// )
 
 onBeforeMount(setOptionsProjects)
 
@@ -173,11 +173,7 @@ onMounted(() => {
           />
         </div>
         <div id="name" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="name"
-            :placeholder="namePlaceholder"
-          />
+          <input class="form-base-text-input" v-model="name" :placeholder="namePlaceholder" />
         </div>
         <div id="order-number" class="grid-item-center">
           <input

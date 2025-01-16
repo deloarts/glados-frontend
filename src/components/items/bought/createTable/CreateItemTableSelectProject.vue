@@ -59,12 +59,12 @@ function onContextMenu() {
 }
 
 function setOptionsProjects() {
-  var temp = []
-  for (let i = 0; i < projectsStore.items.length; i++) {
-    if (projectsStore.items[i].is_active) {
+  const temp = []
+  for (let i = 0; i < projectsStore.all.length; i++) {
+    if (projectsStore.all[i].is_active) {
       temp.push({
-        text: projectsStore.items[i].number,
-        value: String(projectsStore.items[i].id),
+        text: projectsStore.all[i].number,
+        value: String(projectsStore.all[i].id),
       })
     }
   }

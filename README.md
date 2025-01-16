@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.13.1**: Fix component error.  
 **v0.13.0**: Add pagination. Fix log view.  
 **v0.12.6**: Add option to disable naming convention. Fix json editor.  
 **v0.12.5**: Add demo mode and browser support warning.  

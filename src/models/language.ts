@@ -76,6 +76,12 @@ export interface Language {
       tools: string
       settings: string
     }
+    pagination: {
+      first: string
+      previous: string
+      next: string
+      last: string
+    }
   }
   dashboard: {
     boughtItemStatus: string

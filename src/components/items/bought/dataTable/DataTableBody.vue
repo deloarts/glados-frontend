@@ -1,76 +1,70 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed } from 'vue'
 
-import { useBoughtItemsStore } from "@/stores/boughtItems";
+import { useBoughtItemsStore } from '@/stores/boughtItems'
 
-import { getSelection } from "@/helper/selection.helper";
+import { getSelection } from '@/helper/selection.helper'
 
-import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import { boughtItemColumnWidths } from '@/presets/columnWidth'
 
-import TableItemEmpty from "@/components/dataTable/TableItemEmpty.vue";
+import TableItemEmpty from '@/components/dataTable/TableItemEmpty.vue'
 
-import DataTableBodyRow from "./DataTableBodyRow.vue";
-import TableItemNumber from "./item/TableItemNumber.vue";
-import TableItemState from "./item/TableItemState.vue";
-import TableItemID from "./item/TableItemID.vue";
-import TableItemStatus from "./item/TableItemStatus.vue";
-import TableItemProjectNumber from "./item/TableItemProjectNumber.vue";
-import TableItemProductNumber from "./item/TableItemProductNumber.vue";
-import TableItemProjectCustomer from "./item/TableItemProjectCustomer.vue";
-import TableItemProjectDescription from "./item/TableItemProjectDescription.vue";
-import TableItemQuantity from "./item/TableItemQuantity.vue";
-import TableItemUnit from "./item/TableItemUnit.vue";
-import TableItemWeblink from "./item/TableItemWeblink.vue";
-import TableItemPartNumber from "./item/TableItemPartNumber.vue";
-import TableItemOrderNumber from "./item/TableItemOrderNumber.vue";
-import TableItemManufacturer from "./item/TableItemManufacturer.vue";
-import TableItemSupplier from "./item/TableItemSupplier.vue";
-import TableItemGroup from "./item/TableItemGroup.vue";
-import TableItemNoteGeneral from "./item/TableItemNoteGeneral.vue";
-import TableItemNoteSupplier from "./item/TableItemNoteSupplier.vue";
-import TableItemCreatedDate from "./item/TableItemCreatedDate.vue";
-import TableItemCreatorName from "./item/TableItemCreatorName.vue";
-import TableItemDesiredDate from "./item/TableItemDesiredDate.vue";
-import TableItemRequestedDate from "./item/TableItemRequestedDate.vue";
-import TableItemRequesterID from "./item/TableItemRequesterID.vue";
-import TableItemOrderedDate from "./item/TableItemOrderedDate.vue";
-import TableItemOrdererID from "./item/TableItemOrdererID.vue";
-import TableItemExpectedDate from "./item/TableItemExpectedDate.vue";
-import TableItemDeliveredDate from "./item/TableItemDeliveredDate.vue";
-import TableItemReceiverID from "./item/TableItemReceiverID.vue";
-import TableItemArrivalWeeks from "./item/TableItemArrivalWeeks.vue";
-import TableItemTotalWeeks from "./item/TableItemTotalWeeks.vue";
-import TableItemStoragePlace from "./item/TableItemStoragePlace.vue";
+import DataTableBodyRow from './DataTableBodyRow.vue'
+import TableItemNumber from './item/TableItemNumber.vue'
+import TableItemState from './item/TableItemState.vue'
+import TableItemID from './item/TableItemID.vue'
+import TableItemStatus from './item/TableItemStatus.vue'
+import TableItemProjectNumber from './item/TableItemProjectNumber.vue'
+import TableItemProductNumber from './item/TableItemProductNumber.vue'
+import TableItemProjectCustomer from './item/TableItemProjectCustomer.vue'
+import TableItemProjectDescription from './item/TableItemProjectDescription.vue'
+import TableItemQuantity from './item/TableItemQuantity.vue'
+import TableItemUnit from './item/TableItemUnit.vue'
+import TableItemWeblink from './item/TableItemWeblink.vue'
+import TableItemPartNumber from './item/TableItemPartNumber.vue'
+import TableItemOrderNumber from './item/TableItemOrderNumber.vue'
+import TableItemManufacturer from './item/TableItemManufacturer.vue'
+import TableItemSupplier from './item/TableItemSupplier.vue'
+import TableItemGroup from './item/TableItemGroup.vue'
+import TableItemNoteGeneral from './item/TableItemNoteGeneral.vue'
+import TableItemNoteSupplier from './item/TableItemNoteSupplier.vue'
+import TableItemCreatedDate from './item/TableItemCreatedDate.vue'
+import TableItemCreatorName from './item/TableItemCreatorName.vue'
+import TableItemDesiredDate from './item/TableItemDesiredDate.vue'
+import TableItemRequestedDate from './item/TableItemRequestedDate.vue'
+import TableItemRequesterID from './item/TableItemRequesterID.vue'
+import TableItemOrderedDate from './item/TableItemOrderedDate.vue'
+import TableItemOrdererID from './item/TableItemOrdererID.vue'
+import TableItemExpectedDate from './item/TableItemExpectedDate.vue'
+import TableItemDeliveredDate from './item/TableItemDeliveredDate.vue'
+import TableItemReceiverID from './item/TableItemReceiverID.vue'
+import TableItemArrivalWeeks from './item/TableItemArrivalWeeks.vue'
+import TableItemTotalWeeks from './item/TableItemTotalWeeks.vue'
+import TableItemStoragePlace from './item/TableItemStoragePlace.vue'
 
-const boughtItemsStore = useBoughtItemsStore();
+const boughtItemsStore = useBoughtItemsStore()
 
 const props = defineProps<{
-  colW: typeof boughtItemColumnWidths;
-}>();
+  colW: typeof boughtItemColumnWidths
+}>()
 const emit = defineEmits<{
-  (e: "update:colW", v: typeof boughtItemColumnWidths): void;
-}>();
+  (e: 'update:colW', v: typeof boughtItemColumnWidths): void
+}>()
 
 const computedColW = computed<typeof boughtItemColumnWidths>({
   get() {
-    return props.colW;
+    return props.colW
   },
   set(newValue) {
-    emit("update:colW", newValue);
-    return newValue;
+    emit('update:colW', newValue)
+    return newValue
   },
-});
+})
 
 // Selection
-const lineIndex = ref<number>(0);
+const lineIndex = ref<number>(0)
 function multiSelect(event: Event, id: number, index: number) {
-  lineIndex.value = getSelection(
-    event,
-    id,
-    index,
-    lineIndex.value,
-    boughtItemsStore,
-  );
+  lineIndex.value = getSelection(event, id, index, lineIndex.value, boughtItemsStore)
 }
 </script>
 
@@ -84,7 +78,7 @@ function multiSelect(event: Event, id: number, index: number) {
       v-on:click="multiSelect($event, item.id, index)"
     >
       <TableItemNumber
-        :index="index + boughtItemsStore.page.current * boughtItemsStore.page.limit"
+        :index="index + (boughtItemsStore.page.current - 1) * boughtItemsStore.page.limit"
         :item="item"
         v-model:width="computedColW"
       />

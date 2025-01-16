@@ -18,7 +18,6 @@ import type { ResponseWarning } from '@/models/response'
 
 export const useBoughtItemsStore = defineStore('boughtItems', () => {
   const _filterStore = useBoughtItemFilterStore()
-  const _currentTotalAmount = ref<number>(0)
 
   const loading = ref<boolean>(false)
   const paused = ref<boolean>(false)
@@ -71,17 +70,10 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
           total: response.data.total,
           limit: response.data.limit,
           skip: response.data.skip,
-          pages: response.data.pages == 0 ? 1 : response.data.pages,
-          current: response.data.limit == 0 ? 1 : response.data.skip / response.data.limit,
+          pages: response.data.pages,
+          current: response.data.current,
         }
         console.log('Bought Items store got data from server.')
-
-        if (response.data.total != _currentTotalAmount.value) {
-          console.log('Bought Items store total amount changed.')
-          _currentTotalAmount.value = response.data.total
-          _filterStore.state.skip = 0
-        }
-        
       }
       return response
     })
@@ -99,10 +91,20 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
   }
 
   watch(
-    () =>_filterStore.state.limit,
+    () => _filterStore.state.limit,
     async () => {
-      console.log('Bought Items store limit changed.')
+      console.log('Bought Items store limit value changed.')
       _filterStore.state.skip = 0
+      clear()
+      await get()
+    },
+    { deep: true },
+  )
+
+  watch(
+    () => _filterStore.state,
+    async () => {
+      console.log('Bought Items store value changed.')
       clear()
       await get()
     },

@@ -94,6 +94,12 @@ export const deAT: Language = {
       tools: 'Werkzeuge',
       settings: 'Einstellungen',
     },
+    pagination: {
+      first: 'Erste',
+      previous: 'Vorherige',
+      next: 'Nächste',
+      last: 'Letzte',
+    },
   },
   dashboard: {
     boughtItemStatus: 'Artikel-Status',

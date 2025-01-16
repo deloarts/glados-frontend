@@ -11,7 +11,7 @@ import { useBoughtItemsControlsStore } from '@/stores/controls'
 import Changelog from '@/components/items/bought/Changelog.vue'
 import DataTable from '@/components/items/bought/dataTable/DataTable.vue'
 import Controls from '@/components/items/bought/Controls.vue'
-import ControlsPage from '@/components/items/bought/ControlsPage.vue'
+import ControlsPage from '@/components/common/ControlsPage.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -58,7 +58,7 @@ onMounted(() => {
           <DataTable />
         </div>
         <div id="controls-page" class="controls">
-          <ControlsPage />
+          <ControlsPage :item-store="boughtItemsStore" :filter-store="boughtItemFilterStore" />
         </div>
         <div id="changelog" class="changelog" v-if="controlsStore.state.changelog">
           <Changelog />

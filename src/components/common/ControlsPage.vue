@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
-import { useBoughtItemFilterStore } from '@/stores/filter'
-import { useBoughtItemsStore } from '@/stores/boughtItems'
 import { useResolutionStore } from '@/stores/resolution'
+
+import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
+import type { FilterStoreProtocol } from '@/protocols/filterStoreProtocol'
 
 import ButtonArrowLeft from '@/components/elements/ButtonArrowLeft.vue'
 import ButtonArrowDoubleLeft from '@/components/elements/ButtonArrowDoubleLeft.vue'
@@ -13,10 +14,15 @@ import ButtonArrowDoubleRight from '@/components/elements/ButtonArrowDoubleRight
 import ButtonPage from '@/components/elements/ButtonPage.vue'
 import ButtonItem from '@/components/elements/ButtonItem.vue'
 
+interface Props {
+  itemStore: ItemStoreProtocol
+  filterStore: FilterStoreProtocol
+}
+
+const props = withDefaults(defineProps<Props>(), {})
+
 // Stores
 const languageStore = useLanguageStore()
-const boughtItemsStore = useBoughtItemsStore()
-const filterStore = useBoughtItemFilterStore()
 const resolutionStore = useResolutionStore()
 
 const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
@@ -25,38 +31,43 @@ const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTable
 const showPageButton = ref<boolean>(true)
 
 const buttonFirstPage = computed<string>(() => {
-  return gtMinWidthTablet.value ? 'First' : ''
+  return gtMinWidthTablet.value ? languageStore.l.main.pagination.first : ''
 })
 const buttonLastPage = computed<string>(() => {
-  return gtMinWidthTablet.value ? 'Last' : ''
+  return gtMinWidthTablet.value ? languageStore.l.main.pagination.last : ''
 })
 const buttonPreviousPage = computed<string>(() => {
-  return gtMinWidthTablet.value ? 'Previous' : ''
+  return gtMinWidthTablet.value ? languageStore.l.main.pagination.previous : ''
 })
 const buttonNextPage = computed<string>(() => {
-  return gtMinWidthTablet.value ? 'Next' : ''
+  return gtMinWidthTablet.value ? languageStore.l.main.pagination.next : ''
 })
 const buttonPage = computed<string>(() => {
-  return `${boughtItemsStore.page.current + 1} | ${boughtItemsStore.page.pages}`
+  return `${props.itemStore.page.current} | ${props.itemStore.page.pages}`
 })
 const buttonItem = computed<string>(() => {
-  return `${boughtItemsStore.items.length} | ${boughtItemsStore.page.total}`
+  return `${props.itemStore.items.length} | ${props.itemStore.page.total}`
 })
 
 function onFirstPage() {
-  filterStore.state.skip = 0
-  boughtItemsStore.getItems()
+  props.filterStore.set('skip', 0)
+  props.itemStore.getItems()
 }
 
 function onLastPage() {
-  filterStore.state.skip = Math.floor(boughtItemsStore.page.total / boughtItemsStore.page.limit) * boughtItemsStore.page.limit
-  boughtItemsStore.getItems()
+  let newSkip =
+    Math.floor(props.itemStore.page.total / props.itemStore.page.limit) * props.itemStore.page.limit
+
+  if (newSkip == props.itemStore.page.total) {
+    newSkip -= props.itemStore.page.limit
+  }
+  props.filterStore.set('skip', newSkip)
+  props.itemStore.getItems()
 }
 
 function onNextPage() {
-  // FIXME: Bug on multi page skip
-  let currentLimit = filterStore.state.limit
-  let currentSkip = filterStore.state.skip
+  let currentLimit = props.filterStore.state.limit
+  let currentSkip = props.filterStore.state.skip
 
   if (currentLimit == null) {
     currentLimit = 25
@@ -65,17 +76,17 @@ function onNextPage() {
     currentSkip = 0
   }
 
-  let newSkip = currentSkip + currentLimit
-  if (newSkip > boughtItemsStore.page.total) {
+  let newSkip = +currentSkip + +currentLimit
+  if (newSkip >= props.itemStore.page.total) {
     newSkip = currentSkip
   }
-  filterStore.state.skip = newSkip
-  boughtItemsStore.getItems()
+  props.filterStore.set('skip', newSkip)
+  props.itemStore.getItems()
 }
 
 function onPreviousPage() {
-  let currentLimit = filterStore.state.limit
-  let currentSkip = filterStore.state.skip
+  let currentLimit = props.filterStore.state.limit
+  let currentSkip = props.filterStore.state.skip
 
   if (currentLimit == null) {
     currentLimit = 25
@@ -84,14 +95,13 @@ function onPreviousPage() {
     currentSkip = 0
   }
 
-  let newSkip = currentSkip - currentLimit
+  let newSkip = +currentSkip - +currentLimit
   if (newSkip < 0) {
     newSkip = 0
   }
-  filterStore.state.skip = newSkip
-  boughtItemsStore.getItems()
+  props.filterStore.set('skip', newSkip)
+  props.itemStore.getItems()
 }
-
 </script>
 
 <template>

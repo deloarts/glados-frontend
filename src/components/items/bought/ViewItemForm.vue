@@ -2,6 +2,8 @@
 import { computed } from "vue"
 
 import { useLanguageStore } from '@/stores/language'
+import { useUsersStore } from "@/stores/user";
+import { capitalizeFirstLetter } from "@/helper/string.helper";
 
 import InputPlaceholder from '@/components/elements/InputPlaceholder.vue';
 import TextareaPlaceholder from "@/components/elements/TextareaPlaceholder.vue";
@@ -14,6 +16,7 @@ const props = defineProps<{
 
 // Stores
 const languageStore = useLanguageStore()
+const usersStore = useUsersStore()
 
 // Computed
 const quantityUnit = computed<string>(() => {
@@ -26,6 +29,13 @@ const quantityUnit = computed<string>(() => {
   <div class="form-base-scope">
     <div class="form-base-container">
       <div class="grid">
+        <div id="status" class="grid-item-center">
+          <InputPlaceholder
+            :value="capitalizeFirstLetter(props.itemData.status)"
+            :placeholder="languageStore.l.boughtItem.input.statusPlaceholder"
+            :disabled="true"
+          />
+        </div>
         <div id="project" class="grid-item-center">
           <InputPlaceholder
             :value="props.itemData.project_number"
@@ -89,10 +99,59 @@ const quantityUnit = computed<string>(() => {
             :disabled="true"
           />
         </div>
+        <div id="created" class="grid-item-center">
+          <InputPlaceholder
+            :value="props.itemData.created"
+            :placeholder="languageStore.l.boughtItem.input.createdDate"
+            :disabled="true"
+          />
+        </div>
+        <div id="creator" class="grid-item-center">
+          <InputPlaceholder
+            :value="usersStore.getNameByID(props.itemData.creator_id)"
+            :placeholder="languageStore.l.boughtItem.input.creator"
+            :disabled="true"
+          />
+        </div>
+        <div id="ordered" class="grid-item-center">
+          <InputPlaceholder
+            :value="props.itemData.ordered_date"
+            :placeholder="languageStore.l.boughtItem.input.orderedDate"
+            :disabled="true"
+          />
+        </div>
+        <div id="orderer" class="grid-item-center">
+          <InputPlaceholder
+            :value="usersStore.getNameByID(props.itemData.orderer_id)"
+            :placeholder="languageStore.l.boughtItem.input.orderer"
+            :disabled="true"
+          />
+        </div>
+        <div id="delivered" class="grid-item-center">
+          <InputPlaceholder
+            :value="props.itemData.delivery_date"
+            :placeholder="languageStore.l.boughtItem.input.deliveryDate"
+            :disabled="true"
+          />
+        </div>
+        <div id="receiver" class="grid-item-center">
+          <InputPlaceholder
+            :value="usersStore.getNameByID(props.itemData.receiver_id)"
+            :placeholder="languageStore.l.boughtItem.input.receiver"
+            :disabled="true"
+          />
+        </div>
         <div id="desired" class="grid-item-center">
           <InputPlaceholder
             :value="props.itemData.desired_delivery_date"
             :placeholder="languageStore.l.boughtItem.input.desiredDatePlaceholder"
+            :disabled="true"
+          />
+        </div>
+        <div id="expected" class="grid-item-center">
+          <InputPlaceholder
+            :value="props.itemData.expected_delivery_date"
+            :placeholder="languageStore.l.boughtItem.input.expectedDatePlaceholder"
             :disabled="true"
           />
         </div>
@@ -121,39 +180,74 @@ const quantityUnit = computed<string>(() => {
 @use '@/scss/grid/gridBase.scss';
 
 .grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
-  grid-template-columns: 50px 350px 150px 620px;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+  grid-template-columns: 400px 400px auto;
   grid-template-areas:
-    'project project project note-general'
-    'product-number product-number product-number note-general'
-    'quantity quantity quantity note-general'
-    'partnumber partnumber partnumber note-general'
-    'order-number order-number order-number note-general'
-    'manufacturer manufacturer manufacturer note-supplier'
-    'supplier supplier supplier note-supplier'
-    'group group group note-supplier'
-    'weblink weblink weblink note-supplier'
-    'desired desired desired note-supplier';
+    'status quantity group'
+    'project product-number note-general'
+    'partnumber manufacturer note-general'
+    'order-number supplier note-general'
+    'weblink weblink note-general'
+    'desired expected note-supplier'
+    'created creator note-supplier'
+    'ordered orderer note-supplier'
+    'delivered receiver note-supplier';
 }
 
 @media screen and (max-width: $max-width-desktop) {
   .grid {
-    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 120px 120px;
-    grid-template-columns: 50px auto 150px;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 120px 120px;
+    grid-template-columns: auto;
     grid-template-areas:
-      'project project project'
-      'product-number product-number product-number'
-      'quantity quantity quantity'
-      'partnumber partnumber partnumber'
-      'order-number order-number order-number'
-      'manufacturer manufacturer manufacturer'
-      'supplier supplier supplier'
-      'group group group'
-      'weblink weblink weblink'
-      'desired desired desired'
-      'note-general note-general note-general'
-      'note-supplier note-supplier note-supplier';
+      'status'
+      'project'
+      'product-number'
+      'quantity'
+      'partnumber'
+      'order-number'
+      'manufacturer'
+      'supplier'
+      'group'
+      'weblink'
+      'creator'
+      'created'
+      'orderer'
+      'ordered'
+      'receiver'
+      'delivered'
+      'desired'
+      'expected'
+      'note-general'
+      'note-supplier';
   }
+}
+
+#status {
+  grid-area: status;
+}
+
+#creator {
+  grid-area: creator;
+}
+
+#created {
+  grid-area: created;
+}
+
+#orderer {
+  grid-area: orderer;
+}
+
+#ordered {
+  grid-area: ordered;
+}
+
+#receiver {
+  grid-area: receiver;
+}
+
+#delivered {
+  grid-area: delivered;
 }
 
 #notify {
@@ -210,6 +304,10 @@ const quantityUnit = computed<string>(() => {
 
 #desired {
   grid-area: desired;
+}
+
+#expected {
+  grid-area: expected;
 }
 
 #note-general {

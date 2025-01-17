@@ -233,6 +233,7 @@ export interface Language {
     }
     input: {
       filterPlaceholder: string
+      statusPlaceholder: string
       projectNumberPlaceholder: string
       productNumberPlaceholder: string
       quantityPlaceholder: string
@@ -244,7 +245,14 @@ export interface Language {
       supplierPlaceholder: string
       group1Placeholder: string
       weblinkPlaceholder: string
+      createdDate: string
+      creator: string
+      orderedDate: string
+      orderer: string
+      deliveryDate: string
+      receiver: string
       desiredDatePlaceholder: string
+      expectedDatePlaceholder: string
       noteGeneralPlaceholder: string
       noteSupplierPlaceholder: string
     }

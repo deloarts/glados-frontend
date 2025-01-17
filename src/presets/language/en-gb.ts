@@ -23,6 +23,7 @@ export const enGB: Language = {
         return `Updated project #${id}`
       },
       selectItemFirst: 'Select an item first',
+      onlyViewOneItem: 'You can only view one item',
       onlyEditOneItem: 'You can only edit one item',
       onlyCopyOneItem: 'You can only copy one item',
       onlyDeleteOneItem: 'You can only delete one item',
@@ -80,6 +81,8 @@ export const enGB: Language = {
     screenResolutionNotSupportedSub: 'Please use a device with a higher resolution',
     promptYes: 'Yes',
     promptNo: 'No',
+    buttonClose: 'Close',
+    buttonCopyLink: 'Copy Link',
     login: {
       usernamePlaceholder: 'Username',
       passwordPlaceholder: 'Password',
@@ -275,6 +278,7 @@ export const enGB: Language = {
       exportExcel: 'Export Excel',
       unselect: 'Unselect',
       sync: 'Synchronize',
+      view: 'View Item',
       views: 'Views',
       columns: 'Columns',
       saveFilter: 'Save Filter',

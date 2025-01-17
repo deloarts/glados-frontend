@@ -23,6 +23,7 @@ export const deAT: Language = {
         return `Projekt #${id} wurde aktualisiert`
       },
       selectItemFirst: 'Wähle zuerst einen Artikel aus',
+      onlyViewOneItem: 'Du kannst nur einen Artikel einsehen',
       onlyEditOneItem: 'Du kannst nur einen Artikel bearbeiten',
       onlyCopyOneItem: 'Du kannst nur einen Artikel kopieren',
       onlyDeleteOneItem: 'Du kannst nur einen Artikel löschen',
@@ -80,6 +81,8 @@ export const deAT: Language = {
     screenResolutionNotSupportedSub: 'Das Endgerät verfügt nicht über die nötige Breite',
     promptYes: 'Ja',
     promptNo: 'Nein',
+    buttonClose: 'Schließen',
+    buttonCopyLink: 'Link kopieren',
     login: {
       usernamePlaceholder: 'Benutzername',
       passwordPlaceholder: 'Passwort',
@@ -276,6 +279,7 @@ export const deAT: Language = {
       exportExcel: 'Exportieren',
       unselect: 'Abwählen',
       sync: 'Laden',
+      view: 'Detailansicht',
       views: 'Ansichten',
       columns: 'Spalten',
       saveFilter: 'Speichern',

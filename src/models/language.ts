@@ -15,6 +15,7 @@ export interface Language {
       createdProject: string
       updatedProject: Function
       selectItemFirst: string
+      onlyViewOneItem: string
       onlyEditOneItem: string
       onlyCopyOneItem: string
       onlyDeleteOneItem: string
@@ -62,6 +63,8 @@ export interface Language {
     screenResolutionNotSupportedSub: string
     promptYes: string
     promptNo: string
+    buttonClose: string
+    buttonCopyLink: string
     login: {
       usernamePlaceholder: string
       passwordPlaceholder: string
@@ -256,6 +259,7 @@ export interface Language {
       exportExcel: string
       unselect: string
       sync: string
+      view: string
       views: string
       columns: string
       saveFilter: string

@@ -15,9 +15,11 @@ import ProjectsNewView from "@/views/projectsView/ProjectsNewView.vue";
 import ProjectsEditView from "@/views/projectsView/ProjectsEditView.vue";
 import ProjectsCopyView from "@/views/projectsView/ProjectsCopyView.vue";
 import ItemsBoughtView from "@/views/items/bought/ItemsBoughtView.vue";
+import ItemsBoughtViewerView from "@/views/items/bought/ItemsBoughtViewerView.vue";
 import ItemsBoughtNewView from "@/views/items/bought/ItemsBoughtNewView.vue";
 import ItemsBoughtCopyView from "@/views/items/bought/ItemsBoughtCopyView.vue";
 import ItemsBoughtEditView from "@/views/items/bought/ItemsBoughtEditView.vue";
+import ItemsBoughtNewMultiView from "@/views/items/bought/ItemsBoughtNewMultiView.vue";
 import SettingsHostView from "@/views/settings/SettingsHostView.vue";
 import SettingsLogsView from "@/views/settings/SettingsLogsView.vue";
 import SettingsUsersView from "@/views/settings/SettingsUsersView.vue";
@@ -27,7 +29,6 @@ import AccountUpdateView from "@/views/account/AccountUpdateView.vue";
 import AccountPersonalAccessTokenView from "@/views/account/AccountPersonalAccessTokenView.vue";
 import ToolsStockCut1DView from "@/views/tools/ToolsStockCut1DView.vue";
 import ToolsStockCut2DView from "@/views/tools/ToolsStockCut2DView.vue";
-import ItemsBoughtNewMultiView from "@/views/items/bought/ItemsBoughtNewMultiView.vue";
 
 const router = createRouter({
   // history: createWebHistory(import.meta.env.BASE_URL),
@@ -72,6 +73,11 @@ const router = createRouter({
       path: "/items/bought",
       name: "BoughtItems",
       component: ItemsBoughtView,
+    },
+    {
+      path: "/items/bought/view/:id",
+      name: "ViewBoughtItem",
+      component: ItemsBoughtViewerView,
     },
     {
       path: "/items/bought/new",

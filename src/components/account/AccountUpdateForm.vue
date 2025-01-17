@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 
 import { usersRequest } from '@/requests/users'
 
@@ -7,8 +7,11 @@ import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
+import type { AvailableOption } from '@/models/controls'
 import type { UserUpdateSchema } from '@/schemas/user'
 
+import InputPlaceholder from '@/components/elements/InputPlaceholder.vue'
+import SelectPlaceholder from '@/components/elements/SelectPlaceholder.vue'
 import ButtonUserUpdate from '@/components/elements/ButtonUserUpdate.vue'
 import SelectLanguage from '@/components/elements/SelectLanguage.vue'
 
@@ -23,6 +26,20 @@ const formUserUpdate = ref<UserUpdateSchema>({
   language: userStore.user.language,
 })
 
+// Options
+let availableOptionsLanguage: Array<AvailableOption> = []
+
+function setOptionsLanguage() {
+  const temp = []
+  for (let i = 0; i < languageStore.languageOptions.length; i++) {
+    temp.push({
+      text: `${languageStore.languageOptions[i].text}`,
+      value: languageStore.languageOptions[i].value,
+    })
+  }
+  availableOptionsLanguage = temp
+}
+
 function updateUser() {
   usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
     if (response.status == 200) {
@@ -36,6 +53,10 @@ function updateUser() {
     }
   })
 }
+
+onBeforeMount(() => {
+  setOptionsLanguage()
+})
 </script>
 
 <template>
@@ -43,37 +64,37 @@ function updateUser() {
     <div class="form-base-container">
       <div id="grid">
         <div id="username" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formUserUpdate.username"
-            type="text"
+          <InputPlaceholder
+            v-model:value="formUserUpdate.username"
             :placeholder="languageStore.l.account.input.usernamePlaceholder"
-            readonly
+            :disabled="true"
           />
         </div>
         <div id="full-name" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formUserUpdate.full_name"
+          <InputPlaceholder
+            v-model:value="formUserUpdate.full_name"
             :placeholder="languageStore.l.account.input.fullNamePlaceholder"
           />
         </div>
         <div id="email" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formUserUpdate.email"
+          <InputPlaceholder
+            v-model:value="formUserUpdate.email"
             :placeholder="languageStore.l.account.input.emailPlaceholder"
           />
         </div>
         <div id="password" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formUserUpdate.password"
+          <InputPlaceholder
+            v-model:value="formUserUpdate.password"
             :placeholder="languageStore.l.account.input.passwordPlaceholder"
           />
         </div>
-        <div id="language">
-          <SelectLanguage v-model:selection="formUserUpdate.language" />
+        <div id="language" class="grid-item-center">
+          <SelectPlaceholder
+            v-model:value="formUserUpdate.language"
+            v-bind:options-active="availableOptionsLanguage"
+            v-bind:options-inactive="[]"
+            :placeholder="languageStore.l.account.input.languagePlaceholder"
+          />
         </div>
         <div id="btn">
           <ButtonUserUpdate v-on:click="updateUser" :text="languageStore.l.account.button.save" />
@@ -88,7 +109,7 @@ function updateUser() {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px auto;
+  grid-template-rows: 50px 50px 50px 50px 50px auto;
   grid-template-columns: 50px auto;
   grid-template-areas:
     'username username'

@@ -8,6 +8,7 @@ import { usersRequest } from '@/requests/users'
 import type { UserCreateSchema } from '@/schemas/user'
 
 import Toggle from '@vueform/toggle'
+import InputPlaceholder from '@/components/elements/InputPlaceholder.vue'
 import ButtonUserCreate from '@/components/elements/ButtonUserCreate.vue'
 
 // Stores
@@ -83,38 +84,36 @@ function createUser() {
           {{ languageStore.l.settings.users.toggle.active }}
         </div>
         <div id="username" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formData.username"
-            type="text"
+          <InputPlaceholder
+            v-model:value="formData.username"
             :placeholder="languageStore.l.settings.users.input.usernamePlaceholder"
+            :required="true"
           />
         </div>
         <div id="full-name" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formData.full_name"
+          <InputPlaceholder
+            v-model:value="formData.full_name"
             :placeholder="languageStore.l.settings.users.input.fullNamePlaceholder"
+            :required="true"
           />
         </div>
         <div id="email" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formData.email"
+          <InputPlaceholder
+            v-model:value="formData.email"
             :placeholder="languageStore.l.settings.users.input.mailPlaceholder"
+            :required="true"
           />
         </div>
         <div id="password" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formData.password"
+          <InputPlaceholder
+            v-model:value="formData.password"
             :placeholder="languageStore.l.settings.users.input.passwordPlaceholder"
+            :required="true"
           />
         </div>
         <div id="rfid" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="formData.rfid"
+          <InputPlaceholder
+            v-model:value="formData.rfid"
             :placeholder="languageStore.l.settings.users.input.rfidPlaceholder"
           />
         </div>
@@ -134,7 +133,7 @@ function createUser() {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 40px 35px 35px 35px 35px 40px;
+  grid-template-rows: 50px 50px 50px 50px 50px 25px 25px 25px 25px 50px;
   grid-template-columns: 50px auto;
   grid-template-areas:
     'username username'

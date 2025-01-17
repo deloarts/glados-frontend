@@ -138,6 +138,7 @@ export interface Language {
       fullNamePlaceholder: string
       emailPlaceholder: string
       passwordPlaceholder: string
+      languagePlaceholder: string
       patPlaceholder: string
     }
   }
@@ -235,6 +236,7 @@ export interface Language {
       projectNumberPlaceholder: string
       productNumberPlaceholder: string
       quantityPlaceholder: string
+      unitPlaceholder: string
       namePlaceholder: string
       partnumberPlaceholder: string
       orderNumberPlaceholder: string

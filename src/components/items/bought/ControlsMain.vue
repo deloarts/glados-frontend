@@ -249,49 +249,52 @@ onBeforeMount(setupTabletView)
 
 <template>
   <div class="controls-base-scope">
-    <div id="item-controls" v-if="!is_guestuser" class="controls-base-container">
+    <div id="item-controls" class="controls-base-container">
       <ButtonItemCreate
+        v-if="!is_guestuser"
         class="controls-base-element"
         v-model:text="buttonItemCreateText"
         v-on:click="onButtonNewItem"
       />
       <ButtonItemCreate
+        v-if="gtMinWidthDesktop && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.batchCreate"
-        v-if="gtMinWidthDesktop"
         v-on:click="onButtonBatchCreate"
       />
       <ButtonExcel
-        v-if="gtMinWidthDesktop"
+        v-if="gtMinWidthDesktop && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.exportExcel"
         v-on:click="onButtonDownloadExcel"
       />
       <ButtonEdit
+        v-if="!is_guestuser"
         class="controls-base-element"
         v-model:text="buttonItemEditText"
         v-on:click="onButtonEdit"
       />
       <ButtonCopy
+        v-if="!is_guestuser"
         class="controls-base-element"
         v-model:text="buttonItemCopyText"
         v-on:click="onButtonCopy"
       />
       <ButtonDelete
-        v-if="gtMinWidthTablet"
+        v-if="gtMinWidthTablet && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.deleteItem"
         v-on:click="onButtonDelete"
-      />
-      <ButtonClear
-        class="controls-base-element"
-        :text="languageStore.l.boughtItem.button.unselect"
-        v-on:click="onButtonClear"
       />
       <ButtonView
         class="controls-base-element"
         :text="buttonViewText"
         v-on:click="onButtonView"
+      />
+      <ButtonClear
+        class="controls-base-element"
+        :text="languageStore.l.boughtItem.button.unselect"
+        v-on:click="onButtonClear"
       />
     </div>
     <div id="filter-controls" class="controls-base-container">

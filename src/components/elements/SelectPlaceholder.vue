@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { computed } from "vue"
 
+import type { AvailableOption } from '@/models/controls'
+
 interface Props {
   value: number | string | Date | null | undefined
+  optionsActive: Array<AvailableOption>
+  optionsInactive?: Array<AvailableOption> | null | undefined
   placeholder: string
-  type?: string
   required?: boolean
   disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  type: 'text',
   required: false,
   disabled: false
 })
@@ -32,12 +34,32 @@ const placeholderText = computed<string>(() => {
   return props.required ? `${props.placeholder} *` : `${props.placeholder}`
 })
 
+function onChange(event: Event) {
+  emit('update:value', (event.target as HTMLSelectElement).value)
+}
+
 </script>
 
 <template>
   <div class="scope">
     <p>
-      <input v-model="computedValue" :type="props.type" :disabled="props.disabled" />
+      <select v-model="computedValue" @change="onChange">
+        <option value="null" disabled selected hidden>
+          {{ props.placeholder }}
+        </option>
+        <option v-for="option in props.optionsActive" :key="option.text" :value="option.value">
+          {{ option.text }}
+        </option>
+        <option
+          hidden
+          disabled
+          v-for="option in props.optionsInactive"
+          :key="option.text"
+          :value="option.value"
+        >
+          {{ option.text }}
+        </option>
+      </select>
       <span>{{ placeholderText }} </span>
     </p>
   </div>
@@ -90,7 +112,7 @@ span {
   font-size: 12px;
 }
 
-input {
+select {
   width: calc(100% - 15px);
   height: calc(100% - 12px);
 
@@ -115,11 +137,11 @@ input {
   transition: all 0.2s ease;
 }
 
-input:hover {
+select:hover {
   background-color: var(--main-background-color-hover);
 }
 
-input:focus {
+select:focus {
   border-color: var(--main-color);
 }
 </style>

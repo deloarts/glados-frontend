@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { watch, computed } from 'vue'
+import { watch, computed, onBeforeMount } from 'vue'
 import Toggle from '@vueform/toggle'
 
 import { useLanguageStore } from '@/stores/language'
 import { useUsersStore, useUserStore } from '@/stores/user'
 
+import type { AvailableOption } from '@/models/controls'
 import type { ProjectCreateSchema } from '@/schemas/project'
 
-import SelectUser from '@/components/elements/SelectUser.vue'
+import InputPlaceholder from '@/components/elements/InputPlaceholder.vue'
+import SelectPlaceholder from '@/components/elements/SelectPlaceholder.vue'
 
 // Props & Emits
 const props = defineProps<{
@@ -26,6 +28,22 @@ const languageStore = useLanguageStore()
 const userStore = useUserStore()
 const usersStore = useUsersStore()
 
+// Options
+let availableOptionsUsers: Array<AvailableOption> = []
+
+function setOptionsUsers() {
+  const temp = []
+  for (let i = 0; i < usersStore.users.length; i++) {
+    if (usersStore.users[i].is_active) {
+      temp.push({
+        text: `${usersStore.users[i].full_name} (${usersStore.users[i].email})`,
+        value: usersStore.users[i].id.toString(),
+      })
+    }
+  }
+  availableOptionsUsers = temp
+}
+
 watch(
   () => createFormData,
   () => {
@@ -33,6 +51,10 @@ watch(
   },
   { deep: true },
 )
+
+onBeforeMount(() => {
+  setOptionsUsers()
+})
 </script>
 
 <template>
@@ -40,45 +62,52 @@ watch(
     <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.number"
+          <InputPlaceholder
+            v-model:value="createFormData.number"
             :placeholder="languageStore.l.project.input.projectNumberPlaceholder"
+            :required="true"
           />
         </div>
         <div id="product-number" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.product_number"
+          <InputPlaceholder
+            v-model:value="createFormData.product_number"
             :placeholder="languageStore.l.project.input.productNumberPlaceholder"
           />
         </div>
         <div id="customer" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.customer"
+          <InputPlaceholder
+            v-model:value="createFormData.customer"
             :placeholder="languageStore.l.project.input.customerPlaceholder"
+            :required="true"
           />
         </div>
         <div id="description" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.description"
+          <InputPlaceholder
+            v-model:value="createFormData.description"
             :placeholder="languageStore.l.project.input.descriptionPlaceholder"
+            :required="true"
           />
         </div>
         <div id="designated" class="grid-item-center">
-          <SelectUser
+          <SelectPlaceholder
             v-if="
               userStore.user.is_superuser ||
               userStore.user.is_adminuser ||
               userStore.user.is_systemuser
             "
-            v-model:selection="createFormData.designated_user_id"
-            :options="usersStore.users"
+            v-model:value="createFormData.designated_user_id"
+            v-bind:options-active="availableOptionsUsers"
+            v-bind:options-inactive="[]"
             :placeholder="languageStore.l.project.input.designateUserPlaceholder"
+            :required="true"
+          />      
+          <InputPlaceholder
+            v-else
+            :value="userStore.user.full_name"
+            :placeholder="languageStore.l.project.input.designateUserPlaceholder"
+            :required="true"
+            :disabled="true"
           />
-          <input v-else class="form-base-text-input" :value="userStore.user.full_name" disabled />
         </div>
         <div id="active" class="grid-item-center">
           <Toggle v-model="createFormData.is_active"></Toggle>
@@ -96,7 +125,7 @@ watch(
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 40px 25px;
+  grid-template-rows: 50px 50px 50px 50px 50px 25px;
   grid-template-columns: 50px auto 150px;
   grid-template-areas:
     'project project project'
@@ -104,7 +133,12 @@ watch(
     'customer customer customer'
     'description description description'
     'designated designated designated'
+    'empty empty empty'
     'active active-text active-text';
+}
+
+#empty {
+  grid-area: empty;
 }
 
 #project {

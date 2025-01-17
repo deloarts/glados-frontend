@@ -60,7 +60,7 @@ onBeforeMount(() => {
         <div class="grid-area-data">
           <ViewItemForm v-model:item-data="itemData" />
         </div>
-        <div class="grid-area-changelog">
+        <div class="grid-area-changelog-view">
           <Changelog v-model:item-id="itemId" />
         </div>
       </div>
@@ -74,11 +74,11 @@ onBeforeMount(() => {
 
 .grid {
   grid-template-columns: 100%;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto 250px;
   grid-template-areas:
     'grid-area-controls'
     'grid-area-data'
-    'grid-area-changelog';
+    'grid-area-changelog-view';
 }
 
 .grid-area-controls {
@@ -89,7 +89,7 @@ onBeforeMount(() => {
   grid-area: grid-area-data;
 }
 
-.grid-area-changelog {
-  grid-area: grid-area-changelog;
+.grid-area-changelog-view {
+  grid-area: grid-area-changelog-view;
 }
 </style>

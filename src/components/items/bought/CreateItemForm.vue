@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onBeforeMount } from 'vue'
-import moment from 'moment'
 import Toggle from '@vueform/toggle'
-import Datepicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
 
 import config from '@/config'
 import { useLanguageStore } from '@/stores/language'
-import { useUserStore } from '@/stores/user'
 import { useUnitsStore } from '@/stores/units'
 import { useProjectsStore } from '@/stores/projects'
 
 import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
 import type { AvailableOption } from '@/models/controls'
 
-import SelectBase from '@/components/elements/SelectBase.vue'
-import SelectProject from '@/components/elements/SelectProject.vue'
+import InputPlaceholder from '@/components/elements/InputPlaceholder.vue';
+import TextareaPlaceholder from "@/components/elements/TextareaPlaceholder.vue";
+import SelectPlaceholder from '@/components/elements/SelectPlaceholder.vue'
+import DatepickerPlaceholder from '@/components/elements/DatepickerPlaceholder.vue'
 
 // Props & Emits
 const props = defineProps<{
@@ -40,21 +38,11 @@ const namePlaceholder = computed<string>(() => {
 
 // Stores
 const languageStore = useLanguageStore()
-const userStore = useUserStore()
 const unitStore = useUnitsStore()
 const projectsStore = useProjectsStore()
 
 // Options
 let availableOptionsProjects: Array<AvailableOption> = []
-
-// Dates
-const pickedDesiredDate = ref<Date | null>(null)
-const formatDesiredDate = (pickedDesiredDate: Date) => {
-  const day = pickedDesiredDate.getDate()
-  const month = pickedDesiredDate.getMonth() + 1
-  const year = pickedDesiredDate.getFullYear()
-  return `${day}.${month}.${year}`
-}
 
 function setOptionsProjects() {
   const temp = []
@@ -70,15 +58,15 @@ function setOptionsProjects() {
 }
 
 // Form stuff
-const name = ref('')
+const itemName = ref('')
 
 function buildPartnumber() {
   let partnumber = ''
   if (config.items.nameIsPartnumber) {
-    partnumber = name.value
+    partnumber = itemName.value
   } else {
     partnumber =
-      name.value +
+    itemName.value +
       ' - ' +
       createFormData.value.order_number +
       ' - ' +
@@ -95,31 +83,19 @@ watch(
   () => createFormData,
   () => {
     const data = createFormData.value
-    if (data.desired_delivery_date != null && data.desired_delivery_date != undefined) {
-      const date = Date.parse(String(data.desired_delivery_date))
-      pickedDesiredDate.value = new Date(date)
-    }
     buildPartnumber()
     emit('update:formData', data)
   },
   { deep: true },
 )
 
-watch(name, () => {
+watch(itemName, () => {
   buildPartnumber()
 })
 
-watch(pickedDesiredDate, () => {
-  const data = createFormData.value
-  if (pickedDesiredDate.value instanceof Date) {
-    data.desired_delivery_date = moment(pickedDesiredDate.value).format('YYYY-MM-DD')
-  } else {
-    data.desired_delivery_date = null
-  }
-  emit('update:formData', data)
+onBeforeMount(() => {
+  setOptionsProjects()
 })
-
-onBeforeMount(setOptionsProjects)
 
 onMounted(() => {
   if (unitStore.boughtItemUnits.default) {
@@ -133,95 +109,93 @@ onMounted(() => {
     <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <SelectProject
-            v-model:selection="createFormData.project_id"
-            :options-active="availableOptionsProjects"
-            :options-inactive="[]"
+          <SelectPlaceholder
+            v-model:value="createFormData.project_id"
+            v-bind:options-active="availableOptionsProjects"
+            v-bind:options-inactive="[]"
+            :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
+            :required="true"
           />
         </div>
         <div id="product-number" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-bind:value="projectsStore.getProductNumber(createFormData.project_id)"
+          <InputPlaceholder
+            :value="projectsStore.getProductNumber(createFormData.project_id)"
             :placeholder="languageStore.l.boughtItem.input.productNumberPlaceholder"
-            readonly
+            :disabled="true"
           />
         </div>
         <div id="quantity" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.quantity"
-            type="number"
+          <InputPlaceholder
+            v-model:value="createFormData.quantity"
             :placeholder="languageStore.l.boughtItem.input.quantityPlaceholder"
+            :required="true"
+            type="number"
           />
         </div>
         <div id="unit" class="grid-item-center">
-          <SelectBase
-            v-model:selection="createFormData.unit"
-            :options="unitStore.boughtItemUnits.values"
+          <SelectPlaceholder
+            v-model:value="createFormData.unit"
+            v-bind:options-active="unitStore.boughtItemUnits.values.map(value => ({ text: value, value }))"
+            v-bind:options-inactive="[]"
+            :placeholder="languageStore.l.boughtItem.input.unitPlaceholder"
           />
         </div>
         <div id="name" class="grid-item-center">
-          <input class="form-base-text-input" v-model="name" :placeholder="namePlaceholder" />
+          <InputPlaceholder
+            v-model:value="itemName"
+            :placeholder="namePlaceholder"
+            :required="true"
+          />
         </div>
         <div id="order-number" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.order_number"
+          <InputPlaceholder
+            v-model:value="createFormData.order_number"
             :placeholder="languageStore.l.boughtItem.input.orderNumberPlaceholder"
+            :required="true"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.manufacturer"
+          <InputPlaceholder
+            v-model:value="createFormData.manufacturer"
             :placeholder="languageStore.l.boughtItem.input.manufacturerPlaceholder"
+            :required="true"
           />
         </div>
         <div id="supplier" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.supplier"
+          <InputPlaceholder
+            v-model:value="createFormData.supplier"
             :placeholder="languageStore.l.boughtItem.input.supplierPlaceholder"
           />
         </div>
         <div id="group" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.group_1"
+          <InputPlaceholder
+            v-model:value="createFormData.group_1"
             :placeholder="languageStore.l.boughtItem.input.group1Placeholder"
           />
         </div>
         <div id="weblink" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="createFormData.weblink"
+          <InputPlaceholder
+            v-model:value="createFormData.weblink"
             :placeholder="languageStore.l.boughtItem.input.weblinkPlaceholder"
           />
         </div>
         <div id="desired" class="grid-item-center">
-          <Datepicker
-            class="form-base-date-input"
-            v-model="pickedDesiredDate"
-            :format="formatDesiredDate"
-            :clearable="true"
+          <DatepickerPlaceholder
+            v-model:value="createFormData.desired_delivery_date"
             :placeholder="languageStore.l.boughtItem.input.desiredDatePlaceholder"
-            :dark="userStore.user.theme == 'dark'"
           />
         </div>
         <div id="note-general" class="grid-item-center">
-          <textarea
-            class="form-base-text-input-multiline"
-            v-model="createFormData.note_general"
+          <TextareaPlaceholder
+            v-model:value="createFormData.note_general"
             :placeholder="languageStore.l.boughtItem.input.noteGeneralPlaceholder"
-          ></textarea>
+          />
         </div>
         <div id="note-supplier" class="grid-item-center">
-          <textarea
-            class="form-base-text-input-multiline"
-            v-model="createFormData.note_supplier"
+          <TextareaPlaceholder
+            v-model:value="createFormData.note_supplier"
             :placeholder="languageStore.l.boughtItem.input.noteSupplierPlaceholder"
-          ></textarea>
+          />
         </div>
         <div id="notify" class="grid-item-center">
           <Toggle v-model="createFormData.notify_on_delivery"></Toggle>
@@ -246,7 +220,7 @@ onMounted(() => {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 25px 25px;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 10px 25px 25px;
   grid-template-columns: 50px 350px 150px 620px;
   grid-template-areas:
     'project project project note-general'
@@ -259,13 +233,14 @@ onMounted(() => {
     'group group group note-supplier'
     'weblink weblink weblink note-supplier'
     'desired desired desired note-supplier'
+    'empty empty empty empty'
     'notify notify-text notify-text notify-text'
     'priority priority-text priority-text priority-text';
 }
 
 @media screen and (max-width: $max-width-desktop) {
   #grid {
-    grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 120px 120px 25px 25px;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 120px 120px 10px 25px 25px;
     grid-template-columns: 50px auto 150px;
     grid-template-areas:
       'project project project'
@@ -280,9 +255,14 @@ onMounted(() => {
       'desired desired desired'
       'note-general note-general note-general'
       'note-supplier note-supplier note-supplier'
+      'empty empty empty'
       'notify notify-text notify-text'
       'priority priority-text priority-text';
   }
+}
+
+#empty {
+  grid-area: empty;
 }
 
 #notify {
@@ -347,13 +327,9 @@ onMounted(() => {
 
 #note-general {
   grid-area: note-general;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 #note-supplier {
   grid-area: note-supplier;
-  padding-top: 10px;
-  padding-bottom: 15px;
 }
 </style>

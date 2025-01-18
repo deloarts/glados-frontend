@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 
 interface Props {
   value: number | string | Date | null | undefined
@@ -7,6 +7,7 @@ interface Props {
   type?: string
   required?: boolean
   disabled?: boolean
+  tooltip?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,9 +29,10 @@ const computedValue = computed<number | string | Date | null | undefined>({
   },
 })
 
-const placeholderText = computed<string>(() => {
-  return props.required ? `${props.placeholder} *` : `${props.placeholder}`
+const labelText = computed<string>(() => {
+  return showTooltip.value && props.tooltip ? props.tooltip : props.placeholder
 })
+const showTooltip = ref<boolean>(false)
 </script>
 
 <template>
@@ -42,7 +44,14 @@ const placeholderText = computed<string>(() => {
         :type="props.type"
         :disabled="props.disabled"
       />
-      <span class="labeled-label">{{ placeholderText }} </span>
+      <div
+        class="labeled-label"
+        v-bind:class="{ 'labeled-label-tooltip': tooltip }"
+        @click="showTooltip = !showTooltip"
+        @mouseout="showTooltip = false"
+      >
+        {{ labelText }}
+      </div>
     </div>
   </div>
 </template>

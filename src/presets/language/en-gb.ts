@@ -507,4 +507,7 @@ export const enGB: Language = {
       },
     },
   },
+  tooltips: {
+    productNumberIsFromProject: 'The product number is loaded from the project',
+  },
 }

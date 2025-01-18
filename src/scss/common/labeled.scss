@@ -16,17 +16,19 @@
 }
 
 .labeled-label {
-  width: max-content;
+  // display: block;
+
+  width: fit-content;
   height: min-content;
+
+  overflow: hidden;
 
   padding: 2px;
   padding-left: 8px;
   padding-right: 8px;
   margin: 0;
 
-  pointer-events: none;
   position: absolute;
-
   left: 0px;
   top: 1px;
 
@@ -41,6 +43,10 @@
   background-color: var(--input-background);
   font-family: var(--main-font-head);
   font-size: 12px;
+}
+
+.labeled-label-tooltip {
+  cursor: help;
 }
 
 .labeled-input {

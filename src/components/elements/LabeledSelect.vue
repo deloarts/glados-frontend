@@ -59,7 +59,7 @@ function onChange(event: Event) {
           {{ option.text }}
         </option>
       </select>
-      <span class="labeled-label">{{ placeholderText }} </span>
+      <div class="labeled-label">{{ placeholderText }}</div>
     </div>
   </div>
 </template>

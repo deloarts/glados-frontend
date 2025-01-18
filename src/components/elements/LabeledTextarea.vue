@@ -42,7 +42,7 @@ const placeholderText = computed<string>(() => {
         :type="props.type"
         :disabled="props.disabled"
       ></textarea>
-      <span class="labeled-label">{{ placeholderText }} </span>
+      <div class="labeled-label">{{ placeholderText }}</div>
     </div>
   </div>
 </template>

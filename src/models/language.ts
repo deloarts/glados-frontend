@@ -487,4 +487,7 @@ export interface Language {
       }
     }
   }
+  tooltips: {
+    productNumberIsFromProject: string
+  }
 }

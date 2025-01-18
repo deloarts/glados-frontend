@@ -509,4 +509,7 @@ export const deAT: Language = {
       },
     },
   },
+  tooltips: {
+    productNumberIsFromProject: 'Die Produktnummer wird vom Projekt geladen',
+  },
 }

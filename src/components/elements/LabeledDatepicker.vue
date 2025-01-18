@@ -70,7 +70,7 @@ watch(pickedDesiredDate, () => {
           :dark="userStore.user.theme == 'dark'"
         />
       </div>
-      <span class="labeled-label">{{ placeholderText }} </span>
+      <div class="labeled-label">{{ placeholderText }}</div>
     </div>
   </div>
 </template>

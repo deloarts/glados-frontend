@@ -122,6 +122,7 @@ onMounted(() => {
             :value="projectsStore.getProductNumber(createFormData.project_id)"
             :placeholder="languageStore.l.boughtItem.input.productNumberPlaceholder"
             :disabled="true"
+            :tooltip="languageStore.l.tooltips.productNumberIsFromProject"
           />
         </div>
         <div id="quantity" class="grid-item-center">

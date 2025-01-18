@@ -43,7 +43,7 @@
 }
 
 .form-base-text-input:hover {
-  background-color: var(--main-background-color-hover);
+  border-color: var(--input-border-color-hover);
 }
 
 .form-base-text-input:focus {
@@ -57,6 +57,7 @@
   color: var(--main-text-color);
   background-color: var(--input-background);
 
+  font-family: var(--main-font-text);
   font-size: 1.15em;
 
   padding: 10px;
@@ -75,7 +76,7 @@
 }
 
 .form-base-text-input-multiline:hover {
-  background-color: var(--main-background-color-hover);
+  border-color: var(--input-border-color-hover);
 }
 
 .form-base-text-input-multiline:focus {

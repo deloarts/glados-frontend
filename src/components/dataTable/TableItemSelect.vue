@@ -153,12 +153,12 @@ select::-ms-expand {
 }
 
 select > option {
-  color: var(--main-text-color);
+  color: white;
   background-color: var(--main-color);
 }
 
 select > option:hover {
-  color: var(--main-text-color);
+  color: white;
   background-color: var(--main-color-hover);
 }
 

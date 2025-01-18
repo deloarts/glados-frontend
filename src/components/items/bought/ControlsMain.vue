@@ -26,6 +26,7 @@ import ButtonFilterClear from '@/components/elements/ButtonFilterClear.vue'
 import ButtonFilterSave from '@/components/elements/ButtonFilterSave.vue'
 import ButtonFilterLoad from '@/components/elements/ButtonFilterLoad.vue'
 import ButtonClear from '@/components/elements/ButtonClear.vue'
+import ButtonView from '@/components/elements/ButtonView.vue'
 import ButtonShowInitial from '@/components/elements/ButtonShowInitial.vue'
 import DropDownTableView from '@/components/elements/DropDownTableView.vue'
 import DropDownTableColumns from '@/components/elements/DropDownTableColumns.vue'
@@ -61,6 +62,9 @@ const buttonItemCopyText = computed<string>(() => {
 })
 const buttonSyncText = computed<string>(() => {
   return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.sync : ''
+})
+const buttonViewText = computed<string>(() => {
+  return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.view : ''
 })
 const buttonViewsText = computed<string>(() => {
   return gtMinWidthTablet.value ? languageStore.l.boughtItem.button.views : ''
@@ -134,6 +138,16 @@ function clearFilter() {
 
 function onButtonNewItem() {
   router.push({ name: 'NewBoughtItem' })
+}
+
+function onButtonView() {
+  if (boughtItemsStore.getSelection().length == 0) {
+    notificationStore.addInfo(languageStore.l.notification.info.selectItemFirst)
+  } else if (boughtItemsStore.getSelection().length != 1) {
+    notificationStore.addInfo(languageStore.l.notification.info.onlyViewOneItem)
+  } else {
+    router.push(`/items/bought/view/${boughtItemsStore.getSelection()[0]}`)
+  }
 }
 
 function onButtonEdit() {
@@ -235,39 +249,47 @@ onBeforeMount(setupTabletView)
 
 <template>
   <div class="controls-base-scope">
-    <div id="item-controls" v-if="!is_guestuser" class="controls-base-container">
+    <div id="item-controls" class="controls-base-container">
       <ButtonItemCreate
+        v-if="!is_guestuser"
         class="controls-base-element"
         v-model:text="buttonItemCreateText"
         v-on:click="onButtonNewItem"
       />
       <ButtonItemCreate
+        v-if="gtMinWidthDesktop && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.batchCreate"
-        v-if="gtMinWidthDesktop"
         v-on:click="onButtonBatchCreate"
       />
       <ButtonExcel
-        v-if="gtMinWidthDesktop"
+        v-if="gtMinWidthDesktop && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.exportExcel"
         v-on:click="onButtonDownloadExcel"
       />
       <ButtonEdit
+        v-if="!is_guestuser"
         class="controls-base-element"
         v-model:text="buttonItemEditText"
         v-on:click="onButtonEdit"
       />
       <ButtonCopy
+        v-if="!is_guestuser"
         class="controls-base-element"
         v-model:text="buttonItemCopyText"
         v-on:click="onButtonCopy"
       />
       <ButtonDelete
-        v-if="gtMinWidthTablet"
+        v-if="gtMinWidthTablet && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.deleteItem"
         v-on:click="onButtonDelete"
+      />
+      <ButtonView
+        class="controls-base-element"
+        :text="buttonViewText"
+        v-on:click="onButtonView"
       />
       <ButtonClear
         class="controls-base-element"

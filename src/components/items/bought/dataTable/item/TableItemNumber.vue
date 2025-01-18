@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import type { BoughtItemSchema } from "@/schemas/boughtItem";
+import { computed} from "vue"
 
+import config from "@/config";
 import TableItemRowNumber from "@/components/dataTable/TableItemRowNumber.vue";
 
-import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import type { BoughtItemSchema } from "@/schemas/boughtItem";
 
+import { boughtItemColumnWidths } from "@/presets/columnWidth";
 import { useBoughtItemsControlsStore } from "@/stores/controls";
 
 const controlsStore = useBoughtItemsControlsStore();
@@ -14,13 +16,18 @@ const props = defineProps<{
   item: BoughtItemSchema;
   width: typeof boughtItemColumnWidths;
 }>();
+
+const copyUrl = computed<string>(() => {
+  return `${config.url.domain}/#/items/bought/view/${props.item.id}`;
+});
+
 </script>
 
 <template>
   <TableItemRowNumber
     :number="index + 1"
     :id="item.id"
-    copy-url="items/bought"
+    :copy-url="copyUrl"
     v-model:width="props.width.number"
     :fixed-height="controlsStore.state.fixedHeight"
   />

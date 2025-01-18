@@ -3,6 +3,8 @@ import { ref, watch, computed } from 'vue'
 import moment from 'moment'
 import Datepicker from '@vuepic/vue-datepicker'
 
+import LabeledLabel from './LabeledLabel.vue'
+
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
@@ -13,6 +15,7 @@ interface Props {
   type?: string
   required?: boolean
   disabled?: boolean
+  tooltip?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -31,10 +34,6 @@ const formatDesiredDate = (pickedDesiredDate: Date) => {
   const year = pickedDesiredDate.getFullYear()
   return `${day}.${month}.${year}`
 }
-
-const placeholderText = computed<string>(() => {
-  return props.required ? `${props.placeholder} *` : `${props.placeholder}`
-})
 
 watch(
   () => props.value,
@@ -70,7 +69,7 @@ watch(pickedDesiredDate, () => {
           :dark="userStore.user.theme == 'dark'"
         />
       </div>
-      <div class="labeled-label">{{ placeholderText }}</div>
+      <LabeledLabel :value="props.placeholder" :tooltip="props.tooltip" />
     </div>
   </div>
 </template>

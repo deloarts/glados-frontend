@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import LabeledLabel from './LabeledLabel.vue'
 
 interface Props {
   value: number | string | null | undefined
@@ -7,6 +8,7 @@ interface Props {
   type?: string
   required?: boolean
   disabled?: boolean
+  tooltip?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -27,10 +29,6 @@ const computedValue = computed<number | string | null | undefined>({
     return newValue
   },
 })
-
-const placeholderText = computed<string>(() => {
-  return props.required ? `${props.placeholder} *` : `${props.placeholder}`
-})
 </script>
 
 <template>
@@ -42,7 +40,7 @@ const placeholderText = computed<string>(() => {
         :type="props.type"
         :disabled="props.disabled"
       ></textarea>
-      <div class="labeled-label">{{ placeholderText }}</div>
+      <LabeledLabel :value="props.placeholder" :tooltip="props.tooltip" />
     </div>
   </div>
 </template>

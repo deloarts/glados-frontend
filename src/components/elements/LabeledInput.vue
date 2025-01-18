@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import LabeledLabel from './LabeledLabel.vue'
 
 interface Props {
   value: number | string | Date | null | undefined
@@ -28,11 +29,6 @@ const computedValue = computed<number | string | Date | null | undefined>({
     return newValue
   },
 })
-
-const labelText = computed<string>(() => {
-  return showTooltip.value && props.tooltip ? props.tooltip : props.placeholder
-})
-const showTooltip = ref<boolean>(false)
 </script>
 
 <template>
@@ -44,14 +40,7 @@ const showTooltip = ref<boolean>(false)
         :type="props.type"
         :disabled="props.disabled"
       />
-      <div
-        class="labeled-label"
-        v-bind:class="{ 'labeled-label-tooltip': tooltip }"
-        @click="showTooltip = !showTooltip"
-        @mouseout="showTooltip = false"
-      >
-        {{ labelText }}
-      </div>
+      <LabeledLabel :value="props.placeholder" :tooltip="props.tooltip" />
     </div>
   </div>
 </template>

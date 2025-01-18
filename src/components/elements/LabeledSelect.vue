@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import LabeledLabel from './LabeledLabel.vue'
 
 import type { AvailableOption } from '@/models/controls'
 
@@ -10,6 +11,7 @@ interface Props {
   placeholder: string
   required?: boolean
   disabled?: boolean
+  tooltip?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,10 +30,6 @@ const computedValue = computed<number | string | Date | null | undefined>({
     emit('update:value', newValue)
     return newValue
   },
-})
-
-const placeholderText = computed<string>(() => {
-  return props.required ? `${props.placeholder} *` : `${props.placeholder}`
 })
 
 function onChange(event: Event) {
@@ -59,7 +57,7 @@ function onChange(event: Event) {
           {{ option.text }}
         </option>
       </select>
-      <div class="labeled-label">{{ placeholderText }}</div>
+      <LabeledLabel :value="props.placeholder" :tooltip="props.tooltip" />
     </div>
   </div>
 </template>

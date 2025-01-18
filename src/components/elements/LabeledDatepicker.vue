@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue"
+import { ref, watch, computed } from 'vue'
 import moment from 'moment'
 import Datepicker from '@vuepic/vue-datepicker'
 
@@ -18,7 +18,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   required: false,
-  disabled: false
+  disabled: false,
 })
 const emit = defineEmits<{
   (e: 'update:value', v: Date | null | undefined): void
@@ -57,13 +57,12 @@ watch(pickedDesiredDate, () => {
   }
   emit('update:value', newValue)
 })
-
 </script>
 
 <template>
-  <div class="scope">
-    <div class="p">
-      <div class="date-input">
+  <div class="labeled-scope">
+    <div class="labeled-container">
+      <div class="labeled-input-date">
         <Datepicker
           v-model="pickedDesiredDate"
           :format="formatDesiredDate"
@@ -71,58 +70,15 @@ watch(pickedDesiredDate, () => {
           :dark="userStore.user.theme == 'dark'"
         />
       </div>
-      <span>{{ placeholderText }} </span>
+      <span class="labeled-label">{{ placeholderText }} </span>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.scope {
-  width: 100%;
-  height: 100%;
-}
+@use '@/scss/common/labeled.scss';
 
-.p {
-  width: 100%;
-  height: 100%;
-
-  position: relative;
-  display: inline-block;
-
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-
-span {
-  width: max-content;
-  height: min-content;
-
-  padding: 2px;
-  padding-left: 8px;
-  padding-right: 8px;
-  margin: 0;
-
-  pointer-events: none;
-  position: absolute;
-
-  left: 0px;
-  top: 1px;
-
-  border: none;
-  border-radius: var(--main-border-radius);
-
-  transition: 0.2s;
-  transition-timing-function: ease;
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-
-  color: white;
-  background-color: var(--main-color);
-  font-family: var(--main-font-head);
-  font-size: 12px;
-}
-
-.date-input {
+.labeled-input-date {
   width: calc(100% - 15px);
   height: calc(100% - 15px);
 

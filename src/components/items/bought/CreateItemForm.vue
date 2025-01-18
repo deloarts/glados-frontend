@@ -10,10 +10,10 @@ import { useProjectsStore } from '@/stores/projects'
 import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
 import type { AvailableOption } from '@/models/controls'
 
-import InputPlaceholder from '@/components/elements/InputPlaceholder.vue';
-import TextareaPlaceholder from "@/components/elements/TextareaPlaceholder.vue";
-import SelectPlaceholder from '@/components/elements/SelectPlaceholder.vue'
-import DatepickerPlaceholder from '@/components/elements/DatepickerPlaceholder.vue'
+import LabeledInput from '@/components/elements/LabeledInput.vue'
+import LabeledTextarea from '@/components/elements/LabeledTextarea.vue'
+import LabeledSelect from '@/components/elements/LabeledSelect.vue'
+import LabeledDatepicker from '@/components/elements/LabeledDatepicker.vue'
 
 // Props & Emits
 const props = defineProps<{
@@ -66,7 +66,7 @@ function buildPartnumber() {
     partnumber = itemName.value
   } else {
     partnumber =
-    itemName.value +
+      itemName.value +
       ' - ' +
       createFormData.value.order_number +
       ' - ' +
@@ -109,7 +109,7 @@ onMounted(() => {
     <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <SelectPlaceholder
+          <LabeledSelect
             v-model:value="createFormData.project_id"
             v-bind:options-active="availableOptionsProjects"
             v-bind:options-inactive="[]"
@@ -118,14 +118,14 @@ onMounted(() => {
           />
         </div>
         <div id="product-number" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="projectsStore.getProductNumber(createFormData.project_id)"
             :placeholder="languageStore.l.boughtItem.input.productNumberPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="quantity" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.quantity"
             :placeholder="languageStore.l.boughtItem.input.quantityPlaceholder"
             :required="true"
@@ -133,66 +133,64 @@ onMounted(() => {
           />
         </div>
         <div id="unit" class="grid-item-center">
-          <SelectPlaceholder
+          <LabeledSelect
             v-model:value="createFormData.unit"
-            v-bind:options-active="unitStore.boughtItemUnits.values.map(value => ({ text: value, value }))"
+            v-bind:options-active="
+              unitStore.boughtItemUnits.values.map((value) => ({ text: value, value }))
+            "
             v-bind:options-inactive="[]"
             :placeholder="languageStore.l.boughtItem.input.unitPlaceholder"
           />
         </div>
         <div id="name" class="grid-item-center">
-          <InputPlaceholder
-            v-model:value="itemName"
-            :placeholder="namePlaceholder"
-            :required="true"
-          />
+          <LabeledInput v-model:value="itemName" :placeholder="namePlaceholder" :required="true" />
         </div>
         <div id="order-number" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.order_number"
             :placeholder="languageStore.l.boughtItem.input.orderNumberPlaceholder"
             :required="true"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.manufacturer"
             :placeholder="languageStore.l.boughtItem.input.manufacturerPlaceholder"
             :required="true"
           />
         </div>
         <div id="supplier" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.supplier"
             :placeholder="languageStore.l.boughtItem.input.supplierPlaceholder"
           />
         </div>
         <div id="group" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.group_1"
             :placeholder="languageStore.l.boughtItem.input.group1Placeholder"
           />
         </div>
         <div id="weblink" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.weblink"
             :placeholder="languageStore.l.boughtItem.input.weblinkPlaceholder"
           />
         </div>
         <div id="desired" class="grid-item-center">
-          <DatepickerPlaceholder
+          <LabeledDatepicker
             v-model:value="createFormData.desired_delivery_date"
             :placeholder="languageStore.l.boughtItem.input.desiredDatePlaceholder"
           />
         </div>
         <div id="note-general" class="grid-item-center">
-          <TextareaPlaceholder
+          <LabeledTextarea
             v-model:value="createFormData.note_general"
             :placeholder="languageStore.l.boughtItem.input.noteGeneralPlaceholder"
           />
         </div>
         <div id="note-supplier" class="grid-item-center">
-          <TextareaPlaceholder
+          <LabeledTextarea
             v-model:value="createFormData.note_supplier"
             :placeholder="languageStore.l.boughtItem.input.noteSupplierPlaceholder"
           />

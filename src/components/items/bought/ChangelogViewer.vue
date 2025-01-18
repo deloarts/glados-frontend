@@ -1,40 +1,37 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted } from 'vue'
 
-import { useLanguageStore } from "@/stores/language";
-import { boughtItemsRequest } from "@/requests/items";
+import { useLanguageStore } from '@/stores/language'
+import { boughtItemsRequest } from '@/requests/items'
 
-import TextareaPlaceholder from "@/components/elements/TextareaPlaceholder.vue";
+import LabeledTextarea from '@/components/elements/LabeledTextarea.vue'
 
 const props = defineProps<{
   itemId: string
 }>()
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 
-const changelog = ref<string>("");
+const changelog = ref<string>('')
 
 function fetchChangelog() {
-  boughtItemsRequest
-    .getItemsIDChangelog(Number(props.itemId))
-    .then((response) => {
-      if (response.status == 200) {
-        changelog.value = ''
-        for (let i = 0; i < response.data.length; i++) {
-          changelog.value += `${response.data[i]}\n`
-        }
+  boughtItemsRequest.getItemsIDChangelog(Number(props.itemId)).then((response) => {
+    if (response.status == 200) {
+      changelog.value = ''
+      for (let i = 0; i < response.data.length; i++) {
+        changelog.value += `${response.data[i]}\n`
       }
-    });
+    }
+  })
 }
 
-onMounted(() => fetchChangelog());
-
+onMounted(() => fetchChangelog())
 </script>
 
 <template>
   <div class="scope">
     <div class="container">
-      <TextareaPlaceholder
+      <LabeledTextarea
         :value="changelog"
         :placeholder="languageStore.l.boughtItem.changelog.changelog"
         :disabled="true"
@@ -63,7 +60,7 @@ onMounted(() => fetchChangelog());
 }
 
 h1 {
-  font-family: "Play", "Calibri";
+  font-family: 'Play', 'Calibri';
   font-size: 16px;
   font-weight: bold;
 
@@ -74,7 +71,7 @@ h1 {
 }
 
 .changelog-item {
-  font-family: "Calibri";
+  font-family: 'Calibri';
   font-size: 14px;
 
   margin: 0;

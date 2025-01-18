@@ -10,8 +10,8 @@ import { useUserStore } from '@/stores/user'
 import type { AvailableOption } from '@/models/controls'
 import type { UserUpdateSchema } from '@/schemas/user'
 
-import InputPlaceholder from '@/components/elements/InputPlaceholder.vue'
-import SelectPlaceholder from '@/components/elements/SelectPlaceholder.vue'
+import LabeledInput from '@/components/elements/LabeledInput.vue'
+import LabeledSelect from '@/components/elements/LabeledSelect.vue'
 import ButtonUserUpdate from '@/components/elements/ButtonUserUpdate.vue'
 import SelectLanguage from '@/components/elements/SelectLanguage.vue'
 
@@ -64,32 +64,32 @@ onBeforeMount(() => {
     <div class="form-base-container">
       <div id="grid">
         <div id="username" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formUserUpdate.username"
             :placeholder="languageStore.l.account.input.usernamePlaceholder"
             :disabled="true"
           />
         </div>
         <div id="full-name" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formUserUpdate.full_name"
             :placeholder="languageStore.l.account.input.fullNamePlaceholder"
           />
         </div>
         <div id="email" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formUserUpdate.email"
             :placeholder="languageStore.l.account.input.emailPlaceholder"
           />
         </div>
         <div id="password" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formUserUpdate.password"
             :placeholder="languageStore.l.account.input.passwordPlaceholder"
           />
         </div>
         <div id="language" class="grid-item-center">
-          <SelectPlaceholder
+          <LabeledSelect
             v-model:value="formUserUpdate.language"
             v-bind:options-active="availableOptionsLanguage"
             v-bind:options-inactive="[]"

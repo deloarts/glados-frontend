@@ -8,7 +8,7 @@ import { usersRequest } from '@/requests/users'
 import type { UserCreateSchema } from '@/schemas/user'
 
 import Toggle from '@vueform/toggle'
-import InputPlaceholder from '@/components/elements/InputPlaceholder.vue'
+import LabeledInput from '@/components/elements/LabeledInput.vue'
 import ButtonUserCreate from '@/components/elements/ButtonUserCreate.vue'
 
 // Stores
@@ -84,35 +84,35 @@ function createUser() {
           {{ languageStore.l.settings.users.toggle.active }}
         </div>
         <div id="username" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formData.username"
             :placeholder="languageStore.l.settings.users.input.usernamePlaceholder"
             :required="true"
           />
         </div>
         <div id="full-name" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formData.full_name"
             :placeholder="languageStore.l.settings.users.input.fullNamePlaceholder"
             :required="true"
           />
         </div>
         <div id="email" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formData.email"
             :placeholder="languageStore.l.settings.users.input.mailPlaceholder"
             :required="true"
           />
         </div>
         <div id="password" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formData.password"
             :placeholder="languageStore.l.settings.users.input.passwordPlaceholder"
             :required="true"
           />
         </div>
         <div id="rfid" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="formData.rfid"
             :placeholder="languageStore.l.settings.users.input.rfidPlaceholder"
           />

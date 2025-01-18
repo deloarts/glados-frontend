@@ -1,0 +1,82 @@
+.labeled-scope {
+  width: 100%;
+  height: 100%;
+}
+  
+.labeled-container {
+  width: 100%;
+  height: 100%;
+
+  position: relative;
+  display: inline-block;
+
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.labeled-label {
+  width: max-content;
+  height: min-content;
+
+  padding: 2px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin: 0;
+
+  pointer-events: none;
+  position: absolute;
+
+  left: 0px;
+  top: 1px;
+
+  border: 1px solid var(--main-color);
+  border-radius: var(--main-border-radius);
+
+  transition: 0.2s;
+  transition-timing-function: ease;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  color: var(--main-color-text);
+  background-color: var(--input-background);
+  font-family: var(--main-font-head);
+  font-size: 12px;
+}
+
+.labeled-input {
+  width: calc(100% - 15px);
+  height: calc(100% - 12px);
+
+  color: var(--main-text-color);
+  background-color: var(--input-background);
+
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  margin: 0;
+  margin-top: 15px;
+  margin-left: 10px;
+
+  box-sizing: border-box;
+  border-width: var(--main-border-width);
+  border-style: var(--main-border-style);
+  border-color: var(--input-border-color);
+  border-radius: var(--main-border-radius);
+  outline: none;
+
+  transition: all 0.2s ease;
+}
+
+.labeled-input:hover {
+  border-color: var(--input-border-color-hover);
+}
+
+.labeled-input:focus {
+  border-color: var(--main-color);
+}
+
+.labeled-input:focus + .labeled-label {
+  color: white;
+  background-color: var(--main-color);
+}

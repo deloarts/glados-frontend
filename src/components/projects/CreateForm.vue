@@ -8,8 +8,8 @@ import { useUsersStore, useUserStore } from '@/stores/user'
 import type { AvailableOption } from '@/models/controls'
 import type { ProjectCreateSchema } from '@/schemas/project'
 
-import InputPlaceholder from '@/components/elements/InputPlaceholder.vue'
-import SelectPlaceholder from '@/components/elements/SelectPlaceholder.vue'
+import LabeledInput from '@/components/elements/LabeledInput.vue'
+import LabeledSelect from '@/components/elements/LabeledSelect.vue'
 
 // Props & Emits
 const props = defineProps<{
@@ -62,34 +62,34 @@ onBeforeMount(() => {
     <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.number"
             :placeholder="languageStore.l.project.input.projectNumberPlaceholder"
             :required="true"
           />
         </div>
         <div id="product-number" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.product_number"
             :placeholder="languageStore.l.project.input.productNumberPlaceholder"
           />
         </div>
         <div id="customer" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.customer"
             :placeholder="languageStore.l.project.input.customerPlaceholder"
             :required="true"
           />
         </div>
         <div id="description" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             v-model:value="createFormData.description"
             :placeholder="languageStore.l.project.input.descriptionPlaceholder"
             :required="true"
           />
         </div>
         <div id="designated" class="grid-item-center">
-          <SelectPlaceholder
+          <LabeledSelect
             v-if="
               userStore.user.is_superuser ||
               userStore.user.is_adminuser ||
@@ -100,8 +100,8 @@ onBeforeMount(() => {
             v-bind:options-inactive="[]"
             :placeholder="languageStore.l.project.input.designateUserPlaceholder"
             :required="true"
-          />      
-          <InputPlaceholder
+          />
+          <LabeledInput
             v-else
             :value="userStore.user.full_name"
             :placeholder="languageStore.l.project.input.designateUserPlaceholder"

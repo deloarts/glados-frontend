@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
-import { useUsersStore } from "@/stores/user";
-import { capitalizeFirstLetter } from "@/helper/string.helper";
+import { useUsersStore } from '@/stores/user'
+import { capitalizeFirstLetter } from '@/helper/string.helper'
 
-import InputPlaceholder from '@/components/elements/InputPlaceholder.vue';
-import TextareaPlaceholder from "@/components/elements/TextareaPlaceholder.vue";
+import LabeledInput from '@/components/elements/LabeledInput.vue'
+import LabeledTextarea from '@/components/elements/LabeledTextarea.vue'
 import type { BoughtItemSchema } from '@/schemas/boughtItem'
 
 // Props & Emits
@@ -22,7 +22,6 @@ const usersStore = useUsersStore()
 const quantityUnit = computed<string>(() => {
   return `${props.itemData.quantity} ${props.itemData.unit}`
 })
-
 </script>
 
 <template>
@@ -30,140 +29,140 @@ const quantityUnit = computed<string>(() => {
     <div class="form-base-container">
       <div class="grid">
         <div id="status" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="capitalizeFirstLetter(props.itemData.status)"
             :placeholder="languageStore.l.boughtItem.input.statusPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="project" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.project_number"
             :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="product-number" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.product_number"
             :placeholder="languageStore.l.boughtItem.input.productNumberPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="quantity" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="quantityUnit"
             :placeholder="languageStore.l.boughtItem.input.quantityPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="partnumber" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.partnumber"
             :placeholder="languageStore.l.boughtItem.input.partnumberPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="order-number" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.order_number"
             :placeholder="languageStore.l.boughtItem.input.orderNumberPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="manufacturer" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.manufacturer"
             :placeholder="languageStore.l.boughtItem.input.manufacturerPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="supplier" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.supplier"
             :placeholder="languageStore.l.boughtItem.input.supplierPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="group" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.group_1"
             :placeholder="languageStore.l.boughtItem.input.group1Placeholder"
             :disabled="true"
           />
         </div>
         <div id="weblink" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.weblink"
             :placeholder="languageStore.l.boughtItem.input.weblinkPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="created" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.created"
             :placeholder="languageStore.l.boughtItem.input.createdDate"
             :disabled="true"
           />
         </div>
         <div id="creator" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="usersStore.getNameByID(props.itemData.creator_id)"
             :placeholder="languageStore.l.boughtItem.input.creator"
             :disabled="true"
           />
         </div>
         <div id="ordered" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.ordered_date"
             :placeholder="languageStore.l.boughtItem.input.orderedDate"
             :disabled="true"
           />
         </div>
         <div id="orderer" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="usersStore.getNameByID(props.itemData.orderer_id)"
             :placeholder="languageStore.l.boughtItem.input.orderer"
             :disabled="true"
           />
         </div>
         <div id="delivered" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.delivery_date"
             :placeholder="languageStore.l.boughtItem.input.deliveryDate"
             :disabled="true"
           />
         </div>
         <div id="receiver" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="usersStore.getNameByID(props.itemData.receiver_id)"
             :placeholder="languageStore.l.boughtItem.input.receiver"
             :disabled="true"
           />
         </div>
         <div id="desired" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.desired_delivery_date"
             :placeholder="languageStore.l.boughtItem.input.desiredDatePlaceholder"
             :disabled="true"
           />
         </div>
         <div id="expected" class="grid-item-center">
-          <InputPlaceholder
+          <LabeledInput
             :value="props.itemData.expected_delivery_date"
             :placeholder="languageStore.l.boughtItem.input.expectedDatePlaceholder"
             :disabled="true"
           />
         </div>
         <div id="note-general" class="grid-item-center">
-          <TextareaPlaceholder
+          <LabeledTextarea
             :value="props.itemData.note_general"
             :placeholder="languageStore.l.boughtItem.input.noteGeneralPlaceholder"
             :disabled="true"
           />
         </div>
         <div id="note-supplier" class="grid-item-center">
-          <TextareaPlaceholder
+          <LabeledTextarea
             :value="props.itemData.note_supplier"
             :placeholder="languageStore.l.boughtItem.input.noteSupplierPlaceholder"
             :disabled="true"

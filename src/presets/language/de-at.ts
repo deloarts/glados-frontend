@@ -83,6 +83,8 @@ export const deAT: Language = {
     promptNo: 'Nein',
     buttonClose: 'Schließen',
     buttonCopyLink: 'Link kopieren',
+    inputSearch: 'Suchen',
+    inputSearchNoItems: 'Keine Einträge',
     login: {
       usernamePlaceholder: 'Benutzername',
       passwordPlaceholder: 'Passwort',

@@ -96,8 +96,7 @@ onBeforeMount(() => {
               userStore.user.is_systemuser
             "
             v-model:value="createFormData.designated_user_id"
-            v-bind:options-active="availableOptionsUsers"
-            v-bind:options-inactive="[]"
+            v-bind:options="availableOptionsUsers"
             :placeholder="languageStore.l.project.input.designateUserPlaceholder"
             :required="true"
           />

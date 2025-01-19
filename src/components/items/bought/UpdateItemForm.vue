@@ -83,11 +83,17 @@ onBeforeMount(() => {
       <div class="grid">
         <div id="project" class="grid-item-center">
           <LabeledSelect
+            v-if="projectsStore.getProjectByID(updateFormData.project_id)?.is_active"
             v-model:value="updateFormData.project_id"
-            v-bind:options-active="availableOptionsProjectsActive"
-            v-bind:options-inactive="availableOptionsProjectsInactive"
+            v-bind:options="availableOptionsProjectsActive"
             :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
             :required="true"
+          />
+          <LabeledInput
+            v-else
+            :value="projectsStore.getProjectByID(updateFormData.project_id)?.number"
+            :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
+            :disabled="true"
           />
         </div>
         <div id="product-number" class="grid-item-center">
@@ -108,10 +114,9 @@ onBeforeMount(() => {
         <div id="unit" class="grid-item-center">
           <LabeledSelect
             v-model:value="updateFormData.unit"
-            v-bind:options-active="
+            v-bind:options="
               unitStore.boughtItemUnits.values.map((value) => ({ text: value, value }))
             "
-            v-bind:options-inactive="[]"
             :placeholder="languageStore.l.boughtItem.input.unitPlaceholder"
           />
         </div>

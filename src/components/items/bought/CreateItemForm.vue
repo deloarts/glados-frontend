@@ -111,8 +111,7 @@ onMounted(() => {
         <div id="project" class="grid-item-center">
           <LabeledSelect
             v-model:value="createFormData.project_id"
-            v-bind:options-active="availableOptionsProjects"
-            v-bind:options-inactive="[]"
+            v-bind:options="availableOptionsProjects"
             :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
             :required="true"
           />
@@ -136,10 +135,9 @@ onMounted(() => {
         <div id="unit" class="grid-item-center">
           <LabeledSelect
             v-model:value="createFormData.unit"
-            v-bind:options-active="
+            v-bind:options="
               unitStore.boughtItemUnits.values.map((value) => ({ text: value, value }))
             "
-            v-bind:options-inactive="[]"
             :placeholder="languageStore.l.boughtItem.input.unitPlaceholder"
           />
         </div>

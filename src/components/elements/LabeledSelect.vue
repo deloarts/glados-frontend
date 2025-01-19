@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 
 import LabeledLabel from './LabeledLabel.vue'
 import { useLanguageStore } from '@/stores/language'
@@ -26,7 +26,7 @@ const emit = defineEmits<{
 }>()
 
 const inputSearch = ref<HTMLElement>()
-const optionIndex = ref<number>()
+const optionIndex = ref<number | null>(null)
 const filteredOptions = ref<Array<AvailableOption>>()
 const searchText = ref<string | null>()
 const computedText = computed<string | null>(() => {
@@ -52,15 +52,15 @@ function onFocusOut() {
   }, 100)
 }
 
-watch(optionIndex, () => {
-  let newValue = null
-  if (optionIndex.value != null) {
-    newValue = props.options[optionIndex.value].value
+function setValue() {
+  for (let i = 0; i < props.options.length; i++) {
+    if (props.value == props.options[i].value) {
+      onItem(i)
+    }
   }
-  emit('update:value', newValue)
-})
+}
 
-watch(searchText, () => {
+function filterOptions() {
   filteredOptions.value = props.options.filter((item) => {
     if (!searchText.value) {
       return item
@@ -71,24 +71,41 @@ watch(searchText, () => {
       return item
     }
   })
-})
+}
+
+watch(
+  () => props.options,
+  () => {
+    setValue()
+  },
+)
 
 watch(
   () => props.value,
   () => {
-    for (let i = 0; i < props.options.length; i++) {
-      if (props.value == props.options[i].value) {
-        onItem(i)
-      }
-    }
+    setValue()
   },
 )
+
+watch(searchText, () => {
+  filterOptions()
+})
+
+watch(optionIndex, () => {
+  let newValue = null
+  if (optionIndex.value != null) {
+    newValue = props.options[optionIndex.value].value
+  }
+  emit('update:value', newValue)
+})
 
 watch(inputSearch, () => {
   if (inputSearch.value) {
     inputSearch.value.focus()
   }
 })
+
+onMounted(setValue)
 </script>
 
 <template>

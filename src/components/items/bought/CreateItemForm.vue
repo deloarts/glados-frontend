@@ -42,19 +42,21 @@ const unitStore = useUnitsStore()
 const projectsStore = useProjectsStore()
 
 // Options
-let availableOptionsProjects: Array<AvailableOption> = []
+const availableOptionsProjects = ref<Array<AvailableOption>>([])
 
 function setOptionsProjects() {
-  const temp = []
-  for (let i = 0; i < projectsStore.all.length; i++) {
-    if (projectsStore.all[i].is_active) {
-      temp.push({
-        text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
-        value: String(projectsStore.all[i].id),
-      })
+  projectsStore.getAll().then(() => {
+    const temp = []
+    for (let i = 0; i < projectsStore.all.length; i++) {
+      if (projectsStore.all[i].is_active) {
+        temp.push({
+          text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
+          value: String(projectsStore.all[i].id),
+        })
+      }
     }
-  }
-  availableOptionsProjects = temp
+    availableOptionsProjects.value = temp
+  })
 }
 
 // Form stuff
@@ -93,11 +95,10 @@ watch(itemName, () => {
   buildPartnumber()
 })
 
-onBeforeMount(() => {
-  setOptionsProjects()
-})
+onBeforeMount(() => {})
 
 onMounted(() => {
+  setOptionsProjects()
   if (unitStore.boughtItemUnits.default) {
     createFormData.value.unit = unitStore.boughtItemUnits.default
   }
@@ -111,7 +112,7 @@ onMounted(() => {
         <div id="project" class="grid-item-center">
           <LabeledSelect
             v-model:value="createFormData.project_id"
-            v-bind:options="availableOptionsProjects"
+            v-model:options="availableOptionsProjects"
             :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
             :required="true"
           />

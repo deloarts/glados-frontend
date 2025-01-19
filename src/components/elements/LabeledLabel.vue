@@ -3,12 +3,16 @@ import { ref, computed } from 'vue'
 
 interface Props {
   value: string
+  required?: boolean
   tooltip?: string
 }
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  required: false,
+})
 
 const labelText = computed<string>(() => {
-  return showTooltip.value && props.tooltip ? props.tooltip : props.value
+  const returnValue = props.required ? `${props.value} *` : props.value
+  return showTooltip.value && props.tooltip ? props.tooltip : returnValue
 })
 const showTooltip = ref<boolean>(false)
 </script>

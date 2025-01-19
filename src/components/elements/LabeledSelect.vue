@@ -110,7 +110,11 @@ watch(inputSearch, () => {
         placeholder="Search"
         @focusout="onFocusOut()"
       />
-      <LabeledLabel :value="props.placeholder" :tooltip="props.tooltip" />
+      <LabeledLabel
+        :value="props.placeholder"
+        :tooltip="props.tooltip"
+        :required="props.required"
+      />
       <Transition>
         <div v-if="showDropdown && !props.disabled" class="labeled-input-dropdown">
           <div

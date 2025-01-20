@@ -13,7 +13,6 @@ import type { UserUpdateSchema } from '@/schemas/user'
 import LabeledInput from '@/components/elements/LabeledInput.vue'
 import LabeledSelect from '@/components/elements/LabeledSelect.vue'
 import ButtonUserUpdate from '@/components/elements/ButtonUserUpdate.vue'
-import SelectLanguage from '@/components/elements/SelectLanguage.vue'
 
 const languageStore = useLanguageStore()
 const userStore = useUserStore()

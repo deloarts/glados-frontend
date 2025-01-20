@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed, onBeforeMount, onMounted } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import Toggle from '@vueform/toggle'
 
 import config from '@/config'

@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.13.2**: Enhance input components.  
 **v0.13.1**: Fix component error.  
 **v0.13.0**: Add pagination. Fix log view.  
 **v0.12.6**: Add option to disable naming convention. Fix json editor.  

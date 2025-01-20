@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { watch, computed } from 'vue'
+import { watch, computed, onBeforeMount } from 'vue'
 import Toggle from '@vueform/toggle'
 
 import { useLanguageStore } from '@/stores/language'
-import { useUsersStore } from '@/stores/user'
+import { useUsersStore, useUserStore } from '@/stores/user'
 
+import type { AvailableOption } from '@/models/controls'
 import type { ProjectUpdateSchema } from '@/schemas/project'
 
-import SelectUser from '@/components/elements/SelectUser.vue'
+import LabeledInput from '@/components/elements/LabeledInput.vue'
+import LabeledSelect from '@/components/elements/LabeledSelect.vue'
 
 // Props & Emits
 const props = defineProps<{
@@ -23,7 +25,24 @@ const updateFormData = computed<ProjectUpdateSchema>(() => props.formData)
 
 // Stores
 const languageStore = useLanguageStore()
+const userStore = useUserStore()
 const usersStore = useUsersStore()
+
+// Options
+let availableOptionsUsers: Array<AvailableOption> = []
+
+function setOptionsUsers() {
+  const temp = []
+  for (let i = 0; i < usersStore.users.length; i++) {
+    if (usersStore.users[i].is_active) {
+      temp.push({
+        text: `${usersStore.users[i].full_name} (${usersStore.users[i].email})`,
+        value: usersStore.users[i].id.toString(),
+      })
+    }
+  }
+  availableOptionsUsers = temp
+}
 
 watch(
   () => updateFormData,
@@ -32,6 +51,10 @@ watch(
   },
   { deep: true },
 )
+
+onBeforeMount(() => {
+  setOptionsUsers()
+})
 </script>
 
 <template>
@@ -39,38 +62,50 @@ watch(
     <div class="form-base-container">
       <div id="grid">
         <div id="project" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="updateFormData.number"
+          <LabeledInput
+            v-model:value="updateFormData.number"
             :placeholder="languageStore.l.project.input.projectNumberPlaceholder"
+            :required="true"
           />
         </div>
         <div id="product-number" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="updateFormData.product_number"
+          <LabeledInput
+            v-model:value="updateFormData.product_number"
             :placeholder="languageStore.l.project.input.productNumberPlaceholder"
           />
         </div>
         <div id="customer" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="updateFormData.customer"
+          <LabeledInput
+            v-model:value="updateFormData.customer"
             :placeholder="languageStore.l.project.input.customerPlaceholder"
+            :required="true"
           />
         </div>
         <div id="description" class="grid-item-center">
-          <input
-            class="form-base-text-input"
-            v-model="updateFormData.description"
+          <LabeledInput
+            v-model:value="updateFormData.description"
             :placeholder="languageStore.l.project.input.descriptionPlaceholder"
+            :required="true"
           />
         </div>
         <div id="designated" class="grid-item-center">
-          <SelectUser
-            v-model:selection="updateFormData.designated_user_id"
-            :options="usersStore.users"
+          <LabeledSelect
+            v-if="
+              userStore.user.is_superuser ||
+              userStore.user.is_adminuser ||
+              userStore.user.is_systemuser
+            "
+            v-model:value="updateFormData.designated_user_id"
+            v-bind:options="availableOptionsUsers"
             :placeholder="languageStore.l.project.input.designateUserPlaceholder"
+            :required="true"
+          />
+          <LabeledInput
+            v-else
+            :value="userStore.user.full_name"
+            :placeholder="languageStore.l.project.input.designateUserPlaceholder"
+            :required="true"
+            :disabled="true"
           />
         </div>
         <div id="active" class="grid-item-center">
@@ -89,7 +124,7 @@ watch(
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px 40px 40px 25px;
+  grid-template-rows: 50px 50px 50px 50px 50px 25px;
   grid-template-columns: 50px auto 150px;
   grid-template-areas:
     'project project project'
@@ -97,7 +132,12 @@ watch(
     'customer customer customer'
     'description description description'
     'designated designated designated'
+    'empty empty empty'
     'active active-text active-text';
+}
+
+#empty {
+  grid-area: empty;
 }
 
 #project {

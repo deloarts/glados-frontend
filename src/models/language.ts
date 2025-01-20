@@ -15,6 +15,7 @@ export interface Language {
       createdProject: string
       updatedProject: Function
       selectItemFirst: string
+      onlyViewOneItem: string
       onlyEditOneItem: string
       onlyCopyOneItem: string
       onlyDeleteOneItem: string
@@ -62,6 +63,10 @@ export interface Language {
     screenResolutionNotSupportedSub: string
     promptYes: string
     promptNo: string
+    buttonClose: string
+    buttonCopyLink: string
+    inputSearch: string
+    inputSearchNoItems: string
     login: {
       usernamePlaceholder: string
       passwordPlaceholder: string
@@ -135,6 +140,7 @@ export interface Language {
       fullNamePlaceholder: string
       emailPlaceholder: string
       passwordPlaceholder: string
+      languagePlaceholder: string
       patPlaceholder: string
     }
   }
@@ -229,9 +235,11 @@ export interface Language {
     }
     input: {
       filterPlaceholder: string
+      statusPlaceholder: string
       projectNumberPlaceholder: string
       productNumberPlaceholder: string
       quantityPlaceholder: string
+      unitPlaceholder: string
       namePlaceholder: string
       partnumberPlaceholder: string
       orderNumberPlaceholder: string
@@ -239,7 +247,14 @@ export interface Language {
       supplierPlaceholder: string
       group1Placeholder: string
       weblinkPlaceholder: string
+      createdDate: string
+      creator: string
+      orderedDate: string
+      orderer: string
+      deliveryDate: string
+      receiver: string
       desiredDatePlaceholder: string
+      expectedDatePlaceholder: string
       noteGeneralPlaceholder: string
       noteSupplierPlaceholder: string
     }
@@ -256,6 +271,7 @@ export interface Language {
       exportExcel: string
       unselect: string
       sync: string
+      view: string
       views: string
       columns: string
       saveFilter: string
@@ -472,5 +488,8 @@ export interface Language {
         state: string
       }
     }
+  }
+  tooltips: {
+    productNumberIsFromProject: string
   }
 }

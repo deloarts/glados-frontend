@@ -51,12 +51,12 @@ const particlesLoaded = async (container) => {}
 
 <style scoped lang="scss">
 .scope {
-  color: white;
   background: linear-gradient(rgb(25, 25, 25) 30%, rgb(10, 10, 10));
   z-index: 1010;
 }
 
 .center {
+  color: white;
   z-index: 1012;
 
   position: absolute;

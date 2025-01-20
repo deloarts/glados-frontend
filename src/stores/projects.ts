@@ -16,6 +16,8 @@ export const useProjectsStore = defineStore('projects', () => {
   const paused = ref<boolean>(false)
   const items = ref<ProjectSchema[]>([])
   const all = ref<ProjectSchema[]>([])
+  const active = ref<ProjectSchema[]>([])
+  const inactive = ref<ProjectSchema[]>([])
   const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
   const selectedIDs = ref<Array<number>>([])
 
@@ -77,7 +79,18 @@ export const useProjectsStore = defineStore('projects', () => {
     return projectsRequest.getProjects(params).then((response) => {
       loading.value = false
       if (response.status === 200) {
+        all.value = []
+        active.value = []
+        inactive.value = []
+
         all.value = response.data.items
+        for (let i = 0; i < all.value.length; i++) {
+          if (all.value[i].is_active) {
+            active.value.push(all.value[i])
+          } else {
+            inactive.value.push(all.value[i])
+          }
+        }
       }
       return response
     })
@@ -144,6 +157,8 @@ export const useProjectsStore = defineStore('projects', () => {
     paused,
     items,
     all,
+    active,
+    inactive,
     page,
     clear,
     pause,

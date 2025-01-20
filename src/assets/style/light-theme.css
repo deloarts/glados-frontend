@@ -19,6 +19,7 @@ html[data-theme="light"] {
     --input-color: black;
     --input-background: rgb(250, 250, 250);
     --input-border-color: rgb(210, 210, 210);
+    --input-border-color-hover: rgb(123, 123, 123);
 
     --main-green: rgb(99, 219, 99);
     --main-red: red;

@@ -42,9 +42,8 @@ const cssWidth = computed<string>(() => {
 })
 
 async function copyToClipboard() {
-  if (props.id != null) {
-    const url = `${config.url.domain}/#/${props.copyUrl}?id=${props.id}`
-    copy(url)
+  if (props.id != null && props.copyUrl != null) {
+    copy(props.copyUrl)
   }
 }
 

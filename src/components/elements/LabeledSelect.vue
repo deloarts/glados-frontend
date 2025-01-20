@@ -41,9 +41,11 @@ function onClick() {
   showDropdown.value = true
 }
 
-function onItem(index: number) {
-  optionIndex.value = index
-  showDropdown.value = false
+function onFilteredItem(index: number) {
+  if (filteredOptions.value) {
+    emit('update:value', filteredOptions.value[index].value)
+  }
+  updateOptionIndex()
 }
 
 function onFocusOut() {
@@ -52,10 +54,10 @@ function onFocusOut() {
   }, 100)
 }
 
-function setValue() {
+function updateOptionIndex() {
   for (let i = 0; i < props.options.length; i++) {
     if (props.value == props.options[i].value) {
-      onItem(i)
+      optionIndex.value = i
     }
   }
 }
@@ -76,14 +78,14 @@ function filterOptions() {
 watch(
   () => props.options,
   () => {
-    setValue()
+    updateOptionIndex()
   },
 )
 
 watch(
   () => props.value,
   () => {
-    setValue()
+    updateOptionIndex()
   },
 )
 
@@ -105,7 +107,7 @@ watch(inputSearch, () => {
   }
 })
 
-onMounted(setValue)
+onMounted(updateOptionIndex)
 </script>
 
 <template>
@@ -138,7 +140,7 @@ onMounted(setValue)
             class="labeled-input-dropdown-item"
             v-for="(option, index) in filteredOptions"
             :key="option.text"
-            @click="onItem(index)"
+            @click="onFilteredItem(index)"
           >
             {{ option.text }}
           </div>

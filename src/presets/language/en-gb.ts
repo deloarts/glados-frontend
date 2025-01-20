@@ -83,6 +83,8 @@ export const enGB: Language = {
     promptNo: 'No',
     buttonClose: 'Close',
     buttonCopyLink: 'Copy Link',
+    inputSearch: 'Search',
+    inputSearchNoItems: 'No items found',
     login: {
       usernamePlaceholder: 'Username',
       passwordPlaceholder: 'Password',

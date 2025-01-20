@@ -69,7 +69,11 @@ watch(pickedDesiredDate, () => {
           :dark="userStore.user.theme == 'dark'"
         />
       </div>
-      <LabeledLabel :value="props.placeholder" :tooltip="props.tooltip" />
+      <LabeledLabel
+        :value="props.placeholder"
+        :tooltip="props.tooltip"
+        :required="props.required"
+      />
     </div>
   </div>
 </template>

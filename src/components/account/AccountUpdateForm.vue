@@ -91,8 +91,7 @@ onBeforeMount(() => {
         <div id="language" class="grid-item-center">
           <LabeledSelect
             v-model:value="formUserUpdate.language"
-            v-bind:options-active="availableOptionsLanguage"
-            v-bind:options-inactive="[]"
+            v-bind:options="availableOptionsLanguage"
             :placeholder="languageStore.l.account.input.languagePlaceholder"
           />
         </div>

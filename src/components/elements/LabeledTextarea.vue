@@ -40,7 +40,11 @@ const computedValue = computed<number | string | null | undefined>({
         :type="props.type"
         :disabled="props.disabled"
       ></textarea>
-      <LabeledLabel :value="props.placeholder" :tooltip="props.tooltip" />
+      <LabeledLabel
+        :value="props.placeholder"
+        :tooltip="props.tooltip"
+        :required="props.required"
+      />
     </div>
   </div>
 </template>

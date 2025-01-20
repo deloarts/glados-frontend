@@ -65,6 +65,8 @@ export interface Language {
     promptNo: string
     buttonClose: string
     buttonCopyLink: string
+    inputSearch: string
+    inputSearchNoItems: string
     login: {
       usernamePlaceholder: string
       passwordPlaceholder: string

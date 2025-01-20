@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, computed, onBeforeMount } from 'vue'
+import { ref, watch, computed, onBeforeMount, onMounted } from 'vue'
 import Toggle from '@vueform/toggle'
 
 import config from '@/config'
@@ -40,27 +40,29 @@ const unitStore = useUnitsStore()
 const projectsStore = useProjectsStore()
 
 // Options
-let availableOptionsProjectsActive: Array<AvailableOption> = []
-let availableOptionsProjectsInactive: Array<AvailableOption> = []
+const availableOptionsProjects = ref<Array<AvailableOption>>([])
+const availableOptionsProjectsInactive = ref<Array<AvailableOption>>([])
 
 function setOptionsProjects() {
-  const tempActive = []
-  const tempInactive = []
-  for (let i = 0; i < projectsStore.all.length; i++) {
-    if (projectsStore.all[i].is_active) {
-      tempActive.push({
-        text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
-        value: String(projectsStore.all[i].id),
-      })
-    } else {
-      tempInactive.push({
-        text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
-        value: String(projectsStore.all[i].id),
-      })
+  projectsStore.getAll().then(() => {
+    const tempActive = []
+    const tempInactive = []
+    for (let i = 0; i < projectsStore.all.length; i++) {
+      if (projectsStore.all[i].is_active) {
+        tempActive.push({
+          text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
+          value: String(projectsStore.all[i].id),
+        })
+      } else {
+        tempInactive.push({
+          text: `${projectsStore.all[i].number} - ${projectsStore.all[i].customer} - ${projectsStore.all[i].description}`,
+          value: String(projectsStore.all[i].id),
+        })
+      }
     }
-  }
-  availableOptionsProjectsActive = tempActive
-  availableOptionsProjectsInactive = tempInactive
+    availableOptionsProjects.value = tempActive
+    availableOptionsProjectsInactive.value = tempInactive
+  })
 }
 
 watch(
@@ -72,7 +74,7 @@ watch(
   { deep: true },
 )
 
-onBeforeMount(() => {
+onMounted(() => {
   setOptionsProjects()
 })
 </script>
@@ -83,10 +85,17 @@ onBeforeMount(() => {
       <div class="grid">
         <div id="project" class="grid-item-center">
           <LabeledSelect
+            v-if="projectsStore.getProjectByID(updateFormData.project_id)?.is_active"
             v-model:value="updateFormData.project_id"
-            v-bind:options-active="availableOptionsProjectsActive"
-            v-bind:options-inactive="availableOptionsProjectsInactive"
+            v-model:options="availableOptionsProjects"
             :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
+            :required="true"
+          />
+          <LabeledInput
+            v-else
+            :value="projectsStore.getProjectByID(updateFormData.project_id)?.number"
+            :placeholder="languageStore.l.boughtItem.input.projectNumberPlaceholder"
+            :disabled="true"
             :required="true"
           />
         </div>
@@ -108,10 +117,9 @@ onBeforeMount(() => {
         <div id="unit" class="grid-item-center">
           <LabeledSelect
             v-model:value="updateFormData.unit"
-            v-bind:options-active="
+            v-bind:options="
               unitStore.boughtItemUnits.values.map((value) => ({ text: value, value }))
             "
-            v-bind:options-inactive="[]"
             :placeholder="languageStore.l.boughtItem.input.unitPlaceholder"
           />
         </div>

@@ -3,7 +3,7 @@ import { onBeforeMount } from "vue";
 import router from "@/router/index";
 
 onBeforeMount(() => {
-  router.push({ name: "SettingsHost" });
+  router.push({ name: "SettingsLicense" });
 });
 </script>
 

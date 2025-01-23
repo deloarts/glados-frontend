@@ -391,6 +391,10 @@ export interface Language {
     }
   }
   settings: {
+    license: {
+      selectorButton: string
+      banner: string
+    }
     host: {
       selectorButton: string
       banner: string

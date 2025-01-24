@@ -14,6 +14,7 @@ export const enGB: Language = {
       cannotUpdateSystemUser: 'Systemuser cannot be updated',
       selectProjectFirst: 'Select a project first',
       onlyEditOneProject: 'You can only edit one project',
+      onlyExportOneProject: 'You can only export one project',
       onlyDeleteOneProject: 'You can only delete one project',
       deletedProject: (id: number) => {
         return `Deleted project #${id}`
@@ -65,6 +66,7 @@ export const enGB: Language = {
       xlsxTemplateDownloadFailed: 'Could not download template file.',
       xlsxUploadContentIncomplete: 'EXCEL file content is incomplete.',
       xlsxProcessError: 'Could not process excel file',
+      projectNumberNotFound: 'Project number not found',
       batchImportAllFailed: 'No item has been created',
       batchImportSomeFailed: 'Some items have issues (all others have been created)',
       noLogForThisDay: 'There is no log file for this day',

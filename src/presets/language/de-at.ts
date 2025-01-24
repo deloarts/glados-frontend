@@ -273,6 +273,7 @@ export const deAT: Language = {
       orderer: 'Besteller',
       deliveryDate: 'Lieferdatum',
       receiver: 'Empfänger',
+      storage: 'Lagerort',
       desiredDatePlaceholder: 'Gewünschtes Lieferdatum',
       expectedDatePlaceholder: 'Erwartetes Lieferdatum',
       noteGeneralPlaceholder: 'Anmerkung',

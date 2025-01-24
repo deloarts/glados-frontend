@@ -32,6 +32,7 @@ onMounted(() => fetchChangelog())
   <div class="scope">
     <div class="container">
       <LabeledTextarea
+        class="text-area"
         :value="changelog"
         :placeholder="languageStore.l.boughtItem.changelog.changelog"
         :disabled="true"
@@ -50,6 +51,7 @@ onMounted(() => fetchChangelog())
 .container {
   padding: 10px;
   margin: 4px;
+  padding-bottom: 20px;
 
   width: calc(100% - 27px);
   height: calc(100% - 30px);
@@ -68,17 +70,5 @@ h1 {
   padding-top: 20px;
   padding-left: 20px;
   padding-bottom: 5px;
-}
-
-.changelog-item {
-  font-family: 'Calibri';
-  font-size: 14px;
-
-  margin: 0;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-left: 20px;
-
-  white-space: pre-wrap;
 }
 </style>

@@ -272,6 +272,7 @@ export const enGB: Language = {
       orderer: 'Orderer',
       deliveryDate: 'Delivery Date',
       receiver: 'Receiver',
+      storage: 'Storage Place',
       desiredDatePlaceholder: 'Desired Delivery Date',
       expectedDatePlaceholder: 'Expected Delivery Date',
       noteGeneralPlaceholder: 'Note',

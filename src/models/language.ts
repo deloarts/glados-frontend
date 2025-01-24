@@ -253,6 +253,7 @@ export interface Language {
       orderer: string
       deliveryDate: string
       receiver: string
+      storage: string
       desiredDatePlaceholder: string
       expectedDatePlaceholder: string
       noteGeneralPlaceholder: string

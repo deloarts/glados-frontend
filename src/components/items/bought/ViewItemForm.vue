@@ -7,6 +7,8 @@ import { capitalizeFirstLetter } from '@/helper/string.helper'
 
 import LabeledInput from '@/components/elements/LabeledInput.vue'
 import LabeledTextarea from '@/components/elements/LabeledTextarea.vue'
+import ButtonOpenLink from '@/components/elements/ButtonOpenLink.vue'
+
 import type { BoughtItemSchema } from '@/schemas/boughtItem'
 
 // Props & Emits
@@ -22,6 +24,12 @@ const usersStore = useUsersStore()
 const quantityUnit = computed<string>(() => {
   return `${props.itemData.quantity} ${props.itemData.unit}`
 })
+
+function openLink() {
+  if (props.itemData.weblink) {
+    window.open(props.itemData.weblink, '_blank')
+  }
+}
 </script>
 
 <template>
@@ -97,6 +105,13 @@ const quantityUnit = computed<string>(() => {
             :placeholder="languageStore.l.boughtItem.input.weblinkPlaceholder"
             :disabled="true"
           />
+          <ButtonOpenLink
+            text=""
+            @click="openLink"
+            class="button-open-link"
+          />
+        </div>
+        <div id="weblink-button" class="grid-item-center">
         </div>
         <div id="created" class="grid-item-center">
           <LabeledInput
@@ -154,6 +169,13 @@ const quantityUnit = computed<string>(() => {
             :disabled="true"
           />
         </div>
+        <div id="storage" class="grid-item-center">
+          <LabeledInput
+            :value="props.itemData.storage_place"
+            :placeholder="languageStore.l.boughtItem.input.storage"
+            :disabled="true"
+          />
+        </div>
         <div id="note-general" class="grid-item-center">
           <LabeledTextarea
             :value="props.itemData.note_general"
@@ -179,23 +201,27 @@ const quantityUnit = computed<string>(() => {
 @use '@/scss/grid/gridBase.scss';
 
 .grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
   grid-template-columns: 400px 400px auto;
   grid-template-areas:
     'status quantity group'
     'project product-number note-general'
-    'partnumber manufacturer note-general'
-    'order-number supplier note-general'
+    'partnumber partnumber note-general'
+    'order-number order-number note-general'
+    'manufacturer supplier note-general'
     'weblink weblink note-general'
     'desired expected note-supplier'
     'created creator note-supplier'
     'ordered orderer note-supplier'
-    'delivered receiver note-supplier';
+    'delivered receiver note-supplier'
+    'storage storage note-supplier';
+
+  padding-bottom: 10px;
 }
 
 @media screen and (max-width: $max-width-desktop) {
   .grid {
-    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 120px 120px;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 120px 120px;
     grid-template-columns: auto;
     grid-template-areas:
       'status'
@@ -216,9 +242,19 @@ const quantityUnit = computed<string>(() => {
       'delivered'
       'desired'
       'expected'
+      'storage'
       'note-general'
       'note-supplier';
   }
+}
+
+.button-open-link {
+  height: 38px;
+
+  margin-top: 18px;
+  margin-right: 6px;
+  
+  border-color: var(--input-border-color);
 }
 
 #status {
@@ -243,6 +279,10 @@ const quantityUnit = computed<string>(() => {
 
 #receiver {
   grid-area: receiver;
+}
+
+#storage {
+  grid-area: storage;
 }
 
 #delivered {

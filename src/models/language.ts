@@ -10,6 +10,7 @@ export interface Language {
       cannotUpdateSystemUser: string
       selectProjectFirst: string
       onlyEditOneProject: string
+      onlyExportOneProject: string
       onlyDeleteOneProject: string
       deletedProject: Function
       createdProject: string
@@ -47,6 +48,7 @@ export interface Language {
       xlsxTemplateDownloadFailed: string
       xlsxUploadContentIncomplete: string
       xlsxProcessError: string
+      projectNumberNotFound: string
       batchImportAllFailed: string
       batchImportSomeFailed: string
       noLogForThisDay: string

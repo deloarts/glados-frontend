@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.13.3**: Add export for projects.  
 **v0.13.2**: Enhance input components.  
 **v0.13.1**: Fix component error.  
 **v0.13.0**: Add pagination. Fix log view.  

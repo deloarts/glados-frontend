@@ -14,6 +14,7 @@ export const deAT: Language = {
       cannotUpdateSystemUser: 'Der Systembenutzer kann nicht geändert werden',
       selectProjectFirst: 'Wähle zuerst ein Projekt aus',
       onlyEditOneProject: 'Du kannst nur ein Projekt bearbeiten',
+      onlyExportOneProject: 'Du kannst nur ein Projekt exportieren',
       onlyDeleteOneProject: 'Du kannst nur ein Projekt löschen',
       deletedProject: (id: number) => {
         return `Projekt #${id} wurde gelöscht`
@@ -65,6 +66,7 @@ export const deAT: Language = {
       xlsxTemplateDownloadFailed: 'Die Vorlage kann nicht geladen werden',
       xlsxUploadContentIncomplete: 'Der Inhalt der Datei ist unvollständig',
       xlsxProcessError: 'Fehler beim Verarbeiten der Datei',
+      projectNumberNotFound: 'Projektnummer nicht gefunden',
       batchImportAllFailed: 'Kein Artikel wurde erstellt',
       batchImportSomeFailed: 'Einige Artikel sind fehlerhaft (alle anderen wurden erstellt)',
       noLogForThisDay: 'Für diesen Tag existiert keine Log-Datei',
@@ -273,6 +275,7 @@ export const deAT: Language = {
       orderer: 'Besteller',
       deliveryDate: 'Lieferdatum',
       receiver: 'Empfänger',
+      storage: 'Lagerort',
       desiredDatePlaceholder: 'Gewünschtes Lieferdatum',
       expectedDatePlaceholder: 'Erwartetes Lieferdatum',
       noteGeneralPlaceholder: 'Anmerkung',
@@ -412,6 +415,10 @@ export const deAT: Language = {
     },
   },
   settings: {
+    license: {
+      selectorButton: 'Lizenz',
+      banner: 'Lizenzinformationen',
+    },
     host: {
       selectorButton: 'Host',
       banner: 'Host-Informationen',

@@ -1,6 +1,5 @@
 import {
   createRouter,
-  createWebHistory,
   createWebHashHistory,
 } from "vue-router";
 
@@ -20,6 +19,7 @@ import ItemsBoughtNewView from "@/views/items/bought/ItemsBoughtNewView.vue";
 import ItemsBoughtCopyView from "@/views/items/bought/ItemsBoughtCopyView.vue";
 import ItemsBoughtEditView from "@/views/items/bought/ItemsBoughtEditView.vue";
 import ItemsBoughtNewMultiView from "@/views/items/bought/ItemsBoughtNewMultiView.vue";
+import SettingsLicenseView from "@/views/settings/SettingsLicenseView.vue";
 import SettingsHostView from "@/views/settings/SettingsHostView.vue";
 import SettingsLogsView from "@/views/settings/SettingsLogsView.vue";
 import SettingsUsersView from "@/views/settings/SettingsUsersView.vue";
@@ -133,6 +133,11 @@ const router = createRouter({
       path: "/settings",
       name: "Settings",
       component: RedirectSettings,
+    },
+    {
+      path: "/settings/license",
+      name: "SettingsLicense",
+      component: SettingsLicenseView,
     },
     {
       path: "/settings/host",

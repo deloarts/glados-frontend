@@ -4,6 +4,8 @@ import Toggle from '@vueform/toggle'
 
 import router from '@/router/index'
 import { projectsRequest } from '@/requests/projects'
+import { boughtItemsRequest } from '@/requests/items'
+import { getBoughtItemsFilterParams } from '@/requests/params'
 import { camelToTitle } from '@/helper/string.helper'
 
 import { useLanguageStore } from '@/stores/language'
@@ -17,6 +19,7 @@ import { useProjectsControlsStore } from '@/stores/controls'
 import Prompt from '@/components/main/UserPrompt.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonFilterClear from '@/components/elements/ButtonFilterClear.vue'
+import ButtonExcel from '@/components/elements/ButtonExcel.vue'
 import ButtonEdit from '@/components/elements/ButtonEdit.vue'
 import ButtonDelete from '@/components/elements/ButtonDelete.vue'
 import ButtonSync from '@/components/elements/ButtonSync.vue'
@@ -37,6 +40,7 @@ const resolutionStore = useResolutionStore()
 const userStore = useUserStore()
 const projectsControlsStore = useProjectsControlsStore()
 
+const is_guestuser = computed<boolean>(() => userStore.user.is_guestuser)
 const enableControls = computed<boolean>(() => !userStore.user.is_guestuser)
 const gtMinWidthDesktop = computed<boolean>(() => resolutionStore.gtMinWidthDesktop)
 const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
@@ -121,6 +125,33 @@ function clearFilter() {
   projectFilterStore.reset()
   projectStore.getItems()
 }
+
+function onButtonDownloadExcel() {
+  if (projectStore.getSelection().length == 0) {
+    notificationStore.addInfo(languageStore.l.notification.info.selectProjectFirst)
+  } else if (projectStore.getSelection().length != 1) {
+    notificationStore.addInfo(languageStore.l.notification.info.onlyExportOneProject)
+  } else {
+    const projectNumber = projectStore.getProjectByID(projectStore.getSelection()[0])?.number
+    if (!projectNumber) {
+      notificationStore.addWarn(languageStore.l.notification.warn.projectNumberNotFound)
+      return
+    }
+    const params = getBoughtItemsFilterParams({ skip: null, limit: null, projectNumber: projectNumber })
+    boughtItemsRequest.getItemsExcel(params).then((response) => {
+      if (response.status == 200) {
+        const blob = new Blob([response.data], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          }),
+          url = window.URL.createObjectURL(blob)
+        window.open(url)
+      } else {
+        notificationStore.addWarn(response.data.detail)
+      }
+    })
+  }
+}
+
 </script>
 
 <template>
@@ -131,6 +162,12 @@ function clearFilter() {
         :text="buttonCreateText"
         v-on:click="onButtonNew"
       ></ButtonItemCreate>
+      <ButtonExcel
+        v-if="gtMinWidthDesktop && !is_guestuser"
+        class="controls-base-element"
+        :text="languageStore.l.boughtItem.button.exportExcel"
+        v-on:click="onButtonDownloadExcel"
+      />
       <ButtonEdit
         class="controls-base-element"
         :text="buttonEditText"

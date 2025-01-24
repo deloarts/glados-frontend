@@ -10,6 +10,7 @@ export interface Language {
       cannotUpdateSystemUser: string
       selectProjectFirst: string
       onlyEditOneProject: string
+      onlyExportOneProject: string
       onlyDeleteOneProject: string
       deletedProject: Function
       createdProject: string
@@ -47,6 +48,7 @@ export interface Language {
       xlsxTemplateDownloadFailed: string
       xlsxUploadContentIncomplete: string
       xlsxProcessError: string
+      projectNumberNotFound: string
       batchImportAllFailed: string
       batchImportSomeFailed: string
       noLogForThisDay: string
@@ -253,6 +255,7 @@ export interface Language {
       orderer: string
       deliveryDate: string
       receiver: string
+      storage: string
       desiredDatePlaceholder: string
       expectedDatePlaceholder: string
       noteGeneralPlaceholder: string
@@ -391,6 +394,10 @@ export interface Language {
     }
   }
   settings: {
+    license: {
+      selectorButton: string
+      banner: string
+    }
     host: {
       selectorButton: string
       banner: string

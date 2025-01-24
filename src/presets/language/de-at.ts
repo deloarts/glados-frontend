@@ -412,6 +412,10 @@ export const deAT: Language = {
     },
   },
   settings: {
+    license: {
+      selectorButton: 'Lizenz',
+      banner: 'Lizenzinformationen',
+    },
     host: {
       selectorButton: 'Host',
       banner: 'Host-Informationen',

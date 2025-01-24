@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 
+import ButtonLicense from '@/components/elements/ButtonLicense.vue'
 import ButtonServer from '@/components/elements/ButtonServer.vue'
 import ButtonFile from '@/components/elements/ButtonFile.vue'
 import ButtonUsers from '@/components/elements/ButtonUsers.vue'
@@ -30,6 +31,13 @@ function routeIsActive(currentLink: string) {
 <template>
   <div class="controls-base-scope">
     <div id="settings-controls" class="controls-base-container">
+      <router-link :to="'/settings/license'"
+        ><ButtonLicense
+          class="controls-base-element"
+          v-bind:class="{ active: routeIsActive('/settings/license') }"
+          :text="languageStore.l.settings.license.selectorButton"
+        />
+      </router-link>
       <router-link :to="'/settings/host'"
         ><ButtonServer
           class="controls-base-element"

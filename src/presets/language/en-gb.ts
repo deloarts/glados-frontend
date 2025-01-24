@@ -411,6 +411,10 @@ export const enGB: Language = {
     },
   },
   settings: {
+    license: {
+      selectorButton: 'License',
+      banner: 'License Information',
+    },
     host: {
       selectorButton: 'Host',
       banner: 'Host Information',

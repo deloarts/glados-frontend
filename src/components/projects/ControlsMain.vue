@@ -17,6 +17,7 @@ import { useResolutionStore } from '@/stores/resolution'
 import { useProjectsControlsStore } from '@/stores/controls'
 
 import Prompt from '@/components/main/UserPrompt.vue'
+import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonFilterClear from '@/components/elements/ButtonFilterClear.vue'
 import ButtonExcel from '@/components/elements/ButtonExcel.vue'
@@ -47,6 +48,7 @@ const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTable
 
 // Shows
 const showDeletePrompt = ref<boolean>(false)
+  const loadExportExcel = ref<boolean>(false)
 
 // Buttons
 const buttonCreateText = computed<string>(() => {
@@ -137,8 +139,15 @@ function onButtonDownloadExcel() {
       notificationStore.addWarn(languageStore.l.notification.warn.projectNumberNotFound)
       return
     }
+
+    loadExportExcel.value = true   
     const params = getBoughtItemsFilterParams({ skip: null, limit: null, projectNumber: projectNumber })
+
     boughtItemsRequest.getItemsExcel(params).then((response) => {
+      setTimeout(() => {
+        loadExportExcel.value = false
+      }, 400)
+
       if (response.status == 200) {
         const blob = new Blob([response.data], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -162,8 +171,13 @@ function onButtonDownloadExcel() {
         :text="buttonCreateText"
         v-on:click="onButtonNew"
       ></ButtonItemCreate>
+      <ButtonLoadingGreen
+        v-if="loadExportExcel"
+        class="controls-base-element"
+        :text="languageStore.l.boughtItem.button.exportExcel"
+      />
       <ButtonExcel
-        v-if="gtMinWidthDesktop && !is_guestuser"
+        v-if="!loadExportExcel && gtMinWidthDesktop && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.exportExcel"
         v-on:click="onButtonDownloadExcel"

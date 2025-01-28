@@ -15,7 +15,7 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss">
-@use '@/scss/button/buttonBase.scss';
+@use '@/scss/button/buttonGreenOutline.scss';
 
 button:hover {
   background-color: var(--button-background);

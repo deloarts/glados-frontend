@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import router from '@/router/index'
 import { boughtItemsRequest } from '@/requests/items'
 
@@ -8,6 +9,7 @@ import { useBoughtItemsStore } from '@/stores/boughtItems'
 
 import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
 
+import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonAbort from '@/components/elements/ButtonAbort.vue'
 
@@ -20,10 +22,18 @@ const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
 const boughtItemsStore = useBoughtItemsStore()
 
+const loadingCreate = ref<boolean>(false)
+
 function onCreate() {
+  loadingCreate.value = true
+
   boughtItemsRequest
     .postItems(props.formData)
     .then((response) => {
+      setTimeout(() => {
+        loadingCreate.value = false
+      }, 400)
+
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.createdItem)
         boughtItemsStore.getItems()
@@ -57,7 +67,13 @@ function onAbort() {
 <template>
   <div class="controls-base-scope">
     <div id="item-controls" class="controls-base-container">
+      <ButtonLoadingGreen
+        v-if="loadingCreate"
+        class="controls-base-element"
+        :text="languageStore.l.project.button.create"
+      />
       <ButtonItemCreate
+        v-else
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.create"
         v-on:click="onCreate"

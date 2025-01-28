@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 import router from '@/router/index'
@@ -10,6 +11,7 @@ import { useBoughtItemsStore } from '@/stores/boughtItems'
 
 import type { BoughtItemUpdateSchema } from '@/schemas/boughtItem'
 
+import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonAbort from '@/components/elements/ButtonAbort.vue'
 
@@ -25,11 +27,19 @@ const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
 const boughtItemsStore = useBoughtItemsStore()
 
+const loadingUpdate = ref<boolean>(false)
+
 function onUpdate() {
+  loadingUpdate.value = true
+
   const itemID = Number(route.params.id)
   boughtItemsRequest
     .putItems(itemID, props.formData)
     .then((response) => {
+      setTimeout(() => {
+        loadingUpdate.value = false
+      }, 400)
+
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.updatedItem(itemID))
         boughtItemsStore.getItems()
@@ -63,7 +73,13 @@ function onAbort() {
 <template>
   <div class="controls-base-scope">
     <div id="item-controls" class="controls-base-container">
+      <ButtonLoadingGreen
+        v-if="loadingUpdate"
+        class="controls-base-element"
+        :text="languageStore.l.project.button.update"
+      />
       <ButtonItemCreate
+        v-else
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.update"
         v-on:click="onUpdate"

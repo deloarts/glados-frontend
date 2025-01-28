@@ -61,13 +61,14 @@
 
 .items {
   z-index: 9999;
-  position: fixed;
-  display: inline-block;
+  position: absolute;
+  
   padding: 0;
   margin: 0;
+  margin-top: 5px;
   
   max-height: 350px;
-  overflow-y: auto;
+  overflow: hidden;
 
   border-style: var(--main-border-style);
   border-color: var(--main-border-color);
@@ -75,8 +76,10 @@
   border-width: var(--main-border-width);
 
   background-color: var(--main-background-color-accent-1);
+}
 
-  transform: translateY(calc(50% + 20px));
+.items-overflow {
+  overflow-y: auto;
 }
 
 :deep(hr) {
@@ -95,8 +98,6 @@
   padding: 8px;
 
   border-radius: var(--main-border-radius);
-
-  transition: all 0.2s ease;
 }
 
 :deep(.drop-down-toggle-item:hover) {
@@ -115,6 +116,25 @@
   padding: 8px;
 
   border-radius: var(--main-border-radius);
+}
 
-  transition: all 0.2s ease;
+.v-enter-active {
+  animation: show-dropdown 0.3s ease;}
+
+.v-leave-active {
+  animation: show-dropdown 0.3s reverse;
+}
+
+@keyframes show-dropdown {
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    max-height: 350px;
+    opacity: 1;
+  }
 }

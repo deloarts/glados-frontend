@@ -15,6 +15,7 @@ import { getBoughtItemsFilterParams } from '@/requests/params'
 import { camelToTitle } from '@/helper/string.helper'
 
 import Prompt from '@/components/main/UserPrompt.vue'
+import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonEdit from '@/components/elements/ButtonEdit.vue'
 import ButtonCopy from '@/components/elements/ButtonCopy.vue'
@@ -49,6 +50,7 @@ const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTable
 
 // Shows
 const showDeletePrompt = ref<boolean>(false)
+const loadExportExcel = ref<boolean>(false)
 
 // Buttons
 const buttonItemCreateText = computed<string>(() => {
@@ -181,8 +183,14 @@ function onButtonDelete() {
 }
 
 function onButtonDownloadExcel() {
+  loadExportExcel.value = true
   const params = getBoughtItemsFilterParams(filterStore.state)
+
   boughtItemsRequest.getItemsExcel(params).then((response) => {
+      setTimeout(() => {
+        loadExportExcel.value = false
+      }, 400)
+      
     if (response.status == 200) {
       const blob = new Blob([response.data], {
           type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -262,8 +270,13 @@ onBeforeMount(setupTabletView)
         :text="languageStore.l.boughtItem.button.batchCreate"
         v-on:click="onButtonBatchCreate"
       />
+      <ButtonLoadingGreen
+        v-if="loadExportExcel"
+        class="controls-base-element"
+        :text="languageStore.l.boughtItem.button.exportExcel"
+      />
       <ButtonExcel
-        v-if="gtMinWidthDesktop && !is_guestuser"
+        v-if="!loadExportExcel && gtMinWidthDesktop && !is_guestuser"
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.exportExcel"
         v-on:click="onButtonDownloadExcel"
@@ -360,6 +373,7 @@ onBeforeMount(setupTabletView)
         class="controls-base-element"
         v-model:text="buttonColumnsText"
         :hide-when-clicked="false"
+        :overflow="true"
       >
         <div class="drop-down-button-item">
           <ButtonShowInitial

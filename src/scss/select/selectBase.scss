@@ -12,8 +12,11 @@ select {
 
   color: var(--main-text-color);
   background-color: var(--input-background);
+
   border: 1px solid var(--input-border-color);
-  // box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  border-radius: var(--main-border-radius);
+  border-style: var(--main-border-style);
+  border-width: var(--main-border-width);
 
   -webkit-appearance: button;
   appearance: button;

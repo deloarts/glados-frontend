@@ -360,6 +360,7 @@ onBeforeMount(setupTabletView)
         class="controls-base-element"
         v-model:text="buttonColumnsText"
         :hide-when-clicked="false"
+        :overflow="true"
       >
         <div class="drop-down-button-item">
           <ButtonShowInitial

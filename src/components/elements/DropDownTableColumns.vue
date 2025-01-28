@@ -4,9 +4,11 @@ import { ref } from 'vue'
 interface Props {
   text?: string
   hideWhenClicked?: boolean
+  overflow?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   hideWhenClicked: true,
+  overflow: false,
 })
 const state = ref(false)
 
@@ -40,7 +42,7 @@ function onClickDropDown() {
       </div>
     </button>
     <Transition>
-      <div class="items items-overflow" v-if="state" v-on:click="onClickDropDown()" @mouseleave="state=false">
+      <div class="items" v-bind:class="{ 'items-overflow': props.overflow }" v-if="state" v-on:click="onClickDropDown()" @mouseleave="state=false">
         <slot></slot>
       </div>
     </Transition>

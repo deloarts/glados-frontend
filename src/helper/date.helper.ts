@@ -1,4 +1,3 @@
-// @ts-ignore
 import moment from 'moment'
 
 export function calcDiffInWeeks(fromDate: Date | null, toDate: Date | null) {

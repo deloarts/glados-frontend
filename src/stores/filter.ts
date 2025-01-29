@@ -3,6 +3,9 @@ import { defineStore } from 'pinia'
 
 import constants from '@/constants'
 import { hostRequest } from '@/requests/host'
+import { boughtItemsFilter } from '@/presets/boughtItemsFilter'
+import { projectsFilter, projectsFilterAll } from '@/presets/projectsFilter'
+import { getDifference } from '@/helper/object.helper'
 
 import type {
   HostConfigBoughtItemsFilterSchema,
@@ -16,84 +19,15 @@ interface BoughtItemPreset {
 export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   const loading = ref<boolean>(false)
   const presets = ref<BoughtItemPreset>({})
-  const state = ref<HostConfigBoughtItemsFilterSchema>({
-    limit: 25,
-    skip: null,
-    ignoreDelivered: false,
-    ignoreCanceled: false,
-    ignoreLost: false,
-    highPriority: null,
-    creatorID: null,
-    createdDate: null,
-    changedDateFrom: null,
-    desiredDate: null,
-    requesterID: null,
-    requestedDate: null,
-    ordererID: null,
-    orderedDate: null,
-    expectedDate: null,
-    deliveredDate: null,
-    sortBy: 'id',
-    id: null,
-    status: null,
-    projectNumber: null,
-    projectCustomer: null,
-    projectDescription: null,
-    productNumber: null,
-    quantity: null,
-    unit: null,
-    partnumber: null,
-    orderNumber: null,
-    manufacturer: null,
-    supplier: null,
-    group1: null,
-    noteGeneral: null,
-    noteSupplier: null,
-    storagePlace: null,
-    receiverID: null,
-  })
+  const state = ref<HostConfigBoughtItemsFilterSchema>(JSON.parse(JSON.stringify(boughtItemsFilter)))
+  const filterApplied = ref<boolean>(false)
 
-  function set(key: string, value: string | number | Date | null) {
+  function set(key: string, value: boolean | number | string | Date | null | undefined) {
     state.value[key] = value
   }
 
   function reset() {
-    state.value = {
-      limit: 25,
-      skip: null,
-      ignoreDelivered: false,
-      ignoreCanceled: false,
-      ignoreLost: false,
-      highPriority: null,
-      creatorID: null,
-      createdDate: null,
-      changedDateFrom: null,
-      desiredDate: null,
-      requesterID: null,
-      requestedDate: null,
-      ordererID: null,
-      orderedDate: null,
-      expectedDate: null,
-      deliveredDate: null,
-      sortBy: 'id',
-      id: null,
-      status: null,
-      projectNumber: null,
-      projectCustomer: null,
-      projectDescription: null,
-      productNumber: null,
-      quantity: null,
-      unit: null,
-      partnumber: null,
-      orderNumber: null,
-      manufacturer: null,
-      supplier: null,
-      group1: null,
-      noteGeneral: null,
-      noteSupplier: null,
-      storagePlace: null,
-      receiverID: null,
-    }
+    state.value = JSON.parse(JSON.stringify(boughtItemsFilter))
     console.log('Reset bought items filter')
   }
 
@@ -175,6 +109,13 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   watch(
     state,
     () => {
+      const a = JSON.parse(JSON.stringify(boughtItemsFilter))
+      const b = JSON.parse(JSON.stringify(state.value))
+      const diff = getDifference(a, b)
+      if ('skip' in diff) delete diff['skip']
+      if ('limit' in diff) delete diff['limit']
+      filterApplied.value = Object.keys(diff).length > 0
+
       localStorage.setItem('gladosBoughtItemFilter', JSON.stringify(state.value))
       console.log('Saved bought items filter to local storage.')
     },
@@ -194,6 +135,7 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   return {
     state,
     presets,
+    filterApplied,
     get,
     set,
     reset,
@@ -204,50 +146,34 @@ export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
 })
 
 export const useProjectFilterStore = defineStore('projectFilter', () => {
-  const state = ref<HostConfigProjectFilterSchema>({
-    limit: 25,
-    skip: null,
-    id: null,
-    number: null,
-    productNumber: null,
-    customer: null,
-    description: null,
-    isActive: null,
-    designatedUserID: null,
-  })
-  const all: HostConfigProjectFilterSchema = {
-    limit: null,
-    skip: null,
-    id: null,
-    number: null,
-    productNumber: null,
-    customer: null,
-    description: null,
-    isActive: null,
-    designatedUserID: null,
-  }
+  const state = ref<HostConfigProjectFilterSchema>(JSON.parse(JSON.stringify(projectsFilter)))
+  const all: HostConfigProjectFilterSchema = JSON.parse(JSON.stringify(projectsFilterAll))
+  const filterApplied = ref<boolean>(false)
 
   function set(key: string, value: string | number | Date | null) {
     state.value[key] = value
   }
 
   function reset() {
-    state.value = {
-      limit: 25,
-      skip: null,
-      id: null,
-      number: null,
-      productNumber: null,
-      customer: null,
-      description: null,
-      isActive: null,
-      designatedUserID: null,
-    }
+    state.value = JSON.parse(JSON.stringify(projectsFilter))
   }
+
+  watch(
+    state,
+    () => {
+      const a = JSON.parse(JSON.stringify(projectsFilter))
+      const b = JSON.parse(JSON.stringify(state.value))
+      const diff = getDifference(a, b)
+      if ('skip' in diff) delete diff['skip']
+      if ('limit' in diff) delete diff['limit']
+      filterApplied.value = Object.keys(diff).length > 0
+    },
+    { deep: true },
+  )
 
   onBeforeMount(() => {
     reset()
   })
 
-  return { state, all, set, reset }
+  return { state, all, filterApplied, set, reset }
 })

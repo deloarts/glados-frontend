@@ -410,6 +410,7 @@ onBeforeMount(setupTabletView)
         class="controls-base-element"
         v-model:text="buttonClearFilterText"
         v-on:click="clearFilter"
+        v-bind:class="{ 'controls-base-filter-applied': filterStore.filterApplied }"
       />
 
       <SelectPreText

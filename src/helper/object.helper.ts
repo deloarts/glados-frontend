@@ -1,0 +1,1 @@
+export const getDifference = (a: object, b: object) => Object.entries(b).filter(([key, val]) => a[key] !== val && key in a).reduce((a, [key, v]) => ({...a, [key]: v}), {});

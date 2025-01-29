@@ -4,7 +4,8 @@ import { useRoute } from 'vue-router'
 
 import router from '@/router/index'
 import { useLanguageStore } from '@/stores/language'
-import { useUserStore } from '@/stores/user'
+import { useProjectsStore } from '@/stores/projects'
+import { useUsersStore, useUserStore } from '@/stores/user'
 import { useResolutionStore } from '@/stores/resolution'
 
 import IconLogout from '@/components/icons/IconLogout.vue'
@@ -22,6 +23,8 @@ const route = useRoute()
 // Store
 const languageStore = useLanguageStore()
 const userStore = useUserStore()
+const usersStore = useUsersStore()
+const projectsStore = useProjectsStore()
 const resolutionStore = useResolutionStore()
 
 interface Props {
@@ -68,6 +71,9 @@ function routeIsActive(currentLink: string) {
 }
 
 function logout() {
+  userStore.logout()
+  usersStore.clear()
+  projectsStore.clear()
   localStorage.setItem('gladosTokenValue', '')
   localStorage.setItem('gladosTokenType', '')
   router.push({ name: 'Login' })

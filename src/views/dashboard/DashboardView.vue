@@ -62,7 +62,7 @@ function autoFetchBoughtItemStatus() {
   if (route.path != '/dashboard') {
     console.info('Stopped updating routine for bought items: User leaved site.')
   } else {
-    let filter = JSON.parse(JSON.stringify(boughtItemsFilter))
+    const filter = JSON.parse(JSON.stringify(boughtItemsFilter))
     const fromDate = moment().subtract(30, 'days').format('YYYY-MM-DD')
 
     filter.limit = null
@@ -73,8 +73,8 @@ function autoFetchBoughtItemStatus() {
       if (response.status == 200) {
         const data = response.data.items
 
-        let usersDataset = {}
-        let boughtItems = {
+        const usersDataset = {}
+        const boughtItems = {
           active: data.length,
           open: 0,
           requested: 0,
@@ -86,7 +86,7 @@ function autoFetchBoughtItemStatus() {
           lost: 0,
         }
 
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           const datum = data[i]
 
           // BOUGHT ITEMS COUNT
@@ -116,7 +116,7 @@ function autoFetchBoughtItemStatus() {
           }
 
           // USER ITEMS COUNT
-          let fullName = usersStore.getNameByID(datum.creator_id)
+          const fullName = usersStore.getNameByID(datum.creator_id)
           if (fullName in usersDataset) {
             let value = parseInt(usersDataset[fullName])
             value++
@@ -128,11 +128,11 @@ function autoFetchBoughtItemStatus() {
         }
 
         // Sort user dataset and limit to 10 items
-        let sortedUsers = []
-        let sortedUsersDataset = {}
+        const sortedUsers = []
+        const sortedUsersDataset = {}
         let userLimit = 0
 
-        for (var user in usersDataset) {
+        for (const user in usersDataset) {
           sortedUsers.push([user, usersDataset[user]])
         }
 
@@ -146,7 +146,7 @@ function autoFetchBoughtItemStatus() {
           userLimit = sortedUsers.length
         }
 
-        for (var i = 0; i < userLimit; i++) {
+        for (let i = 0; i < userLimit; i++) {
           sortedUsersDataset[sortedUsers[i][0]] = sortedUsers[i][1]
         }
 
@@ -170,7 +170,7 @@ function autoFetchBoughtItemStatus() {
       } else {
         console.error('Failed to fetch data for dashboard.')
       }
-      setTimeout(autoFetchBoughtItemStatus.bind(this), constants.fetchDashboardDataAfter)
+      setTimeout(() => { autoFetchBoughtItemStatus() }, constants.fetchDashboardDataAfter)
     })
   }
 }
@@ -182,7 +182,7 @@ function autoFetchBoughtItemTimeline() {
     const currentYear = moment().year()
     const currentMonth = moment().month()
 
-    let filter = JSON.parse(JSON.stringify(boughtItemsFilter))
+    const filter = JSON.parse(JSON.stringify(boughtItemsFilter))
 
     const fromYear = moment().subtract(1, 'years').year()
     let fromMonth = moment().subtract(1, 'years').month() + 2
@@ -198,7 +198,7 @@ function autoFetchBoughtItemTimeline() {
     boughtItemsRequest.getItems(params).then((response) => {
       if (response.status == 200) {
         const data = response.data.items
-        let dataset = {
+        const dataset = {
           months: [
             languageStore.l.dashboard.months.january,
             languageStore.l.dashboard.months.february,
@@ -218,27 +218,27 @@ function autoFetchBoughtItemTimeline() {
           delivered: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         }
 
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           const datum = data[i]
 
-          let createdDate = moment(datum.created, 'YYYY-MM-DD')
+          const createdDate = moment(datum.created, 'YYYY-MM-DD')
           if (createdDate.isValid()) {
             dataset.created[createdDate.month()] += 1
           }
 
-          let orderedDate = moment(datum.ordered_date, 'YYYY-MM-DD')
+          const orderedDate = moment(datum.ordered_date, 'YYYY-MM-DD')
           if (orderedDate.isValid()) {
             dataset.ordered[orderedDate.month()] += 1
           }
 
-          let deliveredDate = moment(datum.delivery_date, 'YYYY-MM-DD')
+          const deliveredDate = moment(datum.delivery_date, 'YYYY-MM-DD')
           if (deliveredDate.isValid()) {
             dataset.delivered[deliveredDate.month()] += 1
           }
         }
 
         // Set year and shift everything
-        for (var i = 0; i < dataset.months.length; i++) {
+        for (let i = 0; i < dataset.months.length; i++) {
           if (i <= currentMonth) {
             dataset.months[i] += ` ${currentYear - 2000}`
           } else {
@@ -246,17 +246,17 @@ function autoFetchBoughtItemTimeline() {
           }
         }
 
-        for (var i = 0; i < currentMonth + 1; i++) {
-          let shiftedMonth = dataset.months.shift()
+        for (let i = 0; i < currentMonth + 1; i++) {
+          const shiftedMonth = dataset.months.shift()
           dataset.months.push(shiftedMonth)
 
-          let shiftedCreated = dataset.created.shift()
+          const shiftedCreated = dataset.created.shift()
           dataset.created.push(shiftedCreated)
 
-          let shiftedOrdered = dataset.ordered.shift()
+          const shiftedOrdered = dataset.ordered.shift()
           dataset.ordered.push(shiftedOrdered)
 
-          let shiftedDelivered = dataset.delivered.shift()
+          const shiftedDelivered = dataset.delivered.shift()
           dataset.delivered.push(shiftedDelivered)
         }
 
@@ -264,7 +264,7 @@ function autoFetchBoughtItemTimeline() {
       } else {
         console.error('Failed to fetch data for dashboard.')
       }
-      setTimeout(autoFetchBoughtItemTimeline.bind(this), constants.fetchDashboardDataAfter)
+      setTimeout(() => { autoFetchBoughtItemTimeline() }, constants.fetchDashboardDataAfter)
     })
   }
 }
@@ -273,11 +273,12 @@ onBeforeMount(() => {
   boughtItemsUsersDataset.value = null
   boughtItemsOverviewDataset.value = null
   timelineDataset.value = null
-}),
-  onMounted(() => {
-    autoFetchBoughtItemStatus()
-    autoFetchBoughtItemTimeline()
-  })
+})
+
+onMounted(() => {
+  autoFetchBoughtItemStatus()
+  autoFetchBoughtItemTimeline()
+})
 </script>
 
 <template>

@@ -29,3 +29,20 @@
   margin: 2px;
 }
 
+.controls-base-filter-applied {
+  border-bottom-color: var(--main-color);
+
+  animation-name: applied;
+  animation-duration: 0.6s;
+}
+
+@keyframes applied {
+  0% {
+  }
+  50% {
+    background-color: var(--main-background-color);
+  }
+  100% {
+  }
+}
+

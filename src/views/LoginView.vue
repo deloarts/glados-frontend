@@ -2,7 +2,6 @@
 import { ref, onMounted, onBeforeMount, computed, watch } from 'vue'
 import { baseParticles } from '@/presets/particles'
 import { loadFull } from 'tsparticles'
-//@ts-ignore
 import moment from 'moment'
 import router from '@/router/index'
 
@@ -80,7 +79,7 @@ function enterApp() {
   notificationStore.addInfo(
     languageStore.l.notification.info.welcomeMessage(userStore.user.full_name),
   )
-  var previousRoute = localStorage.getItem('gladosActiveRoute')
+  let previousRoute = localStorage.getItem('gladosActiveRoute')
   if (previousRoute == '/login' || previousRoute == null) {
     previousRoute = '/'
   }
@@ -101,9 +100,9 @@ watch(hasRequiredData, () => {
 })
 
 onBeforeMount(() => {
-  userStore.logout()
-  usersStore.clear()
-  projectsStore.clear()
+  // userStore.logout()
+  // usersStore.clear()
+  // projectsStore.clear()
 })
 onMounted(() => {
   setTimeout(() => {

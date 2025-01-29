@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import router from '@/router/index'
 import { projectsRequest } from '@/requests/projects'
 
@@ -8,6 +9,7 @@ import { useProjectsStore } from '@/stores/projects'
 
 import type { ProjectCreateSchema } from '@/schemas/project'
 
+import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonAbort from '@/components/elements/ButtonAbort.vue'
 
@@ -20,10 +22,18 @@ const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
 const projectsStore = useProjectsStore()
 
+const loadingCreate = ref<boolean>(false)
+
 function onCreate() {
+  loadingCreate.value = true
+
   projectsRequest
     .postProjects(props.formData)
     .then((response) => {
+      setTimeout(() => {
+        loadingCreate.value = false
+      }, 400)
+
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.createdProject)
         projectsStore.getItems()
@@ -53,16 +63,22 @@ function onAbort() {
 <template>
   <div class="controls-base-scope">
     <div id="item-controls" class="controls-base-container">
+      <ButtonLoadingGreen
+        v-if="loadingCreate"
+        class="controls-base-element"
+        :text="languageStore.l.project.button.create"
+      />
       <ButtonItemCreate
+        v-else
         class="controls-base-element"
         :text="languageStore.l.project.button.create"
         v-on:click="onCreate"
-      ></ButtonItemCreate>
+      />
       <ButtonAbort
         class="controls-base-element"
         :text="languageStore.l.project.button.cancel"
         v-on:click="onAbort"
-      ></ButtonAbort>
+      />
     </div>
   </div>
 </template>

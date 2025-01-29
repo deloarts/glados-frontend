@@ -17,7 +17,7 @@ git fetch --all --tags
 git checkout {TAG_NAME}
 ```
 
-Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.13.3`.
+Where `{TAG_NAME}` is the version of the app you want to use, e.g. `v0.13.4`.
 
 ## 2 update the config file
 

@@ -26,15 +26,25 @@ const chartData = computed(() => {
     labels: chartLabels.value,
     datasets: [
       {
+        borderColor: [
+          'rgba(37, 204, 247, 1)',
+          'rgba(240, 150, 70, 1)',
+          'rgba(206, 192, 0, 1)',
+          'rgba(250, 100, 80, 1)',
+          'rgba(111, 151, 0, 1)',
+          'rgba(50, 205, 50, 1)',
+          'rgba(109, 109, 109, 1)',
+          'rgba(255, 55, 55, 1)',
+        ],
         backgroundColor: [
-          '#25CCF7',
-          '#f09646',
-          '#cec000',
-          '#fa6450',
-          '#6f9700',
-          '#32CD32',
-          '#6d6d6d',
-          '#501e1e',
+          'rgba(37, 204, 247, 1)',
+          'rgba(240, 150, 70, 1)',
+          'rgba(206, 192, 0, 1)',
+          'rgba(250, 100, 80, 1)',
+          'rgba(111, 151, 0, 1)',
+          'rgba(50, 205, 50, 1)',
+          'rgba(109, 109, 109, 1)',
+          'rgba(255, 55, 55, 1)',
         ],
         data: chartDataset.value,
       },
@@ -45,7 +55,7 @@ const chartOptions = ref({
   responsive: true,
   maintainAspectRatio: false,
   datasets: {
-    doughnut: { borderWidth: 0 },
+    doughnut: { borderWidth: 2, borderAlign: 'inner' },
   },
   plugins: {
     legend: {

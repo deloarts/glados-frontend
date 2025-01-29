@@ -81,7 +81,7 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   datasets: {
-    doughnut: { borderWidth: 0 },
+    doughnut: { borderWidth: 0, borderAlign: 'inner' },
   },
   plugins: {
     legend: {
@@ -99,8 +99,8 @@ const chartOptions = {
 
 function updateChart() {
   if (props.dataset != null) {
-    var data = []
-    var labels = []
+    const data = []
+    const labels = []
     for (const key in props.dataset) {
       labels.push(key)
       data.push(props.dataset[key])

@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.13.5**: Fix login-loop.  
 **v0.13.4**: Better styling.  
 **v0.13.3**: Add export for projects.  
 **v0.13.2**: Enhance input components.  

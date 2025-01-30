@@ -74,6 +74,14 @@ function login() {
   })
 }
 
+function logout() {
+  userStore.logout()
+  usersStore.clear()
+  projectsStore.clear()
+  localStorage.setItem('gladosTokenValue', '')
+  localStorage.setItem('gladosTokenType', '')
+}
+
 function enterApp() {
   showLoadingBar.value = false
   notificationStore.addInfo(
@@ -100,9 +108,7 @@ watch(hasRequiredData, () => {
 })
 
 onBeforeMount(() => {
-  // userStore.logout()
-  // usersStore.clear()
-  // projectsStore.clear()
+  logout()
 })
 onMounted(() => {
   setTimeout(() => {

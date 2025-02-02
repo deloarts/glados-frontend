@@ -96,6 +96,7 @@ url/backend | `string` | The backend address. Can be empty if the backend handle
 url/domain | `string` | The URL under which glados is reachable (e.g. `glados.company.local` on your intranet)
 url/rfidAuth | `string` | The URL where the rfid-auth-app can be reached on the local machine
 patExpireMinutes | `number` | The expiration time in minutes for the personal access token
+allowUnsupportedBrowsers | `boolean` | Wether or not to allow unsupported browsers. Currently supported: Chromium based browsers.
 
 ## 6 install dependencies
 

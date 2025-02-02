@@ -55,7 +55,7 @@ onMounted(() => {
 <template>
   <div id="app">
     <Resolution />
-    <BrowserSupport />
+    <BrowserSupport v-if="!config.allowUnsupportedBrowsers" />
     <Notification />
     <Connection />
     <div

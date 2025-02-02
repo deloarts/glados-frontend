@@ -15,4 +15,5 @@ export default {
     rfidAuth: 'ws://localhost:5500',
   },
   patExpireMinutes: 43200,
+  allowUnsupportedBrowsers: false,
 }

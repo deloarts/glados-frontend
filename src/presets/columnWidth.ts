@@ -2,15 +2,15 @@ export const projectsColumnWidths = {
   number: 45,
   id: 55,
   status: 85,
-  projectNumber: 85,
-  productNumber: 85,
+  projectNumber: 100,
+  productNumber: 100,
   projectLink: 35,
   customer: 250,
   description: 350,
   designatedUserID: 140,
   createdDate: 85,
   state: 85,
-};
+}
 
 export const boughtItemColumnWidths = {
   number: 45,
@@ -44,4 +44,4 @@ export const boughtItemColumnWidths = {
   arrivalWeeks: 61,
   totalWeeks: 61,
   storagePlace: 300,
-};
+}

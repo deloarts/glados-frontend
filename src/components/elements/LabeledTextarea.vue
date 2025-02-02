@@ -54,7 +54,7 @@ const computedValue = computed<number | string | null | undefined>({
 
 .labeled-input {
   font-family: var(--main-font-text);
-  font-size: 1em;
+  font-size: var(--main-font-text-size);
 
   padding-top: 10px;
   padding-bottom: 10px;

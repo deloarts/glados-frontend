@@ -62,8 +62,8 @@ onMounted(() => fetchChangelog())
 }
 
 h1 {
-  font-family: 'Play', 'Calibri';
-  font-size: 16px;
+  font-family: var(--main-font-head);
+  font-size: var(--main-font-head-size);
   font-weight: bold;
 
   margin: 0;

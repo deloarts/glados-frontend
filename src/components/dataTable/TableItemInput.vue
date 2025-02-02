@@ -184,8 +184,8 @@ input {
   border: none;
   border-color: inherit;
 
-  font-family: Calibri;
-  font-size: 14px;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
 
   text-align: v-bind(cssCenter);
 }

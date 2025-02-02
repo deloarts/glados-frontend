@@ -50,8 +50,8 @@ th {
   margin: 4px;
   height: 25px;
 
-  font-family: "Play", "Calibri";
-  font-size: 14px;
+  font-family: var(--main-font-head);
+  font-size: var(--main-font-head-size);
 
   background-color: var(--table-head-background);
 }
@@ -93,8 +93,8 @@ tr.selected:hover > td {
 }
 
 td {
-  font-family: "Calibri";
-  font-size: 14px;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
 
   padding: 4px;
   padding-left: 8px;

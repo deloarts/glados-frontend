@@ -271,7 +271,7 @@ onMounted(() => {
 
   padding: 4px;
 
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--main-font-text);
   font-size: 0.75em;
   font-weight: thin;
   color: white;
@@ -280,7 +280,7 @@ onMounted(() => {
 }
 
 h1 {
-  font-family: 'Lobster', 'Segoe UI', 'Arial';
+  font-family: var(--main-font-glados);
   font-size: 3em;
   font-weight: thin;
   padding: 0;
@@ -296,7 +296,7 @@ h1 {
 }
 
 h2 {
-  font-family: 'Play', 'Segoe UI', 'Arial';
+  font-family: var(--main-font-head);
   font-size: 1.1em;
   font-weight: thin;
   padding: 0;
@@ -329,7 +329,7 @@ button {
   left: 25px;
   right: 25px;
 
-  font-family: 'Play', 'Segoe UI', 'Arial';
+  font-family: var(--main-font-head);
   font-weight: 700;
 
   height: 30px;

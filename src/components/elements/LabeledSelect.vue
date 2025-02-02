@@ -185,8 +185,8 @@ onMounted(updateOptionIndex)
   border: 1px solid var(--main-color);
   border-radius: var(--main-border-radius);
 
-  font-family: var(--main-font);
-  font-size: 14px;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
 }
 
 .labeled-input-dropdown-item {

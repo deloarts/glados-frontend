@@ -19,6 +19,9 @@ th {
 
   color: var(--main-text-color);
   background: var(--table-head-background);
+  
+  font-family: var(--main-font-head);
+  font-size: var(--main-font-head-size);
 }
 
 .editing {

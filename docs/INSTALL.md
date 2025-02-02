@@ -72,7 +72,7 @@ cd glados-frontend
 git checkout {TAG_NAME}
 ```
 
-Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.13.5`.
+Enter your username and your access token when prompted. Replace `{TAG_NAME}` with the version you want to clone, e.g. `v0.13.6`.
 
 > ✏️ You can use this command to update the app as well. Just modify the tag name.
 >
@@ -96,6 +96,7 @@ url/backend | `string` | The backend address. Can be empty if the backend handle
 url/domain | `string` | The URL under which glados is reachable (e.g. `glados.company.local` on your intranet)
 url/rfidAuth | `string` | The URL where the rfid-auth-app can be reached on the local machine
 patExpireMinutes | `number` | The expiration time in minutes for the personal access token
+allowUnsupportedBrowsers | `boolean` | Wether or not to allow unsupported browsers. Currently supported: Chromium based browsers.
 
 ## 6 install dependencies
 

@@ -16,10 +16,10 @@ tr {
 }
 
 tr > th {
-  font-family: 'Calibri';
+  font-family: var(--main-font-text);
   text-align: 'center';
   font-weight: normal;
-  font-size: 14px;
+  font-size: var(--main-font-text-size);
 }
 
 tr:nth-child(1) > th {
@@ -29,7 +29,7 @@ tr:nth-child(1) > th {
   min-height: 40px;
   max-height: 40px;
 
-  font-family: 'Play', 'Calibri';
+  font-family: var(--main-font-head);
   font-weight: bold;
 }
 

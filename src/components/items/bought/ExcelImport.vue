@@ -208,7 +208,7 @@ watch(files, () => {
   width: 800px;
   height: 400px;
   overflow: auto;
-  font-family: Calibri, Arial, Helvetica, sans-serif;
+  font-family: var(--main-font-text);
   text-align: left;
 }
 
@@ -248,7 +248,7 @@ input {
 }
 
 h1 {
-  font-family: 'Play', 'Segoe UI', 'Arial';
+  font-family: var(--main-font-head);
   font-size: 1.5em;
   font-weight: thin;
 }

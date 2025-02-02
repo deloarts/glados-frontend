@@ -170,7 +170,9 @@ function autoFetchBoughtItemStatus() {
       } else {
         console.error('Failed to fetch data for dashboard.')
       }
-      setTimeout(() => { autoFetchBoughtItemStatus() }, constants.fetchDashboardDataAfter)
+      setTimeout(() => {
+        autoFetchBoughtItemStatus()
+      }, constants.fetchDashboardDataAfter)
     })
   }
 }
@@ -264,7 +266,9 @@ function autoFetchBoughtItemTimeline() {
       } else {
         console.error('Failed to fetch data for dashboard.')
       }
-      setTimeout(() => { autoFetchBoughtItemTimeline() }, constants.fetchDashboardDataAfter)
+      setTimeout(() => {
+        autoFetchBoughtItemTimeline()
+      }, constants.fetchDashboardDataAfter)
     })
   }
 }
@@ -471,6 +475,6 @@ h1 {
 
 #data-note {
   grid-area: data-note;
-  font-size: 14px;
+  font-size: var(--main-font-text-size);
 }
 </style>

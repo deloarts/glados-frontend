@@ -74,11 +74,11 @@
   --main-border-color: var(--main-color);
 
   // FONTS
-  --main-font-text: "Aptos", "Calibri", "Tahoma";
+  --main-font-text: "Calibri", "Tahoma", "Arial";
   --main-font-text-size: 14px;
-  --main-font-head: "Play", "Aptos", "Calibri", "Tahoma";
+  --main-font-head: "Play", "Roboto", "Calibri", "Tahoma", "Arial";
   --main-font-head-size: 14px;
-  --main-font-glados: "Lobster", "Play", "Aptos", "Calibri", "Tahoma";
+  --main-font-glados: "Lobster", "Play", "Roboto", "Calibri", "Tahoma", "Arial";
   --main-font-glados-size: 30px;
 
 
@@ -95,10 +95,9 @@
 }
 
 h1 {
-  font-family: "Play", "Segoe UI", "Arial";
+  font-family: var(--main-font-head);
   font-weight: 700;
   font-size: 1.5em;
-  // padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;

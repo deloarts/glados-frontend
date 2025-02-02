@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
+import { useUsersStore, useUserStore } from '@/stores/user'
 import { usersRequest } from '@/requests/users'
 
 import type { UserCreateSchema } from '@/schemas/user'
@@ -14,6 +15,8 @@ import ButtonUserCreate from '@/components/elements/ButtonUserCreate.vue'
 // Stores
 const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
+const userStore = useUserStore()
+const usersStore = useUsersStore()
 
 const formData = ref<UserCreateSchema>({
   is_active: false,
@@ -29,6 +32,9 @@ const formData = ref<UserCreateSchema>({
 
 function createUser() {
   usersRequest.postUsers(formData.value).then((response) => {
+    userStore.get()
+    usersStore.get()
+
     if (response.status == 200) {
       notificationStore.addInfo(languageStore.l.notification.info.createdUser)
       formData.value = {

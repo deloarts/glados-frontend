@@ -1,36 +1,34 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted } from 'vue'
 
-import { useLanguageStore } from "@/stores/language";
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { boughtItemsRequest } from "@/requests/items";
+import { useLanguageStore } from '@/stores/language'
+import { useBoughtItemsStore } from '@/stores/boughtItems'
+import { boughtItemsRequest } from '@/requests/items'
 
-const languageStore = useLanguageStore();
-const boughtItemsStore = useBoughtItemsStore();
+const languageStore = useLanguageStore()
+const boughtItemsStore = useBoughtItemsStore()
 
-const changelog = ref<Array<string>>([""]);
+const changelog = ref<Array<string>>([''])
 
 function fetchChangelog() {
   if (boughtItemsStore.getSelection().length > 0) {
-    boughtItemsRequest
-      .getItemsIDChangelog(boughtItemsStore.getSelection()[0])
-      .then((response) => {
-        changelog.value = response.data;
-      });
+    boughtItemsRequest.getItemsIDChangelog(boughtItemsStore.getSelection()[0]).then((response) => {
+      changelog.value = response.data
+    })
   }
 }
 
-onMounted(() => fetchChangelog());
+onMounted(() => fetchChangelog())
 
 watch(
   () => boughtItemsStore.getSelection(),
   (newSelection: Array<number>, oldSelection: Array<number>) => {
     if (newSelection != oldSelection) {
-      changelog.value = [];
-      fetchChangelog();
+      changelog.value = []
+      fetchChangelog()
     }
   },
-);
+)
 </script>
 
 <template>
@@ -44,14 +42,9 @@ watch(
         {{ log }}
       </div>
     </div>
-    <div
-      v-else-if="boughtItemsStore.getSelection().length > 1"
-      class="container"
-    >
+    <div v-else-if="boughtItemsStore.getSelection().length > 1" class="container">
       <h1>{{ languageStore.l.boughtItem.changelog.changelog }}</h1>
-      <div class="changelog-item">
-        {{ languageStore.l.boughtItem.changelog.tooManySelected }}d
-      </div>
+      <div class="changelog-item">{{ languageStore.l.boughtItem.changelog.tooManySelected }}d</div>
     </div>
     <div v-else class="container">
       <h1>{{ languageStore.l.boughtItem.changelog.changelog }}</h1>
@@ -81,8 +74,8 @@ watch(
 }
 
 h1 {
-  font-family: "Play", "Calibri";
-  font-size: 16px;
+  font-family: var(--main-font-head);
+  font-size: var(--main-font-head-size);
   font-weight: bold;
 
   margin: 0;
@@ -92,8 +85,8 @@ h1 {
 }
 
 .changelog-item {
-  font-family: "Calibri";
-  font-size: 14px;
+  font-family: var(--main-font-text);
+  font-size: var(--main-font-text-size);
 
   margin: 0;
   padding-top: 2px;

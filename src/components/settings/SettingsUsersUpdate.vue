@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
+import { useUsersStore, useUserStore } from '@/stores/user'
 import { usersRequest } from '@/requests/users'
 
 import type { UserUpdateSchema } from '@/schemas/user'
@@ -19,6 +20,8 @@ const props = defineProps<{
 // Stores
 const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
+const userStore = useUserStore()
+const usersStore = useUsersStore()
 
 const formData = ref<UserUpdateSchema>({
   is_active: false,
@@ -49,6 +52,8 @@ function updateUser() {
 
   usersRequest.putUsers(props.selectedUserID, formData.value).then((response) => {
     getUser()
+    userStore.get()
+    usersStore.get()
     if (response.status == 200) {
       notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
       // } else if (response.status == 403) {

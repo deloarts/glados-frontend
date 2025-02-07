@@ -51,7 +51,7 @@ export class BoughtItemsRequest {
   }
   putItemsQuantity(id: Number, quantity: any) {
     const params = new URLSearchParams()
-    params.append('quantity', quantity)
+    params.append('value', quantity)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/required/quantity/`,
       requestConfig(params),
@@ -60,7 +60,7 @@ export class BoughtItemsRequest {
   }
   putItemsUnit(id: Number, unit: any) {
     const params = new URLSearchParams()
-    params.append('unit', unit)
+    params.append('value', unit)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/required/unit/`,
       requestConfig(params),
@@ -69,7 +69,7 @@ export class BoughtItemsRequest {
   }
   putItemsPartnumber(id: Number, partnumber: any) {
     const params = new URLSearchParams()
-    params.append('partnumber', partnumber)
+    params.append('value', partnumber)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/required/partnumber/`,
       requestConfig(params),
@@ -78,7 +78,7 @@ export class BoughtItemsRequest {
   }
   putItemsOrderNumber(id: Number, orderNumber: any) {
     const params = new URLSearchParams()
-    params.append('order_number', orderNumber)
+    params.append('value', orderNumber)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/required/order-number/`,
       requestConfig(params),
@@ -87,7 +87,7 @@ export class BoughtItemsRequest {
   }
   putItemsManufacturer(id: Number, manufacturer: any) {
     const params = new URLSearchParams()
-    params.append('manufacturer', manufacturer)
+    params.append('value', manufacturer)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/required/manufacturer/`,
       requestConfig(params),
@@ -96,7 +96,7 @@ export class BoughtItemsRequest {
   }
   putItemsSupplier(id: Number, supplier: any) {
     const params = new URLSearchParams()
-    params.append('supplier', supplier)
+    params.append('value', supplier)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/optional/supplier/`,
       requestConfig(params),
@@ -105,7 +105,7 @@ export class BoughtItemsRequest {
   }
   putItemsGroup1(id: Number, group: any) {
     const params = new URLSearchParams()
-    params.append('group', group)
+    params.append('value', group)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/optional/group-1/`,
       requestConfig(params),
@@ -114,7 +114,7 @@ export class BoughtItemsRequest {
   }
   putItemsNoteGeneral(id: Number, note: any) {
     const params = new URLSearchParams()
-    params.append('note', note)
+    params.append('value', note)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/optional/note-general/`,
       requestConfig(params),
@@ -123,16 +123,25 @@ export class BoughtItemsRequest {
   }
   putItemsNoteSupplier(id: Number, note: any) {
     const params = new URLSearchParams()
-    params.append('note', note)
+    params.append('value', note)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/optional/note-supplier/`,
       requestConfig(params),
       null,
     )
   }
+  putItemsStorage(id: Number, storage: any) {
+    const params = new URLSearchParams()
+    params.append('value', storage)
+    return request.put(
+      `/api/web/v1/items/bought/${id}/field/optional/storage/`,
+      requestConfig(params),
+      null,
+    )
+  }
   putItemsDesiredDeliveryDate(id: Number, date: any) {
     const params = new URLSearchParams()
-    params.append('date', date)
+    params.append('value', date)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/date/desired-delivery-date/`,
       requestConfig(params),
@@ -141,18 +150,9 @@ export class BoughtItemsRequest {
   }
   putItemsExpectedDeliveryDate(id: Number, date: any) {
     const params = new URLSearchParams()
-    params.append('date', date)
+    params.append('value', date)
     return request.put(
       `/api/web/v1/items/bought/${id}/field/date/expected-delivery-date/`,
-      requestConfig(params),
-      null,
-    )
-  }
-  putItemsStorage(id: Number, storage: any) {
-    const params = new URLSearchParams()
-    params.append('storage_place', storage)
-    return request.put(
-      `/api/web/v1/items/bought/${id}/field/optional/storage/`,
       requestConfig(params),
       null,
     )

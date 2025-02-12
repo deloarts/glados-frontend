@@ -51,21 +51,13 @@ export class BoughtItemsRequest {
   }
   putItemsQuantity(id: Number, quantity: any) {
     const params = new URLSearchParams()
-    params.append('value', quantity)
-    return request.put(
-      `/api/web/v1/items/bought/${id}/field/required/quantity/`,
-      requestConfig(params),
-      null,
-    )
+    params.append('quantity', quantity)
+    return request.put(`/api/web/v1/items/bought/${id}/quantity/`, requestConfig(params), null)
   }
   putItemsUnit(id: Number, unit: any) {
     const params = new URLSearchParams()
-    params.append('value', unit)
-    return request.put(
-      `/api/web/v1/items/bought/${id}/field/required/unit/`,
-      requestConfig(params),
-      null,
-    )
+    params.append('unit', unit)
+    return request.put(`/api/web/v1/items/bought/${id}/unit/`, requestConfig(params), null)
   }
   putItemsPartnumber(id: Number, partnumber: any) {
     const params = new URLSearchParams()

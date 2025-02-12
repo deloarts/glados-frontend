@@ -134,7 +134,7 @@ export class BoughtItemsRequest {
     const params = new URLSearchParams()
     params.append('value', storage)
     return request.put(
-      `/api/web/v1/items/bought/${id}/field/optional/storage/`,
+      `/api/web/v1/items/bought/${id}/field/optional/storage-place/`,
       requestConfig(params),
       null,
     )

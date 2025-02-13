@@ -137,11 +137,19 @@ export interface Language {
       save: string
       newToken: string
     }
+    option: {
+      logMeOut: string
+      keepMeLoggedIn: string
+    }
     input: {
       usernamePlaceholder: string
       fullNamePlaceholder: string
       emailPlaceholder: string
       passwordPlaceholder: string
+      workHoursPerWeekPlaceholder: string
+      autoBreakFromPlaceholder: string
+      autoBreakToPlaceholder: string
+      autoLogoutPlaceholder: string
       languagePlaceholder: string
       patPlaceholder: string
     }

@@ -18,15 +18,20 @@ const languageStore = useLanguageStore()
 const userStore = useUserStore()
 const notificationStore = useNotificationStore()
 
-const formUserUpdate = ref<UserUpdateSchema>({
-  username: userStore.user.username,
-  full_name: userStore.user.full_name,
-  email: userStore.user.email,
-  language: userStore.user.language,
-})
+const formUserUpdate = ref<UserUpdateSchema>(JSON.parse(JSON.stringify(userStore.user)))
 
 // Options
 let availableOptionsLanguage: Array<AvailableOption> = []
+const availableOptionsAutoLogout: Array<AvailableOption> = [
+  {
+    text: languageStore.l.account.option.logMeOut,
+    value: true,
+  },
+  {
+    text: languageStore.l.account.option.keepMeLoggedIn,
+    value: false,
+  },
+]
 
 function setOptionsLanguage() {
   const temp = []
@@ -40,9 +45,20 @@ function setOptionsLanguage() {
 }
 
 function updateUser() {
+  if (String(formUserUpdate.value.work_hours_per_week).length == 0) {
+    formUserUpdate.value.work_hours_per_week = null
+  }
+  if (String(formUserUpdate.value.auto_break_from).length == 0) {
+    formUserUpdate.value.auto_break_from = null
+  }
+  if (String(formUserUpdate.value.auto_break_to).length == 0) {
+    formUserUpdate.value.auto_break_to = null
+  }
+
   usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
     if (response.status == 200) {
       userStore.user = response.data
+      formUserUpdate.value = JSON.parse(JSON.stringify(userStore.user))
       languageStore.apply(userStore.user.language)
       notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
     } else if (response.status == 422) {
@@ -94,6 +110,32 @@ onBeforeMount(() => {
             :placeholder="languageStore.l.account.input.languagePlaceholder"
           />
         </div>
+        <div id="work-hours" class="grid-item-center">
+          <LabeledInput
+            v-model:value="formUserUpdate.work_hours_per_week"
+            :placeholder="languageStore.l.account.input.workHoursPerWeekPlaceholder"
+            type="number"
+          />
+        </div>
+        <div id="auto-break-from" class="grid-item-center">
+          <LabeledInput
+            v-model:value="formUserUpdate.auto_break_from"
+            :placeholder="languageStore.l.account.input.autoBreakFromPlaceholder"
+          />
+        </div>
+        <div id="auto-break-to" class="grid-item-center">
+          <LabeledInput
+            v-model:value="formUserUpdate.auto_break_to"
+            :placeholder="languageStore.l.account.input.autoBreakToPlaceholder"
+          />
+        </div>
+        <div id="auto-logout" class="grid-item-center">
+          <LabeledSelect
+            v-model:value="formUserUpdate.auto_logout"
+            v-bind:options="availableOptionsAutoLogout"
+            :placeholder="languageStore.l.account.input.autoLogoutPlaceholder"
+          />
+        </div>
         <div id="btn">
           <ButtonUserUpdate v-on:click="updateUser" :text="languageStore.l.account.button.save" />
         </div>
@@ -107,18 +149,22 @@ onBeforeMount(() => {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 50px 50px 50px 50px 50px auto;
-  grid-template-columns: 50px auto;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px auto;
+  grid-template-columns: 50% 50%;
   grid-template-areas:
     'username username'
     'full-name full-name'
     'email email'
     'password password'
+    'work-hours work-hours'
+    'auto-break-from auto-break-to'
+    'auto-logout auto-logout'
     'language language'
     'btn btn';
 }
 
 #btn {
+  padding-top: 20px;
   grid-area: btn;
 }
 
@@ -140,5 +186,21 @@ onBeforeMount(() => {
 
 #email {
   grid-area: email;
+}
+
+#work-hours {
+  grid-area: work-hours;
+}
+
+#auto-break-from {
+  grid-area: auto-break-from;
+}
+
+#auto-break-to {
+  grid-area: auto-break-to;
+}
+
+#auto-logout {
+  grid-area: auto-logout;
 }
 </style>

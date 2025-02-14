@@ -63,10 +63,12 @@ export interface HostConfigProjectFilterSchema {
   designatedUserID: number | null
 }
 
-
 export interface HostConfigUserTimeFilterSchema {
   skip: number | null
   limit: number | null
   id: number | null
-  date: Date | null
+  loginFrom: string | null
+  loginTo: string | null
+  logoutFrom: string | null
+  logoutTo: string | null
 }

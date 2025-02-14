@@ -1,181 +1,182 @@
 import type {
   HostConfigBoughtItemsFilterSchema,
   HostConfigProjectFilterSchema,
-  HostConfigUserTimeFilterSchema
-} from "@/schemas/host";
+  HostConfigUserTimeFilterSchema,
+} from '@/schemas/host'
 
-export function getBoughtItemsFilterParams(
-  filter: HostConfigBoughtItemsFilterSchema,
-) {
-  const params = new URLSearchParams();
+export function getBoughtItemsFilterParams(filter: HostConfigBoughtItemsFilterSchema) {
+  const params = new URLSearchParams()
 
   if (filter.limit != null && filter.limit != undefined) {
-    params.append("limit", String(filter.limit));
+    params.append('limit', String(filter.limit))
   }
   if (filter.skip != null && filter.limit != undefined) {
-    params.append("skip", String(filter.skip));
+    params.append('skip', String(filter.skip))
   }
   if (filter.ignoreDelivered) {
-    params.append("ignore_delivered", String(filter.ignoreDelivered));
+    params.append('ignore_delivered', String(filter.ignoreDelivered))
   }
   if (filter.ignoreCanceled) {
-    params.append("ignore_canceled", String(filter.ignoreCanceled));
+    params.append('ignore_canceled', String(filter.ignoreCanceled))
   }
   if (filter.ignoreLost) {
-    params.append("ignore_lost", String(filter.ignoreLost));
+    params.append('ignore_lost', String(filter.ignoreLost))
   }
   if (filter.highPriority) {
-    params.append("high_priority", String(filter.highPriority));
+    params.append('high_priority', String(filter.highPriority))
   }
-  if (String(filter.creatorID) != "" && filter.creatorID != undefined) {
-    params.append("creator_id", String(filter.creatorID));
+  if (String(filter.creatorID) != '' && filter.creatorID != undefined) {
+    params.append('creator_id', String(filter.creatorID))
   }
   if (filter.createdDate) {
-    params.append("created_from", String(filter.createdDate));
-    params.append("created_to", String(filter.createdDate));
+    params.append('created_from', String(filter.createdDate))
+    params.append('created_to', String(filter.createdDate))
   }
   if (filter.changedDateFrom) {
-    params.append("changed_from", String(filter.changedDateFrom));
+    params.append('changed_from', String(filter.changedDateFrom))
   }
   if (filter.desiredDate) {
-    params.append("desired_from", String(filter.desiredDate));
-    params.append("desired_to", String(filter.desiredDate));
+    params.append('desired_from', String(filter.desiredDate))
+    params.append('desired_to', String(filter.desiredDate))
   }
-  if (String(filter.requesterID) != "" && filter.requesterID != undefined) {
-    params.append("requester_id", String(filter.requesterID));
+  if (String(filter.requesterID) != '' && filter.requesterID != undefined) {
+    params.append('requester_id', String(filter.requesterID))
   }
   if (filter.requestedDate) {
-    params.append("requested_from", String(filter.requestedDate));
-    params.append("requested_to", String(filter.requestedDate));
+    params.append('requested_from', String(filter.requestedDate))
+    params.append('requested_to', String(filter.requestedDate))
   }
-  if (String(filter.ordererID) != "" && filter.ordererID != undefined) {
-    params.append("orderer_id", String(filter.ordererID));
+  if (String(filter.ordererID) != '' && filter.ordererID != undefined) {
+    params.append('orderer_id', String(filter.ordererID))
   }
   if (filter.orderedDate) {
-    params.append("ordered_from", String(filter.orderedDate));
-    params.append("ordered_to", String(filter.orderedDate));
+    params.append('ordered_from', String(filter.orderedDate))
+    params.append('ordered_to', String(filter.orderedDate))
   }
   if (filter.expectedDate) {
-    params.append("expected_from", String(filter.expectedDate));
-    params.append("expected_to", String(filter.expectedDate));
+    params.append('expected_from', String(filter.expectedDate))
+    params.append('expected_to', String(filter.expectedDate))
   }
   if (filter.deliveredDate) {
-    params.append("delivered_from", String(filter.deliveredDate));
-    params.append("delivered_to", String(filter.deliveredDate));
+    params.append('delivered_from', String(filter.deliveredDate))
+    params.append('delivered_to', String(filter.deliveredDate))
   }
-  if (filter.sortBy != "" && filter.sortBy != undefined) {
-    params.append("sort_by", filter.sortBy);
+  if (filter.sortBy != '' && filter.sortBy != undefined) {
+    params.append('sort_by', filter.sortBy)
   }
-  if (String(filter.id) != "" && filter.id != undefined) {
-    params.append("id", String(filter.id));
+  if (String(filter.id) != '' && filter.id != undefined) {
+    params.append('id', String(filter.id))
   }
-  if (filter.status != "" && filter.status != undefined) {
-    params.append("status", filter.status);
+  if (filter.status != '' && filter.status != undefined) {
+    params.append('status', filter.status)
   }
-  if (filter.projectNumber != "" && filter.projectNumber != undefined) {
-    params.append("project_number", filter.projectNumber);
+  if (filter.projectNumber != '' && filter.projectNumber != undefined) {
+    params.append('project_number', filter.projectNumber)
   }
-  if (filter.projectCustomer != "" && filter.projectCustomer != undefined) {
-    params.append("project_customer", filter.projectCustomer);
+  if (filter.projectCustomer != '' && filter.projectCustomer != undefined) {
+    params.append('project_customer', filter.projectCustomer)
   }
-  if (
-    filter.projectDescription != "" &&
-    filter.projectDescription != undefined
-  ) {
-    params.append("project_description", filter.projectDescription);
+  if (filter.projectDescription != '' && filter.projectDescription != undefined) {
+    params.append('project_description', filter.projectDescription)
   }
-  if (filter.productNumber != "" && filter.productNumber != undefined) {
-    params.append("product_number", filter.productNumber);
+  if (filter.productNumber != '' && filter.productNumber != undefined) {
+    params.append('product_number', filter.productNumber)
   }
-  if (String(filter.quantity) != "" && filter.quantity != undefined) {
-    params.append("quantity", String(filter.quantity));
+  if (String(filter.quantity) != '' && filter.quantity != undefined) {
+    params.append('quantity', String(filter.quantity))
   }
-  if (filter.unit != "" && filter.unit != undefined) {
-    params.append("unit", filter.unit);
+  if (filter.unit != '' && filter.unit != undefined) {
+    params.append('unit', filter.unit)
   }
-  if (filter.partnumber != "" && filter.partnumber != undefined) {
-    params.append("partnumber", filter.partnumber);
+  if (filter.partnumber != '' && filter.partnumber != undefined) {
+    params.append('partnumber', filter.partnumber)
   }
-  if (filter.orderNumber != "" && filter.orderNumber != undefined) {
-    params.append("order_number", filter.orderNumber);
+  if (filter.orderNumber != '' && filter.orderNumber != undefined) {
+    params.append('order_number', filter.orderNumber)
   }
-  if (filter.manufacturer != "" && filter.manufacturer != undefined) {
-    params.append("manufacturer", filter.manufacturer);
+  if (filter.manufacturer != '' && filter.manufacturer != undefined) {
+    params.append('manufacturer', filter.manufacturer)
   }
-  if (filter.supplier != "" && filter.supplier != undefined) {
-    params.append("supplier", filter.supplier);
+  if (filter.supplier != '' && filter.supplier != undefined) {
+    params.append('supplier', filter.supplier)
   }
-  if (filter.group1 != "" && filter.group1 != undefined) {
-    params.append("group_1", filter.group1);
+  if (filter.group1 != '' && filter.group1 != undefined) {
+    params.append('group_1', filter.group1)
   }
-  if (filter.noteGeneral != "" && filter.noteGeneral != undefined) {
-    params.append("note_general", filter.noteGeneral);
+  if (filter.noteGeneral != '' && filter.noteGeneral != undefined) {
+    params.append('note_general', filter.noteGeneral)
   }
-  if (filter.noteSupplier != "" && filter.noteSupplier != undefined) {
-    params.append("note_supplier", filter.noteSupplier);
+  if (filter.noteSupplier != '' && filter.noteSupplier != undefined) {
+    params.append('note_supplier', filter.noteSupplier)
   }
-  if (filter.storagePlace != "" && filter.storagePlace != undefined) {
-    params.append("storage_place", filter.storagePlace);
+  if (filter.storagePlace != '' && filter.storagePlace != undefined) {
+    params.append('storage_place', filter.storagePlace)
   }
-  if (String(filter.receiverID) != "" && filter.receiverID != undefined) {
-    params.append("receiver_id", String(filter.receiverID));
+  if (String(filter.receiverID) != '' && filter.receiverID != undefined) {
+    params.append('receiver_id', String(filter.receiverID))
   }
 
-  return params;
+  return params
 }
 
 export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
-  const params = new URLSearchParams();
+  const params = new URLSearchParams()
 
   if (filter.skip != null && filter.skip != undefined) {
-    params.append("skip", String(filter.skip));
+    params.append('skip', String(filter.skip))
   }
   if (filter.limit != null && filter.limit != undefined) {
-    params.append("limit", String(filter.limit));
+    params.append('limit', String(filter.limit))
   }
   if (filter.id != null && filter.id != undefined) {
-    params.append("id", String(filter.id));
+    params.append('id', String(filter.id))
   }
-  if (filter.number != "" && filter.number != undefined) {
-    params.append("number", filter.number);
+  if (filter.number != '' && filter.number != undefined) {
+    params.append('number', filter.number)
   }
-  if (filter.productNumber != "" && filter.productNumber != undefined) {
-    params.append("product_number", filter.productNumber);
+  if (filter.productNumber != '' && filter.productNumber != undefined) {
+    params.append('product_number', filter.productNumber)
   }
-  if (filter.customer != "" && filter.customer != undefined) {
-    params.append("customer", filter.customer);
+  if (filter.customer != '' && filter.customer != undefined) {
+    params.append('customer', filter.customer)
   }
-  if (filter.description != "" && filter.description != undefined) {
-    params.append("description", filter.description);
+  if (filter.description != '' && filter.description != undefined) {
+    params.append('description', filter.description)
   }
   if (filter.isActive) {
-    params.append("is_active", String(filter.isActive));
+    params.append('is_active', String(filter.isActive))
   }
-  if (
-    String(filter.designatedUserID) != "" &&
-    filter.designatedUserID != undefined
-  ) {
-    params.append("designated_user_id", String(filter.designatedUserID));
+  if (String(filter.designatedUserID) != '' && filter.designatedUserID != undefined) {
+    params.append('designated_user_id', String(filter.designatedUserID))
   }
 
-  return params;
+  return params
 }
 
 export function getUserTimeFilterParams(filter: HostConfigUserTimeFilterSchema) {
-  const params = new URLSearchParams();
+  const params = new URLSearchParams()
 
   if (filter.skip != null && filter.skip != undefined) {
-    params.append("skip", String(filter.skip));
+    params.append('skip', String(filter.skip))
   }
   if (filter.limit != null && filter.limit != undefined) {
-    params.append("limit", String(filter.limit));
+    params.append('limit', String(filter.limit))
   }
   if (filter.id != null && filter.id != undefined) {
-    params.append("id", String(filter.id));
+    params.append('id', String(filter.id))
   }
-  if (filter.date) {
-    params.append("login_from", String(filter.date));
+  if (filter.loginFrom) {
+    params.append('login_from', String(filter.loginFrom))
+  }
+  if (filter.loginTo) {
+    params.append('login_to', String(filter.loginTo))
+  }
+  if (filter.logoutFrom) {
+    params.append('logout_from', String(filter.logoutFrom))
+  }
+  if (filter.logoutTo) {
+    params.append('logout_to', String(filter.logoutTo))
   }
 
-  return params;
+  return params
 }

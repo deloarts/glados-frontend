@@ -5,6 +5,7 @@ import { useUserTimeStore } from '@/stores/userTime'
 import { useUserTimeFilterStore } from '@/stores/filter'
 
 import DataTable from '@/components/userTime/table/DataTable.vue'
+import UserTimeChart from '@/components/userTime/UserTimeChart.vue'
 import Controls from '@/components/userTime/ControlsMain.vue'
 import ControlsPage from '@/components/common/ControlsPage.vue'
 
@@ -22,6 +23,9 @@ onBeforeMount(() => {
       <div class="grid">
         <div id="controls" class="controls">
           <Controls />
+        </div>
+        <div id="week">
+          <UserTimeChart />
         </div>
         <div id="data" class="data">
           <DataTable />
@@ -52,9 +56,10 @@ onBeforeMount(() => {
 
   grid-gap: 10px;
   grid-template-columns: 100%;
-  grid-template-rows: min-content auto min-content;
+  grid-template-rows: min-content 250px auto min-content;
   grid-template-areas:
     'controls'
+    'week'
     'data'
     'controls-page';
 }
@@ -66,6 +71,7 @@ onBeforeMount(() => {
 .data {
   overflow: auto;
   padding-bottom: 2px;
+  padding-top: 8px;
 }
 
 // grid
@@ -75,5 +81,9 @@ onBeforeMount(() => {
 
 #data {
   grid-area: data;
+}
+
+#week {
+  grid-area: week;
 }
 </style>

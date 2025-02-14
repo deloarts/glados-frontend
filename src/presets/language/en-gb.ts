@@ -175,7 +175,7 @@ export const enGB: Language = {
       fullNamePlaceholder: 'Full Name',
       emailPlaceholder: 'Mail',
       passwordPlaceholder: 'Password',
-      workHoursPerWeekPlaceholder: 'Work time per week in minutes',
+      workHoursPerWeekPlaceholder: 'Work hours per week',
       autoBreakFromPlaceholder: 'Automatic break from (UTC)',
       autoBreakToPlaceholder: 'Automatic break to (UTC)',
       autoLogoutPlaceholder: 'When over midnight',

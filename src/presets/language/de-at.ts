@@ -176,7 +176,7 @@ export const deAT: Language = {
       fullNamePlaceholder: 'Vollständiger Name',
       emailPlaceholder: 'E-Mail',
       passwordPlaceholder: 'Passwort',
-      workHoursPerWeekPlaceholder: 'Wochenarbeitszeit in Minuten',
+      workHoursPerWeekPlaceholder: 'Wochenarbeitszeit',
       autoBreakFromPlaceholder: 'Automatische Pause von (UTC)',
       autoBreakToPlaceholder: 'Automatische Pause bis (UTC)',
       autoLogoutPlaceholder: 'Wenn über Mitternacht',

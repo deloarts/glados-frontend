@@ -12,7 +12,9 @@ export const deAT: Language = {
       savedNewFilter: 'Neuer Filter wurde gespeichert',
       createdNewPAT: 'Neuer geheimer Schlüssel wurde erstellt',
       createdUser: 'Benutzer wurde angelegt',
+      createdEntry: 'Eintrag wurde erstellt',
       updatedUserData: 'Benutzerdaten wurden aktualisiert',
+      updatedEntry: 'Eintrag wurde aktualisiert',
       cannotUpdateSystemUser: 'Der Systembenutzer kann nicht geändert werden',
       selectEntryFirst: 'Wähle zuerst einen Eintrag aus',
       selectProjectFirst: 'Wähle zuerst ein Projekt aus',
@@ -402,6 +404,9 @@ export const deAT: Language = {
     },
     input: {
       filterPlaceholder: "Filter",
+      loginPlaceholder: "Kommt Zeitstempel",
+      logoutPlaceholder: "Geht Zeitstempel",
+      notePlaceholder: "Notiz",
     },
     button: {
       login: "Anmelden",

@@ -1,20 +1,20 @@
 export interface UserTimeSchema {
   id: number
   user_id: number
-  login: string
-  logout: string
+  login: Date
+  logout: Date
   duration_minutes: number
   note: string
 }
 
 export interface UserTimeCreateSchema {
-  login: string
-  logout: string
+  login: Date
+  logout: Date
   note: string | null
 }
 
 export interface UserTimeUpdateSchema {
-  login: string
-  logout: string | null
+  login: Date
+  logout: Date | null
   note: string | null
 }

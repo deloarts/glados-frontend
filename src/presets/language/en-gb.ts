@@ -12,7 +12,9 @@ export const enGB: Language = {
       savedNewFilter: 'Saved new filter',
       createdNewPAT: 'Created new token',
       createdUser: 'Created new user',
+      createdEntry: 'Created new entry',
       updatedUserData: 'Updated user data',
+      updatedEntry: 'Updated entry',
       cannotUpdateSystemUser: 'Systemuser cannot be updated',
       selectEntryFirst: 'Select an entry first',
       selectProjectFirst: 'Select a project first',
@@ -401,6 +403,9 @@ export const enGB: Language = {
     },
     input: {
       filterPlaceholder: "Filter",
+      loginPlaceholder: "Login Timestamp",
+      logoutPlaceholder: "Logout Timestamp",
+      notePlaceholder: "Note",
     },
     button: {
       login: "Login",

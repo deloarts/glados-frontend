@@ -8,7 +8,9 @@ export interface Language {
       savedNewFilter: string
       createdNewPAT: string
       createdUser: string
+      createdEntry: string
       updatedUserData: string
+      updatedEntry: string
       cannotUpdateSystemUser: string
       selectEntryFirst: string
       selectProjectFirst: string
@@ -379,6 +381,9 @@ export interface Language {
     }
     input: {
       filterPlaceholder: string
+      loginPlaceholder: string
+      logoutPlaceholder: string
+      notePlaceholder: string
     }
     button: {
       login: string

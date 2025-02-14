@@ -20,8 +20,8 @@ import ItemsBoughtCopyView from "@/views/items/bought/ItemsBoughtCopyView.vue";
 import ItemsBoughtEditView from "@/views/items/bought/ItemsBoughtEditView.vue";
 import ItemsBoughtNewMultiView from "@/views/items/bought/ItemsBoughtNewMultiView.vue";
 import UserTimeView from "@/views/userTime/UserTimeView.vue";
-// import UserTimeNewView from "@/views/userTime/UserTimeNewView.vue";
-// import UserTimeEditView from "@/views/userTime/UserTimeEditView.vue";
+import UserTimeNewView from "@/views/userTime/UserTimeNewView.vue";
+import UserTimeEditView from "@/views/userTime/UserTimeEditView.vue";
 import SettingsLicenseView from "@/views/settings/SettingsLicenseView.vue";
 import SettingsHostView from "@/views/settings/SettingsHostView.vue";
 import SettingsLogsView from "@/views/settings/SettingsLogsView.vue";
@@ -122,16 +122,16 @@ const router = createRouter({
       name: "UserTime",
       component: UserTimeView,
     },
-    // {
-    //   path: "/user-time/new",
-    //   name: "UserTimeNew",
-    //   component: UserTimeNewView,
-    // },
-    // {
-    //   path: "/user-time/edit/:id",
-    //   name: "UserTimeEdit",
-    //   component: UserTimeEditView,
-    // },
+    {
+      path: "/user-time/new",
+      name: "UserTimeNew",
+      component: UserTimeNewView,
+    },
+    {
+      path: "/user-time/edit/:id",
+      name: "UserTimeEdit",
+      component: UserTimeEditView,
+    },
     {
       path: "/tools",
       name: "Tools",

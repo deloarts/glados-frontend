@@ -13,6 +13,8 @@ interface Props {
   value: Date | null | undefined
   placeholder: string
   type?: string
+  format?: string
+  returnAsDate?: boolean
   required?: boolean
   disabled?: boolean
   tooltip?: string
@@ -20,6 +22,8 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
+  format: 'YYYY-MM-DD',
+  returnAsDate: false,
   required: false,
   disabled: false,
 })
@@ -27,30 +31,30 @@ const emit = defineEmits<{
   (e: 'update:value', v: Date | null | undefined): void
 }>()
 
-const pickedDesiredDate = ref<Date | null>(null)
-const formatDesiredDate = (pickedDesiredDate: Date) => {
-  const day = pickedDesiredDate.getDate()
-  const month = pickedDesiredDate.getMonth() + 1
-  const year = pickedDesiredDate.getFullYear()
-  return `${day}.${month}.${year}`
+const pickedDate = ref<Date | null>(null)
+const formatDate = (pickedDate: Date) => {
+  return moment(pickedDate).format(props.format)
 }
 
 watch(
   () => props.value,
   () => {
     if (props.value != null && props.value != undefined) {
-      const date = Date.parse(String(props.value))
-      pickedDesiredDate.value = new Date(date)
+      pickedDate.value = moment(props.value).toDate()
     }
-    emit('update:value', pickedDesiredDate.value)
+    emit('update:value', pickedDate.value)
   },
   { deep: true },
 )
 
-watch(pickedDesiredDate, () => {
+watch(pickedDate, () => {
   let newValue
-  if (pickedDesiredDate.value instanceof Date) {
-    newValue = moment(pickedDesiredDate.value).format('YYYY-MM-DD')
+  if (pickedDate.value instanceof Date) {
+    if (props.returnAsDate) {
+      newValue = moment(pickedDate.value).format(props.format)
+    } else {
+      newValue = moment(pickedDate.value).toDate()
+    }
   } else {
     newValue = null
   }
@@ -63,8 +67,8 @@ watch(pickedDesiredDate, () => {
     <div class="labeled-container">
       <div class="labeled-input-date">
         <Datepicker
-          v-model="pickedDesiredDate"
-          :format="formatDesiredDate"
+          v-model="pickedDate"
+          :format="formatDate"
           :clearable="true"
           :dark="userStore.user.theme == 'dark'"
         />

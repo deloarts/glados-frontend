@@ -1,6 +1,7 @@
 import type {
   HostConfigBoughtItemsFilterSchema,
   HostConfigProjectFilterSchema,
+  HostConfigUserTimeFilterSchema
 } from "@/schemas/host";
 
 export function getBoughtItemsFilterParams(
@@ -155,6 +156,25 @@ export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
     filter.designatedUserID != undefined
   ) {
     params.append("designated_user_id", String(filter.designatedUserID));
+  }
+
+  return params;
+}
+
+export function getUserTimeFilterParams(filter: HostConfigUserTimeFilterSchema) {
+  const params = new URLSearchParams();
+
+  if (filter.skip != null && filter.skip != undefined) {
+    params.append("skip", String(filter.skip));
+  }
+  if (filter.limit != null && filter.limit != undefined) {
+    params.append("limit", String(filter.limit));
+  }
+  if (filter.id != null && filter.id != undefined) {
+    params.append("id", String(filter.id));
+  }
+  if (filter.date) {
+    params.append("login_from", String(filter.date));
   }
 
   return params;

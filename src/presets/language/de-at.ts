@@ -7,15 +7,23 @@ export const deAT: Language = {
       welcomeMessage: (name: string) => {
         return `Willkommen ${name}`
       },
+      loggedInNow: 'Du bist angemeldet',
+      loggedOutNow: 'Du bist abgemeldet',
       savedNewFilter: 'Neuer Filter wurde gespeichert',
       createdNewPAT: 'Neuer geheimer Schlüssel wurde erstellt',
       createdUser: 'Benutzer wurde angelegt',
       updatedUserData: 'Benutzerdaten wurden aktualisiert',
       cannotUpdateSystemUser: 'Der Systembenutzer kann nicht geändert werden',
+      selectEntryFirst: 'Wähle zuerst einen Eintrag aus',
       selectProjectFirst: 'Wähle zuerst ein Projekt aus',
       onlyEditOneProject: 'Du kannst nur ein Projekt bearbeiten',
+      onlyEditOneEntry: 'Du kannst nur einen Eintrag bearbeiten',
       onlyExportOneProject: 'Du kannst nur ein Projekt exportieren',
+      onlyDeleteOneEntry: 'Du kannst nur einen Eintrag löschen',
       onlyDeleteOneProject: 'Du kannst nur ein Projekt löschen',
+      deletedEntry: (id: number) => {
+        return `Eintrag #${id} wurde gelöscht`
+      },
       deletedProject: (id: number) => {
         return `Projekt #${id} wurde gelöscht`
       },
@@ -98,6 +106,7 @@ export const deAT: Language = {
       projects: 'Projekte',
       boughtItems: 'Zukaufteile',
       account: 'Konto',
+      userTime: 'Zeitlogger',
       tools: 'Werkzeuge',
       settings: 'Einstellungen',
     },
@@ -378,6 +387,46 @@ export const deAT: Language = {
       notAllowedEditItemOtherUser: 'Du kannst keinen Artikel eines anderen Benutzers ändern.',
       notAllowedEditItemPlanned: 'Du kannst keinen bereits geplanten Artikel ändern.',
     },
+  },
+  userTime: {
+    table: {
+      number: "#",
+      id: "ID",
+      week: "Woche",
+      day: "Tag",
+      date: "Datum",
+      login: "Kommt",
+      logout: "Geht",
+      duration: "Dauer",
+      note: "Notiz",
+    },
+    input: {
+      filterPlaceholder: "Filter",
+    },
+    button: {
+      login: "Anmelden",
+      logout: "Abmelden",
+      newEntry: "Neuer Eintrag",
+      editEntry: "Bearbeiten",
+      deleteEntry: "Löschen",
+      unselect: "Abwählen",
+      sync: "Snychronisieren",
+      views: "Ansichten",
+      columns: "Spalten",
+      clearFilter: "Zurücksetzen",
+      create: "Erstellen",
+      update: "Aktualisieren",
+      cancel: "Abbrechen",
+    },
+    options: {
+      showAll: "Zeige alle",
+      views: {
+        fixedHeight: "Gleiche Höhe",
+      }
+    },
+    prompt: {
+      deleteEntry: "Eintrag löschen?",
+    }
   },
   tools: {
     banner: {

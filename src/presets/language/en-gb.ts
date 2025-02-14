@@ -7,15 +7,23 @@ export const enGB: Language = {
       welcomeMessage: (name: '') => {
         return `Welcome ${name}`
       },
+      loggedInNow: 'Logged you in now',
+      loggedOutNow: 'Logged you out now',
       savedNewFilter: 'Saved new filter',
       createdNewPAT: 'Created new token',
       createdUser: 'Created new user',
       updatedUserData: 'Updated user data',
       cannotUpdateSystemUser: 'Systemuser cannot be updated',
+      selectEntryFirst: 'Select an entry first',
       selectProjectFirst: 'Select a project first',
+      onlyEditOneEntry: 'You can only edit one entry',
       onlyEditOneProject: 'You can only edit one project',
       onlyExportOneProject: 'You can only export one project',
+      onlyDeleteOneEntry: 'You can only delete one entry',
       onlyDeleteOneProject: 'You can only delete one project',
+      deletedEntry: (id: number) => {
+        return `Deleted entry #${id}`
+      },
       deletedProject: (id: number) => {
         return `Deleted project #${id}`
       },
@@ -98,6 +106,7 @@ export const enGB: Language = {
       projects: 'Projects',
       boughtItems: 'Bought Items',
       account: 'Account',
+      userTime: 'Time Logger',
       tools: 'Tools',
       settings: 'Settings',
     },
@@ -377,6 +386,46 @@ export const enGB: Language = {
       notAllowedEditItemOtherUser: 'You are not allowed to edit an item of another user.',
       notAllowedEditItemPlanned: 'You are not allowed to edit an item that is already planned.',
     },
+  },
+  userTime: {
+    table: {
+      number: "#",
+      id: "ID",
+      week: "Week",
+      day: "Day",
+      date: "Date",
+      login: "Login",
+      logout: "Logout",
+      duration: "Duration",
+      note: "Note",
+    },
+    input: {
+      filterPlaceholder: "Filter",
+    },
+    button: {
+      login: "Login",
+      logout: "Logout",
+      newEntry: "New Entry",
+      editEntry: "Edit Entry",
+      deleteEntry: "Delete Entry",
+      unselect: "Unselect",
+      sync: "Sync",
+      views: "Views",
+      columns: "Columns",
+      clearFilter: "Clear Filter",
+      create: "Create",
+      update: "Update",
+      cancel: "Cancel",
+    },
+    options: {
+      showAll: "Show All",
+      views: {
+        fixedHeight: "Fixed Height",
+      }
+    },
+    prompt: {
+      deleteEntry: "Delete Entry?",
+    }
   },
   tools: {
     banner: {

@@ -3,15 +3,21 @@ export interface Language {
     info: {
       reconnectedToServer: string
       welcomeMessage: Function
+      loggedInNow: string
+      loggedOutNow: string
       savedNewFilter: string
       createdNewPAT: string
       createdUser: string
       updatedUserData: string
       cannotUpdateSystemUser: string
+      selectEntryFirst: string
       selectProjectFirst: string
+      onlyEditOneEntry: string
       onlyEditOneProject: string
       onlyExportOneProject: string
+      onlyDeleteOneEntry: string
       onlyDeleteOneProject: string
+      deletedEntry: Function
       deletedProject: Function
       createdProject: string
       updatedProject: Function
@@ -80,6 +86,7 @@ export interface Language {
       projects: string
       boughtItems: string
       account: string
+      userTime: string
       tools: string
       settings: string
     }
@@ -356,6 +363,46 @@ export interface Language {
       notAllowedEditItemInactiveProject: string
       notAllowedEditItemOtherUser: string
       notAllowedEditItemPlanned: string
+    }
+  }
+  userTime: {
+    table: {
+      number: string
+      id: string
+      week: string
+      day: string
+      date: string
+      login: string
+      logout: string
+      duration: string
+      note: string
+    }
+    input: {
+      filterPlaceholder: string
+    }
+    button: {
+      login: string
+      logout: string
+      newEntry: string
+      editEntry: string
+      deleteEntry: string
+      unselect: string
+      sync: string
+      views: string
+      columns: string
+      clearFilter: string
+      create: string
+      update: string
+      cancel: string
+    }
+    options: {
+      showAll: string
+      views: {
+        fixedHeight: string
+      }
+    }
+    prompt: {
+      deleteEntry: string
     }
   }
   tools: {

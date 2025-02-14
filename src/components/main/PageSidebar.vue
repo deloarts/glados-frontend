@@ -13,9 +13,10 @@ import IconDashboard from '@/components/icons/IconDashboard.vue'
 import IconProject from '@/components/icons/IconProject.vue'
 import IconItems from '@/components/icons/IconItems.vue'
 import IconAccount from '@/components/icons/IconAccount.vue'
+import IconUserTime from '@/components/icons/IconUserTime.vue'
 import IconTools from '@/components/icons/IconTools.vue'
 import IconSettings from '@/components/icons/IconSettings.vue'
-import IconChevronLeft from '../icons/IconChevronLeft.vue'
+import IconChevronLeft from '@/components/icons/IconChevronLeft.vue'
 
 // Router
 const route = useRoute()
@@ -55,6 +56,7 @@ const showLabelDashboard = ref<boolean>(false)
 const showLabelProjects = ref<boolean>(false)
 const showLabelBoughtItems = ref<boolean>(false)
 const showLabelAccount = ref<boolean>(false)
+const showLabelUserTime = ref<boolean>(false)
 const showLabelTools = ref<boolean>(false)
 const showLabelSettings = ref<boolean>(false)
 
@@ -86,6 +88,7 @@ function hideLabel() {
     showLabelProjects.value = false
     showLabelBoughtItems.value = false
     showLabelAccount.value = false
+    showLabelUserTime.value = false
     showLabelTools.value = false
     showLabelSettings.value = false
   }, 2000)
@@ -158,6 +161,18 @@ watch(gtMinWidthTablet, () => {
         <Transition>
           <div v-if="showLabelAccount" class="label">
             {{ languageStore.l.main.sideBar.account }}
+          </div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/user-time'"
+        @mouseover="(showLabelUserTime = true), hideLabel()"
+        @mouseleave="showLabelUserTime = false"
+      >
+        <IconUserTime v-bind:class="{ active: routeIsActive('/user-time') }" />
+        <Transition>
+          <div v-if="showLabelUserTime" class="label">
+            {{ languageStore.l.main.sideBar.userTime }}
           </div>
         </Transition>
       </router-link>

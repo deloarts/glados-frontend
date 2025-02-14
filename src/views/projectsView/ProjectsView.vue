@@ -2,7 +2,7 @@
 import { onMounted, onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-import { useBoughtItemsControlsStore } from '@/stores/controls'
+import { useProjectsControlsStore } from '@/stores/controls'
 import { useProjectsStore } from '@/stores/projects'
 import { useProjectFilterStore } from '@/stores/filter'
 
@@ -15,7 +15,7 @@ const route = useRoute()
 
 const projectsStore = useProjectsStore()
 const projectFilterStore = useProjectFilterStore()
-const controlsStore = useBoughtItemsControlsStore()
+const controlsStore = useProjectsControlsStore()
 
 onBeforeMount(() => {
   projectsStore.getAll()
@@ -43,7 +43,7 @@ onMounted(() => {
 <template>
   <div class="views-scope">
     <div class="views-content">
-      <div class="grid" v-bind:class="{ 'show-changelog': controlsStore.state.changelog }">
+      <div class="grid">
         <div id="controls" class="controls">
           <Controls />
         </div>

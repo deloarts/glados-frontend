@@ -62,3 +62,11 @@ export interface HostConfigProjectFilterSchema {
   isActive: boolean | null
   designatedUserID: number | null
 }
+
+
+export interface HostConfigUserTimeFilterSchema {
+  skip: number | null
+  limit: number | null
+  id: number | null
+  date: Date | null
+}

@@ -25,7 +25,7 @@ const notificationStore = useNotificationStore()
 const formData = ref<UserTimeUpdateSchema>({
   login: moment().toDate(),
   logout: moment().toDate(),
-  note: ''
+  note: '',
 })
 
 onBeforeMount(() => {

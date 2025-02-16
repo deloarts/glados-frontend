@@ -26,12 +26,10 @@ const languageStore = useLanguageStore()
 watch(
   () => createFormData,
   () => {
-    
     emit('update:formData', createFormData.value)
   },
   { deep: true },
 )
-
 </script>
 
 <template>

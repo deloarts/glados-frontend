@@ -1,4 +1,52 @@
 export interface Language {
+  common: {
+    days: {
+      monday: string
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+    }
+    shortDays: {
+      monday: string
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+    }
+    months: {
+      january: string
+      february: string
+      march: string
+      april: string
+      may: string
+      june: string
+      july: string
+      august: string
+      september: string
+      october: string
+      november: string
+      december: string
+    }
+    shortMonths: {
+      january: string
+      february: string
+      march: string
+      april: string
+      may: string
+      june: string
+      july: string
+      august: string
+      september: string
+      october: string
+      november: string
+      december: string
+    }
+  }
   notification: {
     info: {
       reconnectedToServer: string
@@ -114,20 +162,6 @@ export interface Language {
       late: string
       canceled: string
       lost: string
-    }
-    months: {
-      january: string
-      february: string
-      march: string
-      april: string
-      may: string
-      june: string
-      july: string
-      august: string
-      september: string
-      october: string
-      november: string
-      december: string
     }
     banner: {
       showingItems: string

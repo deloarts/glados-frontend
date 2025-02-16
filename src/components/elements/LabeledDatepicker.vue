@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed } from 'vue'
 import moment from 'moment'
 import Datepicker from '@vuepic/vue-datepicker'
 
@@ -31,35 +31,19 @@ const emit = defineEmits<{
   (e: 'update:value', v: Date | null | undefined): void
 }>()
 
-const pickedDate = ref<Date | null>(null)
+const computedValue = computed<Date | null | undefined>({
+  get() {
+    return props.value
+  },
+  set(newValue) {
+    emit('update:value', newValue)
+    return newValue
+  },
+})
+
 const formatDate = (pickedDate: Date) => {
   return moment(pickedDate).format(props.format)
 }
-
-watch(
-  () => props.value,
-  () => {
-    if (props.value != null && props.value != undefined) {
-      pickedDate.value = moment(props.value).toDate()
-    }
-    emit('update:value', pickedDate.value)
-  },
-  { deep: true },
-)
-
-watch(pickedDate, () => {
-  let newValue
-  if (pickedDate.value instanceof Date) {
-    if (props.returnAsDate) {
-      newValue = moment(pickedDate.value).format(props.format)
-    } else {
-      newValue = moment(pickedDate.value).toDate()
-    }
-  } else {
-    newValue = null
-  }
-  emit('update:value', newValue)
-})
 </script>
 
 <template>
@@ -67,7 +51,7 @@ watch(pickedDate, () => {
     <div class="labeled-container">
       <div class="labeled-input-date">
         <Datepicker
-          v-model="pickedDate"
+          v-model="computedValue"
           :format="formatDate"
           :clearable="true"
           :dark="userStore.user.theme == 'dark'"

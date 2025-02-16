@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 
 import { useUserTimeStore } from '@/stores/userTime'
 import { useUserTimeFilterStore } from '@/stores/filter'
+import { useResolutionStore } from '@/stores/resolution'
 
 import DataTable from '@/components/userTime/table/DataTable.vue'
-import UserTimeChart from '@/components/userTime/UserTimeChart.vue'
+import UserTimeChartTime from '@/components/userTime/UserTimeChartTime.vue'
+import UserTimeChartSum from '@/components/userTime/UserTimeChartSum.vue'
 import Controls from '@/components/userTime/ControlsMain.vue'
 import ControlsPage from '@/components/common/ControlsPage.vue'
 
 const userTimeStore = useUserTimeStore()
 const userTimeFilterStore = useUserTimeFilterStore()
+const resolutionStore = useResolutionStore()
+
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet)
 
 onBeforeMount(() => {
   userTimeStore.getItems()
@@ -24,8 +29,11 @@ onBeforeMount(() => {
         <div id="controls" class="controls">
           <Controls />
         </div>
-        <div id="week">
-          <UserTimeChart />
+        <div id="week-sum">
+          <UserTimeChartSum />
+        </div>
+        <div id="week-time" v-if="gtMinWidthTablet">
+          <UserTimeChartTime />
         </div>
         <div id="data" class="data">
           <DataTable />
@@ -39,7 +47,9 @@ onBeforeMount(() => {
 </template>
 
 <style src="@vueform/toggle/themes/default.css"></style>
+
 <style scoped lang="scss">
+@use '@/scss/variables.scss' as *;
 @use '@/scss/views.scss';
 @use '@/scss/grid/gridBase.scss';
 
@@ -55,13 +65,30 @@ onBeforeMount(() => {
   display: grid;
 
   grid-gap: 10px;
-  grid-template-columns: 100%;
-  grid-template-rows: min-content 250px auto min-content;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: min-content 300px auto min-content;
   grid-template-areas:
-    'controls'
-    'week'
-    'data'
-    'controls-page';
+    'controls controls'
+    'week-sum week-time'
+    'data data'
+    'controls-page controls-page';
+}
+@media screen and (max-width: $max-width-tablet) {
+  .grid {
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+
+    grid-gap: 10px;
+    grid-template-columns: 100%;
+    grid-template-rows: min-content 300px auto min-content;
+    grid-template-areas:
+      'controls'
+      'week-sum'
+      'data'
+      'controls-page';
+  }
 }
 
 .controls {
@@ -83,7 +110,15 @@ onBeforeMount(() => {
   grid-area: data;
 }
 
-#week {
-  grid-area: week;
+#controls-page {
+  grid-area: controls-page;
+}
+
+#week-time {
+  grid-area: week-time;
+}
+
+#week-sum {
+  grid-area: week-sum;
 }
 </style>

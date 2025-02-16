@@ -9,7 +9,7 @@ export interface UserTimeSchema {
 
 export interface UserTimeCreateSchema {
   login: Date
-  logout: Date
+  logout: Date | null
   note: string | null
 }
 

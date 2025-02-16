@@ -10,6 +10,7 @@ import {
   LinearScale,
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
+import type { ChartDataset } from 'chart.js'
 
 import { useLanguageStore } from '@/stores/language'
 import { useUserStore } from '@/stores/user'
@@ -23,11 +24,13 @@ const userStore = useUserStore()
 const userTimeStore = useUserTimeStore()
 const resolutionStore = useResolutionStore()
 
+const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet)
+
 const labelColor = computed(() => {
   return userStore.user.theme == 'dark' ? 'white' : 'black'
 })
 
-const datasets = ref<Array<any>>([])
+const datasets = ref<Array<ChartDataset>>([])
 const labels = ref<Array<string>>([])
 
 const chartData = computed(() => {
@@ -40,8 +43,12 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
-    x: { ticks: { display: true, color: labelColor.value, beginAtZero: true } },
-    y: { ticks: { display: true, color: labelColor.value, beginAtZero: true } },
+    x: { stacked: true, ticks: { stepSize: 1, color: labelColor.value } },
+    y: {
+      stacked: false,
+      ticks: { stepSize: 1, beginAtZero: true, color: labelColor.value },
+      grid: { color: 'rgba(100, 100, 100, 0.4)' },
+    },
   },
   plugins: {
     legend: {
@@ -54,33 +61,40 @@ const chartOptions = {
 }
 
 function updateChart() {
-  if (resolutionStore.gtMinWidthTablet) {
-    labels.value = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  if (gtMinWidthTablet.value) {
+    labels.value = [
+      languageStore.l.common.days.monday,
+      languageStore.l.common.days.tuesday,
+      languageStore.l.common.days.wednesday,
+      languageStore.l.common.days.thursday,
+      languageStore.l.common.days.friday,
+      languageStore.l.common.days.saturday,
+      languageStore.l.common.days.sunday,
+    ]
   } else {
-    labels.value = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    labels.value = [
+      languageStore.l.common.shortDays.monday,
+      languageStore.l.common.shortDays.tuesday,
+      languageStore.l.common.shortDays.wednesday,
+      languageStore.l.common.shortDays.thursday,
+      languageStore.l.common.shortDays.friday,
+      languageStore.l.common.shortDays.saturday,
+      languageStore.l.common.shortDays.sunday,
+    ]
   }
 
   datasets.value = [
     {
       label: 'Current Week',
-      data: userTimeStore.week,
+      data: userTimeStore.weekSum,
       backgroundColor: [
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-      ],
-      borderColor: [
-        'rgb(54, 162, 235)',
-        'rgb(54, 162, 235)',
-        'rgb(54, 162, 235)',
-        'rgb(54, 162, 235)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 159, 64)',
-        'rgb(255, 99, 132)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 159, 64, 0.6)',
+        'rgba(255, 99, 132, 0.6)',
       ],
       borderWidth: 1,
     },
@@ -88,20 +102,11 @@ function updateChart() {
 }
 
 onMounted(() => {
-  userTimeStore.fetchCurrentWeek()
   updateChart()
 })
 
 watch(
-  () => userTimeStore,
-  () => {
-    userTimeStore.fetchCurrentWeek()
-  },
-  { deep: true },
-)
-
-watch(
-  () => userTimeStore.week,
+  () => userTimeStore.weekSum,
   () => {
     updateChart()
   },

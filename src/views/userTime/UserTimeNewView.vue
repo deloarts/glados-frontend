@@ -10,8 +10,8 @@ import moment from 'moment'
 // Form stuff
 const formData = ref<UserTimeCreateSchema>({
   login: moment().toDate(),
-  logout: moment().toDate(),
-  note: ''
+  logout: null,
+  note: '',
 })
 </script>
 

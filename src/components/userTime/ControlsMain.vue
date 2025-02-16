@@ -95,6 +95,7 @@ function onButtonLogout() {
       notificationStore.addWarn(response.data.detail)
     }
     userTimeStore.getItems()
+    userTimeStore.fetchCurrentWeek()
   })
 }
 
@@ -144,7 +145,6 @@ function clearFilter() {
   userTimeFilterStore.reset()
   userTimeStore.getItems()
 }
-
 </script>
 
 <template>

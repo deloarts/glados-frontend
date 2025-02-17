@@ -165,6 +165,7 @@ watch(gtMinWidthTablet, () => {
         </Transition>
       </router-link>
       <router-link
+        v-if="userStore.user.work_hours_per_week"
         :to="'/user-time'"
         @mouseover="(showLabelUserTime = true), hideLabel()"
         @mouseleave="showLabelUserTime = false"

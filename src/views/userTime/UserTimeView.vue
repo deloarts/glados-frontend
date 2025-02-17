@@ -8,6 +8,7 @@ import { useResolutionStore } from '@/stores/resolution'
 import DataTable from '@/components/userTime/table/DataTable.vue'
 import UserTimeChartTime from '@/components/userTime/UserTimeChartTime.vue'
 import UserTimeChartSum from '@/components/userTime/UserTimeChartSum.vue'
+import UserTimeChartHours from '@/components/userTime/UserTimeChartHours.vue'
 import Controls from '@/components/userTime/ControlsMain.vue'
 import ControlsPage from '@/components/common/ControlsPage.vue'
 
@@ -28,6 +29,9 @@ onBeforeMount(() => {
       <div class="grid">
         <div id="controls" class="controls">
           <Controls />
+        </div>
+        <div id="week-hours">
+          <UserTimeChartHours v-if="gtMinWidthTablet" />
         </div>
         <div id="week-sum">
           <UserTimeChartSum />
@@ -65,13 +69,13 @@ onBeforeMount(() => {
   display: grid;
 
   grid-gap: 10px;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 300px 1fr 1fr;
   grid-template-rows: min-content 300px auto min-content;
   grid-template-areas:
-    'controls controls'
-    'week-sum week-time'
-    'data data'
-    'controls-page controls-page';
+    'controls controls controls'
+    'week-hours week-sum week-time'
+    'data data data'
+    'controls-page controls-page controls-page';
 }
 @media screen and (max-width: $max-width-tablet) {
   .grid {
@@ -120,5 +124,9 @@ onBeforeMount(() => {
 
 #week-sum {
   grid-area: week-sum;
+}
+
+#week-hours {
+  grid-area: week-hours;
 }
 </style>

@@ -118,6 +118,7 @@ watch(
   <div class="scope">
     <div class="chart-base-scope">
       <div class="chart-base-wrapper">
+        <h1>Sum for this week</h1>
         <Bar class="chart" :data="chartData" :options="chartOptions" />
       </div>
     </div>
@@ -126,6 +127,11 @@ watch(
 
 <style scoped lang="scss">
 @use '@/scss/chart/chartBase.scss';
+
+h1 {
+  margin-top: 0;
+  font-size: 16px;
+}
 
 .scope {
   width: calc(100% - 10px);
@@ -141,7 +147,7 @@ watch(
 
 .chart-base-wrapper {
   width: calc(100% - 40px);
-  height: calc(100% - 40px);
+  height: calc(100% - 60px);
   padding: 20px;
 }
 

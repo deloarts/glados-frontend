@@ -44,7 +44,7 @@ const computedValue = computed<Date | TimeModel | null | undefined>({
     return props.value
   },
   set(newValue) {
-    emit('update:value', newValue)
+    emit('update:value', props.returnAsDate ? moment(newValue).format(props.format) : newValue)
     return newValue
   },
 })

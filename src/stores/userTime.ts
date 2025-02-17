@@ -6,7 +6,6 @@ import constants from '@/constants'
 import { userTimeRequest } from '@/requests/userTime'
 import { useUserTimeFilterStore } from '@/stores/filter'
 import { getUserTimeFilterParams } from '@/requests/params'
-import { getCurrentWeekDates } from '@/helper/date.helper'
 
 import type { PageSchema } from '@/schemas/page'
 import type { UserTimeSchema } from '@/schemas/userTime'
@@ -47,39 +46,35 @@ export const useUserTimeStore = defineStore('userTime', () => {
 
     for (let i = 0; i < 7; i++) {
       const filter: HostConfigUserTimeFilterSchema = JSON.parse(JSON.stringify(userTimeFilterAll))
-      filter.loginFrom = getCurrentWeekDates()[i]
-      filter.loginTo = moment(getCurrentWeekDates()[i]).add(1, 'days').format('YYYY-MM-DD')
+      const currentDate = moment()
+      const startOfCurrentWeek = currentDate.clone().startOf('isoWeek')
+      filter.loginFrom = moment(startOfCurrentWeek).add(i, 'days').toISOString()
+      filter.loginTo = moment(filter.loginFrom).add(23, 'hours').add(59, 'minutes').toISOString()
       const params = getUserTimeFilterParams(filter)
 
       await userTimeRequest.getUserTime(params).then((response) => {
         if (response.status === 200) {
-          let duration = 0
+          let duration: number = 0
           const entries: UserTimeSchema[] = response.data.items
 
           for (let j = 0; j < entries.length; j++) {
             // Create a list for the days
+            const loginTime = moment.utc(entries[j].login).local()
+            const logoutTime = moment.utc(entries[j].logout).local()
             if (tempWeekTime.length < entries.length) {
               tempWeekTime.push([[], [], [], [], [], [], []])
             }
             if (entries[j].logout) {
-              tempWeekTime[j][i] = [
-                Number(
-                  (
-                    moment.utc(entries[j].login).local().hours() +
-                    moment.utc(entries[j].login).local().minutes() / 60
-                  ).toFixed(1),
-                ),
-                Number(
-                  (
-                    moment.utc(entries[j].logout).local().hours() +
-                    moment.utc(entries[j].logout).local().minutes() / 60
-                  ).toFixed(1),
-                ),
-              ]
+              const loginData = Number((loginTime.hours() + loginTime.minutes() / 60).toFixed(1))
+              let logoutData = Number((logoutTime.hours() + logoutTime.minutes() / 60).toFixed(1))
+              if (logoutTime.date() > loginTime.date()) {
+                logoutData = 24
+              }
+              tempWeekTime[j][i] = [loginData, logoutData]
             }
             // Create total sum for the day
             if (entries[j].duration_minutes) {
-              duration += entries[j].duration_minutes
+              duration += Number(entries[j].duration_minutes.toFixed(1))
             }
           }
           tempWeekSum[i] = duration / 60

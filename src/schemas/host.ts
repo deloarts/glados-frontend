@@ -67,8 +67,8 @@ export interface HostConfigUserTimeFilterSchema {
   skip: number | null
   limit: number | null
   id: number | null
-  loginFrom: string | null
-  loginTo: string | null
-  logoutFrom: string | null
-  logoutTo: string | null
+  loginFrom: string | Date | null
+  loginTo: string | Date | null
+  logoutFrom: string | Date | null
+  logoutTo: string | Date | null
 }

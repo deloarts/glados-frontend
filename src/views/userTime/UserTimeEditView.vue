@@ -35,7 +35,12 @@ onBeforeMount(() => {
     .getUserTimeByID(Number(entryID))
     .then((response) => {
       if (response.status === 200) {
-        formData.value = response.data
+        const data: UserTimeUpdateSchema = response.data
+        if (response.data.login) {
+          data.login = moment.utc(response.data.login).local().toDate()
+          data.logout = moment.utc(response.data.logout).local().toDate()
+        }
+        formData.value = data
       } else {
         notificationStore.addWarn(languageStore.l.notification.warn.failedFetchItem(entryID))
         setTimeout(function () {

@@ -12,7 +12,7 @@ import type { TimeModel } from '@vuepic/vue-datepicker'
 const userStore = useUserStore()
 
 interface Props {
-  value: Date | TimeModel | null | undefined
+  value: string | Date | TimeModel | null | undefined
   placeholder: string
   type?: string
   format?: string
@@ -36,15 +36,19 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
 })
 const emit = defineEmits<{
-  (e: 'update:value', v: Date | TimeModel | null | undefined): void
+  (e: 'update:value', v: string | Date | TimeModel | null | undefined): void
 }>()
 
-const computedValue = computed<Date | TimeModel | null | undefined>({
+const computedValue = computed<string | Date | TimeModel | null | undefined>({
   get() {
     return props.value
   },
   set(newValue) {
-    emit('update:value', props.returnAsDate ? moment(newValue).format(props.format) : newValue)
+    if (newValue) {
+      emit('update:value', props.returnAsDate ? moment(newValue).format(props.format) : newValue)
+    } else {
+      emit('update:value', null)
+    }
     return newValue
   },
 })

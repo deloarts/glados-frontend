@@ -415,6 +415,7 @@ export interface Language {
     }
     input: {
       filterPlaceholder: string
+      datePlaceholder: string
       loginPlaceholder: string
       logoutPlaceholder: string
       notePlaceholder: string

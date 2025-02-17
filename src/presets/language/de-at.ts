@@ -438,8 +438,9 @@ export const deAT: Language = {
     },
     input: {
       filterPlaceholder: 'Filter',
-      loginPlaceholder: 'Kommt Zeitstempel',
-      logoutPlaceholder: 'Geht Zeitstempel',
+      datePlaceholder: 'Datum',
+      loginPlaceholder: 'Beginn',
+      logoutPlaceholder: 'Ende',
       notePlaceholder: 'Notiz',
     },
     button: {

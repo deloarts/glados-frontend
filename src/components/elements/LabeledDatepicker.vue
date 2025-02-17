@@ -7,14 +7,20 @@ import LabeledLabel from './LabeledLabel.vue'
 
 import { useUserStore } from '@/stores/user'
 
+import type { TimeModel } from '@vuepic/vue-datepicker'
+
 const userStore = useUserStore()
 
 interface Props {
-  value: Date | null | undefined
+  value: Date | TimeModel | null | undefined
   placeholder: string
   type?: string
   format?: string
   returnAsDate?: boolean
+  minDate?: Date
+  maxDate?: Date
+  timeOnly?: boolean
+  disableTime?: boolean
   required?: boolean
   disabled?: boolean
   tooltip?: string
@@ -24,14 +30,16 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   format: 'YYYY-MM-DD',
   returnAsDate: false,
+  timeOnly: false,
+  disableTime: false,
   required: false,
   disabled: false,
 })
 const emit = defineEmits<{
-  (e: 'update:value', v: Date | null | undefined): void
+  (e: 'update:value', v: Date | TimeModel | null | undefined): void
 }>()
 
-const computedValue = computed<Date | null | undefined>({
+const computedValue = computed<Date | TimeModel | null | undefined>({
   get() {
     return props.value
   },
@@ -55,6 +63,12 @@ const formatDate = (pickedDate: Date) => {
           :format="formatDate"
           :clearable="true"
           :dark="userStore.user.theme == 'dark'"
+          :min-date="props.minDate"
+          :max-date="props.maxDate"
+          :time-picker="props.timeOnly"
+          :enable-time-picker="!props.disableTime"
+          :disabled="props.disabled"
+          position="left"
         />
       </div>
       <LabeledLabel

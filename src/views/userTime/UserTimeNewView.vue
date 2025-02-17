@@ -5,11 +5,10 @@ import type { UserTimeCreateSchema } from '@/schemas/userTime'
 
 import ControlsNew from '@/components/userTime/ControlsNew.vue'
 import CreateForm from '@/components/userTime/CreateForm.vue'
-import moment from 'moment'
 
 // Form stuff
 const formData = ref<UserTimeCreateSchema>({
-  login: moment().toDate(),
+  login: null,
   logout: null,
   note: '',
 })

@@ -437,8 +437,9 @@ export const enGB: Language = {
     },
     input: {
       filterPlaceholder: 'Filter',
-      loginPlaceholder: 'Login Timestamp',
-      logoutPlaceholder: 'Logout Timestamp',
+      datePlaceholder: 'Date',
+      loginPlaceholder: 'Login Time',
+      logoutPlaceholder: 'Logout Time',
       notePlaceholder: 'Note',
     },
     button: {

@@ -6,11 +6,13 @@ import Vue3Autocounter from 'vue3-autocounter'
 
 import { useUserStore } from '@/stores/user'
 import { useUserTimeStore } from '@/stores/userTime'
+import { useLanguageStore } from '@/stores/language'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 const userStore = useUserStore()
 const userTimeStore = useUserTimeStore()
+const languageStore = useLanguageStore()
 
 const startHours = ref(0)
 const startPercent = ref(0)
@@ -105,7 +107,7 @@ watch(
   <div class="scope">
     <div class="chart-base-scope">
       <div class="chart-base-wrapper">
-        <h1>Total hours this week</h1>
+        <h1>{{ languageStore.l.userTime.common.totalHoursThisWeek }}</h1>
         <div class="chart">
           <Doughnut :data="chartData" :options="chartOptions" />
         </div>

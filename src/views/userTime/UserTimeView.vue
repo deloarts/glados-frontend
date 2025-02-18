@@ -19,6 +19,7 @@ const resolutionStore = useResolutionStore()
 const gtMinWidthTablet = computed(() => resolutionStore.gtMinWidthTablet)
 
 onBeforeMount(() => {
+  userTimeStore.clearSelection()
   userTimeStore.getItems()
 })
 </script>

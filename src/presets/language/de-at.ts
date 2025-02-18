@@ -425,6 +425,11 @@ export const deAT: Language = {
     },
   },
   userTime: {
+    common: {
+      totalHoursThisWeek: "Gesamte Wochenstunden",
+      sumForThisWeek: "Summe für diese Woche",
+      entriesForThisWeek: "Einträge dieser Woche",
+    },
     table: {
       number: '#',
       id: 'ID',
@@ -446,11 +451,11 @@ export const deAT: Language = {
     button: {
       login: 'Anmelden',
       logout: 'Abmelden',
-      newEntry: 'Neuer Eintrag',
+      newEntry: 'Erstellen',
       editEntry: 'Bearbeiten',
       deleteEntry: 'Löschen',
       unselect: 'Abwählen',
-      sync: 'Snychronisieren',
+      sync: 'Laden',
       views: 'Ansichten',
       columns: 'Spalten',
       clearFilter: 'Zurücksetzen',

@@ -118,7 +118,7 @@ watch(
   <div class="scope">
     <div class="chart-base-scope">
       <div class="chart-base-wrapper">
-        <h1>Sum for this week</h1>
+        <h1>{{ languageStore.l.userTime.common.sumForThisWeek }}</h1>
         <Bar class="chart" :data="chartData" :options="chartOptions" />
       </div>
     </div>

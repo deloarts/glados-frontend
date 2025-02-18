@@ -424,6 +424,11 @@ export const enGB: Language = {
     },
   },
   userTime: {
+    common: {
+      totalHoursThisWeek: "Total hours this week",
+      sumForThisWeek: "Sum for this week",
+      entriesForThisWeek: "Entries for this week",
+    },
     table: {
       number: '#',
       id: 'ID',

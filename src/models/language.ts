@@ -402,6 +402,11 @@ export interface Language {
     }
   }
   userTime: {
+    common: {
+      totalHoursThisWeek: string
+      sumForThisWeek: string
+      entriesForThisWeek: string
+    }
     table: {
       number: string
       id: string

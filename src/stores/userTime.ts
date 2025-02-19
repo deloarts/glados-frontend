@@ -40,6 +40,8 @@ export const useUserTimeStore = defineStore('userTime', () => {
 
   function getItems(): Array<UserTimeSchema> {
     get()
+    fetchCurrentWeek()
+    fetchCurrentLogin()
     return items.value
   }
 

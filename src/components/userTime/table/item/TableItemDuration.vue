@@ -20,7 +20,7 @@ const duration = computed<string>(() => {
   } else {
     m = moment.duration(moment().diff(moment.utc(props.item.login)))
   }
-  return `${String(m.hours()).padStart(2, '0')}:${String(m.minutes()).padStart(2, '0')}`
+  return `${String(m.hours()).padStart(2, '0')}:${String(Math.abs(m.minutes())).padStart(2, '0')}`
 })
 </script>
 

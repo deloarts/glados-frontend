@@ -80,6 +80,7 @@ function onButtonLogin() {
   userTimeRequest.postUserTimeLogin().then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(languageStore.l.notification.info.loggedInNow)
+      userTimeStore.getItems()
     } else {
       notificationStore.addWarn(response.data.detail)
     }
@@ -91,6 +92,7 @@ function onButtonLogout() {
   userTimeRequest.postUserTimeLogout().then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(languageStore.l.notification.info.loggedInNow)
+      userTimeStore.getItems()
     } else {
       notificationStore.addWarn(response.data.detail)
     }

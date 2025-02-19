@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onBeforeUnmount, watch } from 'vue'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import {
   Chart as ChartJS,
   Title,

@@ -69,8 +69,14 @@ function updateUser() {
   })
 }
 
+async function loadUserData() {
+  await userStore.get()
+  formUserUpdate.value = JSON.parse(JSON.stringify(userStore.user))
+}
+
 onBeforeMount(() => {
   setOptionsLanguage()
+  loadUserData()
 })
 </script>
 

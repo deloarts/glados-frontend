@@ -1,4 +1,5 @@
 import { ref, watch, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
@@ -15,6 +16,7 @@ import { userTimeFilterAll } from '@/presets/userTimeFilter'
 import moment from 'moment'
 
 export const useUserTimeStore = defineStore('userTime', () => {
+  const _route = useRoute()
   const _filterStore = useUserTimeFilterStore()
 
   const loading = ref<boolean>(false)
@@ -152,6 +154,13 @@ export const useUserTimeStore = defineStore('userTime', () => {
     }
   }
 
+  onBeforeMount(() => {
+    clear()
+    fetchItems()
+    fetchCurrentWeek()
+    fetchCurrentLogin()
+  })
+
   watch(
     () => _filterStore.state.limit,
     async () => {
@@ -173,21 +182,18 @@ export const useUserTimeStore = defineStore('userTime', () => {
     { deep: true },
   )
 
-  watch(
-    () => items.value,
-    async () => {
-      await fetchCurrentLogin()
-      await fetchCurrentWeek()
-    },
-    { deep: true },
-  )
-
-  onBeforeMount(() => {
-    clear()
-    fetchItems()
-    fetchCurrentWeek()
-    fetchCurrentLogin()
+  watch(_route, () => {
+    paused.value = !(_route.path.includes('user-time'))
   })
+
+  // watch(
+  //   () => items.value,
+  //   async () => {
+  //     await fetchCurrentLogin()
+  //     await fetchCurrentWeek()
+  //   },
+  //   { deep: true },
+  // )
 
   return {
     loading,

@@ -1,4 +1,5 @@
 import { ref, watch, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
@@ -10,6 +11,7 @@ import type { PageSchema } from '@/schemas/page'
 import type { ProjectSchema } from '@/schemas/project'
 
 export const useProjectsStore = defineStore('projects', () => {
+  const _route = useRoute()
   const _filterStore = useProjectFilterStore()
 
   const loading = ref<boolean>(false)
@@ -125,6 +127,12 @@ export const useProjectsStore = defineStore('projects', () => {
     return null
   }
 
+  onBeforeMount(() => {
+    clear()
+    getAll()
+    fetchItems()
+  })
+
   watch(
     () => _filterStore.state.limit,
     async () => {
@@ -146,11 +154,10 @@ export const useProjectsStore = defineStore('projects', () => {
     { deep: true },
   )
 
-  onBeforeMount(() => {
-    clear()
-    getAll()
-    fetchItems()
+  watch(_route, () => {
+    paused.value = !(_route.path.includes('projects'))
   })
+
 
   return {
     loading,

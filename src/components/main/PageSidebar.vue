@@ -153,18 +153,6 @@ watch(gtMinWidthTablet, () => {
         </Transition>
       </router-link>
       <router-link
-        :to="'/account'"
-        @mouseover="(showLabelAccount = true), hideLabel()"
-        @mouseleave="showLabelAccount = false"
-      >
-        <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
-        <Transition>
-          <div v-if="showLabelAccount" class="label">
-            {{ languageStore.l.main.sideBar.account }}
-          </div>
-        </Transition>
-      </router-link>
-      <router-link
         v-if="userStore.user.work_hours_per_week"
         :to="'/user-time'"
         @mouseover="(showLabelUserTime = true), hideLabel()"
@@ -174,6 +162,18 @@ watch(gtMinWidthTablet, () => {
         <Transition>
           <div v-if="showLabelUserTime" class="label">
             {{ languageStore.l.main.sideBar.userTime }}
+          </div>
+        </Transition>
+      </router-link>
+      <router-link
+        :to="'/account'"
+        @mouseover="(showLabelAccount = true), hideLabel()"
+        @mouseleave="showLabelAccount = false"
+      >
+        <IconAccount v-bind:class="{ active: routeIsActive('/account') }" />
+        <Transition>
+          <div v-if="showLabelAccount" class="label">
+            {{ languageStore.l.main.sideBar.account }}
           </div>
         </Transition>
       </router-link>

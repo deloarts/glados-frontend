@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -11,6 +11,10 @@ import {
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
 import type { ChartDataset } from 'chart.js'
+
+import moment from 'moment'
+
+import { useIntervalFn } from '@vueuse/core'
 
 import { useLanguageStore } from '@/stores/language'
 import { useUserStore } from '@/stores/user'
@@ -30,6 +34,7 @@ const labelColor = computed(() => {
   return userStore.user.theme == 'dark' ? 'white' : 'black'
 })
 
+const current = ref<Array<number>>([])
 const datasets = ref<Array<ChartDataset>>([])
 const labels = ref<Array<string>>([])
 
@@ -45,7 +50,7 @@ const chartOptions = {
   scales: {
     x: { stacked: true, ticks: { stepSize: 1, color: labelColor.value } },
     y: {
-      stacked: false,
+      stacked: true,
       ticks: { stepSize: 1, beginAtZero: true, color: labelColor.value },
       grid: { color: 'rgba(100, 100, 100, 0.4)' },
     },
@@ -57,12 +62,36 @@ const chartOptions = {
     datalabels: {
       display: false,
     },
+    tooltip: {
+      callbacks: {
+        label: function (data: any) {
+          const duration = moment.duration(data.formattedValue, 'hours');
+          const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm');
+          return formatted
+        },
+      },
+    },
   },
 }
 
+const { pause, resume } = useIntervalFn(() => {
+  updateChart()
+}, 1000)
+
+function getCurrent(): Array<number> {
+  const c = [0, 0, 0, 0, 0, 0, 0]
+  const day = moment().day() - 1
+  c[day] = moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() / 60
+  current.value = c
+  return c
+}
+
 function updateChart() {
+  let tempLabels = []
+  let tempDatasets = []
+
   if (gtMinWidthTablet.value) {
-    labels.value = [
+    tempLabels = [
       languageStore.l.common.days.monday,
       languageStore.l.common.days.tuesday,
       languageStore.l.common.days.wednesday,
@@ -72,7 +101,7 @@ function updateChart() {
       languageStore.l.common.days.sunday,
     ]
   } else {
-    labels.value = [
+    tempLabels = [
       languageStore.l.common.shortDays.monday,
       languageStore.l.common.shortDays.tuesday,
       languageStore.l.common.shortDays.wednesday,
@@ -83,9 +112,9 @@ function updateChart() {
     ]
   }
 
-  datasets.value = [
+  tempDatasets = [
     {
-      label: 'Current Week',
+      label: 'Logged',
       data: userTimeStore.weekSum,
       backgroundColor: [
         'rgba(54, 162, 235, 0.8)',
@@ -96,22 +125,40 @@ function updateChart() {
         'rgba(255, 159, 64, 0.6)',
         'rgba(255, 99, 132, 0.6)',
       ],
-      borderWidth: 1,
+      borderWidth: 0,
+    },
+    {
+      label: 'Current',
+      data: getCurrent(),
+      backgroundColor: [
+        'rgba(0, 204, 92, 0.8)',
+        'rgba(0, 204, 92, 0.8)',
+        'rgba(0, 204, 92, 0.8)',
+        'rgba(0, 204, 92, 0.8)',
+        'rgba(0, 204, 92, 0.8)',
+        'rgba(0, 204, 92, 0.8)',
+        'rgba(0, 204, 92, 0.8)',
+      ],
+      borderWidth: 0,
     },
   ]
+  
+  if (JSON.stringify(labels.value) != JSON.stringify(tempLabels)) {
+    labels.value = tempLabels
+  }
+  if (JSON.stringify(datasets.value) != JSON.stringify(tempDatasets)) {
+    datasets.value = tempDatasets
+  }
 }
 
 onMounted(() => {
   updateChart()
+  resume()
 })
 
-watch(
-  () => userTimeStore.weekSum,
-  () => {
-    updateChart()
-  },
-  { deep: true },
-)
+onBeforeUnmount(() => {
+  pause()
+})
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
 import Vue3Autocounter from 'vue3-autocounter'
@@ -7,6 +7,10 @@ import Vue3Autocounter from 'vue3-autocounter'
 import { useUserStore } from '@/stores/user'
 import { useUserTimeStore } from '@/stores/userTime'
 import { useLanguageStore } from '@/stores/language'
+
+import moment from 'moment'
+
+import { useIntervalFn } from '@vueuse/core'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -24,8 +28,8 @@ const chartData = computed(() => {
     labels: chartLabels.value,
     datasets: [
       {
-        backgroundColor: ['rgba(54, 162, 235, 0.8)', '#282828'],
-        borderColor: ['rgba(54, 162, 235, 0.9)', '#007acc'],
+        backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(0, 204, 92, 0.8)', 'rgba(40, 40, 40, 0.5)'],
+        borderColor: ['rgba(250, 250, 250, 0.2)', 'rgba(250, 250, 250, 0.2)', 'rgba(250, 250, 250, 0.2)'],
         data: chartDataset.value,
       },
     ],
@@ -48,43 +52,60 @@ const chartOptions = {
     tooltip: {
       callbacks: {
         label: function (data: any) {
-          console.log(data)
-          return Number(data.formattedValue).toFixed(1) + ' Hours'
+          const duration = moment.duration(data.formattedValue, 'hours');
+          const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm');
+          return formatted
         },
       },
     },
   },
 }
 
+const current = ref<number>(0)
 const percentage = computed<number | null>(() => {
   return userStore.user.work_hours_per_week
-    ? (chartData.value.datasets[0].data[0] * 100) / userStore.user.work_hours_per_week
+    ? ((chartData.value.datasets[0].data[0] + current.value) * 100) / userStore.user.work_hours_per_week
     : null
 })
 
+const { pause, resume } = useIntervalFn(() => {
+  updateChart()
+}, 1000)
+
 function setStartHours() {
-  startHours.value = chartData.value.datasets[0].data[0]
+  startHours.value = Number(current.value) + Number(chartData.value.datasets[0].data[0])
 }
 
 function setStartPercent() {
   startPercent.value = percentage.value || 0
 }
 
+function getCurrent(): number {
+  let c = 0  
+  if (userTimeStore.loggedInSince != null) {
+    c = moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() / 60
+  }
+  current.value = c
+  return c
+}
+
 function updateChart() {
+  getCurrent()
   let sumOfWeek = 0
   let restOfWeek = 0
+
   for (let i = 0; i < userTimeStore.weekSum.length; i++) {
     sumOfWeek += userTimeStore.weekSum[i]
   }
   if (userStore.user.work_hours_per_week) {
-    restOfWeek = userStore.user.work_hours_per_week - sumOfWeek
+    restOfWeek = userStore.user.work_hours_per_week - sumOfWeek - current.value
     if (restOfWeek < 0) {
       restOfWeek = 0
     }
   }
 
-  const data = [sumOfWeek, restOfWeek]
-  const labels = ['Worked', 'Open']
+  const data = [sumOfWeek, current.value, restOfWeek]
+  const labels = ['Worked', 'Current', 'Open']
 
   chartLabels.value = labels
   chartDataset.value = data
@@ -92,15 +113,12 @@ function updateChart() {
 
 onMounted(() => {
   updateChart()
+  resume()
 })
 
-watch(
-  () => userTimeStore.weekSum,
-  () => {
-    updateChart()
-  },
-  { deep: true },
-)
+onBeforeUnmount(() => {
+  pause()
+})
 </script>
 
 <template>
@@ -116,7 +134,7 @@ watch(
     <div class="value">
       <Vue3Autocounter
         :startAmount="startHours"
-        :endAmount="chartData.datasets[0].data[0]"
+        :endAmount="Number(current) + Number(chartData.datasets[0].data[0])"
         :duration="0.5"
         @finished="setStartHours"
       />
@@ -169,7 +187,7 @@ h1 {
 
   display: table-cell;
   position: relative;
-  top: -142px;
+  top: -145px;
 
   width: 300px;
   height: min-content;

@@ -20,6 +20,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
   const loading = ref<boolean>(false)
   const paused = ref<boolean>(false)
   const items = ref<UserTimeSchema[]>([])
+  const loggedInSince = ref<Date | null>()
   const weekTime = ref<Array<Array<number[]>>>([[]])
   const weekSum = ref<number[]>([0, 0, 0, 0, 0, 0, 0])
   const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
@@ -40,8 +41,19 @@ export const useUserTimeStore = defineStore('userTime', () => {
     return items.value
   }
 
+  async function fetchCurrentLogin() {
+    return userTimeRequest.getUserLoginTime().then((response) => {
+      if (response.status === 200) {
+        loggedInSince.value = response.data.login
+      } else {
+        loggedInSince.value = null
+      }
+      return response
+    })
+  }
+
   async function fetchCurrentWeek() {
-    const tempWeekTime: Array<Array<number[]>> = [[], [], [], [], [], [], []]
+    const tempWeekTime: Array<Array<number[]>> = []
     const tempWeekSum: number[] = [0, 0, 0, 0, 0, 0, 0]
 
     for (let i = 0; i < 7; i++) {
@@ -82,7 +94,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
       })
     }
 
-    if (!(JSON.stringify(tempWeekTime) === JSON.stringify(weekTime.value))) {
+    if (JSON.stringify(tempWeekTime) != JSON.stringify(weekTime.value)) {
       weekTime.value = tempWeekTime
     }
     if (JSON.stringify(tempWeekSum) != JSON.stringify(weekSum.value)) {
@@ -133,6 +145,8 @@ export const useUserTimeStore = defineStore('userTime', () => {
       setTimeout(fetchItems, constants.patchUserTimeStoreInterval)
     } else {
       get().then(() => {
+        fetchCurrentLogin()
+        fetchCurrentWeek()
         setTimeout(fetchItems, constants.patchUserTimeStoreInterval)
       })
     }
@@ -162,6 +176,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
   watch(
     () => items.value,
     async () => {
+      await fetchCurrentLogin()
       await fetchCurrentWeek()
     },
     { deep: true },
@@ -171,12 +186,14 @@ export const useUserTimeStore = defineStore('userTime', () => {
     clear()
     fetchItems()
     fetchCurrentWeek()
+    fetchCurrentLogin()
   })
 
   return {
     loading,
     paused,
     items,
+    loggedInSince,
     weekTime,
     weekSum,
     page,
@@ -184,6 +201,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
     pause,
     getItems,
     fetchCurrentWeek,
+    fetchCurrentLogin,
     clearItems,
     getSelection,
     setSelection,

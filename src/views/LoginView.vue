@@ -13,6 +13,7 @@ import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useProjectsStore } from '@/stores/projects'
 import { useUsersStore, useUserStore } from '@/stores/user'
+import { useUserTimeStore } from '@/stores/userTime'
 import { useRfidAuthStore } from '@/stores/rfidAuth'
 
 import LoadingBar from '@/components/spinner/LoadingBar.vue'
@@ -33,6 +34,7 @@ const particlesLoaded = async (container) => {
 const languageStore = useLanguageStore()
 const userStore = useUserStore()
 const usersStore = useUsersStore()
+const userTimeStore = useUserTimeStore()
 const projectsStore = useProjectsStore()
 const notificationStore = useNotificationStore()
 const rfidAuthStore = useRfidAuthStore()
@@ -61,6 +63,7 @@ function login() {
     if (response.status === 200) {
       setTimeout(userStore.get, 1200)
       usersStore.get()
+      userTimeStore.getItems()
       projectsStore.getItems()
     } else if (response.status === 422) {
       showLoadingBar.value = false

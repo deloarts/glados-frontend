@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch, computed, onBeforeUnmount } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -11,6 +11,10 @@ import {
 } from 'chart.js'
 import { Bar } from 'vue-chartjs'
 import type { ChartDataset } from 'chart.js'
+
+import moment from 'moment'
+
+import { useIntervalFn } from '@vueuse/core'
 
 import { useLanguageStore } from '@/stores/language'
 import { useUserStore } from '@/stores/user'
@@ -30,6 +34,7 @@ const labelColor = computed(() => {
   return userStore.user.theme == 'dark' ? 'white' : 'black'
 })
 
+const current = ref<Array<number[]>>([])
 const datasets = ref<Array<ChartDataset>>([])
 const labels = ref<Array<string>>([])
 
@@ -43,12 +48,12 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
-    x: { stacked: true, ticks: { stepSize: 1, color: labelColor.value } },
+    x: { stacked: true, ticks: { stepSize: 1, beginAtZero: false, color: labelColor.value } },
     y: {
       stacked: false,
       min: 0,
       max: 24,
-      ticks: { stepSize: 1, beginAtZero: true, color: labelColor.value },
+      ticks: { stepSize: 1, beginAtZero: false, color: labelColor.value },
       grid: { color: 'rgba(100, 100, 100, 0.4)' },
     },
   },
@@ -62,9 +67,30 @@ const chartOptions = {
   },
 }
 
+const { pause, resume } = useIntervalFn(() => {
+  updateChart()
+}, 1000)
+
+function getCurrent(): Array<number[]> {
+  const c: Array<number[]> = [[], [], [], [], [], [], []]
+  if (userTimeStore.loggedInSince != null) {
+    const day = moment().day() - 1
+    const loginTime = moment.utc(userTimeStore.loggedInSince).local()
+    const logoutTime = moment()
+    const login = Number((loginTime.hours() + loginTime.minutes() / 60).toFixed(1))
+    const logout = Number(logoutTime.hours() + logoutTime.minutes() / 60).toFixed(1)
+    c[day] = [login, logout]
+  }
+  current.value = c
+  return c
+}
+
 function updateChart() {
+  let tempLabels = []
+  const tempDatasets = []
+
   if (gtMinWidthTablet.value) {
-    labels.value = [
+    tempLabels = [
       languageStore.l.common.days.monday,
       languageStore.l.common.days.tuesday,
       languageStore.l.common.days.wednesday,
@@ -74,7 +100,7 @@ function updateChart() {
       languageStore.l.common.days.sunday,
     ]
   } else {
-    labels.value = [
+    tempLabels = [
       languageStore.l.common.shortDays.monday,
       languageStore.l.common.shortDays.tuesday,
       languageStore.l.common.shortDays.wednesday,
@@ -85,10 +111,23 @@ function updateChart() {
     ]
   }
 
-  datasets.value = []
+  tempDatasets.push({
+    label: 'Current',
+    data: getCurrent(),
+    backgroundColor: [
+      'rgba(0, 204, 92, 0.8)',
+      'rgba(0, 204, 92, 0.8)',
+      'rgba(0, 204, 92, 0.8)',
+      'rgba(0, 204, 92, 0.8)',
+      'rgba(0, 204, 92, 0.8)',
+      'rgba(0, 204, 92, 0.8)',
+      'rgba(0, 204, 92, 0.8)',
+    ],
+    borderWidth: 0,
+  })
   for (let i = 0; i < userTimeStore.weekTime.length; i++) {
-    datasets.value.push({
-      label: 'Current Week',
+    tempDatasets.push({
+      label: `Entry #${i + 1}`,
       data: userTimeStore.weekTime[i],
       backgroundColor: [
         'rgba(54, 162, 235, 0.8)',
@@ -99,40 +138,26 @@ function updateChart() {
         'rgba(255, 159, 64, 0.6)',
         'rgba(255, 99, 132, 0.6)',
       ],
-      // backgroundColor: [
-      //   'rgba(54, 162, 235, 0.2)',
-      //   'rgba(54, 162, 235, 0.2)',
-      //   'rgba(54, 162, 235, 0.2)',
-      //   'rgba(54, 162, 235, 0.2)',
-      //   'rgba(54, 162, 235, 0.2)',
-      //   'rgba(255, 159, 64, 0.2)',
-      //   'rgba(255, 99, 132, 0.2)',
-      // ],
-      // borderColor: [
-      //   'rgb(54, 162, 235)',
-      //   'rgb(54, 162, 235)',
-      //   'rgb(54, 162, 235)',
-      //   'rgb(54, 162, 235)',
-      //   'rgb(54, 162, 235)',
-      //   'rgb(255, 159, 64)',
-      //   'rgb(255, 99, 132)',
-      // ],
-      borderWidth: 1,
+      borderWidth: 0,
     })
+  }
+
+  if (JSON.stringify(labels.value) != JSON.stringify(tempLabels)) {
+    labels.value = tempLabels
+  }
+  if (JSON.stringify(datasets.value) != JSON.stringify(tempDatasets)) {
+    datasets.value = tempDatasets
   }
 }
 
 onMounted(() => {
   updateChart()
+  resume()
 })
 
-watch(
-  () => userTimeStore.weekTime,
-  () => {
-    updateChart()
-  },
-  { deep: true },
-)
+onBeforeUnmount(() => {
+  pause()
+})
 </script>
 
 <template>

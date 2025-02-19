@@ -9,6 +9,9 @@ export class UserTimeRequest {
   getUserTimeByID(id: number) {
     return request.get(`/api/web/v1/user-time/${id}/`, requestConfig(null));
   }
+  getUserLoginTime() {
+    return request.get(`/api/web/v1/user-time/login/`, requestConfig(null));
+  }
 
   // POST
   postUserTime(data: UserTimeCreateSchema) {

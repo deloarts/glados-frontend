@@ -407,6 +407,12 @@ export interface Language {
       sumForThisWeek: string
       entriesForThisWeek: string
     }
+    warnings: {
+      cannotCreateWhileLoggedIn: string
+      loginMustBeProvided: string
+      loginMustBeToday: string
+      loginAfterLogout: string
+    }
     table: {
       number: string
       id: string

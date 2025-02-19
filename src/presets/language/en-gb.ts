@@ -429,6 +429,12 @@ export const enGB: Language = {
       sumForThisWeek: "Sum for this week",
       entriesForThisWeek: "Entries for this week",
     },
+    warnings: {
+      cannotCreateWhileLoggedIn: 'You cannot create an entry while you are logged in',
+      loginMustBeProvided: 'Login time must be provided',
+      loginMustBeToday: 'Login date must be today when no logout time is provided',
+      loginAfterLogout: 'Login time cannot be after logout time',
+    },
     table: {
       number: '#',
       id: 'ID',

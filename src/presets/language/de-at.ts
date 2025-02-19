@@ -430,6 +430,12 @@ export const deAT: Language = {
       sumForThisWeek: "Summe für diese Woche",
       entriesForThisWeek: "Einträge dieser Woche",
     },
+    warnings: {
+      cannotCreateWhileLoggedIn: 'Du kannst keinen Eintrag erstellen, während du angemeldet bist',
+      loginMustBeProvided: 'Die Anmeldezeit muss angegeben werden',
+      loginMustBeToday: 'Das Anmeldedatum muss heute sein, wenn keine Abmeldezeit angegeben ist',
+      loginAfterLogout: 'Die Anmeldezeit kann nicht nach der Abmeldezeit liegen',
+    },
     table: {
       number: '#',
       id: 'ID',

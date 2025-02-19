@@ -28,7 +28,7 @@ const chartData = computed(() => {
     labels: chartLabels.value,
     datasets: [
       {
-        backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(0, 204, 92, 0.8)', 'rgba(40, 40, 40, 0.5)'],
+        backgroundColor: ['rgba(54, 162, 235, 0.8)', currentColor.value, 'rgba(40, 40, 40, 0.5)'],
         borderColor: ['rgba(250, 250, 250, 0.2)', 'rgba(250, 250, 250, 0.2)', 'rgba(250, 250, 250, 0.2)'],
         data: chartDataset.value,
       },
@@ -62,6 +62,9 @@ const chartOptions = {
 }
 
 const current = ref<number>(0)
+const currentColor = computed<string>(() => {
+  return current.value >= 0 ? 'rgba(0, 204, 92, 0.8)' : 'rgba(255, 50, 50, 0.8)'
+})
 const percentage = computed<number | null>(() => {
   return userStore.user.work_hours_per_week
     ? ((chartData.value.datasets[0].data[0] + current.value) * 100) / userStore.user.work_hours_per_week

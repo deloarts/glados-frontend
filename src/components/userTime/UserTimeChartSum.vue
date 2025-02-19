@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
+import { ref, onMounted, computed, onBeforeUnmount, watch } from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -35,6 +35,9 @@ const labelColor = computed(() => {
 })
 
 const current = ref<Array<number>>([])
+const currentColor = computed<string>(() => {
+  return moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() >= 0 ? 'rgba(0, 204, 92, 0.8)' : 'rgba(255, 50, 50, 0.8)'
+})
 const datasets = ref<Array<ChartDataset>>([])
 const labels = ref<Array<string>>([])
 
@@ -130,15 +133,7 @@ function updateChart() {
     {
       label: 'Current',
       data: getCurrent(),
-      backgroundColor: [
-        'rgba(0, 204, 92, 0.8)',
-        'rgba(0, 204, 92, 0.8)',
-        'rgba(0, 204, 92, 0.8)',
-        'rgba(0, 204, 92, 0.8)',
-        'rgba(0, 204, 92, 0.8)',
-        'rgba(0, 204, 92, 0.8)',
-        'rgba(0, 204, 92, 0.8)',
-      ],
+      backgroundColor: currentColor.value,
       borderWidth: 0,
     },
   ]
@@ -159,6 +154,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   pause()
 })
+
 </script>
 
 <template>

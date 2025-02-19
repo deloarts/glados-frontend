@@ -31,11 +31,11 @@ onBeforeMount(() => {
         <div id="controls" class="controls">
           <Controls />
         </div>
-        <div id="week-hours">
-          <UserTimeChartHours v-if="gtMinWidthTablet" />
-        </div>
         <div id="week-sum">
           <UserTimeChartSum />
+        </div>
+        <div id="week-hours" v-if="gtMinWidthTablet">
+          <UserTimeChartHours />
         </div>
         <div id="week-time" v-if="gtMinWidthTablet">
           <UserTimeChartTime />

@@ -166,6 +166,7 @@ onMounted(() => {
           <LabeledDatepicker
             v-model:value="updateFormData.desired_delivery_date"
             :placeholder="languageStore.l.boughtItem.input.desiredDatePlaceholder"
+            :return-as-date="true"
           />
         </div>
         <div id="note-general" class="grid-item-center">

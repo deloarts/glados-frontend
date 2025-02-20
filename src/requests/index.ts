@@ -117,7 +117,7 @@ export class Request {
         return response
       })
       .catch((error) => {
-        if (error.response != undefined && error.response.status === 401) {
+        if (error.response != undefined && error.response.status >= 500) {
           console.warn(error.response.data.detail)
           router.push({ name: 'Login' })
         }
@@ -136,7 +136,7 @@ export class Request {
         return response
       })
       .catch((error) => {
-        if (error.response != undefined && error.response.status === 401) {
+        if (error.response != undefined && error.response.status >= 500) {
           console.warn(error.response.data.detail)
           router.push({ name: 'Login' })
         }
@@ -155,7 +155,7 @@ export class Request {
         return response
       })
       .catch((error) => {
-        if (error.response != undefined && error.response.status === 401) {
+        if (error.response != undefined && error.response.status >= 500) {
           console.warn(error.response.data.detail)
           router.push({ name: 'Login' })
         }
@@ -174,7 +174,7 @@ export class Request {
         return response
       })
       .catch((error) => {
-        if (error.response != undefined && error.response.status === 401) {
+        if (error.response != undefined && error.response.status >= 500) {
           console.warn(error.response.data.detail)
           router.push({ name: 'Login' })
         }

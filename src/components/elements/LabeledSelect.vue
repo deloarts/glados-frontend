@@ -9,7 +9,7 @@ import type { AvailableOption } from '@/models/controls'
 const languageStore = useLanguageStore()
 
 interface Props {
-  value: number | string | Date | null | undefined
+  value: boolean | number | string | Date | null | undefined
   options: Array<AvailableOption>
   placeholder: string
   required?: boolean
@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false,
 })
 const emit = defineEmits<{
-  (e: 'update:value', v: number | string | Date | null | undefined): void
+  (e: 'update:value', v: boolean | number | string | Date | null | undefined): void
 }>()
 
 const inputSearch = ref<HTMLElement>()

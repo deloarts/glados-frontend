@@ -1,4 +1,5 @@
 import { ref, watch, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
@@ -16,6 +17,7 @@ import type { BoughtItemBatchImportSchema } from '@/schemas/boughtItem'
 import type { ResponseWarning } from '@/models/response'
 
 export const useBoughtItemsStore = defineStore('boughtItems', () => {
+  const _route = useRoute()
   const _filterStore = useBoughtItemFilterStore()
 
   const loading = ref<boolean>(false)
@@ -89,6 +91,11 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     }
   }
 
+  onBeforeMount(() => {
+    clear()
+    fetchItems()
+  })
+
   watch(
     () => _filterStore.state.limit,
     async () => {
@@ -110,9 +117,8 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     { deep: true },
   )
 
-  onBeforeMount(() => {
-    clear()
-    fetchItems()
+  watch(_route, () => {
+    paused.value = !(_route.path.includes('items/bought'))
   })
 
   return {

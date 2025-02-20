@@ -1,17 +1,73 @@
 export interface Language {
+  common: {
+    days: {
+      monday: string
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+    }
+    shortDays: {
+      monday: string
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+    }
+    months: {
+      january: string
+      february: string
+      march: string
+      april: string
+      may: string
+      june: string
+      july: string
+      august: string
+      september: string
+      october: string
+      november: string
+      december: string
+    }
+    shortMonths: {
+      january: string
+      february: string
+      march: string
+      april: string
+      may: string
+      june: string
+      july: string
+      august: string
+      september: string
+      october: string
+      november: string
+      december: string
+    }
+  }
   notification: {
     info: {
       reconnectedToServer: string
       welcomeMessage: Function
+      loggedInNow: string
+      loggedOutNow: string
       savedNewFilter: string
       createdNewPAT: string
       createdUser: string
+      createdEntry: string
       updatedUserData: string
+      updatedEntry: string
       cannotUpdateSystemUser: string
+      selectEntryFirst: string
       selectProjectFirst: string
+      onlyEditOneEntry: string
       onlyEditOneProject: string
       onlyExportOneProject: string
+      onlyDeleteOneEntry: string
       onlyDeleteOneProject: string
+      deletedEntry: Function
       deletedProject: Function
       createdProject: string
       updatedProject: Function
@@ -80,6 +136,7 @@ export interface Language {
       projects: string
       boughtItems: string
       account: string
+      userTime: string
       tools: string
       settings: string
     }
@@ -106,20 +163,6 @@ export interface Language {
       canceled: string
       lost: string
     }
-    months: {
-      january: string
-      february: string
-      march: string
-      april: string
-      may: string
-      june: string
-      july: string
-      august: string
-      september: string
-      october: string
-      november: string
-      december: string
-    }
     banner: {
       showingItems: string
     }
@@ -137,11 +180,19 @@ export interface Language {
       save: string
       newToken: string
     }
+    option: {
+      logMeOut: string
+      keepMeLoggedIn: string
+    }
     input: {
       usernamePlaceholder: string
       fullNamePlaceholder: string
       emailPlaceholder: string
       passwordPlaceholder: string
+      workHoursPerWeekPlaceholder: string
+      autoBreakFromPlaceholder: string
+      autoBreakToPlaceholder: string
+      autoLogoutPlaceholder: string
       languagePlaceholder: string
       patPlaceholder: string
     }
@@ -348,6 +399,61 @@ export interface Language {
       notAllowedEditItemInactiveProject: string
       notAllowedEditItemOtherUser: string
       notAllowedEditItemPlanned: string
+    }
+  }
+  userTime: {
+    common: {
+      totalHoursThisWeek: string
+      sumForThisWeek: string
+      entriesForThisWeek: string
+    }
+    warnings: {
+      cannotCreateWhileLoggedIn: string
+      loginMustBeProvided: string
+      loginMustBeToday: string
+      loginAfterLogout: string
+    }
+    table: {
+      number: string
+      id: string
+      week: string
+      day: string
+      date: string
+      login: string
+      logout: string
+      duration: string
+      note: string
+    }
+    input: {
+      filterPlaceholder: string
+      datePlaceholder: string
+      loginPlaceholder: string
+      logoutPlaceholder: string
+      notePlaceholder: string
+    }
+    button: {
+      login: string
+      logout: string
+      newEntry: string
+      editEntry: string
+      deleteEntry: string
+      unselect: string
+      sync: string
+      views: string
+      columns: string
+      clearFilter: string
+      create: string
+      update: string
+      cancel: string
+    }
+    options: {
+      showAll: string
+      views: {
+        fixedHeight: string
+      }
+    }
+    prompt: {
+      deleteEntry: string
     }
   }
   tools: {

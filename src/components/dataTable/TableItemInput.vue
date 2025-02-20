@@ -25,6 +25,7 @@ interface Props {
   center?: boolean
   fixedHeight?: boolean
   editMode?: boolean
+  forceEditMode?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -36,6 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   center: false,
   fixedHeight: false,
   editMode: false,
+  forceEditMode: false
 })
 const emit = defineEmits<{
   (e: 'update:filterStore', v: FilterStoreProtocol | null): void
@@ -140,7 +142,7 @@ watch(
     <div
       v-if="
         props.editMode &&
-        (userStore.user.is_superuser || userStore.user.is_adminuser) &&
+        (userStore.user.is_superuser || userStore.user.is_adminuser || props.forceEditMode) &&
         gtMinWidthTablet
       "
     >

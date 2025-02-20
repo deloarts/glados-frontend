@@ -5,11 +5,13 @@ import constants from '@/constants'
 import { hostRequest } from '@/requests/host'
 import { boughtItemsFilter } from '@/presets/boughtItemsFilter'
 import { projectsFilter, projectsFilterAll } from '@/presets/projectsFilter'
+import { userTimeFilter, userTimeFilterAll } from '@/presets/userTimeFilter'
 import { getDifference } from '@/helper/object.helper'
 
 import type {
   HostConfigBoughtItemsFilterSchema,
   HostConfigProjectFilterSchema,
+  HostConfigUserTimeFilterSchema
 } from '@/schemas/host'
 
 interface BoughtItemPreset {
@@ -177,3 +179,37 @@ export const useProjectFilterStore = defineStore('projectFilter', () => {
 
   return { state, all, filterApplied, set, reset }
 })
+
+export const useUserTimeFilterStore = defineStore('userTimeFilter', () => {
+  const state = ref<HostConfigUserTimeFilterSchema>(JSON.parse(JSON.stringify(userTimeFilter)))
+  const all: HostConfigUserTimeFilterSchema = JSON.parse(JSON.stringify(userTimeFilterAll))
+  const filterApplied = ref<boolean>(false)
+
+  function set(key: string, value: string | number | Date | null) {
+    state.value[key] = value
+  }
+
+  function reset() {
+    state.value = JSON.parse(JSON.stringify(userTimeFilter))
+  }
+
+  watch(
+    state,
+    () => {
+      const a = JSON.parse(JSON.stringify(userTimeFilter))
+      const b = JSON.parse(JSON.stringify(state.value))
+      const diff = getDifference(a, b)
+      if ('skip' in diff) delete diff['skip']
+      if ('limit' in diff) delete diff['limit']
+      filterApplied.value = Object.keys(diff).length > 0
+    },
+    { deep: true },
+  )
+
+  onBeforeMount(() => {
+    reset()
+  })
+
+  return { state, all, filterApplied, set, reset }
+})
+

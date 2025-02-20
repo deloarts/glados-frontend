@@ -29,8 +29,8 @@ const solverInput = computed<StockCut2DJobSchema>(() => props.solverInput)
 const solverMethods = ['greedy', 'forward_greedy']
 
 function removePanelRow(index: number) {
-  let panels = []
-  for (var i = 0; i < solverInput.value.params.panels.length; i++) {
+  const panels = []
+  for (let i = 0; i < solverInput.value.params.panels.length; i++) {
     if (i != index) {
       panels.push(solverInput.value.params.panels[i])
     }
@@ -43,8 +43,8 @@ function removeAllPanels() {
   ]
 }
 function removeItemRow(index: number) {
-  let items = []
-  for (var i = 0; i < solverInput.value.params.items.length; i++) {
+  const items = []
+  for (let i = 0; i < solverInput.value.params.items.length; i++) {
     if (i != index) {
       items.push(solverInput.value.params.items[i])
     }

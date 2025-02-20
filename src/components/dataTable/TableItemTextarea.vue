@@ -58,7 +58,7 @@ const cssWidth = computed<string>(() => {
 })
 
 function resizeTextarea(event: Event) {
-  var textarea = event.target
+  const textarea = event.target
   //@ts-ignore
   textarea.style.height = '18px'
   //@ts-ignore

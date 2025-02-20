@@ -10,7 +10,7 @@ export class UsersRequest {
   getUsersMe() {
     return request.get('/api/web/v1/users/me/', requestConfig(null))
   }
-  getUsersID(id: Number) {
+  getUsersID(id: number) {
     return request.get(`/api/web/v1/users/${id}/`, requestConfig(null))
   }
 
@@ -20,7 +20,7 @@ export class UsersRequest {
   }
 
   // PUT
-  putUsers(id: Number, data: UserUpdateSchema) {
+  putUsers(id: number, data: UserUpdateSchema) {
     return request.put(`/api/web/v1/users/${id}/`, requestConfig(null), data)
   }
   putUsersMe(data: UserUpdateSchema) {

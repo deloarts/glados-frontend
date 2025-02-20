@@ -12,10 +12,10 @@ export class ProjectsRequest {
   getProjectsMy() {
     return request.get("/api/web/v1/projects/my/", requestConfig(null));
   }
-  getProjectsID(id: Number) {
+  getProjectsID(id: number) {
     return request.get(`/api/web/v1/projects/${id}/`, requestConfig(null));
   }
-  getProjectsNumber(number: String) {
+  getProjectsNumber(number: string) {
     return request.get(
       `/api/web/v1/projects/number/${number}/`,
       requestConfig(null),
@@ -28,7 +28,7 @@ export class ProjectsRequest {
   }
 
   // PUT
-  putProjects(id: Number, data: ProjectUpdateSchema) {
+  putProjects(id: number, data: ProjectUpdateSchema) {
     return request.put(
       `/api/web/v1/projects/${id}/`,
       requestConfig(null),
@@ -37,7 +37,7 @@ export class ProjectsRequest {
   }
 
   // DELETE
-  deleteProjects(id: Number) {
+  deleteProjects(id: number) {
     return request.delete(`/api/web/v1/projects/${id}/`, requestConfig(null));
   }
 }

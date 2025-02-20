@@ -24,7 +24,7 @@ function onSelect(id: number) {
   emit('update:selectedKeyID', id)
 }
 
-function shortKey(value: String) {
+function shortKey(value: string) {
   return `${value.slice(0, 10)} ... ${value.slice(-10)}`
 }
 

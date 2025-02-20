@@ -6,7 +6,7 @@ export class ApiKeysRequest {
   getApiKeys() {
     return request.get('/api/web/v1/api-keys/', requestConfig(null))
   }
-  getApiKeysID(id: Number) {
+  getApiKeysID(id: number) {
     return request.get(`/api/web/v1/api-keys/${id}/`, requestConfig(null))
   }
 
@@ -16,7 +16,7 @@ export class ApiKeysRequest {
   }
 
   // DELETE
-  deleteApiKeys(id: Number) {
+  deleteApiKeys(id: number) {
     return request.delete(`/api/web/v1/api-keys/${id}/`, requestConfig(null))
   }
 }

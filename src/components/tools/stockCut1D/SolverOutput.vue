@@ -122,9 +122,9 @@ function updateChart() {
   chartLabels.value = []
 
   const stock_items = props.solverOutput.lengths.length
-  var max_items_in_stock_item = 0
+  let max_items_in_stock_item = 0
   for (var i = 0; i < stock_items; i++) {
-    let current_subset = props.solverOutput.lengths[i].length
+    const current_subset = props.solverOutput.lengths[i].length
     if (current_subset > max_items_in_stock_item) {
       max_items_in_stock_item = current_subset
     }
@@ -132,8 +132,8 @@ function updateChart() {
 
   canvasHeight.value = 120 + stock_items * 30 + 'px'
 
-  var inverted = []
-  var cut_widths = []
+  const inverted = []
+  const cut_widths = []
   for (var i = 0; i < max_items_in_stock_item; i++) {
     inverted.push([])
     cut_widths.push([])
@@ -156,8 +156,8 @@ function updateChart() {
     }
   }
 
-  var dataset = []
-  var labels = []
+  const dataset = []
+  const labels = []
 
   for (var i = 0; i < stock_items; i++) {
     labels.push(`${languageStore.l.tools.labels.stockNumber}${i + 1}`)

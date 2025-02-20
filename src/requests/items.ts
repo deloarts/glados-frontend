@@ -11,10 +11,10 @@ export class BoughtItemsRequest {
   getItemsExcelTemplate() {
     return request.get('/api/web/v1/items/bought/excel-template/', requestConfigXlsxDownload(null))
   }
-  getItemsID(id: Number) {
+  getItemsID(id: number) {
     return request.get(`/api/web/v1/items/bought/${id}/`, requestConfig(null))
   }
-  getItemsIDChangelog(id: Number) {
+  getItemsIDChangelog(id: number) {
     return request.get(`/api/web/v1/items/bought/${id}/changelog/`, requestConfig(null))
   }
 
@@ -36,30 +36,30 @@ export class BoughtItemsRequest {
   }
 
   // PUT
-  putItems(id: Number, data: any) {
+  putItems(id: number, data: any) {
     return request.put(`/api/web/v1/items/bought/${id}/`, requestConfig(null), data)
   }
-  putItemsStatus(id: Number, status: string) {
+  putItemsStatus(id: number, status: string) {
     const params = new URLSearchParams()
     params.append('status', status)
     return request.put(`/api/web/v1/items/bought/${id}/status/`, requestConfig(params), null)
   }
-  putItemsProject(id: Number, project_number: string) {
+  putItemsProject(id: number, project_number: string) {
     const params = new URLSearchParams()
     params.append('project_number', project_number)
     return request.put(`/api/web/v1/items/bought/${id}/project/`, requestConfig(params), null)
   }
-  putItemsQuantity(id: Number, quantity: any) {
+  putItemsQuantity(id: number, quantity: number | string) {
     const params = new URLSearchParams()
-    params.append('quantity', quantity)
+    params.append('quantity', String(quantity))
     return request.put(`/api/web/v1/items/bought/${id}/quantity/`, requestConfig(params), null)
   }
-  putItemsUnit(id: Number, unit: any) {
+  putItemsUnit(id: number, unit: string) {
     const params = new URLSearchParams()
     params.append('unit', unit)
     return request.put(`/api/web/v1/items/bought/${id}/unit/`, requestConfig(params), null)
   }
-  putItemsPartnumber(id: Number, partnumber: any) {
+  putItemsPartnumber(id: number, partnumber: string) {
     const params = new URLSearchParams()
     params.append('value', partnumber)
     return request.put(
@@ -68,7 +68,7 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsOrderNumber(id: Number, orderNumber: any) {
+  putItemsOrderNumber(id: number, orderNumber: string) {
     const params = new URLSearchParams()
     params.append('value', orderNumber)
     return request.put(
@@ -77,7 +77,7 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsManufacturer(id: Number, manufacturer: any) {
+  putItemsManufacturer(id: number, manufacturer: string) {
     const params = new URLSearchParams()
     params.append('value', manufacturer)
     return request.put(
@@ -86,7 +86,7 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsSupplier(id: Number, supplier: any) {
+  putItemsSupplier(id: number, supplier: string) {
     const params = new URLSearchParams()
     params.append('value', supplier)
     return request.put(
@@ -95,7 +95,7 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsGroup1(id: Number, group: any) {
+  putItemsGroup1(id: number, group: string) {
     const params = new URLSearchParams()
     params.append('value', group)
     return request.put(
@@ -104,7 +104,7 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsNoteGeneral(id: Number, note: any) {
+  putItemsNoteGeneral(id: number, note: string) {
     const params = new URLSearchParams()
     params.append('value', note)
     return request.put(
@@ -113,7 +113,7 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsNoteSupplier(id: Number, note: any) {
+  putItemsNoteSupplier(id: number, note: string) {
     const params = new URLSearchParams()
     params.append('value', note)
     return request.put(
@@ -122,7 +122,7 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsStorage(id: Number, storage: any) {
+  putItemsStorage(id: number, storage: string) {
     const params = new URLSearchParams()
     params.append('value', storage)
     return request.put(
@@ -131,18 +131,18 @@ export class BoughtItemsRequest {
       null,
     )
   }
-  putItemsDesiredDeliveryDate(id: Number, date: any) {
+  putItemsDesiredDeliveryDate(id: number, date: Date | string) {
     const params = new URLSearchParams()
-    params.append('value', date)
+    params.append('value', String(date))
     return request.put(
       `/api/web/v1/items/bought/${id}/field/date/desired-delivery-date/`,
       requestConfig(params),
       null,
     )
   }
-  putItemsExpectedDeliveryDate(id: Number, date: any) {
+  putItemsExpectedDeliveryDate(id: number, date: Date | string) {
     const params = new URLSearchParams()
-    params.append('value', date)
+    params.append('value', String(date))
     return request.put(
       `/api/web/v1/items/bought/${id}/field/date/expected-delivery-date/`,
       requestConfig(params),
@@ -151,7 +151,7 @@ export class BoughtItemsRequest {
   }
 
   // DELETE
-  deleteItemsID(id: Number) {
+  deleteItemsID(id: number) {
     return request.delete(`/api/web/v1/items/bought/${id}/`, requestConfig(null))
   }
 }

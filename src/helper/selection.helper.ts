@@ -3,7 +3,7 @@ import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
 import { useNotificationStore } from '@/stores/notification'
 
 export function updateSelectedTableElement(
-  elementName: String,
+  elementName: string,
   newValue: string | number | Date | null,
   currentValue: string | number | Date | null,
   updateMethod: Function,

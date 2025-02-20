@@ -51,8 +51,8 @@ const chartOptions = {
 }
 
 function updateChart() {
-  var data = []
-  var labels = []
+  const data = []
+  const labels = []
   for (const key in props.dataset) {
     labels.push(key)
     //@ts-ignore

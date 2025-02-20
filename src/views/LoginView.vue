@@ -20,12 +20,12 @@ import LoadingBar from '@/components/spinner/LoadingBar.vue'
 import IconBroadcast from '@/components/icons/IconBroadcast.vue'
 import IconBroadcastOff from '@/components/icons/IconBroadcastOff.vue'
 
-// @ts-ignore
+// @ts-expect-error - Unknown type for engine
 const particlesInit = async (engine) => {
   console.log('Init Particles...')
   await loadFull(engine)
 }
-// @ts-ignore
+// @ts-expect-error - Unknown type for container
 const particlesLoaded = async (container) => {
   console.log('Particles container loaded', container)
 }

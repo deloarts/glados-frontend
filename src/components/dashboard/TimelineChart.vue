@@ -59,7 +59,7 @@ const chartOptions = {
 
 function updateChart() {
   if (props.dataset != null) {
-    var datasets = []
+    const datasets = []
 
     datasets.push({
       data: props.dataset.created,

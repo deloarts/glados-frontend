@@ -73,8 +73,8 @@ const chartOptions = ref({
 
 function updateChart() {
   if (props.dataset != null) {
-    var data = []
-    var labels = []
+    const data = []
+    const labels = []
     for (const key in props.dataset) {
       labels.push(key)
       data.push(props.dataset[key])

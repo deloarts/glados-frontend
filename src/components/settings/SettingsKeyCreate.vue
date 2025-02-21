@@ -10,6 +10,7 @@ import { useApiKeysStore } from '@/stores/apiKeys'
 import { apiKeysRequest } from '@/requests/apiKeys'
 
 import type { ApiKeysCreateSchema } from '@/schemas/apiKeys'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 import ButtonCloudKey from '@/components/elements/ButtonCloudKey.vue'
 
@@ -42,7 +43,8 @@ function createKey() {
     } else if (response.status == 422) {
       notificationStore.addWarn(languageStore.l.notification.warn.apiKeyDataIncomplete)
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
   })
 }

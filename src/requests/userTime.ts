@@ -1,65 +1,57 @@
-import { request, requestConfig } from "./index";
-import type { UserTimeCreateSchema, UserTimeUpdateSchema } from "@/schemas/userTime";
+import { request, requestConfig } from './index'
+import constants from '@/constants'
+
+import type { AxiosResponse, AxiosError } from 'axios'
+import type { UserTimeSchema, UserTimeCreateSchema, UserTimeUpdateSchema } from '@/schemas/userTime'
+import type { PageSchema } from '@/schemas/page'
 
 export class UserTimeRequest {
   // GET
-  getUserTime(params: URLSearchParams) {
-    return request.get("/api/web/v1/user-time/", requestConfig(params));
+  async getUserTime(params: URLSearchParams): Promise<AxiosResponse<PageSchema<UserTimeSchema>>> {
+    return request.get(constants.apiUserTime, requestConfig(params))
   }
-  getUserTimeByID(id: number) {
-    return request.get(`/api/web/v1/user-time/${id}/`, requestConfig(null));
+  async getUserTimeByID(id: number): Promise<AxiosResponse<UserTimeSchema>> {
+    return request.get(`${constants.apiUserTime}/${id}/`, requestConfig(null))
   }
-  getUserLoginTime() {
-    return request.get(`/api/web/v1/user-time/login/`, requestConfig(null));
+  async getUserLoginTime(): Promise<AxiosResponse<UserTimeSchema>> {
+    return request.get(`${constants.apiUserTime}/login/`, requestConfig(null))
   }
 
   // POST
-  postUserTime(data: UserTimeCreateSchema) {
-    return request.post("/api/web/v1/user-time/", requestConfig(null), data);
+  async postUserTime(data: UserTimeCreateSchema): Promise<AxiosResponse<UserTimeSchema> | AxiosError> {
+    return request.post(constants.apiUserTime, requestConfig(null), data)
   }
-  postUserTimeLogin() {
-    return request.post("/api/web/v1/user-time/login", requestConfig(null), null);
+  async postUserTimeLogin(): Promise<AxiosResponse<UserTimeSchema>> {
+    return request.post(`${constants.apiUserTime}/login/`, requestConfig(null), null)
   }
-  postUserTimeLogout() {
-    return request.post("/api/web/v1/user-time/logout", requestConfig(null), null);
+  async postUserTimeLogout(): Promise<AxiosResponse<UserTimeSchema>> {
+    return request.post(`${constants.apiUserTime}/logout/`, requestConfig(null), null)
   }
 
   // PUT
-  putUserTimeByID(id: number, data: UserTimeUpdateSchema) {
-    return request.put(`/api/web/v1/user-time/${id}/`, requestConfig(null),data);
+  async putUserTimeByID(id: number, data: UserTimeUpdateSchema): Promise<AxiosResponse<UserTimeSchema>> {
+    return request.put(`${constants.apiUserTime}/${id}/`, requestConfig(null),data)
   }
-  putUserTimeLogin(id: number, value: string) {
+  async putUserTimeLogin(id: number, value: string): Promise<AxiosResponse<UserTimeSchema>> {
     const params = new URLSearchParams()
     params.append('value', value)
-    return request.put(
-      `/api/web/v1/user-time/${id}/login/`,
-      requestConfig(params),
-      null,
-    )
+    return request.put(`${constants.apiUserTime}/${id}/login/`, requestConfig(params), null)
   }
-  putUserTimeLogout(id: number, value: string) {
+  async putUserTimeLogout(id: number, value: string): Promise<AxiosResponse<UserTimeSchema>> {
     const params = new URLSearchParams()
     params.append('value', value)
-    return request.put(
-      `/api/web/v1/user-time/${id}/logout/`,
-      requestConfig(params),
-      null,
-    )
+    return request.put(`${constants.apiUserTime}/${id}/logout/`, requestConfig(params), null)
   }
-  putUserTimeNote(id: number, value: string) {
+  async putUserTimeNote(id: number, value: string): Promise<AxiosResponse<UserTimeSchema>> {
     const params = new URLSearchParams()
     params.append('value', value)
-    return request.put(
-      `/api/web/v1/user-time/${id}/field/optional/note/`,
-      requestConfig(params),
-      null,
-    )
+    return request.put(`${constants.apiUserTime}/${id}/field/optional/note/`, requestConfig(params), null)
   }
 
   // DELETE
-  deleteUserTimeByID(id: number) {
-    return request.delete(`/api/web/v1/user-time/${id}/`, requestConfig(null));
+  async deleteUserTimeByID(id: number): Promise<AxiosResponse<UserTimeSchema>> {
+    return request.delete(`${constants.apiUserTime}/${id}/`, requestConfig(null))
   }
 }
 
-export const userTimeRequest = new UserTimeRequest();
+export const userTimeRequest = new UserTimeRequest()

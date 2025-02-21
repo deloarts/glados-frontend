@@ -35,12 +35,11 @@ onBeforeMount(() => {
     .getItemsID(Number(itemId.value))
     .then((response) => {
       if (response.status === 200) {
-        itemData.value = response.data
+        const data = response.data as BoughtItemSchema
+        itemData.value = data
       } else {
         notificationStore.addWarn(languageStore.l.notification.warn.failedFetchItem(itemId.value))
-        setTimeout(function () {
-          router.push({ name: 'BoughtItems' })
-        }, 4000)
+        setTimeout(function () { router.push({ name: 'BoughtItems' }) }, 4000)
       }
     })
     .catch((error) => {

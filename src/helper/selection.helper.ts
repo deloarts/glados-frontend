@@ -27,7 +27,7 @@ export function updateSelectedTableElement(
   if (confirmation) {
     for (let i = 0; i < ids.length; i++) {
       const id = ids[i]
-      //@ts-ignore
+      //@ts-expect-error Update method is a function which returns a promise of an AxiosResponse
       updateMethod(id, newValue).then((response) => {
         c++
         if (response.status != 200) {
@@ -44,7 +44,7 @@ export function updateSelectedTableElement(
 }
 
 export function getSelection(
-  event: Event,
+  event: KeyboardEvent,
   id: number,
   index: number,
   lineIndex: number,
@@ -52,7 +52,6 @@ export function getSelection(
 ): number {
   let tempSelectedItemIDs = JSON.parse(JSON.stringify(store.getSelection()))
 
-  //@ts-ignore
   if (event.ctrlKey) {
     if (tempSelectedItemIDs.includes(id)) {
       tempSelectedItemIDs.splice(tempSelectedItemIDs.indexOf(id), 1)
@@ -60,7 +59,6 @@ export function getSelection(
       tempSelectedItemIDs.push(id)
     }
   }
-  //@ts-ignore
   else if (event.shiftKey) {
     const indexRange = []
     let highEnd = 0

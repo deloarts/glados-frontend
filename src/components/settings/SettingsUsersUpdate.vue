@@ -6,7 +6,8 @@ import { useNotificationStore } from '@/stores/notification'
 import { useUsersStore, useUserStore } from '@/stores/user'
 import { usersRequest } from '@/requests/users'
 
-import type { UserUpdateSchema } from '@/schemas/user'
+import type { UserSchema, UserUpdateSchema } from '@/schemas/user'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 import Toggle from '@vueform/toggle'
 import LabeledInput from '@/components/elements/LabeledInput.vue'
@@ -39,8 +40,9 @@ const isSystemuser = ref<boolean>(false)
 
 function getUser() {
   usersRequest.getUsersID(props.selectedUserID).then((response) => {
-    formData.value = response.data
-    isSystemuser.value = response.data.is_systemuser
+    const data = response.data as UserSchema
+    formData.value = data
+    isSystemuser.value = data.is_systemuser
   })
 }
 
@@ -49,21 +51,17 @@ function updateUser() {
     notificationStore.addInfo(languageStore.l.notification.info.cannotUpdateSystemUser)
     return
   }
-
   usersRequest.putUsers(props.selectedUserID, formData.value).then((response) => {
     getUser()
     userStore.get()
     usersStore.get()
     if (response.status == 200) {
       notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
-      // } else if (response.status == 403) {
-      //   notificationStore.addWarn("Not enough permission"
-      // } else if (response.status == 404) {
-      //   notificationStore.addWarn("User not found");
     } else if (response.status == 422) {
       notificationStore.addWarn(languageStore.l.notification.warn.userDataIncomplete)
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
   })
 }

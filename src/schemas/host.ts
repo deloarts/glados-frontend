@@ -1,3 +1,22 @@
+export interface HostConfigInfoSpaceSchema {
+  db_total: number
+  db_used: number
+  db_free: number
+  db_path: string
+  backup_total: number
+  backup_used: number
+  backup_free: number
+  backup_path: string
+}
+
+export interface HostConfigInfoSchema {
+  now: Date
+  version: string
+  os: string
+  hostname: string
+  disc_space: HostConfigInfoSpaceSchema
+}
+
 export interface HostConfigBoughtItemsUnitsSchema {
   default: string | null
   values: Array<string>
@@ -50,6 +69,11 @@ export interface HostConfigBoughtItemsFilterSchema {
   storagePlace: string | null
   receiverID: number | null
 }
+
+export interface HostConfigBoughtItemsFilterPresetsSchema {
+  [key: string]: HostConfigBoughtItemsFilterSchema
+}
+
 
 export interface HostConfigProjectFilterSchema {
   skip: number | null

@@ -24,4 +24,13 @@ export default {
   apiAccessToken: '/api/web/v1/login/access-token',
   apiGetHostTime: '/api/web/v1/host/time',
   apiGetHostVersion: '/api/web/v1/host/version',
+
+  // API endpoints
+  apiHost: '/api/web/v1/host',
+  apiLogs: '/api/web/v1/logs',
+  apiApiKeys: '/api/web/v1/api-keys',
+  apiUsers: '/api/web/v1/users',
+  apiUserTime: '/api/web/v1/user-time',
+  apiProjects: '/api/web/v1/projects',
+  apiBoughtItems: '/api/web/v1/items/bought',
 }

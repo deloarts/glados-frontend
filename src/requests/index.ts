@@ -5,20 +5,23 @@ import router from '@/router/index'
 import config from '@/config'
 import constants from '@/constants'
 
+import type { AxiosResponse, RawAxiosRequestConfig } from 'axios'
+import type { LoginSchema } from '@/schemas/login'
+
 /**
  * Generates a configuration object for making HTTP requests.
  *
  * @param urlSearchParams - The URL search parameters to be included in the request.
  *                          Can be null if no parameters are needed.
- * @returns An object containing the request parameters and headers.
- *          The headers include CORS settings and an authorization token.
+ * @returns {RawAxiosRequestConfig} An object containing the request parameters and headers.
+ *                                    The headers include CORS settings and an authorization token.
  *
  * @remarks
  * The authorization token is retrieved from the local storage using the keys
  * 'gladosTokenType' and 'gladosTokenValue'. Ensure these values are set in the
  * local storage before making a request.
  */
-export function requestConfig(urlSearchParams: URLSearchParams | null) {
+export function requestConfig(urlSearchParams: URLSearchParams | null): RawAxiosRequestConfig {
   const tokenType = localStorage.getItem('gladosTokenType')
   const tokenValue = localStorage.getItem('gladosTokenValue')
   return {
@@ -36,7 +39,7 @@ export function requestConfig(urlSearchParams: URLSearchParams | null) {
  * Generates a configuration object for a file upload request.
  *
  * @param {URLSearchParams | null} urlSearchParams - The URL search parameters to be included in the request.
- * @returns {object} The configuration object containing headers and parameters for the request.
+ * @returns {RawAxiosRequestConfig} The configuration object containing headers and parameters for the request.
  *
  * The configuration object includes:
  * - `params`: The URL search parameters.
@@ -47,7 +50,7 @@ export function requestConfig(urlSearchParams: URLSearchParams | null) {
  *   - `Authorization`: The authorization token retrieved from local storage.
  *   - `Content-Type`: Set to 'multipart/form-data' for file uploads.
  */
-export function requestConfigFileUpload(urlSearchParams: URLSearchParams | null): object {
+export function requestConfigFileUpload(urlSearchParams: URLSearchParams | null): RawAxiosRequestConfig {
   const tokenType = localStorage.getItem('gladosTokenType')
   const tokenValue = localStorage.getItem('gladosTokenValue')
   return {
@@ -66,7 +69,7 @@ export function requestConfigFileUpload(urlSearchParams: URLSearchParams | null)
  * Generates a configuration object for downloading a PDF file.
  *
  * @param urlSearchParams - The URL search parameters to be included in the request. Can be null.
- * @returns An object containing the request configuration, including parameters, response type, and headers.
+ * @returns {RawAxiosRequestConfig} An object containing the request configuration, including parameters, response type, and headers.
  *
  * The headers include:
  * - `Access-Control-Allow-Origin`: Allows all origins.
@@ -76,7 +79,7 @@ export function requestConfigFileUpload(urlSearchParams: URLSearchParams | null)
  * - `Content-Disposition`: Specifies the filename for the downloaded PDF.
  * - `Accept`: Specifies that the response should be in PDF format.
  */
-export function requestConfigPdfDownload(urlSearchParams: URLSearchParams | null) {
+export function requestConfigPdfDownload(urlSearchParams: URLSearchParams | null): RawAxiosRequestConfig {
   const tokenType = localStorage.getItem('gladosTokenType')
   const tokenValue = localStorage.getItem('gladosTokenValue')
   return {
@@ -97,7 +100,7 @@ export function requestConfigPdfDownload(urlSearchParams: URLSearchParams | null
  * Generates a configuration object for downloading an XLSX file.
  *
  * @param urlSearchParams - The URL search parameters to be included in the request. Can be null.
- * @returns An object containing the request configuration, including parameters, response type, and headers.
+ * @returns {RawAxiosRequestConfig} An object containing the request configuration, including parameters, response type, and headers.
  *
  * The headers include:
  * - `Access-Control-Allow-Origin`: Allows all origins.
@@ -107,7 +110,7 @@ export function requestConfigPdfDownload(urlSearchParams: URLSearchParams | null
  * - `Content-Disposition`: Specifies the attachment filename as "glados.xlsx".
  * - `Content-Type`: Specifies the MIME type for an XLSX file.
  */
-export function requestConfigXlsxDownload(urlSearchParams: URLSearchParams | null) {
+export function requestConfigXlsxDownload(urlSearchParams: URLSearchParams | null): RawAxiosRequestConfig {
   const tokenType = localStorage.getItem('gladosTokenType')
   const tokenValue = localStorage.getItem('gladosTokenValue')
   return {
@@ -128,41 +131,39 @@ export class Request {
   /**
    * Logs in a user with the provided username and password.
    *
-   * @param username - The username of the user.
-   * @param password - The password of the user.
-   * @returns A promise that resolves to the response of the login request.
-   *          If the login is successful, the access token and token type are stored in localStorage.
-   *          If an error occurs, the error response is returned if it is an Axios error.
-   * @throws Will throw an error if the error is not an Axios error.
+   * @param {string} username - The username of the user.
+   * @param {string} password - The password of the user.
+   * @returns {Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>>} - The response from the login request.
+   * @throws {Error} - Throws an error if the request fails for reasons other than an Axios error.
    */
-  async login(username: string, password: string) {
+  async login(username: string, password: string): Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>> {
     const url = config.url.backend + constants.apiAccessToken
     const params = new URLSearchParams()
     params.append('username', username)
     params.append('password', password)
 
     try {
-      const response = await axios.post(url, params)
+      const response = await axios.post<LoginSchema>(url, params)
       localStorage.setItem('gladosTokenValue', response.data.access_token)
       localStorage.setItem('gladosTokenType', response.data.token_type)
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return error.response
+        return error.response as AxiosResponse<any>
       }
       throw error
     }
   }
 
   /**
-   * Logs in a user using their RFID and stores the received token in localStorage.
+   * Logs in a user using their RFID and an API key.
    *
    * @param {string} rfid - The RFID of the user.
    * @param {string} apiKey - The API key for authentication.
-   * @returns {Promise<AxiosResponse<any> | undefined>} - The response from the server or an error response if the request fails.
+   * @returns {Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>>} - The response from the login request.
    * @throws {Error} - Throws an error if the request fails and it is not an Axios error.
    */
-  async loginByRFID(rfid: string, apiKey: string): Promise<axios.AxiosResponse | undefined> {
+  async loginByRFID(rfid: string, apiKey: string): Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>> {
     const url = `${config.url.backend}/api/key/v1/login/rfid/${rfid}`
     const requestConfig = {
       headers: {
@@ -172,13 +173,13 @@ export class Request {
       },
     }
     try {
-      const response = await axios.post(url, null, requestConfig)
+      const response = await axios.post<LoginSchema>(url, null, requestConfig)
       localStorage.setItem('gladosTokenValue', response.data.access_token)
       localStorage.setItem('gladosTokenType', response.data.token_type)
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        return error.response
+        return error.response as AxiosResponse<any>
       }
       throw error
     }
@@ -188,27 +189,24 @@ export class Request {
    * Sends a GET request to the specified API endpoint with the given parameters.
    *
    * @param {string} api - The API endpoint to send the GET request to.
-   * @param {axios.RawAxiosRequestConfig} params - The parameters to include in the GET request.
-   * @returns {Promise<axios.AxiosResponse | axios.AxiosError['response']>} - The response from the GET request, or the error response if an error occurs.
+   * @param {RawAxiosRequestConfig} params - The parameters to include in the GET request.
+   * @returns {Promise<AxiosResponse>} - The response from the GET request.
    * @throws {Error} - Throws an error if the request fails for reasons other than an Axios error.
    */
-  async get(
-    api: string,
-    params: axios.RawAxiosRequestConfig,
-  ): Promise<axios.AxiosResponse | axios.AxiosError['response']> {
+  async get(api: string, params: RawAxiosRequestConfig): Promise<AxiosResponse> {
     const url = config.url.backend + api
-    console.log(`Sending get request to ${url} with params`, params)
+    // console.log(`Sending get request to ${url} with params`, params)
     try {
       const response = await axios.get(url, params)
       console.log(`Response from get request to ${url}`, response)
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && error.response.status >= 500) {
-          console.warn(error.response.data.detail)
+        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+          console.warn(error)
           router.push({ name: 'Login' })
         }
-        return error.response
+        return error.response as AxiosResponse<any>
       }
       throw error
     }
@@ -218,29 +216,25 @@ export class Request {
    * Sends a POST request to the specified API endpoint with the given parameters and data.
    *
    * @param {string} api - The API endpoint to send the POST request to.
-   * @param {axios.RawAxiosRequestConfig} params - The parameters to include in the POST request.
+   * @param {RawAxiosRequestConfig} params - The parameters to include in the POST request.
    * @param {any} data - The data to include in the POST request body.
-   * @returns {Promise<axios.AxiosResponse | axios.AxiosError['response']>} - The response from the POST request.
+   * @returns {Promise<AxiosResponse>} - The response from the POST request.
    * @throws {Error} - Throws an error if the request fails and it is not an Axios error.
    */
-  async post(
-    api: string,
-    params: axios.RawAxiosRequestConfig,
-    data: any,
-  ): Promise<axios.AxiosResponse | axios.AxiosError['response']> {
+  async post(api: string, params: RawAxiosRequestConfig, data: any): Promise<AxiosResponse> {
     const url = config.url.backend + api
     console.log(`Sending post request to ${url} with params ${String(params)} and data${data}`)
     try {
       const response = await axios.post(url, data, params)
-      console.log(`Response from post request to ${url}`, response)
+      // console.log(`Response from post request to ${url}`, response)
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && error.response.status >= 500) {
-          console.warn(error.response.data.detail)
+        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+          console.warn(error)
           router.push({ name: 'Login' })
         }
-        return error.response
+        return error.response as AxiosResponse<any>
       }
       throw error
     }
@@ -250,29 +244,25 @@ export class Request {
    * Sends a PUT request to the specified API endpoint with the given parameters and data.
    *
    * @param {string} api - The API endpoint to send the PUT request to.
-   * @param {axios.RawAxiosRequestConfig} params - The parameters to include in the PUT request.
+   * @param {RawAxiosRequestConfig} params - The parameters to include in the PUT request.
    * @param {any} data - The data to include in the PUT request.
-   * @returns {Promise<axios.AxiosResponse | axios.AxiosError['response']>} - The response from the PUT request, or undefined if an error occurs.
+   * @returns {Promise<AxiosResponse>} - The response from the PUT request.
    * @throws {Error} - Throws an error if the request fails and is not an Axios error.
    */
-  async put(
-    api: string,
-    params: axios.RawAxiosRequestConfig,
-    data: any,
-  ): Promise<axios.AxiosResponse | axios.AxiosError['response']> {
+  async put(api: string, params: RawAxiosRequestConfig, data: any): Promise<AxiosResponse> {
     const url = config.url.backend + api
     console.log(`Sending put request to ${url} with params ${String(params)} and data${data}`)
     try {
       const response = await axios.put(url, data, params)
-      console.log(`Response from put request to ${url}`, response)
+      // console.log(`Response from put request to ${url}`, response)
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && error.response.status >= 500) {
-          console.warn(error.response.data.detail)
+        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+          console.warn(error)
           router.push({ name: 'Login' })
         }
-        return error.response
+        return error.response as AxiosResponse<any>
       }
       throw error
     }
@@ -282,14 +272,11 @@ export class Request {
    * Sends a DELETE request to the specified API endpoint with the given parameters.
    *
    * @param {string} api - The API endpoint to send the DELETE request to.
-   * @param {axios.RawAxiosRequestConfig} params - The parameters to include in the DELETE request.
-   * @returns {Promise<axios.AxiosResponse | axios.AxiosError['response']>} - The response from the DELETE request, or undefined if an error occurs.
+   * @param {RawAxiosRequestConfig} params - The parameters to include in the DELETE request.
+   * @returns {Promise<AxiosResponse>} - The response from the DELETE request.
    * @throws {Error} - Throws an error if the request fails and it is not an Axios error.
    */
-  async delete(
-    api: string,
-    params: axios.RawAxiosRequestConfig,
-  ): Promise<axios.AxiosResponse | axios.AxiosError['response']> {
+  async delete(api: string, params: RawAxiosRequestConfig): Promise<AxiosResponse> {
     const url = config.url.backend + api
     console.log(`Sending delete request to ${url} with params ${String(params)}`)
     try {
@@ -298,11 +285,11 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && error.response.status >= 500) {
-          console.warn(error.response.data.detail)
+        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+          console.warn(error)
           router.push({ name: 'Login' })
         }
-        return error.response
+        return error.response as AxiosResponse<any>
       }
       throw error
     }

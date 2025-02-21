@@ -4,6 +4,7 @@ import Toggle from '@vueform/toggle'
 
 import router from '@/router/index'
 import { projectsRequest } from '@/requests/projects'
+import { projectsFilterAll } from '@/presets/projectsFilter'
 import { boughtItemsRequest } from '@/requests/items'
 import { getBoughtItemsFilterParams } from '@/requests/params'
 import { camelToTitle } from '@/helper/string.helper'
@@ -31,6 +32,7 @@ import DropDownTableView from '@/components/elements/DropDownTableView.vue'
 import SelectPreText from '@/components/elements/SelectPreText.vue'
 
 import type { AvailableOption } from '@/models/controls'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 // Stores
 const languageStore = useLanguageStore()
@@ -112,7 +114,8 @@ function deleteItem() {
       notificationStore.addInfo(languageStore.l.notification.info.deletedProject(projectID))
       projectStore.getItems()
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
   })
   showDeletePrompt.value = false
@@ -140,22 +143,24 @@ function onButtonDownloadExcel() {
       return
     }
 
-    loadExportExcel.value = true   
-    const params = getBoughtItemsFilterParams({ skip: null, limit: null, projectNumber: projectNumber })
+    loadExportExcel.value = true
+    const filter = JSON.parse(JSON.stringify(projectsFilterAll))
+    filter.projectNumber = projectNumber
+    const params = getBoughtItemsFilterParams(filter)
 
     boughtItemsRequest.getItemsExcel(params).then((response) => {
-      setTimeout(() => {
-        loadExportExcel.value = false
-      }, 400)
+      setTimeout(() => { loadExportExcel.value = false }, 400)
 
       if (response.status == 200) {
-        const blob = new Blob([response.data], {
+        const data = response.data as BlobPart
+        const blob = new Blob([data], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           }),
           url = window.URL.createObjectURL(blob)
         window.open(url)
       } else {
-        notificationStore.addWarn(response.data.detail)
+        const data = response.data as ErrorDetailSchema
+        notificationStore.addWarn(data.detail)
       }
     })
   }

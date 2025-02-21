@@ -50,7 +50,9 @@ export function requestConfig(urlSearchParams: URLSearchParams | null): RawAxios
  *   - `Authorization`: The authorization token retrieved from local storage.
  *   - `Content-Type`: Set to 'multipart/form-data' for file uploads.
  */
-export function requestConfigFileUpload(urlSearchParams: URLSearchParams | null): RawAxiosRequestConfig {
+export function requestConfigFileUpload(
+  urlSearchParams: URLSearchParams | null,
+): RawAxiosRequestConfig {
   const tokenType = localStorage.getItem('gladosTokenType')
   const tokenValue = localStorage.getItem('gladosTokenValue')
   return {
@@ -79,7 +81,9 @@ export function requestConfigFileUpload(urlSearchParams: URLSearchParams | null)
  * - `Content-Disposition`: Specifies the filename for the downloaded PDF.
  * - `Accept`: Specifies that the response should be in PDF format.
  */
-export function requestConfigPdfDownload(urlSearchParams: URLSearchParams | null): RawAxiosRequestConfig {
+export function requestConfigPdfDownload(
+  urlSearchParams: URLSearchParams | null,
+): RawAxiosRequestConfig {
   const tokenType = localStorage.getItem('gladosTokenType')
   const tokenValue = localStorage.getItem('gladosTokenValue')
   return {
@@ -110,7 +114,9 @@ export function requestConfigPdfDownload(urlSearchParams: URLSearchParams | null
  * - `Content-Disposition`: Specifies the attachment filename as "glados.xlsx".
  * - `Content-Type`: Specifies the MIME type for an XLSX file.
  */
-export function requestConfigXlsxDownload(urlSearchParams: URLSearchParams | null): RawAxiosRequestConfig {
+export function requestConfigXlsxDownload(
+  urlSearchParams: URLSearchParams | null,
+): RawAxiosRequestConfig {
   const tokenType = localStorage.getItem('gladosTokenType')
   const tokenValue = localStorage.getItem('gladosTokenValue')
   return {
@@ -136,7 +142,10 @@ export class Request {
    * @returns {Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>>} - The response from the login request.
    * @throws {Error} - Throws an error if the request fails for reasons other than an Axios error.
    */
-  async login(username: string, password: string): Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>> {
+  async login(
+    username: string,
+    password: string,
+  ): Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>> {
     const url = config.url.backend + constants.apiAccessToken
     const params = new URLSearchParams()
     params.append('username', username)
@@ -163,7 +172,10 @@ export class Request {
    * @returns {Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>>} - The response from the login request.
    * @throws {Error} - Throws an error if the request fails and it is not an Axios error.
    */
-  async loginByRFID(rfid: string, apiKey: string): Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>> {
+  async loginByRFID(
+    rfid: string,
+    apiKey: string,
+  ): Promise<AxiosResponse<LoginSchema> | AxiosResponse<any>> {
     const url = `${config.url.backend}/api/key/v1/login/rfid/${rfid}`
     const requestConfig = {
       headers: {
@@ -202,7 +214,10 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+        if (
+          error.response != undefined &&
+          (error.response.status == 401 || error.response.status >= 500)
+        ) {
           console.warn(error)
           router.push({ name: 'Login' })
         }
@@ -230,7 +245,10 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+        if (
+          error.response != undefined &&
+          (error.response.status == 401 || error.response.status >= 500)
+        ) {
           console.warn(error)
           router.push({ name: 'Login' })
         }
@@ -258,7 +276,10 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+        if (
+          error.response != undefined &&
+          (error.response.status == 401 || error.response.status >= 500)
+        ) {
           console.warn(error)
           router.push({ name: 'Login' })
         }
@@ -285,7 +306,10 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response != undefined && (error.response.status == 401 || error.response.status >= 500)) {
+        if (
+          error.response != undefined &&
+          (error.response.status == 401 || error.response.status >= 500)
+        ) {
           console.warn(error)
           router.push({ name: 'Login' })
         }

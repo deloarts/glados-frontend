@@ -123,7 +123,7 @@ function updateChart() {
 
   const stock_items = props.solverOutput.lengths.length
   let max_items_in_stock_item = 0
-  for (var i = 0; i < stock_items; i++) {
+  for (let i = 0; i < stock_items; i++) {
     const current_subset = props.solverOutput.lengths[i].length
     if (current_subset > max_items_in_stock_item) {
       max_items_in_stock_item = current_subset
@@ -132,25 +132,21 @@ function updateChart() {
 
   canvasHeight.value = 120 + stock_items * 30 + 'px'
 
-  const inverted = []
-  const cut_widths = []
-  for (var i = 0; i < max_items_in_stock_item; i++) {
+  const inverted: Array<Array<number | null>> = []
+  const cut_widths: Array<Array<number | null>> = []
+  for (let i = 0; i < max_items_in_stock_item; i++) {
     inverted.push([])
     cut_widths.push([])
-    for (var j = 0; j < stock_items; j++) {
-      //@ts-ignore
+    for (let j = 0; j < stock_items; j++) {
       inverted[i][j] = null
-      //@ts-ignore
       cut_widths[i][j] = null
     }
   }
 
-  for (var i = 0; i < stock_items; i++) {
-    for (var j = 0; j < max_items_in_stock_item; j++) {
-      //@ts-ignore
+  for (let i = 0; i < stock_items; i++) {
+    for (let j = 0; j < max_items_in_stock_item; j++) {
       inverted[j][i] = props.solverOutput.lengths[i][j]
       if (inverted[j][i] != null) {
-        //@ts-ignore
         cut_widths[j][i] = props.solverOutput.job.cut_width
       }
     }
@@ -159,11 +155,11 @@ function updateChart() {
   const dataset = []
   const labels = []
 
-  for (var i = 0; i < stock_items; i++) {
+  for (let i = 0; i < stock_items; i++) {
     labels.push(`${languageStore.l.tools.labels.stockNumber}${i + 1}`)
   }
 
-  for (var i = 0; i < max_items_in_stock_item; i++) {
+  for (let i = 0; i < max_items_in_stock_item; i++) {
     if (i > 0) {
       dataset.push({
         data: cut_widths[i],

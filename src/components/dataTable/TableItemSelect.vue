@@ -1,3 +1,5 @@
+<!-- eslint-disable @typescript-eslint/no-unsafe-function-type -->
+
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -86,8 +88,7 @@ function onChange(eventTarget: EventTarget | null) {
   blur()
   updateSelectedTableElement(
     props.name,
-    //@ts-ignore
-    eventTarget.value,
+    (eventTarget as HTMLSelectElement).value,
     props.value,
     props.updateMethod,
     props.itemStore,

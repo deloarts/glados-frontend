@@ -14,7 +14,11 @@ import { useUnitsStore } from '@/stores/units'
 import type { AxiosResponse } from 'axios'
 import type { PageSchema } from '@/schemas/page'
 import type { BoughtItemSchema, BoughtItemBatchImportSchema } from '@/schemas/boughtItem'
-import type { ErrorDetailSchema, ErrorValidationSchema, ErrorValidationDetail } from '@/schemas/common'
+import type {
+  ErrorDetailSchema,
+  ErrorValidationSchema,
+  ErrorValidationDetail,
+} from '@/schemas/common'
 
 export const useBoughtItemsStore = defineStore('boughtItems', () => {
   const _route = useRoute()
@@ -23,7 +27,14 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
   const loading = ref<boolean>(false)
   const paused = ref<boolean>(false)
   const items = ref<Array<BoughtItemSchema>>([])
-  const page = ref<PageSchema<BoughtItemSchema>>({ items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
+  const page = ref<PageSchema<BoughtItemSchema>>({
+    items: [],
+    total: 0,
+    limit: 0,
+    skip: 0,
+    pages: 1,
+    current: 1,
+  })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
@@ -113,7 +124,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
   )
 
   watch(_route, () => {
-    paused.value = !(_route.path.includes('items/bought'))
+    paused.value = !_route.path.includes('items/bought')
   })
 
   return {
@@ -186,7 +197,9 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     items.value.splice(index, 1)
   }
 
-  async function createItem(index: number): Promise<BoughtItemSchema | ErrorDetailSchema | ErrorValidationSchema> {
+  async function createItem(
+    index: number,
+  ): Promise<BoughtItemSchema | ErrorDetailSchema | ErrorValidationSchema> {
     return boughtItemsRequest
       .postItems(items.value[index])
       .then((response) => {
@@ -300,7 +313,12 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     }
   }
 
-  async function importFile(file: File, serverSideValidation: boolean): Promise<void> {
+  async function importFile(
+    file: File,
+    serverSideValidation: boolean,
+  ): Promise<
+    AxiosResponse<BoughtItemBatchImportSchema[] | ErrorDetailSchema | ErrorValidationSchema>
+  > {
     importing.value = true
     const formData = new FormData()
     formData.append('file', file)

@@ -36,7 +36,9 @@ const labelColor = computed(() => {
 
 const current = ref<Array<number>>([])
 const currentColor = computed<string>(() => {
-  return moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() >= 0 ? 'rgba(0, 204, 92, 0.8)' : 'rgba(255, 50, 50, 0.8)'
+  return moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() >= 0
+    ? 'rgba(0, 204, 92, 0.8)'
+    : 'rgba(255, 50, 50, 0.8)'
 })
 const datasets = ref<Array<ChartDataset>>([])
 const labels = ref<Array<string>>([])
@@ -67,9 +69,9 @@ const chartOptions = {
     },
     tooltip: {
       callbacks: {
-        label: function (data: any) {
-          const duration = moment.duration(data.formattedValue, 'hours');
-          const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm');
+        label: function (data: ChartDataset) {
+          const duration = moment.duration(data.formattedValue, 'hours')
+          const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm')
           return formatted
         },
       },
@@ -137,7 +139,7 @@ function updateChart() {
       borderWidth: 0,
     },
   ]
-  
+
   if (JSON.stringify(labels.value) != JSON.stringify(tempLabels)) {
     labels.value = tempLabels
   }
@@ -154,7 +156,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   pause()
 })
-
 </script>
 
 <template>

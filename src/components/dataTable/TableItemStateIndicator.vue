@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 
 import IconAlert from '@/components/icons/IconAlert.vue'
 import IconCheck from '@/components/icons/IconCheck.vue'

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
-// @ts-ignore
 import moment from 'moment'
 
 import { logsRequest } from '@/requests/logs'
@@ -9,6 +8,7 @@ import SettingsLogsControls from './SettingsLogsControls.vue'
 import SettingsLogsTable from './SettingsLogsTable.vue'
 
 import type { Log } from '@/models/log'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -29,12 +29,17 @@ const logFileName = computed<string | null>(() => {
 const logFileContent = ref<Array<Log>>([])
 
 function getLogFile() {
+  if (logFileName.value == null) {
+    notificationStore.addWarn(languageStore.l.notification.warn.failedToFetchLog)
+    return
+  }
+
   logFileContent.value = []
   logsRequest
     .getLogFile(logFileName.value)
     .then((response) => {
       if (response.status == 200) {
-        const content = response.data
+        const content = response.data as string[]
         const tempContent = []
         for (let i = 0; i < content.length; i++) {
           const currentDate = getLogContent(content[i], 'date')
@@ -51,7 +56,8 @@ function getLogFile() {
       } else if (response.status == 404) {
         notificationStore.addInfo(languageStore.l.notification.warn.noLogForThisDay)
       } else {
-        notificationStore.addWarn(response.data.detail)
+        const data = response.data as ErrorDetailSchema
+        notificationStore.addWarn(data.detail)
       }
     })
     .catch(() => {
@@ -81,7 +87,7 @@ watch(pickedDate, () => {
 })
 
 onMounted(() => {
-  pickedDate.value = moment()
+  pickedDate.value = moment().toDate()
 })
 </script>
 

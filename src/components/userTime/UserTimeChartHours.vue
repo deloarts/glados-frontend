@@ -2,6 +2,8 @@
 import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'vue-chartjs'
+import type { ChartDataset } from 'chart.js'
+
 import Vue3Autocounter from 'vue3-autocounter'
 
 import { useUserStore } from '@/stores/user'
@@ -29,7 +31,11 @@ const chartData = computed(() => {
     datasets: [
       {
         backgroundColor: ['rgba(54, 162, 235, 0.8)', currentColor.value, 'rgba(40, 40, 40, 0.5)'],
-        borderColor: ['rgba(250, 250, 250, 0.2)', 'rgba(250, 250, 250, 0.2)', 'rgba(250, 250, 250, 0.2)'],
+        borderColor: [
+          'rgba(250, 250, 250, 0.2)',
+          'rgba(250, 250, 250, 0.2)',
+          'rgba(250, 250, 250, 0.2)',
+        ],
         data: chartDataset.value,
       },
     ],
@@ -51,9 +57,9 @@ const chartOptions = {
     },
     tooltip: {
       callbacks: {
-        label: function (data: any) {
-          const duration = moment.duration(data.formattedValue, 'hours');
-          const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm');
+        label: function (data: ChartDataset) {
+          const duration = moment.duration(data.formattedValue, 'hours')
+          const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm')
           return formatted
         },
       },
@@ -67,7 +73,8 @@ const currentColor = computed<string>(() => {
 })
 const percentage = computed<number | null>(() => {
   return userStore.user.work_hours_per_week
-    ? ((chartData.value.datasets[0].data[0] + current.value) * 100) / userStore.user.work_hours_per_week
+    ? ((chartData.value.datasets[0].data[0] + current.value) * 100) /
+        userStore.user.work_hours_per_week
     : null
 })
 
@@ -84,7 +91,7 @@ function setStartPercent() {
 }
 
 function getCurrent(): number {
-  let c = 0  
+  let c = 0
   if (userTimeStore.loggedInSince != null) {
     c = moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() / 60
   }

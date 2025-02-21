@@ -26,7 +26,11 @@ const computedSelection = computed<'enGB' | 'deAT'>({
 <template>
   <div class="box">
     <select v-model="computedSelection">
-      <option v-for="option in languageStore.languageOptions" :value="option.value">
+      <option
+        v-for="option in languageStore.languageOptions"
+        :value="option.value"
+        :key="option.text"
+      >
         {{ option.text }}
       </option>
     </select>

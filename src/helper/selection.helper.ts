@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+
 import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
 
 import { useNotificationStore } from '@/stores/notification'
@@ -58,8 +60,7 @@ export function getSelection(
     } else {
       tempSelectedItemIDs.push(id)
     }
-  }
-  else if (event.shiftKey) {
+  } else if (event.shiftKey) {
     const indexRange = []
     let highEnd = 0
     let lowEnd = 0

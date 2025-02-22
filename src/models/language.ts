@@ -519,6 +519,7 @@ export interface Language {
     }
     config: {
       selectorButton: string
+      warning: string
       banner: string
       create: string
       update: string

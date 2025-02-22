@@ -134,7 +134,7 @@ watch(
 }
 
 .editor {
-  height: calc(100vh - 320px);
+  height: calc(100vh - 400px);
   margin-bottom: -4px;
 }
 

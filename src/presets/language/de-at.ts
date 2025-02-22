@@ -106,6 +106,8 @@ export const deAT: Language = {
       copiedUrlToClipboard: 'URL wurde kopiert',
       createdApiKey: 'API Schlüssel wurde erstellt',
       deletedApiKey: 'API Schlüssel wurde gelöscht',
+      sentTestMail: 'Test-Mail ist auf dem Weg',
+      receiverNotGiven: 'Ich weiß nicht wem ich die Test-Mail schicken soll',
     },
     warn: {
       lostServerConnection: 'Keine Verbindung zum Server',
@@ -130,6 +132,7 @@ export const deAT: Language = {
       noLogForThisDay: 'Für diesen Tag existiert keine Log-Datei',
       failedToFetchLog: 'Fehler beim Laden der Log-Datei',
       apiKeyDataIncomplete: 'Daten unvollständig',
+      mailingDisabled: 'Mails sind deaktiviert',
     },
   },
   main: {
@@ -601,6 +604,21 @@ export const deAT: Language = {
         guestUser: 'Gast',
         rfid: 'RFID',
         createdDate: 'Erstelldatum',
+      },
+    },
+    mailing: {
+      selectorButton: 'Emails',
+      banner: 'Email Konfiguration',
+      setupInfo:
+        'Die Einstellungen für Emails müssen im Config-File des Servers vorgenommen werden. Prüfe die Dokumentation für mehr Infos.',
+      button: {
+        sendTestMail: 'Sende Test',
+      },
+      input: {
+        serverPlaceholder: 'Server',
+        portPlaceholder: 'Port',
+        accountPlaceholder: 'Konto',
+        receiverPlaceholder: 'Test-Empfänger',
       },
     },
     apiKeys: {

@@ -17,6 +17,15 @@ export interface HostConfigInfoSchema {
   disc_space: HostConfigInfoSpaceSchema
 }
 
+export interface HostConfigMailSchema {
+  enabled: boolean
+  config: {
+    server: string
+    port: number
+    account: string
+  }
+}
+
 export interface HostConfigBoughtItemsUnitsSchema {
   default: string | null
   values: Array<string>
@@ -73,7 +82,6 @@ export interface HostConfigBoughtItemsFilterSchema {
 export interface HostConfigBoughtItemsFilterPresetsSchema {
   [key: string]: HostConfigBoughtItemsFilterSchema
 }
-
 
 export interface HostConfigProjectFilterSchema {
   skip: number | null

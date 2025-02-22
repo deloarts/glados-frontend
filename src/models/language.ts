@@ -94,6 +94,7 @@ export interface Language {
       copiedUrlToClipboard: string
       createdApiKey: string
       deletedApiKey: string
+      sentTestMail: string
     }
     warn: {
       lostServerConnection: string
@@ -112,6 +113,8 @@ export interface Language {
       noLogForThisDay: string
       failedToFetchLog: string
       apiKeyDataIncomplete: string
+      mailingDisabled: string
+      receiverNotGiven: string
     }
   }
   main: {
@@ -579,6 +582,20 @@ export interface Language {
         guestUser: string
         rfid: string
         createdDate: string
+      }
+    }
+    mailing: {
+      selectorButton: string
+      banner: string
+      setupInfo: string
+      button: {
+        sendTestMail: string
+      }
+      input: {
+        serverPlaceholder: string
+        portPlaceholder: string
+        accountPlaceholder: string
+        receiverPlaceholder: string
       }
     }
     apiKeys: {

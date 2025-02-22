@@ -8,6 +8,7 @@ import type {
   HostConfigBoughtItemsStatusSchema,
   HostConfigBoughtItemsFilterSchema,
   HostConfigBoughtItemsFilterPresetsSchema,
+  HostConfigMailSchema,
 } from '@/schemas/host'
 import type { ErrorDetailSchema } from '@/schemas/common'
 
@@ -15,6 +16,9 @@ export class HostRequest {
   // GET
   getHostInfo(): Promise<AxiosResponse<HostConfigInfoSchema>> {
     return request.get(`${constants.apiHost}/info`, requestConfig(null))
+  }
+  getHostConfigMail(): Promise<AxiosResponse<HostConfigMailSchema | ErrorDetailSchema>> {
+    return request.get(`${constants.apiHost}/config/mailing`, requestConfig(null))
   }
   getConfigItemsBoughtStatus(): Promise<AxiosResponse<HostConfigBoughtItemsStatusSchema>> {
     return request.get(`${constants.apiHost}/config/items/bought/status`, requestConfig(null))
@@ -42,6 +46,13 @@ export class HostRequest {
       requestConfig(null),
       data,
     )
+  }
+  postSendTestMail(
+    receiver: string,
+  ): Promise<AxiosResponse<HostConfigMailSchema | ErrorDetailSchema>> {
+    const params = new URLSearchParams()
+    params.append('receiver', receiver)
+    return request.post(`${constants.apiHost}/config/mailing/test`, requestConfig(params), null)
   }
 
   // PUT

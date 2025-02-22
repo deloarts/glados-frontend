@@ -167,6 +167,23 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     warnings.value = []
   }
 
+  function clearErrorMsgs() {
+    for (let i = 0; i < items.value.length; i++) {
+      items.value[i].project_id_error = undefined
+      items.value[i].partnumber_error = undefined
+      items.value[i].order_number_error = undefined
+      items.value[i].manufacturer_error = undefined
+      items.value[i].quantity_error = undefined
+      items.value[i].unit_error = undefined
+      items.value[i].supplier_error = undefined
+      items.value[i].group_1_error = undefined
+      items.value[i].weblink_error = undefined
+      items.value[i].note_general_error = undefined
+      items.value[i].note_supplier_error = undefined
+      items.value[i].desired_delivery_date_error = undefined
+    }
+  }
+
   function addEmptyRow() {
     const tempMultiData = JSON.parse(JSON.stringify(items.value))
     const temp = [
@@ -229,6 +246,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
   }
 
   async function validateAll() {
+    clearErrorMsgs()
     if (items.value.length == 0) {
       _notificationStore.addInfo(_languageStore.l.notification.info.createRowFirst)
       return
@@ -266,6 +284,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
   }
 
   async function createAll() {
+    clearErrorMsgs()
     if (items.value.length == 0) {
       _notificationStore.addInfo(_languageStore.l.notification.info.createRowFirst)
       return

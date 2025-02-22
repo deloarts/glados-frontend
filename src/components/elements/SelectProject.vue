@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { AvailableOption } from '@/models/controls'
+import { computed } from 'vue'
 
+import type { AvailableOption } from '@/models/controls'
 import { useLanguageStore } from '@/stores/language'
+
 const languageStore = useLanguageStore()
 
 const props = defineProps<{
@@ -14,15 +16,20 @@ const emit = defineEmits<{
   (e: 'update:selection', v: number): void
 }>()
 
-function onChange(event: Event) {
-  //@ts-ignore
-  emit('update:selection', event.target.value)
-}
+const computedSelection = computed<number>({
+  get() {
+    return props.selection
+  },
+  set(newValue) {
+    emit('update:selection', newValue)
+    return newValue
+  },
+})
 </script>
 
 <template>
   <div class="box">
-    <select v-model="props.selection" @change="onChange">
+    <select v-model="computedSelection">
       <option value="null" disabled selected hidden>
         {{ languageStore.l.boughtItem.input.projectNumberPlaceholder }}
       </option>

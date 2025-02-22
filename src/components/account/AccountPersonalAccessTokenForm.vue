@@ -7,6 +7,8 @@ import { useNotificationStore } from '@/stores/notification'
 
 import ButtonNewPersonalAccessToken from '@/components/elements/ButtonNewPersonalAccessToken.vue'
 
+import type { ErrorDetailSchema } from '@/schemas/common'
+
 const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
 
@@ -15,10 +17,12 @@ const personalAccessToken = ref<string>('')
 function newToken() {
   usersRequest.putUsersMePAT().then((response) => {
     if (response.status == 200) {
+      const data = response.data as string
+      personalAccessToken.value = data
       notificationStore.addInfo(languageStore.l.notification.info.createdNewPAT)
-      personalAccessToken.value = response.data
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
   })
 }

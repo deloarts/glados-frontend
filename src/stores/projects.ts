@@ -20,12 +20,12 @@ export const useProjectsStore = defineStore('projects', () => {
   const all = ref<ProjectSchema[]>([])
   const active = ref<ProjectSchema[]>([])
   const inactive = ref<ProjectSchema[]>([])
-  const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
+  const page = ref<PageSchema<ProjectSchema>>({ items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
     selectedIDs.value = []
   }
 
@@ -40,7 +40,7 @@ export const useProjectsStore = defineStore('projects', () => {
 
   function clearItems() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
   }
 
   function getSelection(): Array<number> {
@@ -62,13 +62,7 @@ export const useProjectsStore = defineStore('projects', () => {
       loading.value = false
       if (response.status === 200) {
         items.value = response.data.items
-        page.value = {
-          total: response.data.total,
-          limit: response.data.limit,
-          skip: response.data.skip,
-          pages: response.data.pages,
-          current: response.data.current,
-        }
+        page.value = response.data
         console.log('Projects store got data from server.')
       }
       return response

@@ -119,8 +119,8 @@ export const useUsersStore = defineStore('users', () => {
         loading.value = false
         users.value = response.data
 
-        const tempUsersOptions = []
-        const tempUsersOptionsFilter = [{ text: 'All', value: null }]
+        const tempUsersOptions: Array<AvailableOption> = []
+        const tempUsersOptionsFilter: Array<AvailableOption> = [{ text: 'All', value: null }]
         for (let i = 0; i < users.value.length; i++) {
           tempUsersOptions.push({
             text: users.value[i].full_name,

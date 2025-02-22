@@ -17,9 +17,10 @@ const changelog = ref<string>('')
 function fetchChangelog() {
   boughtItemsRequest.getItemsIDChangelog(Number(props.itemId)).then((response) => {
     if (response.status == 200) {
+      const data = response.data as Array<string>
       changelog.value = ''
-      for (let i = 0; i < response.data.length; i++) {
-        changelog.value += `${response.data[i]}\n`
+      for (let i = 0; i < data.length; i++) {
+        changelog.value += `${data[i]}\n`
       }
     }
   })

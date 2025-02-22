@@ -8,7 +8,7 @@ const props = defineProps<{
   count: number
 }>()
 
-let start = ref(0)
+const start = ref(0)
 
 function setStart() {
   start.value = props.count

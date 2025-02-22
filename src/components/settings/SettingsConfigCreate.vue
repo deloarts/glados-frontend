@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import JsonEditor from 'vue3-ts-jsoneditor';
+import JsonEditor from 'vue3-ts-jsoneditor'
 
 import { hostRequest } from '@/requests/host'
 
@@ -11,11 +11,13 @@ import { useBoughtItemFilterStore } from '@/stores/filter'
 
 import type { AvailableOption } from '@/models/controls'
 import type { HostConfigBoughtItemsFilterSchema } from '@/schemas/host'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 import ButtonSave from '@/components/elements/ButtonSave.vue'
 import SelectPreText from '@/components/elements/SelectPreText.vue'
 
 // Props & Emits
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   selectedConfigName: string
 }>()
@@ -38,8 +40,7 @@ const availableOptionsCategory: Array<AvailableOption> = [
 ]
 const selectedOptionCategory = ref<string>('')
 const newConfigName = ref<string>('')
-//@ts-ignore
-const defaultJson = ref<HostConfigBoughtItemsFilterSchema>(null)
+const defaultJson = ref<HostConfigBoughtItemsFilterSchema>()
 
 function createConfig() {
   if (selectedOptionCategory.value == '') {
@@ -57,7 +58,8 @@ function createConfig() {
           boughtItemsFilterStore.get()
           emit('update:selectedConfigName', newConfigName.value)
         } else {
-          notificationStore.addWarn(response.data.detail)
+          const data = response.data as ErrorDetailSchema
+          notificationStore.addWarn(data.detail)
         }
       })
     } else {
@@ -104,7 +106,13 @@ watch(selectedOptionCategory, () => {
     </div>
 
     <div class="form-base-container editor">
-      <JsonEditor v-if="selectedOptionCategory != ''" v-model="defaultJson" mode="text" :mainMenuBar="false" :darkTheme="jsonEditDarkTheme"/>
+      <JsonEditor
+        v-if="selectedOptionCategory != ''"
+        v-model="defaultJson"
+        mode="text"
+        :mainMenuBar="false"
+        :darkTheme="jsonEditDarkTheme"
+      />
     </div>
   </div>
 </template>
@@ -118,7 +126,7 @@ watch(selectedOptionCategory, () => {
 }
 
 .editor {
-  height: calc(100vh - 320px);
+  height: calc(100vh - 400px);
   margin-bottom: -4px;
 }
 

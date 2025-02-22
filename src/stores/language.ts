@@ -5,6 +5,7 @@ import { usersRequest } from '@/requests/users'
 
 import type { AvailableOption } from '@/models/controls'
 import type { Language } from '@/models/language'
+import type { UserSchema } from '@/schemas/user'
 
 import { enGB } from '@/presets/language/en-gb'
 import { deAT } from '@/presets/language/de-at'
@@ -35,7 +36,8 @@ export const useLanguageStore = defineStore('language', () => {
   function set(lang: 'enGB' | 'deAT') {
     usersRequest.putUsersMeLanguage(lang).then((response) => {
       if (response.status == 200) {
-        apply(response.data.language)
+        const data = response.data as UserSchema
+        apply(data.language)
       }
     })
   }

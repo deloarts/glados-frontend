@@ -65,7 +65,7 @@ export interface BoughtItemBatchImportSchema {
   supplier: string
   supplier_error?: string
   group_1: string
-  group1_error?: string
+  group_1_error?: string
   weblink: string
   weblink_error?: string
   note_general: string

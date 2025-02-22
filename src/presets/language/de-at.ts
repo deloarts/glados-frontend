@@ -426,9 +426,9 @@ export const deAT: Language = {
   },
   userTime: {
     common: {
-      totalHoursThisWeek: "Gesamte Wochenstunden",
-      sumForThisWeek: "Summe für diese Woche",
-      entriesForThisWeek: "Einträge dieser Woche",
+      totalHoursThisWeek: 'Gesamte Wochenstunden',
+      sumForThisWeek: 'Summe für diese Woche',
+      entriesForThisWeek: 'Einträge dieser Woche',
     },
     warnings: {
       cannotCreateWhileLoggedIn: 'Du kannst keinen Eintrag erstellen, während du angemeldet bist',
@@ -540,6 +540,8 @@ export const deAT: Language = {
     },
     config: {
       selectorButton: 'Konfiguration',
+      warning:
+        "Ein Limit mit dem Wert 'null' bedeutet, dass alle Einträge vom Server geladen werden! Das kann den Browser zum Absturz bringen.",
       banner: 'Konfigurationsdateien',
       create: 'Erstellen',
       update: 'Aktualisiere ',

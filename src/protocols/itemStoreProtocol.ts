@@ -1,14 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { PageSchema } from '@/schemas/page'
 
 export interface ItemStoreProtocol {
-  // @ts-ignore
-  loading: T<boolean>
-  // @ts-ignore
-  paused: T<boolean>
-  // @ts-ignore
-  items: T<Array>
-  // @ts-ignore
-  page: T<PageSchema>
+  loading: boolean
+  paused: boolean
+  items: Array<any>
+  page: PageSchema<any>
   clear(): void
   pause(state: boolean): void
   getItems(): Array<any>

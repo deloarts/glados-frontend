@@ -8,7 +8,8 @@ import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 
 import type { AvailableOption } from '@/models/controls'
-import type { UserUpdateSchema } from '@/schemas/user'
+import type { UserSchema, UserUpdateSchema } from '@/schemas/user'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 import LabeledInput from '@/components/elements/LabeledInput.vue'
 import LabeledSelect from '@/components/elements/LabeledSelect.vue'
@@ -57,14 +58,16 @@ function updateUser() {
 
   usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
     if (response.status == 200) {
-      userStore.user = response.data
+      const data = response.data as UserSchema
+      userStore.user = data
       formUserUpdate.value = JSON.parse(JSON.stringify(userStore.user))
       languageStore.apply(userStore.user.language)
       notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
     } else if (response.status == 422) {
       notificationStore.addWarn(languageStore.l.notification.warn.userDataIncomplete)
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
   })
 }

@@ -11,16 +11,13 @@ import { getDifference } from '@/helper/object.helper'
 import type {
   HostConfigBoughtItemsFilterSchema,
   HostConfigProjectFilterSchema,
-  HostConfigUserTimeFilterSchema
+  HostConfigUserTimeFilterSchema,
+  HostConfigBoughtItemsFilterPresetsSchema
 } from '@/schemas/host'
-
-interface BoughtItemPreset {
-  [key: string]: HostConfigBoughtItemsFilterSchema
-}
 
 export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   const loading = ref<boolean>(false)
-  const presets = ref<BoughtItemPreset>({})
+  const presets = ref<HostConfigBoughtItemsFilterPresetsSchema>({})
   const state = ref<HostConfigBoughtItemsFilterSchema>(JSON.parse(JSON.stringify(boughtItemsFilter)))
   const filterApplied = ref<boolean>(false)
 

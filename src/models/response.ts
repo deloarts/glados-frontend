@@ -1,6 +1,6 @@
-import type { ErrorDetails } from '@/models/errors'
+import type { ErrorValidationSchema } from "@/schemas/common";
 
 export interface ResponseWarning {
   row: number
-  errors: Array<ErrorDetails>
+  errors: ErrorValidationSchema
 }

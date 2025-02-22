@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
+
 export interface Language {
   common: {
     days: {
@@ -517,6 +519,7 @@ export interface Language {
     }
     config: {
       selectorButton: string
+      warning: string
       banner: string
       create: string
       update: string

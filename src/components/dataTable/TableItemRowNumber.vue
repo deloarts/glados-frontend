@@ -5,8 +5,6 @@ import { useClipboard } from '@vueuse/core'
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 
-import config from '@/config'
-
 import IconCopy from '@/components/icons/IconCopy.vue'
 import IconBellRing from '@/components/icons/IconBellRing.vue'
 import IconLocked from '@/components/icons/IconLocked.vue'
@@ -15,7 +13,7 @@ const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
 
 const source = ref('')
-const { text, copy, copied, isSupported } = useClipboard({ source })
+const { copy, copied, isSupported } = useClipboard({ source })
 
 interface Props {
   number: number

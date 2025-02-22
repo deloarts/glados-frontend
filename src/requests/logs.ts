@@ -1,12 +1,16 @@
-import { request, requestConfig } from "./index";
+import { request, requestConfig } from './index'
+import constants from '@/constants'
+
+import type { AxiosResponse } from 'axios'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 export class LogsRequest {
-  getLogs() {
-    return request.get("/api/web/v1/logs/", requestConfig(null));
+  getLogs(): Promise<AxiosResponse<string[]>> {
+    return request.get(constants.apiLogs, requestConfig(null))
   }
-  getLogFile(file: any) {
-    return request.get(`/api/web/v1/logs/${file}/`, requestConfig(null));
+  getLogFile(file: string): Promise<AxiosResponse<string[] | ErrorDetailSchema>> {
+    return request.get(`${constants.apiLogs}/${file}/`, requestConfig(null))
   }
 }
 
-export const logsRequest = new LogsRequest();
+export const logsRequest = new LogsRequest()

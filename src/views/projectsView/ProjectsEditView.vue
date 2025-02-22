@@ -9,7 +9,7 @@ import { useLanguageStore } from '@/stores/language'
 import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 
-import type { ProjectUpdateSchema } from '@/schemas/project'
+import type { ProjectSchema, ProjectUpdateSchema } from '@/schemas/project'
 
 import ControlsEdit from '@/components/projects/ControlsEdit.vue'
 import UpdateForm from '@/components/projects/UpdateForm.vue'
@@ -51,13 +51,12 @@ onBeforeMount(() => {
     .getProjectsID(Number(projectID))
     .then((response) => {
       if (response.status === 200) {
-        projectDesignatedUserID.value = response.data.designated_user_id
-        formData.value = response.data
+        const data = response.data as ProjectSchema
+        projectDesignatedUserID.value = data.designated_user_id
+        formData.value = data
       } else {
         notificationStore.addWarn(languageStore.l.notification.warn.failedFetchProject(projectID))
-        setTimeout(function () {
-          router.push({ name: 'Projects' })
-        }, 4000)
+        setTimeout(function () { router.push({ name: 'Projects' }) }, 4000)
       }
     })
     .catch(() => {})

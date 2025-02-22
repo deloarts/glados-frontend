@@ -12,11 +12,9 @@ import DataTableHead from './DataTableHead.vue'
 import DataTableBody from './DataTableBody.vue'
 
 const projectsStore = useProjectsStore()
+const colW = ref<typeof projectsColumnWidths>(JSON.parse(JSON.stringify(projectsColumnWidths)))
 
-// @ts-ignore
-const colW = ref<typeof projectsColumnWidths>(null)
-
-function eventKeyUp(event: any) {
+function eventKeyUp(event: KeyboardEvent) {
   if (event.key === 'Escape') {
     projectsStore.clearSelection()
   }

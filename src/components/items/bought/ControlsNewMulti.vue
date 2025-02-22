@@ -18,6 +18,7 @@ import ButtonDelete from '@/components/elements/ButtonDelete.vue'
 import ButtonPlus from '@/components/elements/ButtonPlus.vue'
 import ButtonExcel from '@/components/elements/ButtonExcel.vue'
 import ButtonCheck from '@/components/elements/ButtonCheck.vue'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 // Stores
 const languageStore = useLanguageStore()
@@ -49,13 +50,15 @@ function onRemoveAll() {
 function onTemplate() {
   boughtItemsRequest.getItemsExcelTemplate().then((response) => {
     if (response.status == 200) {
-      const blob = new Blob([response.data], {
+      const data = response.data as BlobPart
+      const blob = new Blob([data], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       })
       const url = window.URL.createObjectURL(blob)
       window.open(url)
     } else if (response.status == 404) {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     } else {
       notificationStore.addWarn(languageStore.l.notification.warn.xlsxTemplateDownloadFailed)
     }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-//@ts-ignore
-import Toggle from '@vueform/toggle/dist/toggle.js'
+import Toggle from '@vueform/toggle'
 
 import { useLanguageStore } from '@/stores/language'
 import { useBoughtItemsBatchImportStore } from '@/stores/boughtItems'
@@ -9,7 +8,6 @@ import { useBoughtItemsBatchImportStore } from '@/stores/boughtItems'
 import ButtonAbort from '@/components/elements/ButtonAbort.vue'
 import Spinner from '@/components/spinner/LoadingSpinner.vue'
 import DropZone from '@/components/elements/DropZone.vue'
-//@ts-ignore
 import useFileList from '@/compositions/file-list'
 
 const props = defineProps<{
@@ -25,9 +23,9 @@ const boughtItemsBatchImportStore = useBoughtItemsBatchImportStore()
 
 const serverSideValidation = ref<boolean>(false)
 
-const { files, addFiles, removeFile } = useFileList()
+const { files, addFiles } = useFileList()
 
-function onInputChange(e: any) {
+function onInputChange(e: Event) {
   addFiles(e.target.files)
   e.target.value = null // reset so that selecting the same file again will still cause it to recognize this change
 }

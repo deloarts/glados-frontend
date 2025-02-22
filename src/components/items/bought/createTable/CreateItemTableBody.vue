@@ -91,7 +91,7 @@ function onCreate(index: number) {
       <CreateItemTableInput
         v-model:value="item.group_1"
         :width="props.colW.group1"
-        :error="item.group1_error"
+        :error="item.group_1_error"
       />
       <CreateItemTableInput
         v-model:value="item.note_general"

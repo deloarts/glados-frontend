@@ -93,7 +93,7 @@ function onExportPDF() {
   } else {
     stockCut2DRequest.postGenerate(solverOutput.value, 'pdf').then((response) => {
       if (response.status == 200) {
-        let blob = new Blob([response.data], {
+        const blob = new Blob([response.data], {
             type: 'application/pdf',
           }),
           url = window.URL.createObjectURL(blob)

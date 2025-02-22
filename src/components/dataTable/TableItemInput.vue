@@ -1,3 +1,5 @@
+<!-- eslint-disable @typescript-eslint/no-unsafe-function-type -->
+
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
 
@@ -37,7 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   center: false,
   fixedHeight: false,
   editMode: false,
-  forceEditMode: false
+  forceEditMode: false,
 })
 const emit = defineEmits<{
   (e: 'update:filterStore', v: FilterStoreProtocol | null): void

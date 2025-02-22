@@ -1,10 +1,6 @@
-import type {
-  HostConfigBoughtItemsFilterSchema,
-  HostConfigProjectFilterSchema,
-  HostConfigUserTimeFilterSchema,
-} from '@/schemas/host'
+import type { HostConfigBoughtItemsFilterSchema, HostConfigProjectFilterSchema, HostConfigUserTimeFilterSchema } from '@/schemas/host'
 
-export function getBoughtItemsFilterParams(filter: HostConfigBoughtItemsFilterSchema) {
+export function getBoughtItemsFilterParams(filter: HostConfigBoughtItemsFilterSchema): URLSearchParams {
   const params = new URLSearchParams()
 
   if (filter.limit != null && filter.limit != undefined) {
@@ -119,7 +115,7 @@ export function getBoughtItemsFilterParams(filter: HostConfigBoughtItemsFilterSc
   return params
 }
 
-export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
+export function getProjectFilterParams(filter: HostConfigProjectFilterSchema): URLSearchParams {
   const params = new URLSearchParams()
 
   if (filter.skip != null && filter.skip != undefined) {
@@ -153,7 +149,7 @@ export function getProjectFilterParams(filter: HostConfigProjectFilterSchema) {
   return params
 }
 
-export function getUserTimeFilterParams(filter: HostConfigUserTimeFilterSchema) {
+export function getUserTimeFilterParams(filter: HostConfigUserTimeFilterSchema): URLSearchParams {
   const params = new URLSearchParams()
 
   if (filter.skip != null && filter.skip != undefined) {

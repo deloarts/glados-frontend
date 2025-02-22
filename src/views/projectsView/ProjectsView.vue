@@ -2,7 +2,6 @@
 import { onMounted, onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-import { useProjectsControlsStore } from '@/stores/controls'
 import { useProjectsStore } from '@/stores/projects'
 import { useProjectFilterStore } from '@/stores/filter'
 
@@ -15,7 +14,6 @@ const route = useRoute()
 
 const projectsStore = useProjectsStore()
 const projectFilterStore = useProjectFilterStore()
-const controlsStore = useProjectsControlsStore()
 
 onBeforeMount(() => {
   projectsStore.getAll()

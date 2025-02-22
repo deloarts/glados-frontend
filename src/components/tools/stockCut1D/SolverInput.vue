@@ -1,3 +1,5 @@
+<!-- eslint-disable @typescript-eslint/no-unsafe-function-type -->
+
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -22,8 +24,8 @@ const languageStore = useLanguageStore()
 const solverInput = computed<StockCut1DJobSchema>(() => props.solverInput)
 
 function removeRow(index: number) {
-  let target_sizes = []
-  for (var i = 0; i < solverInput.value.target_sizes.length; i++) {
+  const target_sizes = []
+  for (let i = 0; i < solverInput.value.target_sizes.length; i++) {
     if (i != index) {
       target_sizes.push(solverInput.value.target_sizes[i])
     }

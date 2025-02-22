@@ -150,11 +150,19 @@ But if everything is in order, as shown in the image below, the user can validat
 
 - A **guestuser** can only view items (cannot create, nor edit, nor delete)
 
-## 5 account
+## 5 user time logger
+
+With this tool, a user can log their working time.
+
+![User Time Logger](/docs/images/user-time.png)
+
+> ✏️ A user must provide their weekly working hours in their account in order to use this feature
+
+## 6 account
 
 This is each users account. They can view their personal data and make changes to them, if they want.
 
-### 5.1 personal access token
+### 6.1 personal access token
 
 The personal access token allows a user to authenticate in glados from external software, such as the [PYTIA Quick Export App](https://github.com/deloarts/pytia-quick-export). This app allows a user to create items from within CATIA V5, a CAD software for mechanical engineering.
 
@@ -162,15 +170,15 @@ The personal access token allows a user to authenticate in glados from external 
 
 A user can only have one active personal access token. Creating a new one renders the current one invalid.
 
-## 6 tools
+## 7 tools
 
 > ✏️ Tools are helper for users. Tools have often an experimental state and can change at any time. Play around with them :)
 
-## 7 settings
+## 8 settings
 
 > ✏️ Only adminusers can make changes to the settings of the app. Users without this permission level do not see the settings-icon in the sidebar
 
-### 7.1 users
+### 8.1 users
 
 Creating new users is restricted to admin users only. Required fields are marked with an asterix-sign `*`.
 
@@ -180,7 +188,7 @@ The user will receive a welcome mail after creation. The content of this mail ca
 
 > ✏️ The RFID field is an experimental feature. It does not meet security standards and shouldn't be used in production
 
-### 7.2 api keys
+### 8.2 api keys
 
 API keys allow external software to access resources of glados. Use them with caution!
 
@@ -188,13 +196,13 @@ API keys allow external software to access resources of glados. Use them with ca
 
 The API key api is documented in the backend.
 
-### 7.3 logs
+### 8.3 logs
 
 Even though glados uses a file base logging system all logs can be viewed within the app. Select the date from which you want to view the log and glados will load the file:
 
 ![Settings Logs](/docs/images/settings-logs.png)
 
-### 7.4 config
+### 8.4 config
 
 In the config tab adminusers can apply custom filters for bought items. These filters are then available in the `Preset` dropdown in the bought-items-view.
 

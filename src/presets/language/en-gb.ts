@@ -425,9 +425,9 @@ export const enGB: Language = {
   },
   userTime: {
     common: {
-      totalHoursThisWeek: "Total hours this week",
-      sumForThisWeek: "Sum for this week",
-      entriesForThisWeek: "Entries for this week",
+      totalHoursThisWeek: 'Total hours this week',
+      sumForThisWeek: 'Sum for this week',
+      entriesForThisWeek: 'Entries for this week',
     },
     warnings: {
       cannotCreateWhileLoggedIn: 'You cannot create an entry while you are logged in',
@@ -539,6 +539,8 @@ export const enGB: Language = {
     },
     config: {
       selectorButton: 'Config',
+      warning:
+        "A limit with the value 'null' means all entries will be loaded from the server! This can cause the browser to freeze.",
       banner: 'Configuration Files',
       create: 'Create Config',
       update: 'Update Config',

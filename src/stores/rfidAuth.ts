@@ -73,8 +73,11 @@ export const useRfidAuthStore = defineStore('rfidAuth', () => {
     wsConnection.onclose = () => {
       readerOK.value = false
       connectionOK.value = false
-      _notificationStore.addWarn(_languageStore.l.notification.warn.rfidHostDisconnected)
-      logout()
+
+      if (loggedIn.value) {
+        _notificationStore.addWarn(_languageStore.l.notification.warn.rfidHostDisconnected)
+        logout()
+      }
     }
   })
 

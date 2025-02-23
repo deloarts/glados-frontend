@@ -137,7 +137,7 @@ function createUser() {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 25px 25px 25px 25px 50px;
+  grid-template-rows: 50px 50px 50px 50px 50px 25px 25px 25px 25px auto;
   grid-template-columns: 50px auto;
   grid-template-areas:
     'username username'

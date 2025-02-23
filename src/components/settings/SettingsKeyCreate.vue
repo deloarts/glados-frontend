@@ -89,7 +89,7 @@ function createKey() {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 40px 40px 40px;
+  grid-template-rows: 40px 40px auto;
   grid-template-columns: 50px auto;
   grid-template-areas:
     'name name'

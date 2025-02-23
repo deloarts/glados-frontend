@@ -38,20 +38,27 @@ function removeAll() {
 </script>
 
 <template>
-  <div class="form-base-scope">
-    <div class="form-base-container">
-      <div id="grid" class="grid-command">
-        <div id="btn-add">
-          <ButtonPlus v-on:click="props.onAdd()" :text="languageStore.l.tools.buttons.add" />
-        </div>
-        <div id="btn-solve">
-          <ButtonLoading v-if="props.solving" :text="languageStore.l.tools.buttons.solving" />
-          <ButtonSolve
-            v-else
-            v-on:click="props.onSolve()"
-            :text="languageStore.l.tools.buttons.solve"
-          />
-        </div>
+  <div class="controls-base-scope">
+    <div class="controls-base-container">
+      <div id="btn-add">
+        <ButtonPlus
+          v-on:click="props.onAdd()"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.add"
+        />
+      </div>
+      <div id="btn-solve">
+        <ButtonLoading
+          v-if="props.solving"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.solving"
+        />
+        <ButtonSolve
+          v-else
+          v-on:click="props.onSolve()"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.solve"
+        />
       </div>
     </div>
 
@@ -116,6 +123,7 @@ function removeAll() {
 @use '@/scss/table/tableBase.scss';
 @use '@/scss/form/formBase.scss';
 @use '@/scss/grid/gridBase.scss';
+@use '@/scss/controls/controlsBase.scss';
 
 table {
   max-width: 600px;
@@ -123,10 +131,18 @@ table {
 }
 
 td,
-th {
+th,
+tr {
   text-align: left;
   border-radius: var(--main-border-radius);
+  height: 20px;
 }
+
+// th {
+//   margin: 0;
+//   padding: 0;
+//   padding-left: 10px;
+// }
 
 input {
   width: 100%;

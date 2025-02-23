@@ -69,7 +69,7 @@ const chartOptions = {
     },
     tooltip: {
       callbacks: {
-        label: function (data: ChartDataset) {
+        label: function (data: any) {
           const duration = moment.duration(data.formattedValue, 'hours')
           const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm')
           return formatted
@@ -85,13 +85,17 @@ const { pause, resume } = useIntervalFn(() => {
 
 function getCurrent(): Array<number> {
   const c = [0, 0, 0, 0, 0, 0, 0]
-  const day = moment().day() - 1
+  let day = moment().day() - 1
+  if (day < 0) {
+    day = 6
+  }
   c[day] = moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() / 60
   current.value = c
   return c
 }
 
 function updateChart() {
+  getCurrent()
   let tempLabels = []
   let tempDatasets = []
 
@@ -134,7 +138,7 @@ function updateChart() {
     },
     {
       label: 'Current',
-      data: getCurrent(),
+      data: current.value,
       backgroundColor: currentColor.value,
       borderWidth: 0,
     },

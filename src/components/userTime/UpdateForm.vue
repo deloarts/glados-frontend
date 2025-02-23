@@ -26,17 +26,15 @@ const languageStore = useLanguageStore()
 watch(
   () => updateFormData,
   () => {
-    
     emit('update:formData', updateFormData.value)
   },
   { deep: true },
 )
-
 </script>
 
 <template>
   <div class="form-base-scope">
-    <div class="form-base-container">
+    <div class="form-base-container form-base-container-bottom-space">
       <div id="grid">
         <div id="login" class="grid-item-center">
           <LabeledDatepicker
@@ -65,16 +63,23 @@ watch(
 </template>
 
 <style scoped lang="scss">
+@use '@/scss/variables.scss' as *;
 @use '@/scss/form/formBase.scss';
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
   grid-template-rows: 50px 50px 50px;
-  grid-template-columns: auto;
+  grid-template-columns: 600px;
   grid-template-areas:
     'login'
     'logout'
     'note';
+}
+
+@media screen and (max-width: $max-width-tablet) {
+  #grid {
+    grid-template-columns: auto;
+  }
 }
 
 #login {

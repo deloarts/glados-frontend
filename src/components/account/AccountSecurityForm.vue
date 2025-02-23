@@ -84,7 +84,7 @@ onBeforeMount(() => {
 
 #grid {
   grid-template-rows: 50px auto;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 50% calc(50% - 10px);
   grid-template-areas:
     'password password'
     'btn btn';

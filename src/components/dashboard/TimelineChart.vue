@@ -64,17 +64,17 @@ function updateChart() {
     datasets.push({
       data: props.dataset.created,
       label: languageStore.l.dashboard.labels.created,
-      backgroundColor: '#25CCF7',
+      backgroundColor: 'rgba(54, 162, 235, 0.8)',
     })
     datasets.push({
       data: props.dataset.ordered,
       label: languageStore.l.dashboard.labels.ordered,
-      backgroundColor: '#cec000',
+      backgroundColor: 'rgba(206, 192, 0, 1)',
     })
     datasets.push({
       data: props.dataset.delivered,
       label: languageStore.l.dashboard.labels.delivered,
-      backgroundColor: '#32CD32',
+      backgroundColor: 'rgba(50, 205, 50, 1)',
     })
 
     chartLabels.value = props.dataset.months

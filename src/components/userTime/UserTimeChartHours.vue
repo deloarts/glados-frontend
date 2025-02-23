@@ -30,7 +30,7 @@ const chartData = computed(() => {
     labels: chartLabels.value,
     datasets: [
       {
-        backgroundColor: ['rgba(54, 162, 235, 0.8)', currentColor.value, 'rgba(40, 40, 40, 0.5)'],
+        backgroundColor: ['rgba(54, 162, 235, 0.8)', currentColor.value, 'rgba(40, 40, 40, 0.1)'],
         borderColor: [
           'rgba(250, 250, 250, 0.2)',
           'rgba(250, 250, 250, 0.2)',

@@ -123,7 +123,7 @@ onMounted(() => {
 
 #grid {
   grid-template-columns: 100%;
-  grid-template-rows: min-content min-content calc(100vh - 300px);
+  grid-template-rows: min-content min-content calc(100vh - 320px);
   grid-template-areas:
     'header'
     'controls'

@@ -59,7 +59,7 @@ onBeforeMount(() => {
 
 <template>
   <div class="form-base-scope">
-    <div class="form-base-container">
+    <div class="form-base-container form-base-container-bottom-space">
       <div id="grid">
         <div id="project" class="grid-item-center">
           <LabeledInput

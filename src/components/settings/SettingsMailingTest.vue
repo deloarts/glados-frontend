@@ -81,7 +81,7 @@ onMounted(() => {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 50px 50px;
+  grid-template-rows: 50px auto;
   grid-template-columns: auto;
   grid-template-areas:
     'receiver'

@@ -36,7 +36,9 @@ const labelColor = computed(() => {
 
 const current = ref<Array<number[]>>([])
 const currentColor = computed<string>(() => {
-  return moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() >= 0 ? 'rgba(0, 204, 92, 0.8)' : 'rgba(255, 50, 50, 0.8)'
+  return moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() >= 0
+    ? 'rgba(0, 204, 92, 0.8)'
+    : 'rgba(255, 50, 50, 0.8)'
 })
 const datasets = ref<Array<ChartDataset>>([])
 const labels = ref<Array<string>>([])
@@ -77,7 +79,10 @@ const { pause, resume } = useIntervalFn(() => {
 function getCurrent(): Array<number[]> {
   const c: Array<number[]> = [[], [], [], [], [], [], []]
   if (userTimeStore.loggedInSince != null) {
-    const day = moment().day() - 1
+    let day = moment().day() - 1
+    if (day < 0) {
+      day = 6
+    }
     const loginTime = moment.utc(userTimeStore.loggedInSince).local()
     const logoutTime = moment()
     const login = Number((loginTime.hours() + loginTime.minutes() / 60).toFixed(1))

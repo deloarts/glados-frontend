@@ -10,7 +10,7 @@ import type {
   HostConfigBoughtItemsFilterPresetsSchema,
   HostConfigMailSchema,
 } from '@/schemas/host'
-import type { ErrorDetailSchema } from '@/schemas/common'
+import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 export class HostRequest {
   // GET
@@ -49,7 +49,7 @@ export class HostRequest {
   }
   postSendTestMail(
     receiver: string,
-  ): Promise<AxiosResponse<HostConfigMailSchema | ErrorDetailSchema>> {
+  ): Promise<AxiosResponse<HostConfigMailSchema | ErrorDetailSchema | ErrorValidationSchema>> {
     const params = new URLSearchParams()
     params.append('receiver', receiver)
     return request.post(`${constants.apiHost}/config/mailing/test`, requestConfig(params), null)

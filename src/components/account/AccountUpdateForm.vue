@@ -9,7 +9,7 @@ import { useUserStore } from '@/stores/user'
 
 import type { AvailableOption } from '@/models/controls'
 import type { UserSchema, UserUpdateSchema } from '@/schemas/user'
-import type { ErrorDetailSchema } from '@/schemas/common'
+import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 import LabeledInput from '@/components/elements/LabeledInput.vue'
 import LabeledSelect from '@/components/elements/LabeledSelect.vue'
@@ -20,6 +20,14 @@ const userStore = useUserStore()
 const notificationStore = useNotificationStore()
 
 const formUserUpdate = ref<UserUpdateSchema>(JSON.parse(JSON.stringify(userStore.user)))
+const errorsByElement = ref({
+  fullName: false,
+  mail: false,
+  password: false,
+  workHours: false,
+  breakFrom: false,
+  breakTo: false,
+})
 
 // Options
 let availableOptionsLanguage: Array<AvailableOption> = []
@@ -46,6 +54,15 @@ function setOptionsLanguage() {
 }
 
 function updateUser() {
+  errorsByElement.value = {
+    fullName: false,
+    mail: false,
+    password: false,
+    workHours: false,
+    breakFrom: false,
+    breakTo: false,
+  }
+
   if (String(formUserUpdate.value.work_hours_per_week).length == 0) {
     formUserUpdate.value.work_hours_per_week = null
   }
@@ -64,6 +81,27 @@ function updateUser() {
       languageStore.apply(userStore.user.language)
       notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
     } else if (response.status == 422) {
+      const data = response.data as ErrorValidationSchema
+      for (let i = 0; i < data.detail.length; i++) {
+        if (data.detail[i].loc[1] == 'full_name') {
+          errorsByElement.value.fullName = true
+        }
+        if (data.detail[i].loc[1] == 'email') {
+          errorsByElement.value.mail = true
+        }
+        if (data.detail[i].loc[1] == 'password') {
+          errorsByElement.value.password = true
+        }
+        if (data.detail[i].loc[1] == 'work_hours_per_week') {
+          errorsByElement.value.workHours = true
+        }
+        if (data.detail[i].loc[1] == 'auto_break_from') {
+          errorsByElement.value.breakFrom = true
+        }
+        if (data.detail[i].loc[1] == 'auto_break_to') {
+          errorsByElement.value.breakTo = true
+        }
+      }
       notificationStore.addWarn(languageStore.l.notification.warn.userDataIncomplete)
     } else {
       const data = response.data as ErrorDetailSchema
@@ -87,7 +125,13 @@ onBeforeMount(() => {
   <div class="form-base-scope">
     <div class="form-base-container">
       <div id="grid">
-        <div id="username" class="grid-item-center">
+        <div
+          id="username"
+          class="grid-item-center"
+          v-on:click="
+            notificationStore.addWarn(languageStore.l.notification.info.onlyAdminCanChangeUsername)
+          "
+        >
           <LabeledInput
             v-model:value="formUserUpdate.username"
             :placeholder="languageStore.l.account.input.usernamePlaceholder"
@@ -98,18 +142,21 @@ onBeforeMount(() => {
           <LabeledInput
             v-model:value="formUserUpdate.full_name"
             :placeholder="languageStore.l.account.input.fullNamePlaceholder"
+            :error="errorsByElement.fullName"
           />
         </div>
         <div id="email" class="grid-item-center">
           <LabeledInput
             v-model:value="formUserUpdate.email"
             :placeholder="languageStore.l.account.input.emailPlaceholder"
+            :error="errorsByElement.mail"
           />
         </div>
         <div id="password" class="grid-item-center">
           <LabeledInput
             v-model:value="formUserUpdate.password"
             :placeholder="languageStore.l.account.input.passwordPlaceholder"
+            :error="errorsByElement.password"
           />
         </div>
         <div id="language" class="grid-item-center">
@@ -123,6 +170,7 @@ onBeforeMount(() => {
           <LabeledInput
             v-model:value="formUserUpdate.work_hours_per_week"
             :placeholder="languageStore.l.account.input.workHoursPerWeekPlaceholder"
+            :error="errorsByElement.workHours"
             type="number"
           />
         </div>
@@ -130,12 +178,14 @@ onBeforeMount(() => {
           <LabeledInput
             v-model:value="formUserUpdate.auto_break_from"
             :placeholder="languageStore.l.account.input.autoBreakFromPlaceholder"
+            :error="errorsByElement.breakFrom"
           />
         </div>
         <div id="auto-break-to" class="grid-item-center">
           <LabeledInput
             v-model:value="formUserUpdate.auto_break_to"
             :placeholder="languageStore.l.account.input.autoBreakToPlaceholder"
+            :error="errorsByElement.breakTo"
           />
         </div>
         <div id="auto-logout" class="grid-item-center">

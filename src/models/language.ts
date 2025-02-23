@@ -60,6 +60,7 @@ export interface Language {
       createdUser: string
       createdEntry: string
       updatedUserData: string
+      onlyAdminCanChangeUsername: string
       updatedEntry: string
       cannotUpdateSystemUser: string
       selectEntryFirst: string

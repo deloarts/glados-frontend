@@ -62,6 +62,8 @@ export const deAT: Language = {
       createdUser: 'Benutzer wurde angelegt',
       createdEntry: 'Eintrag wurde erstellt',
       updatedUserData: 'Benutzerdaten wurden aktualisiert',
+      onlyAdminCanChangeUsername:
+        'Der Benutzername kann nur von einem Administrator geändert werden',
       updatedEntry: 'Eintrag wurde aktualisiert',
       cannotUpdateSystemUser: 'Der Systembenutzer kann nicht geändert werden',
       selectEntryFirst: 'Wähle zuerst einen Eintrag aus',
@@ -107,7 +109,6 @@ export const deAT: Language = {
       createdApiKey: 'API Schlüssel wurde erstellt',
       deletedApiKey: 'API Schlüssel wurde gelöscht',
       sentTestMail: 'Test-Mail ist auf dem Weg',
-      receiverNotGiven: 'Ich weiß nicht wem ich die Test-Mail schicken soll',
     },
     warn: {
       lostServerConnection: 'Keine Verbindung zum Server',
@@ -133,6 +134,7 @@ export const deAT: Language = {
       failedToFetchLog: 'Fehler beim Laden der Log-Datei',
       apiKeyDataIncomplete: 'Daten unvollständig',
       mailingDisabled: 'Mails sind deaktiviert',
+      receiverNotGiven: 'Ich weiß nicht wem ich die Test-Mail schicken soll',
     },
   },
   main: {

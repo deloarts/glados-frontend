@@ -10,7 +10,7 @@ import LabeledInput from '@/components/elements/LabeledInput.vue'
 import ButtonMailSend from '@/components/elements/ButtonMailSend.vue'
 
 import type { HostConfigMailSchema } from '@/schemas/host'
-import type { ErrorDetailSchema } from '@/schemas/common'
+import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
@@ -31,6 +31,9 @@ function sendTestMail() {
   hostRequest.postSendTestMail(receiver.value).then((response) => {
     if (response.status === 200) {
       notificationStore.addInfo(languageStore.l.notification.info.sentTestMail)
+    } else if (response.status === 422) {
+      const data = response.data as ErrorValidationSchema
+      notificationStore.addWarn(data.detail[0].msg)
     } else {
       const data = response.data as ErrorDetailSchema
       notificationStore.addWarn(data.detail)

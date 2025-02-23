@@ -9,12 +9,14 @@ interface Props {
   required?: boolean
   disabled?: boolean
   tooltip?: string
+  error?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   required: false,
   disabled: false,
+  error: false,
 })
 const emit = defineEmits<{
   (e: 'update:value', v: number | string | Date | null | undefined): void
@@ -41,6 +43,7 @@ const computedValue = computed<number | string | Date | null | undefined>({
         :disabled="props.disabled"
       />
       <LabeledLabel
+        :class="{ error: props.error }"
         :value="props.placeholder"
         :tooltip="props.tooltip"
         :required="props.required"

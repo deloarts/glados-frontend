@@ -62,6 +62,7 @@ export const enGB: Language = {
       createdUser: 'Created new user',
       createdEntry: 'Created new entry',
       updatedUserData: 'Updated user data',
+      onlyAdminCanChangeUsername: 'The username can only be changed by an admin user',
       updatedEntry: 'Updated entry',
       cannotUpdateSystemUser: 'Systemuser cannot be updated',
       selectEntryFirst: 'Select an entry first',

@@ -108,6 +108,7 @@ export const enGB: Language = {
       createdApiKey: 'Created API key',
       deletedApiKey: 'Deleted API key',
       sentTestMail: 'Test mail is on its way',
+      removeCardToLogout: 'Remove your RFID chip to logout',
     },
     warn: {
       lostServerConnection: 'Lost server connection',
@@ -134,6 +135,8 @@ export const enGB: Language = {
       apiKeyDataIncomplete: 'Data incomplete',
       mailingDisabled: 'Mailing is disabled',
       receiverNotGiven: "I don't know where to send the test mail",
+      rfidDeviceDisconnected: 'RFID reader has been disconnected',
+      rfidHostDisconnected: 'RFID-Host has been disconnected',
     },
   },
   main: {

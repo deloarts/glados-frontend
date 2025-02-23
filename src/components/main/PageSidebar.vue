@@ -4,9 +4,11 @@ import { useRoute } from 'vue-router'
 
 import router from '@/router/index'
 import { useLanguageStore } from '@/stores/language'
+import { useNotificationStore } from '@/stores/notification'
 import { useProjectsStore } from '@/stores/projects'
 import { useUsersStore, useUserStore } from '@/stores/user'
 import { useResolutionStore } from '@/stores/resolution'
+import { useRfidAuthStore } from '@/stores/rfidAuth'
 
 import IconLogout from '@/components/icons/IconLogout.vue'
 import IconDashboard from '@/components/icons/IconDashboard.vue'
@@ -23,10 +25,12 @@ const route = useRoute()
 
 // Store
 const languageStore = useLanguageStore()
+const notificationStore = useNotificationStore()
 const userStore = useUserStore()
 const usersStore = useUsersStore()
 const projectsStore = useProjectsStore()
 const resolutionStore = useResolutionStore()
+const rfidAuthStore = useRfidAuthStore()
 
 interface Props {
   hideSidebar: boolean
@@ -73,6 +77,10 @@ function routeIsActive(currentLink: string) {
 }
 
 function logout() {
+  if (rfidAuthStore.loggedIn) {
+    notificationStore.addInfo(languageStore.l.notification.info.removeCardToLogout)
+    return
+  }
   userStore.logout()
   usersStore.clear()
   projectsStore.clear()

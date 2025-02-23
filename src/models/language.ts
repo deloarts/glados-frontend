@@ -96,6 +96,7 @@ export interface Language {
       createdApiKey: string
       deletedApiKey: string
       sentTestMail: string
+      removeCardToLogout: string
     }
     warn: {
       lostServerConnection: string
@@ -116,6 +117,8 @@ export interface Language {
       apiKeyDataIncomplete: string
       mailingDisabled: string
       receiverNotGiven: string
+      rfidDeviceDisconnected: string
+      rfidHostDisconnected: string
     }
   }
   main: {

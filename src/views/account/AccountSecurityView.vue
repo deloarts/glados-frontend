@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import AccountControls from '@/components/account/AccountControls.vue'
-import AccountUpdate from '@/components/account/AccountUpdate.vue'
+import AccountSecurity from '@/components/account/AccountSecurity.vue'
+import InfoForForm from '@/components/common/InfoForForm.vue'
+
+import { useLanguageStore } from '@/stores/language'
+import { useUserStore } from '@/stores/user'
+
+const languageStore = useLanguageStore()
+const userStore = useUserStore()
 </script>
 
 <template>
@@ -11,7 +18,10 @@ import AccountUpdate from '@/components/account/AccountUpdate.vue'
           <AccountControls />
         </div>
         <div class="grid-area-display">
-          <AccountUpdate />
+          <AccountSecurity />
+        </div>
+        <div class="grid-area-info" v-if="userStore.user.hashed_rfid">
+          <InfoForForm :text="languageStore.l.account.banner.rfidInfo" />
         </div>
       </div>
     </div>

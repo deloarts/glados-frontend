@@ -176,12 +176,15 @@ export interface Language {
   account: {
     banner: {
       myAccount: string
+      security: string
       pat: string
       patCreationWarning: string
+      patInfo: string
       rfidInfo: string
     }
     button: {
       myAccount: string
+      security: string
       pat: string
       save: string
       newToken: string

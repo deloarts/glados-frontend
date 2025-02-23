@@ -194,12 +194,15 @@ export const enGB: Language = {
   account: {
     banner: {
       myAccount: 'My Account',
+      security: 'Security',
       pat: 'Personal Access Token',
       patCreationWarning: 'Creating a new token renders the current token invalid.',
+      patInfo: 'Token expiration date: ',
       rfidInfo: 'There is a RFID tag linked to this account',
     },
     button: {
       myAccount: 'My Account',
+      security: 'Security',
       pat: 'Access Key',
       save: 'Save',
       newToken: 'New Token',

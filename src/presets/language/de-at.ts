@@ -195,13 +195,16 @@ export const deAT: Language = {
   account: {
     banner: {
       myAccount: 'Mein Konto',
+      security: 'Sicherheit',
       pat: 'Personalisierter Schlüssel',
       patCreationWarning:
         'Beim Erstellen eines neuen Schlüssels wird der aktuelle Schlüssel ungültig.',
+      patInfo: 'Ablaufdatum des Tokens: ',
       rfidInfo: 'Zu deinem Konto ist ein RFID-Chip zugewiesen',
     },
     button: {
       myAccount: 'Mein Konto',
+      security: 'Sicherheit',
       pat: 'Schlüssel',
       save: 'Speichern',
       newToken: 'Generieren',

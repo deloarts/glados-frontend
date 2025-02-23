@@ -23,7 +23,6 @@ const formUserUpdate = ref<UserUpdateSchema>(JSON.parse(JSON.stringify(userStore
 const errorsByElement = ref({
   fullName: false,
   mail: false,
-  password: false,
   workHours: false,
   breakFrom: false,
   breakTo: false,
@@ -57,7 +56,6 @@ function updateUser() {
   errorsByElement.value = {
     fullName: false,
     mail: false,
-    password: false,
     workHours: false,
     breakFrom: false,
     breakTo: false,
@@ -88,9 +86,6 @@ function updateUser() {
         }
         if (data.detail[i].loc[1] == 'email') {
           errorsByElement.value.mail = true
-        }
-        if (data.detail[i].loc[1] == 'password') {
-          errorsByElement.value.password = true
         }
         if (data.detail[i].loc[1] == 'work_hours_per_week') {
           errorsByElement.value.workHours = true
@@ -152,13 +147,6 @@ onBeforeMount(() => {
             :error="errorsByElement.mail"
           />
         </div>
-        <div id="password" class="grid-item-center">
-          <LabeledInput
-            v-model:value="formUserUpdate.password"
-            :placeholder="languageStore.l.account.input.passwordPlaceholder"
-            :error="errorsByElement.password"
-          />
-        </div>
         <div id="language" class="grid-item-center">
           <LabeledSelect
             v-model:value="formUserUpdate.language"
@@ -208,13 +196,12 @@ onBeforeMount(() => {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px auto;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px auto;
   grid-template-columns: 50% 50%;
   grid-template-areas:
     'username username'
     'full-name full-name'
     'email email'
-    'password password'
     'work-hours work-hours'
     'auto-break-from auto-break-to'
     'auto-logout auto-logout'
@@ -237,10 +224,6 @@ onBeforeMount(() => {
 
 #full-name {
   grid-area: full-name;
-}
-
-#password {
-  grid-area: password;
 }
 
 #email {

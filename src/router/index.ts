@@ -27,6 +27,7 @@ import SettingsConfigView from '@/views/settings/SettingsConfigView.vue'
 import SettingsMailingView from '@/views/settings/SettingsMailingView.vue'
 import SettingsApiKeysView from '@/views/settings/SettingsApiKeysView.vue'
 import AccountUpdateView from '@/views/account/AccountUpdateView.vue'
+import AccountSecurityView from '@/views/account/AccountSecurityView.vue'
 import AccountPersonalAccessTokenView from '@/views/account/AccountPersonalAccessTokenView.vue'
 import ToolsStockCut1DView from '@/views/tools/ToolsStockCut1DView.vue'
 import ToolsStockCut2DView from '@/views/tools/ToolsStockCut2DView.vue'
@@ -109,6 +110,11 @@ const router = createRouter({
       path: '/account/me',
       name: 'AccountUpdate',
       component: AccountUpdateView,
+    },
+    {
+      path: '/account/security',
+      name: 'AccountSecurity',
+      component: AccountSecurityView,
     },
     {
       path: '/account/pat',

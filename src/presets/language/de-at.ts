@@ -109,6 +109,7 @@ export const deAT: Language = {
       createdApiKey: 'API Schlüssel wurde erstellt',
       deletedApiKey: 'API Schlüssel wurde gelöscht',
       sentTestMail: 'Test-Mail ist auf dem Weg',
+      removeCardToLogout: 'Entferne den RFID-Chip zum ausloggen',
     },
     warn: {
       lostServerConnection: 'Keine Verbindung zum Server',
@@ -135,6 +136,8 @@ export const deAT: Language = {
       apiKeyDataIncomplete: 'Daten unvollständig',
       mailingDisabled: 'Mails sind deaktiviert',
       receiverNotGiven: 'Ich weiß nicht wem ich die Test-Mail schicken soll',
+      rfidDeviceDisconnected: 'RFID-Lesegrät wurde entfernt',
+      rfidHostDisconnected: 'RFID-Host wurde getrennt',
     },
   },
   main: {

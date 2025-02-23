@@ -62,6 +62,8 @@ export const deAT: Language = {
       createdUser: 'Benutzer wurde angelegt',
       createdEntry: 'Eintrag wurde erstellt',
       updatedUserData: 'Benutzerdaten wurden aktualisiert',
+      onlyAdminCanChangeUsername:
+        'Der Benutzername kann nur von einem Administrator geändert werden',
       updatedEntry: 'Eintrag wurde aktualisiert',
       cannotUpdateSystemUser: 'Der Systembenutzer kann nicht geändert werden',
       selectEntryFirst: 'Wähle zuerst einen Eintrag aus',
@@ -106,6 +108,7 @@ export const deAT: Language = {
       copiedUrlToClipboard: 'URL wurde kopiert',
       createdApiKey: 'API Schlüssel wurde erstellt',
       deletedApiKey: 'API Schlüssel wurde gelöscht',
+      sentTestMail: 'Test-Mail ist auf dem Weg',
     },
     warn: {
       lostServerConnection: 'Keine Verbindung zum Server',
@@ -130,6 +133,8 @@ export const deAT: Language = {
       noLogForThisDay: 'Für diesen Tag existiert keine Log-Datei',
       failedToFetchLog: 'Fehler beim Laden der Log-Datei',
       apiKeyDataIncomplete: 'Daten unvollständig',
+      mailingDisabled: 'Mails sind deaktiviert',
+      receiverNotGiven: 'Ich weiß nicht wem ich die Test-Mail schicken soll',
     },
   },
   main: {
@@ -601,6 +606,21 @@ export const deAT: Language = {
         guestUser: 'Gast',
         rfid: 'RFID',
         createdDate: 'Erstelldatum',
+      },
+    },
+    mailing: {
+      selectorButton: 'Emails',
+      banner: 'Email Konfiguration',
+      setupInfo:
+        'Die Einstellungen für Emails müssen im Config-File des Servers vorgenommen werden. Prüfe die Dokumentation für mehr Infos.',
+      button: {
+        sendTestMail: 'Sende Test',
+      },
+      input: {
+        serverPlaceholder: 'Server',
+        portPlaceholder: 'Port',
+        accountPlaceholder: 'Konto',
+        receiverPlaceholder: 'Test-Empfänger',
       },
     },
     apiKeys: {

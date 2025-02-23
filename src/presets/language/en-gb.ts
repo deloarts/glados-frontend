@@ -62,6 +62,7 @@ export const enGB: Language = {
       createdUser: 'Created new user',
       createdEntry: 'Created new entry',
       updatedUserData: 'Updated user data',
+      onlyAdminCanChangeUsername: 'The username can only be changed by an admin user',
       updatedEntry: 'Updated entry',
       cannotUpdateSystemUser: 'Systemuser cannot be updated',
       selectEntryFirst: 'Select an entry first',
@@ -106,6 +107,7 @@ export const enGB: Language = {
       copiedUrlToClipboard: 'Copied URL to clipboard',
       createdApiKey: 'Created API key',
       deletedApiKey: 'Deleted API key',
+      sentTestMail: 'Test mail is on its way',
     },
     warn: {
       lostServerConnection: 'Lost server connection',
@@ -130,6 +132,8 @@ export const enGB: Language = {
       noLogForThisDay: 'There is no log file for this day',
       failedToFetchLog: 'Failed to fetch the log file',
       apiKeyDataIncomplete: 'Data incomplete',
+      mailingDisabled: 'Mailing is disabled',
+      receiverNotGiven: "I don't know where to send the test mail",
     },
   },
   main: {
@@ -600,6 +604,21 @@ export const enGB: Language = {
         guestUser: 'Guest',
         rfid: 'RFID',
         createdDate: 'Created',
+      },
+    },
+    mailing: {
+      selectorButton: 'Mailing',
+      banner: 'Mail Configuration',
+      setupInfo:
+        'Mail config must be set in the servers config file. Check the installation documentation for more info.',
+      button: {
+        sendTestMail: 'Send Test',
+      },
+      input: {
+        serverPlaceholder: 'Server',
+        portPlaceholder: 'Port',
+        accountPlaceholder: 'Account',
+        receiverPlaceholder: 'Test Receiver',
       },
     },
     apiKeys: {

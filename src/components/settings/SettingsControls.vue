@@ -7,6 +7,7 @@ import ButtonFile from '@/components/elements/ButtonFile.vue'
 import ButtonUsers from '@/components/elements/ButtonUsers.vue'
 import ButtonCloudKey from '@/components/elements/ButtonCloudKey.vue'
 import ButtonConfig from '@/components/elements/ButtonConfig.vue'
+import ButtonMail from '@/components/elements/ButtonMail.vue'
 
 import { useLanguageStore } from '@/stores/language'
 
@@ -62,6 +63,12 @@ function routeIsActive(currentLink: string) {
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/users') }"
           :text="languageStore.l.settings.users.selectorButton"
+      /></router-link>
+      <router-link :to="'/settings/mailing'"
+        ><ButtonMail
+          class="controls-base-element"
+          v-bind:class="{ active: routeIsActive('/settings/mailing') }"
+          :text="languageStore.l.settings.mailing.selectorButton"
       /></router-link>
       <router-link :to="'/settings/api-keys'"
         ><ButtonCloudKey

@@ -25,12 +25,19 @@ export const useUserTimeStore = defineStore('userTime', () => {
   const loggedInSince = ref<Date | null>()
   const weekTime = ref<Array<Array<number[]>>>([[]])
   const weekSum = ref<number[]>([0, 0, 0, 0, 0, 0, 0])
-  const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
+  const page = ref<PageSchema<UserTimeSchema>>({
+    items: [],
+    total: 0,
+    limit: 0,
+    skip: 0,
+    pages: 1,
+    current: 1,
+  })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
     selectedIDs.value = []
   }
 
@@ -108,7 +115,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
 
   function clearItems() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
   }
 
   function getSelection(): Array<number> {
@@ -131,6 +138,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
       if (response.status === 200) {
         items.value = response.data.items
         page.value = {
+          items: response.data.items,
           total: response.data.total,
           limit: response.data.limit,
           skip: response.data.skip,
@@ -185,7 +193,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
   )
 
   watch(_route, () => {
-    paused.value = !(_route.path.includes('user-time'))
+    paused.value = !_route.path.includes('user-time')
   })
 
   // watch(

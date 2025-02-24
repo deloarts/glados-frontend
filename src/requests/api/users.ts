@@ -1,4 +1,5 @@
-import { request, requestConfig } from '@/requests/index'
+import { request } from '@/requests/index'
+import { requestConfig } from '@/requests/config'
 import config from '@/config'
 import constants from '@/constants'
 

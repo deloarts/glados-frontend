@@ -1,9 +1,9 @@
+import { request } from '@/requests/index'
 import {
-  request,
   requestConfig,
   requestConfigXlsxDownload,
   requestConfigFileUpload,
-} from '@/requests/index'
+} from '@/requests/config'
 import constants from '@/constants'
 
 import type { AxiosResponse } from 'axios'

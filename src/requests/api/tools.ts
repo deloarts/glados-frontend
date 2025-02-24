@@ -1,4 +1,5 @@
-import { request, requestConfig, requestConfigPdfDownload } from '@/requests/index'
+import { request } from '@/requests/index'
+import { requestConfig, requestConfigPdfDownload } from '@/requests/config'
 import constants from '@/constants'
 
 export class ToolsStockCut1DRequest {

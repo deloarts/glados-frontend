@@ -214,11 +214,8 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (
-          error.response != undefined &&
-          (error.response.status == 401 || error.response.status >= 500)
-        ) {
-          console.warn(error)
+        if (error.response != undefined && error.response.status == 401) {
+          console.debug('User not authenticated')
           router.push({ name: 'Login' })
         }
         return error.response as AxiosResponse<any>
@@ -245,11 +242,8 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (
-          error.response != undefined &&
-          (error.response.status == 401 || error.response.status >= 500)
-        ) {
-          console.warn(error)
+        if (error.response != undefined && error.response.status == 401) {
+          console.debug('User not authenticated')
           router.push({ name: 'Login' })
         }
         return error.response as AxiosResponse<any>
@@ -276,11 +270,8 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (
-          error.response != undefined &&
-          (error.response.status == 401 || error.response.status >= 500)
-        ) {
-          console.warn(error)
+        if (error.response != undefined && error.response.status == 401) {
+          console.debug('User not authenticated')
           router.push({ name: 'Login' })
         }
         return error.response as AxiosResponse<any>
@@ -306,11 +297,8 @@ export class Request {
       return response
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (
-          error.response != undefined &&
-          (error.response.status == 401 || error.response.status >= 500)
-        ) {
-          console.warn(error)
+        if (error.response != undefined && error.response.status == 401) {
+          console.debug('User not authenticated')
           router.push({ name: 'Login' })
         }
         return error.response as AxiosResponse<any>

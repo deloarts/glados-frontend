@@ -27,8 +27,9 @@ const props = defineProps<{
 }>()
 
 const computedStatus = computed<string>(() => {
-  //@ts-ignore
-  return languageStore.l.boughtItem.options.status[props.item.status]
+  return languageStore.l.boughtItem.options.status[
+    props.item.status as keyof typeof languageStore.l.boughtItem.options.status
+  ]
 })
 </script>
 

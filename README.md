@@ -2,7 +2,7 @@
 
 ![state](https://img.shields.io/badge/State-beta-brown.svg?style=for-the-badge)
 ![version](https://img.shields.io/github/v/release/deloarts/glados-frontend?style=for-the-badge&color=orange)
-![backend](https://img.shields.io/badge/Backend-0.13.*-orange.svg?style=for-the-badge)
+![backend](https://img.shields.io/badge/Backend-0.14.*-orange.svg?style=for-the-badge)
 ![node](https://img.shields.io/badge/node-v22-blue.svg?style=for-the-badge)
 ![OS](https://img.shields.io/badge/OS-UNIX-blue.svg?style=for-the-badge)
 
@@ -67,6 +67,7 @@ MIT
 
 ## 6 changelog
 
+**v0.14.0**: Add user-time-logger. Other minor improvements.  
 **v0.13.6**: Fix style.  
 **v0.13.5**: Fix login-loop.  
 **v0.13.4**: Better styling.  

@@ -1,3 +1,5 @@
+<!-- eslint-disable @typescript-eslint/no-unsafe-function-type -->
+
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -29,8 +31,8 @@ const solverInput = computed<StockCut2DJobSchema>(() => props.solverInput)
 const solverMethods = ['greedy', 'forward_greedy']
 
 function removePanelRow(index: number) {
-  let panels = []
-  for (var i = 0; i < solverInput.value.params.panels.length; i++) {
+  const panels = []
+  for (let i = 0; i < solverInput.value.params.panels.length; i++) {
     if (i != index) {
       panels.push(solverInput.value.params.panels[i])
     }
@@ -43,8 +45,8 @@ function removeAllPanels() {
   ]
 }
 function removeItemRow(index: number) {
-  let items = []
-  for (var i = 0; i < solverInput.value.params.items.length; i++) {
+  const items = []
+  for (let i = 0; i < solverInput.value.params.items.length; i++) {
     if (i != index) {
       items.push(solverInput.value.params.items[i])
     }
@@ -64,35 +66,41 @@ function removeAllItems() {
 </script>
 
 <template>
-  <div class="form-base-scope">
-    <div class="form-base-container">
-      <div id="grid" class="grid-command">
-        <div id="btn-add-panel">
-          <ButtonPlus
-            v-on:click="props.onAddPanel()"
-            :text="languageStore.l.tools.buttons.addPanel"
-          />
-        </div>
-        <div id="btn-add-item">
-          <ButtonPlus
-            v-on:click="props.onAddItem()"
-            :text="languageStore.l.tools.buttons.addItem"
-          />
-        </div>
-        <div id="btn-solve">
-          <ButtonLoading v-if="props.solving" :text="languageStore.l.tools.buttons.solving" />
-          <ButtonSolve
-            v-else
-            v-on:click="props.onSolve()"
-            :text="languageStore.l.tools.buttons.solve"
-          />
-        </div>
-        <div id="btn-export-pdf">
-          <ButtonDownload
-            v-on:click="props.onExportPdf()"
-            :text="languageStore.l.tools.buttons.exportPDF"
-          />
-        </div>
+  <div class="controls-base-scope">
+    <div class="controls-base-container">
+      <div id="btn-add-panel">
+        <ButtonPlus
+          v-on:click="props.onAddPanel()"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.addPanel"
+        />
+      </div>
+      <div id="btn-add-item">
+        <ButtonPlus
+          v-on:click="props.onAddItem()"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.addItem"
+        />
+      </div>
+      <div id="btn-solve">
+        <ButtonLoading
+          v-if="props.solving"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.solving"
+        />
+        <ButtonSolve
+          v-else
+          v-on:click="props.onSolve()"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.solve"
+        />
+      </div>
+      <div id="btn-export-pdf">
+        <ButtonDownload
+          v-on:click="props.onExportPdf()"
+          class="controls-base-element"
+          :text="languageStore.l.tools.buttons.exportPDF"
+        />
       </div>
     </div>
 
@@ -135,32 +143,32 @@ function removeAllItems() {
       <table class="cursor-default">
         <thead>
           <tr>
-            <th id="panel-id" class="first sticky-col">
+            <th id="panel-id">
               {{ languageStore.l.tools.table.panelID }}
             </th>
-            <th id="panel-width" class="first sticky-col">
+            <th id="panel-width">
               {{ languageStore.l.tools.table.panelWidth }}
             </th>
-            <th id="panel-height" class="first sticky-col">
+            <th id="panel-height">
               {{ languageStore.l.tools.table.panelHeight }}
             </th>
-            <th id="clear" class="first sticky-col">
+            <th id="clear">
               <IconDelete v-on:click="removeAllPanels()" />
             </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(panel, index) in solverInput.params.panels" :key="index">
-            <td id="panel-id" class="sticky-col">
+            <td id="panel-id">
               <input v-model="panel.id" />
             </td>
-            <td id="panel-width" class="sticky-col">
+            <td id="panel-width">
               <input v-model="panel.width" />
             </td>
-            <td id="panel-height" class="sticky-col">
+            <td id="panel-height">
               <input v-model="panel.height" />
             </td>
-            <td id="clear" class="sticky-col">
+            <td id="clear">
               <IconDelete v-on:click="removePanelRow(index)" />
             </td>
           </tr>
@@ -175,38 +183,38 @@ function removeAllItems() {
       <table class="cursor-default">
         <thead>
           <tr>
-            <th id="item-id" class="first sticky-col">
+            <th id="item-id">
               {{ languageStore.l.tools.table.itemID }}
             </th>
-            <th id="item-width" class="first sticky-col">
+            <th id="item-width">
               {{ languageStore.l.tools.table.itemWidth }}
             </th>
-            <th id="item-height" class="first sticky-col">
+            <th id="item-height">
               {{ languageStore.l.tools.table.itemHeight }}
             </th>
-            <th id="item-rotate" class="first sticky-col">
+            <th id="item-rotate">
               {{ languageStore.l.tools.table.rotate }}
             </th>
-            <th id="clear" class="first sticky-col">
+            <th id="clear">
               <IconDelete v-on:click="removeAllItems()" />
             </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in solverInput.params.items" :key="index">
-            <td id="item-id" class="sticky-col">
+            <td id="item-id">
               <input v-model="item.id" />
             </td>
-            <td id="item-width" class="sticky-col">
+            <td id="item-width">
               <input v-model="item.width" />
             </td>
-            <td id="item-height" class="sticky-col">
+            <td id="item-height">
               <input v-model="item.height" />
             </td>
-            <td id="item-rotate" class="sticky-col">
+            <td id="item-rotate">
               <Toggle v-model="item.can_rotate"></Toggle>
             </td>
-            <td id="clear" class="sticky-col">
+            <td id="clear">
               <IconDelete v-on:click="removeItemRow(index)" />
             </td>
           </tr>
@@ -220,6 +228,7 @@ function removeAllItems() {
 @use '@/scss/table/tableBase.scss';
 @use '@/scss/form/formBase.scss';
 @use '@/scss/grid/gridBase.scss';
+@use '@/scss/controls/controlsBase.scss';
 
 table {
   max-width: 600px;
@@ -227,10 +236,18 @@ table {
 }
 
 td,
-th {
+th,
+tr {
   text-align: left;
   border-radius: var(--main-border-radius);
+  height: 20px;
 }
+
+// th {
+//   margin: 0;
+//   padding: 0;
+//   padding-left: 10px;
+// }
 
 input {
   width: 100%;

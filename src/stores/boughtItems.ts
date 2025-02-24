@@ -1,4 +1,5 @@
 import { ref, watch, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
@@ -10,23 +11,35 @@ import { useNotificationStore } from '@/stores/notification'
 import { useBoughtItemFilterStore } from '@/stores/filter'
 import { useUnitsStore } from '@/stores/units'
 
+import type { AxiosResponse } from 'axios'
 import type { PageSchema } from '@/schemas/page'
-import type { BoughtItemSchema } from '@/schemas/boughtItem'
-import type { BoughtItemBatchImportSchema } from '@/schemas/boughtItem'
-import type { ResponseWarning } from '@/models/response'
+import type { BoughtItemSchema, BoughtItemBatchImportSchema } from '@/schemas/boughtItem'
+import type {
+  ErrorDetailSchema,
+  ErrorValidationSchema,
+  ErrorValidationDetail,
+} from '@/schemas/common'
 
 export const useBoughtItemsStore = defineStore('boughtItems', () => {
+  const _route = useRoute()
   const _filterStore = useBoughtItemFilterStore()
 
   const loading = ref<boolean>(false)
   const paused = ref<boolean>(false)
   const items = ref<Array<BoughtItemSchema>>([])
-  const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
+  const page = ref<PageSchema<BoughtItemSchema>>({
+    items: [],
+    total: 0,
+    limit: 0,
+    skip: 0,
+    pages: 1,
+    current: 1,
+  })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
     selectedIDs.value = []
   }
 
@@ -41,7 +54,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
 
   function clearItems() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
   }
 
   function getSelection(): Array<number> {
@@ -56,7 +69,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     selectedIDs.value = []
   }
 
-  async function get(): Promise<void> {
+  async function get(): Promise<AxiosResponse<PageSchema<BoughtItemSchema>>> {
     console.log('Bought Items store requesting data ...')
     loading.value = true
 
@@ -64,14 +77,9 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     return boughtItemsRequest.getItems(params).then((response) => {
       loading.value = false
       if (response.status === 200) {
-        items.value = response.data.items
-        page.value = {
-          total: response.data.total,
-          limit: response.data.limit,
-          skip: response.data.skip,
-          pages: response.data.pages,
-          current: response.data.current,
-        }
+        const data = response.data as PageSchema<BoughtItemSchema>
+        items.value = data.items
+        page.value = data
         console.log('Bought Items store got data from server.')
       }
       return response
@@ -88,6 +96,11 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
       })
     }
   }
+
+  onBeforeMount(() => {
+    clear()
+    fetchItems()
+  })
 
   watch(
     () => _filterStore.state.limit,
@@ -110,9 +123,8 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     { deep: true },
   )
 
-  onBeforeMount(() => {
-    clear()
-    fetchItems()
+  watch(_route, () => {
+    paused.value = !_route.path.includes('items/bought')
   })
 
   return {
@@ -140,7 +152,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
   const validating = ref<boolean>(false)
   const validated = ref<boolean>(false)
   const items = ref<Array<BoughtItemBatchImportSchema>>([])
-  const warnings = ref<Array<ResponseWarning>>([])
+  const warnings = ref<ErrorValidationDetail[]>([])
 
   function clear() {
     items.value = []
@@ -153,6 +165,23 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
 
   function clearWarnings() {
     warnings.value = []
+  }
+
+  function clearErrorMsgs() {
+    for (let i = 0; i < items.value.length; i++) {
+      items.value[i].project_id_error = undefined
+      items.value[i].partnumber_error = undefined
+      items.value[i].order_number_error = undefined
+      items.value[i].manufacturer_error = undefined
+      items.value[i].quantity_error = undefined
+      items.value[i].unit_error = undefined
+      items.value[i].supplier_error = undefined
+      items.value[i].group_1_error = undefined
+      items.value[i].weblink_error = undefined
+      items.value[i].note_general_error = undefined
+      items.value[i].note_supplier_error = undefined
+      items.value[i].desired_delivery_date_error = undefined
+    }
   }
 
   function addEmptyRow() {
@@ -185,7 +214,9 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     items.value.splice(index, 1)
   }
 
-  async function createItem(index: number): Promise<void> {
+  async function createItem(
+    index: number,
+  ): Promise<BoughtItemSchema | ErrorDetailSchema | ErrorValidationSchema> {
     return boughtItemsRequest
       .postItems(items.value[index])
       .then((response) => {
@@ -193,25 +224,29 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
           _notificationStore.addInfo(_languageStore.l.notification.info.createdItem)
           items.value.splice(index, 1)
         } else if (response.status === 422) {
+          const data = response.data as ErrorValidationSchema
           _notificationStore.addWarn(_languageStore.l.notification.warn.someFieldsNotFilled)
           // Assign error msg to data
-          for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
-            const key = `${response.data.detail[errIdx].loc[1]}_error`
-            const value = response.data.detail[errIdx].msg
-            items.value[index][key] = value
+          for (let errIdx = 0; errIdx < data.detail.length; errIdx++) {
+            const key = `${data.detail[errIdx].loc[1]}_error`
+            const value = data.detail[errIdx].msg
+            items.value[index][key] = String(value)
           }
         } else {
-          _notificationStore.addWarn(response.data.detail)
+          const data = response.data as ErrorDetailSchema
+          _notificationStore.addWarn(data.detail)
         }
         return response
       })
       .catch((error) => {
         console.log(error)
         _notificationStore.addWarn(error)
+        return error
       })
   }
 
   async function validateAll() {
+    clearErrorMsgs()
     if (items.value.length == 0) {
       _notificationStore.addInfo(_languageStore.l.notification.info.createRowFirst)
       return
@@ -222,14 +257,16 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     for (let i = 0; i < items.value.length; i++) {
       await boughtItemsRequest.postItemsValidate(items.value[i]).then((response) => {
         if (response.status === 200) {
-          items.value[i] = response.data
+          const data = response.data as BoughtItemBatchImportSchema
+          items.value[i] = data
         } else if (response.status === 422) {
+          const data = response.data as ErrorValidationSchema
           anyError = true
           //Assign error msg to data
-          for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
-            const key = `${response.data.detail[errIdx].loc[1]}_error`
-            const value = response.data.detail[errIdx].msg
-            items.value[i][key] = value
+          for (let errIdx = 0; errIdx < data.detail.length; errIdx++) {
+            const key = `${data.detail[errIdx].loc[1]}_error`
+            const value = data.detail[errIdx].msg
+            items.value[i][key] = String(value)
           }
         } else {
           anyError = true
@@ -247,6 +284,7 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
   }
 
   async function createAll() {
+    clearErrorMsgs()
     if (items.value.length == 0) {
       _notificationStore.addInfo(_languageStore.l.notification.info.createRowFirst)
       return
@@ -265,14 +303,16 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
             anyCreated = true
           } else {
             if (response.status === 422) {
+              const data = response.data as ErrorValidationSchema
               //Assign error msg to data
-              for (let errIdx = 0; errIdx < response.data.detail.length; errIdx++) {
-                const key = `${response.data.detail[errIdx].loc[1]}_error`
-                const value = response.data.detail[errIdx].msg
+              for (let errIdx = 0; errIdx < data.detail.length; errIdx++) {
+                const key = `${data.detail[errIdx].loc[1]}_error`
+                const value = data.detail[errIdx].msg
                 items.value[firstNotFailedItemIdx][key] = value
               }
             } else {
-              _notificationStore.addWarn(response.data.detail)
+              const data = response.data as ErrorDetailSchema
+              _notificationStore.addWarn(data.detail)
             }
             firstNotFailedItemIdx++
           }
@@ -292,7 +332,12 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
     }
   }
 
-  async function importFile(file: File, serverSideValidation: boolean): Promise<void> {
+  async function importFile(
+    file: File,
+    serverSideValidation: boolean,
+  ): Promise<
+    AxiosResponse<BoughtItemBatchImportSchema[] | ErrorDetailSchema | ErrorValidationSchema>
+  > {
     importing.value = true
     const formData = new FormData()
     formData.append('file', file)
@@ -302,23 +347,24 @@ export const useBoughtItemsBatchImportStore = defineStore('boughtItemsBatchImpor
       .then((response) => {
         importing.value = false
         if (response.status == 200) {
-          for (let i = 0; i < response.data.length; i++) {
-            items.value.push(response.data[i])
+          const data = response.data as Array<BoughtItemBatchImportSchema>
+          for (let i = 0; i < data.length; i++) {
+            items.value.push(data[i])
           }
-          // _notificationStore.addInfo(
-          //   _languageStore.l.notification.info.xlsxImportSuccess,
-          // );
         } else if (response.status == 422) {
+          const data = response.data as ErrorValidationSchema
           _notificationStore.addWarn(_languageStore.l.notification.warn.xlsxUploadContentIncomplete)
-          warnings.value = response.data.detail
+          warnings.value = data.detail
         } else {
-          _notificationStore.addWarn(response.data.detail)
+          const data = response.data as ErrorDetailSchema
+          _notificationStore.addWarn(data.detail)
         }
         return response
       })
-      .catch(() => {
+      .catch((error) => {
         importing.value = false
         _notificationStore.addWarn(_languageStore.l.notification.warn.xlsxProcessError)
+        return error
       })
   }
 

@@ -7,13 +7,16 @@ import ButtonFile from '@/components/elements/ButtonFile.vue'
 import ButtonUsers from '@/components/elements/ButtonUsers.vue'
 import ButtonCloudKey from '@/components/elements/ButtonCloudKey.vue'
 import ButtonConfig from '@/components/elements/ButtonConfig.vue'
+import ButtonMail from '@/components/elements/ButtonMail.vue'
 
 import { useLanguageStore } from '@/stores/language'
+import { useResolutionStore } from '@/stores/resolution'
 
 // Router
 const route = useRoute()
 
 const languageStore = useLanguageStore()
+const resolutionStore = useResolutionStore()
 
 function routeIsActive(currentLink: string) {
   const activeRoute = route.path
@@ -45,7 +48,7 @@ function routeIsActive(currentLink: string) {
           :text="languageStore.l.settings.host.selectorButton"
         />
       </router-link>
-      <router-link :to="'/settings/config'"
+      <router-link :to="'/settings/config'" v-if="resolutionStore.gtMinWidthDesktop"
         ><ButtonConfig
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/config') }"
@@ -63,7 +66,13 @@ function routeIsActive(currentLink: string) {
           v-bind:class="{ active: routeIsActive('/settings/users') }"
           :text="languageStore.l.settings.users.selectorButton"
       /></router-link>
-      <router-link :to="'/settings/api-keys'"
+      <router-link :to="'/settings/mailing'" v-if="resolutionStore.gtMinWidthDesktop"
+        ><ButtonMail
+          class="controls-base-element"
+          v-bind:class="{ active: routeIsActive('/settings/mailing') }"
+          :text="languageStore.l.settings.mailing.selectorButton"
+      /></router-link>
+      <router-link :to="'/settings/api-keys'" v-if="resolutionStore.gtMinWidthDesktop"
         ><ButtonCloudKey
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/settings/api-keys') }"

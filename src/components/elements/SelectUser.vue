@@ -24,15 +24,11 @@ const computedSelection = computed<number>({
     return newValue
   },
 })
-
-function onChange(event: Event) {
-  // computedSelection.value = event.target.value;
-}
 </script>
 
 <template>
   <div class="box">
-    <select v-model="computedSelection" @change="onChange">
+    <select v-model="computedSelection">
       <option value="null" disabled selected hidden>
         {{ props.placeholder ? props.placeholder : 'User' }}
       </option>

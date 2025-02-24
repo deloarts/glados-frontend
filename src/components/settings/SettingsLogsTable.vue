@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useLanguageStore } from '@/stores/language'
-import { useUsersStore } from '@/stores/user'
 
 import type { Log } from '@/models/log'
 
@@ -11,7 +10,6 @@ const props = defineProps<{
 
 // Store
 const languageStore = useLanguageStore()
-const usersStore = useUsersStore()
 </script>
 
 <template>

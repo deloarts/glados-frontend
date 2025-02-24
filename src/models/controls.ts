@@ -1,6 +1,6 @@
 export interface AvailableOption {
   text: string
-  value: string | null
+  value: boolean | number | string | null
 }
 
 export interface BoughtItemControlsState {

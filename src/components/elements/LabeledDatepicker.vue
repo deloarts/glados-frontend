@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed } from 'vue'
 import moment from 'moment'
 import Datepicker from '@vuepic/vue-datepicker'
 
@@ -7,12 +7,20 @@ import LabeledLabel from './LabeledLabel.vue'
 
 import { useUserStore } from '@/stores/user'
 
+import type { TimeModel } from '@vuepic/vue-datepicker'
+
 const userStore = useUserStore()
 
 interface Props {
-  value: Date | null | undefined
+  value: string | Date | TimeModel | null | undefined
   placeholder: string
   type?: string
+  format?: string
+  returnAsDate?: boolean
+  minDate?: Date
+  maxDate?: Date
+  timeOnly?: boolean
+  disableTime?: boolean
   required?: boolean
   disabled?: boolean
   tooltip?: string
@@ -20,42 +28,34 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
+  format: 'YYYY-MM-DD',
+  returnAsDate: false,
+  timeOnly: false,
+  disableTime: false,
   required: false,
   disabled: false,
 })
 const emit = defineEmits<{
-  (e: 'update:value', v: Date | null | undefined): void
+  (e: 'update:value', v: string | Date | TimeModel | null | undefined): void
 }>()
 
-const pickedDesiredDate = ref<Date | null>(null)
-const formatDesiredDate = (pickedDesiredDate: Date) => {
-  const day = pickedDesiredDate.getDate()
-  const month = pickedDesiredDate.getMonth() + 1
-  const year = pickedDesiredDate.getFullYear()
-  return `${day}.${month}.${year}`
-}
-
-watch(
-  () => props.value,
-  () => {
-    if (props.value != null && props.value != undefined) {
-      const date = Date.parse(String(props.value))
-      pickedDesiredDate.value = new Date(date)
-    }
-    emit('update:value', pickedDesiredDate.value)
+const computedValue = computed<string | Date | TimeModel | null | undefined>({
+  get() {
+    return props.value
   },
-  { deep: true },
-)
-
-watch(pickedDesiredDate, () => {
-  let newValue
-  if (pickedDesiredDate.value instanceof Date) {
-    newValue = moment(pickedDesiredDate.value).format('YYYY-MM-DD')
-  } else {
-    newValue = null
-  }
-  emit('update:value', newValue)
+  set(newValue) {
+    if (newValue) {
+      emit('update:value', props.returnAsDate ? moment(newValue).format(props.format) : newValue)
+    } else {
+      emit('update:value', null)
+    }
+    return newValue
+  },
 })
+
+const formatDate = (pickedDate: Date) => {
+  return moment(pickedDate).format(props.format)
+}
 </script>
 
 <template>
@@ -63,10 +63,16 @@ watch(pickedDesiredDate, () => {
     <div class="labeled-container">
       <div class="labeled-input-date">
         <Datepicker
-          v-model="pickedDesiredDate"
-          :format="formatDesiredDate"
+          v-model="computedValue"
+          :format="formatDate"
           :clearable="true"
           :dark="userStore.user.theme == 'dark'"
+          :min-date="props.minDate"
+          :max-date="props.maxDate"
+          :time-picker="props.timeOnly"
+          :enable-time-picker="!props.disableTime"
+          :disabled="props.disabled"
+          position="left"
         />
       </div>
       <LabeledLabel

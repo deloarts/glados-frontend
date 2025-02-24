@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router'
 
 import ButtonUserEdit from '@/components/elements/ButtonUserEdit.vue'
 import ButtonCloudKey from '@/components/elements/ButtonCloudKey.vue'
+import ButtonLock from '@/components/elements/ButtonLock.vue'
 
 import { useLanguageStore } from '@/stores/language'
 
@@ -31,6 +32,12 @@ function routeIsActive(currentLink: string) {
           class="controls-base-element"
           :class="{ active: routeIsActive('/account/me') }"
           :text="languageStore.l.account.button.myAccount"
+      /></router-link>
+      <router-link :to="'/account/security'"
+        ><ButtonLock
+          class="controls-base-element"
+          :class="{ active: routeIsActive('/account/security') }"
+          :text="languageStore.l.account.button.security"
       /></router-link>
       <router-link :to="'/account/pat'"
         ><ButtonCloudKey

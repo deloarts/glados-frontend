@@ -1,21 +1,81 @@
 import type { Language } from '@/models/language'
 
 export const deAT: Language = {
+  common: {
+    days: {
+      monday: 'Montag',
+      tuesday: 'Dienstag',
+      wednesday: 'Mittwoch',
+      thursday: 'Donnerstag',
+      friday: 'Freitag',
+      saturday: 'Samstag',
+      sunday: 'Sonntag',
+    },
+    shortDays: {
+      monday: 'MO',
+      tuesday: 'DI',
+      wednesday: 'MI',
+      thursday: 'DO',
+      friday: 'FR',
+      saturday: 'SA',
+      sunday: 'SO',
+    },
+    months: {
+      january: 'Januar',
+      february: 'Februar',
+      march: 'März',
+      april: 'April',
+      may: 'Mai',
+      june: 'Juni',
+      july: 'Juli',
+      august: 'August',
+      september: 'September',
+      october: 'Oktober',
+      november: 'November',
+      december: 'Dezember',
+    },
+    shortMonths: {
+      january: 'JAN',
+      february: 'FEB',
+      march: 'MÄR',
+      april: 'APR',
+      may: 'MAI',
+      june: 'JUN',
+      july: 'JUL',
+      august: 'AUG',
+      september: 'SEP',
+      october: 'OKT',
+      november: 'NOV',
+      december: 'DEZ',
+    },
+  },
   notification: {
     info: {
       reconnectedToServer: 'Serververbindung wiederhergestellt',
       welcomeMessage: (name: string) => {
         return `Willkommen ${name}`
       },
+      loggedInNow: 'Du bist angemeldet',
+      loggedOutNow: 'Du bist abgemeldet',
       savedNewFilter: 'Neuer Filter wurde gespeichert',
       createdNewPAT: 'Neuer geheimer Schlüssel wurde erstellt',
       createdUser: 'Benutzer wurde angelegt',
+      createdEntry: 'Eintrag wurde erstellt',
       updatedUserData: 'Benutzerdaten wurden aktualisiert',
+      onlyAdminCanChangeUsername:
+        'Der Benutzername kann nur von einem Administrator geändert werden',
+      updatedEntry: 'Eintrag wurde aktualisiert',
       cannotUpdateSystemUser: 'Der Systembenutzer kann nicht geändert werden',
+      selectEntryFirst: 'Wähle zuerst einen Eintrag aus',
       selectProjectFirst: 'Wähle zuerst ein Projekt aus',
       onlyEditOneProject: 'Du kannst nur ein Projekt bearbeiten',
+      onlyEditOneEntry: 'Du kannst nur einen Eintrag bearbeiten',
       onlyExportOneProject: 'Du kannst nur ein Projekt exportieren',
+      onlyDeleteOneEntry: 'Du kannst nur einen Eintrag löschen',
       onlyDeleteOneProject: 'Du kannst nur ein Projekt löschen',
+      deletedEntry: (id: number) => {
+        return `Eintrag #${id} wurde gelöscht`
+      },
       deletedProject: (id: number) => {
         return `Projekt #${id} wurde gelöscht`
       },
@@ -48,6 +108,8 @@ export const deAT: Language = {
       copiedUrlToClipboard: 'URL wurde kopiert',
       createdApiKey: 'API Schlüssel wurde erstellt',
       deletedApiKey: 'API Schlüssel wurde gelöscht',
+      sentTestMail: 'Test-Mail ist auf dem Weg',
+      removeCardToLogout: 'Entferne den RFID-Chip zum ausloggen',
     },
     warn: {
       lostServerConnection: 'Keine Verbindung zum Server',
@@ -72,6 +134,10 @@ export const deAT: Language = {
       noLogForThisDay: 'Für diesen Tag existiert keine Log-Datei',
       failedToFetchLog: 'Fehler beim Laden der Log-Datei',
       apiKeyDataIncomplete: 'Daten unvollständig',
+      mailingDisabled: 'Mails sind deaktiviert',
+      receiverNotGiven: 'Ich weiß nicht wem ich die Test-Mail schicken soll',
+      rfidDeviceDisconnected: 'RFID-Lesegrät wurde entfernt',
+      rfidHostDisconnected: 'RFID-Host wurde getrennt',
     },
   },
   main: {
@@ -98,6 +164,7 @@ export const deAT: Language = {
       projects: 'Projekte',
       boughtItems: 'Zukaufteile',
       account: 'Konto',
+      userTime: 'Zeitlogger',
       tools: 'Werkzeuge',
       settings: 'Einstellungen',
     },
@@ -124,20 +191,6 @@ export const deAT: Language = {
       canceled: 'Storniert',
       lost: 'Unauffindbar',
     },
-    months: {
-      january: 'JÄN',
-      february: 'FEB',
-      march: 'MÄR',
-      april: 'APR',
-      may: 'MAI',
-      june: 'JUN',
-      july: 'JUL',
-      august: 'AUG',
-      september: 'SEP',
-      october: 'OKT',
-      november: 'NOV',
-      december: 'DEZ',
-    },
     banner: {
       showingItems: 'Ansicht aller Artikel, die in den letzten 30 Tagen bearbeitet wurden.',
     },
@@ -145,22 +198,33 @@ export const deAT: Language = {
   account: {
     banner: {
       myAccount: 'Mein Konto',
+      security: 'Sicherheit',
       pat: 'Personalisierter Schlüssel',
       patCreationWarning:
         'Beim Erstellen eines neuen Schlüssels wird der aktuelle Schlüssel ungültig.',
+      patInfo: 'Ablaufdatum des Tokens: ',
       rfidInfo: 'Zu deinem Konto ist ein RFID-Chip zugewiesen',
     },
     button: {
       myAccount: 'Mein Konto',
+      security: 'Sicherheit',
       pat: 'Schlüssel',
       save: 'Speichern',
       newToken: 'Generieren',
+    },
+    option: {
+      logMeOut: 'Melde mich automatisch ab',
+      keepMeLoggedIn: 'Lass mich angemeldet',
     },
     input: {
       usernamePlaceholder: 'Benutzername',
       fullNamePlaceholder: 'Vollständiger Name',
       emailPlaceholder: 'E-Mail',
       passwordPlaceholder: 'Passwort',
+      workHoursPerWeekPlaceholder: 'Wochenarbeitszeit',
+      autoBreakFromPlaceholder: 'Automatische Pause von (UTC)',
+      autoBreakToPlaceholder: 'Automatische Pause bis (UTC)',
+      autoLogoutPlaceholder: 'Wenn über Mitternacht',
       languagePlaceholder: 'Sprache',
       patPlaceholder: 'Geheimer Schlüssel',
     },
@@ -371,6 +435,61 @@ export const deAT: Language = {
       notAllowedEditItemPlanned: 'Du kannst keinen bereits geplanten Artikel ändern.',
     },
   },
+  userTime: {
+    common: {
+      totalHoursThisWeek: 'Gesamte Wochenstunden',
+      sumForThisWeek: 'Summe für diese Woche',
+      entriesForThisWeek: 'Einträge dieser Woche',
+    },
+    warnings: {
+      cannotCreateWhileLoggedIn: 'Du kannst keinen Eintrag erstellen, während du angemeldet bist',
+      loginMustBeProvided: 'Die Anmeldezeit muss angegeben werden',
+      loginMustBeToday: 'Das Anmeldedatum muss heute sein, wenn keine Abmeldezeit angegeben ist',
+      loginAfterLogout: 'Die Anmeldezeit kann nicht nach der Abmeldezeit liegen',
+    },
+    table: {
+      number: '#',
+      id: 'ID',
+      week: 'Woche',
+      day: 'Tag',
+      date: 'Datum',
+      login: 'Kommt',
+      logout: 'Geht',
+      duration: 'Dauer',
+      note: 'Notiz',
+    },
+    input: {
+      filterPlaceholder: 'Filter',
+      datePlaceholder: 'Datum',
+      loginPlaceholder: 'Beginn',
+      logoutPlaceholder: 'Ende',
+      notePlaceholder: 'Notiz',
+    },
+    button: {
+      login: 'Anmelden',
+      logout: 'Abmelden',
+      newEntry: 'Erstellen',
+      editEntry: 'Bearbeiten',
+      deleteEntry: 'Löschen',
+      unselect: 'Abwählen',
+      sync: 'Laden',
+      views: 'Ansichten',
+      columns: 'Spalten',
+      clearFilter: 'Zurücksetzen',
+      create: 'Erstellen',
+      update: 'Aktualisieren',
+      cancel: 'Abbrechen',
+    },
+    options: {
+      showAll: 'Zeige alle',
+      views: {
+        fixedHeight: 'Gleiche Höhe',
+      },
+    },
+    prompt: {
+      deleteEntry: 'Eintrag löschen?',
+    },
+  },
   tools: {
     banner: {
       stockCut1D: '1D Schnitt-Löser',
@@ -432,6 +551,8 @@ export const deAT: Language = {
     },
     config: {
       selectorButton: 'Konfiguration',
+      warning:
+        "Ein Limit mit dem Wert 'null' bedeutet, dass alle Einträge vom Server geladen werden! Das kann den Browser zum Absturz bringen.",
       banner: 'Konfigurationsdateien',
       create: 'Erstellen',
       update: 'Aktualisiere ',
@@ -491,6 +612,21 @@ export const deAT: Language = {
         guestUser: 'Gast',
         rfid: 'RFID',
         createdDate: 'Erstelldatum',
+      },
+    },
+    mailing: {
+      selectorButton: 'Emails',
+      banner: 'Email Konfiguration',
+      setupInfo:
+        'Die Einstellungen für Emails müssen im Config-File des Servers vorgenommen werden. Prüfe die Dokumentation für mehr Infos.',
+      button: {
+        sendTestMail: 'Sende Test',
+      },
+      input: {
+        serverPlaceholder: 'Server',
+        portPlaceholder: 'Port',
+        accountPlaceholder: 'Konto',
+        receiverPlaceholder: 'Test-Empfänger',
       },
     },
     apiKeys: {

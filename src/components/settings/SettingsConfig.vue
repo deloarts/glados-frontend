@@ -4,6 +4,7 @@ import { ref, watch } from 'vue'
 import SettingsConfigTable from '@/components/settings/SettingsConfigTable.vue'
 import SettingsConfigCreate from '@/components/settings/SettingsConfigCreate.vue'
 import SettingsConfigUpdate from '@/components/settings/SettingsConfigUpdate.vue'
+import WarningForForm from '@/components/common/WarningForForm.vue'
 
 import { useLanguageStore } from '@/stores/language'
 
@@ -29,6 +30,10 @@ watch(selectedConfigName, () => {
   <div class="scope">
     <div class="content">
       <div id="grid">
+        <div id="warning">
+          <WarningForForm :text="languageStore.l.settings.config.warning" />
+        </div>
+
         <div id="registered-h1">
           <h1>{{ languageStore.l.settings.config.banner }}</h1>
         </div>
@@ -76,20 +81,22 @@ watch(selectedConfigName, () => {
 
 #grid {
   grid-template-columns: 400px auto;
-  grid-template-rows: min-content min-content;
+  grid-template-rows: min-content min-content min-content;
   grid-template-areas:
     'registered-h1 config-h1'
+    'registered warning'
     'registered config';
 }
 
 @media screen and (max-width: 1000px) {
   #grid {
     grid-template-columns: 100%;
-    grid-template-rows: min-content 300px min-content min-content;
+    grid-template-rows: min-content 300px min-content min-content min-content;
     grid-template-areas:
       'registered-h1'
       'registered'
       'config-h1'
+      'warning'
       'config';
   }
 }
@@ -108,5 +115,9 @@ watch(selectedConfigName, () => {
 
 #config-h1 {
   grid-area: config-h1;
+}
+
+#warning {
+  grid-area: warning;
 }
 </style>

@@ -10,6 +10,7 @@ import { useNotificationStore } from '@/stores/notification'
 import { useProjectsStore } from '@/stores/projects'
 
 import type { ProjectCreateSchema } from '@/schemas/project'
+import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
@@ -36,23 +37,17 @@ function onUpdate() {
   projectsRequest
     .putProjects(projectID, props.formData)
     .then((response) => {
-      setTimeout(() => {
-        loadingUpdate.value = false
-      }, 400)
-
+      setTimeout(() => { loadingUpdate.value = false }, 400)
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.updatedProject(projectID))
         projectsStore.getItems()
         router.push({ name: 'Projects' })
       } else if (response.status === 422) {
-        notificationStore.addWarn(
-          languageStore.l.notification.warn.createUpdateErrorInField(
-            response.data.detail[0].loc[1],
-            response.data.detail[0].msg,
-          ),
-        )
+        const data = response.data as ErrorValidationSchema
+        notificationStore.addWarn(languageStore.l.notification.warn.createUpdateErrorInField(data.detail[0].loc[1], data.detail[0].msg))
       } else {
-        notificationStore.addWarn(response.data.detail)
+        const data = response.data as ErrorDetailSchema
+        notificationStore.addWarn(data.detail)
       }
     })
     .catch((error) => {

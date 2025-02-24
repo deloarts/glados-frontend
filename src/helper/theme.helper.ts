@@ -1,12 +1,15 @@
 import { usersRequest } from "@/requests/users";
 import { useUserStore } from "@/stores/user";
 
+import type { UserSchema } from "@/schemas/user";
+
 export function setTheme(theme: "dark" | "light") {
   const userStore = useUserStore();
   usersRequest.putUsersMeTheme(theme).then((response) => {
     userStore.get();
     if (response.status == 200) {
-      if (response.data.theme == "dark") {
+      const data = response.data as UserSchema
+      if (data.theme == "dark") {
         setDark();
       } else {
         setLight();

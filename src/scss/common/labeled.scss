@@ -49,6 +49,10 @@
   cursor: help;
 }
 
+.labeled-label.error {
+  border-color: var(--main-red);
+}
+
 .labeled-input {
   width: calc(100% - 15px);
   height: calc(100% - 12px);
@@ -85,4 +89,5 @@
 .labeled-input:focus + .labeled-label {
   color: white;
   background-color: var(--main-color);
+  border-color: var(--main-color);
 }

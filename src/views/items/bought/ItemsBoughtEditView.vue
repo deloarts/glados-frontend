@@ -11,7 +11,7 @@ import { useUserStore } from '@/stores/user'
 import { useProjectsStore } from '@/stores/projects'
 import { useStatusStore } from '@/stores/status'
 
-import type { BoughtItemUpdateSchema } from '@/schemas/boughtItem'
+import type { BoughtItemSchema, BoughtItemUpdateSchema } from '@/schemas/boughtItem'
 
 import ControlsEdit from '@/components/items/bought/ControlsEdit.vue'
 import UpdateItemForm from '@/components/items/bought/UpdateItemForm.vue'
@@ -77,14 +77,13 @@ onBeforeMount(() => {
     .getItemsID(Number(itemID))
     .then((response) => {
       if (response.status === 200) {
-        itemStatus.value = response.data.status
-        itemCreatorID.value = response.data.creator_id
-        formData.value = response.data
+        const data = response.data as BoughtItemSchema
+        itemStatus.value = data.status
+        itemCreatorID.value = data.creator_id
+        formData.value = data
       } else {
         notificationStore.addWarn(languageStore.l.notification.warn.failedFetchItem(itemID))
-        setTimeout(function () {
-          router.push({ name: 'BoughtItems' })
-        }, 4000)
+        setTimeout(function () { router.push({ name: 'BoughtItems' }) }, 4000)
       }
     })
     .catch((error) => {

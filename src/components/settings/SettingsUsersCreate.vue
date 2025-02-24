@@ -7,6 +7,7 @@ import { useUsersStore, useUserStore } from '@/stores/user'
 import { usersRequest } from '@/requests/users'
 
 import type { UserCreateSchema } from '@/schemas/user'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 import Toggle from '@vueform/toggle'
 import LabeledInput from '@/components/elements/LabeledInput.vue'
@@ -48,14 +49,11 @@ function createUser() {
         password: '',
         rfid: null,
       }
-      // } else if (response.status == 403) {
-      //   notificationStore.addWarn("Not enough permission");
-      // } else if (response.status == 406) {
-      //   notificationStore.addWarn(response.data.detail);
     } else if (response.status == 422) {
       notificationStore.addWarn(languageStore.l.notification.warn.userDataIncomplete)
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
   })
 }
@@ -139,7 +137,7 @@ function createUser() {
 @use '@/scss/grid/gridBase.scss';
 
 #grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 25px 25px 25px 25px 50px;
+  grid-template-rows: 50px 50px 50px 50px 50px 25px 25px 25px 25px auto;
   grid-template-columns: 50px auto;
   grid-template-areas:
     'username username'

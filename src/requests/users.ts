@@ -1,43 +1,49 @@
 import { request, requestConfig } from './index'
-import type { UserCreateSchema, UserUpdateSchema } from '@/schemas/user'
 import config from '@/config'
+import constants from '@/constants'
+
+import type { AxiosResponse } from 'axios'
+import type { UserSchema, UserCreateSchema, UserUpdateSchema } from '@/schemas/user'
+import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 export class UsersRequest {
   // GET
-  getUsers() {
-    return request.get('/api/web/v1/users/', requestConfig(null))
+  async getUsers(): Promise<AxiosResponse<UserSchema[]>> {
+    return request.get(constants.apiUsers, requestConfig(null))
   }
-  getUsersMe() {
-    return request.get('/api/web/v1/users/me/', requestConfig(null))
+  async getUsersMe(): Promise<AxiosResponse<UserSchema>> {
+    return request.get(`${constants.apiUsers}/me/`, requestConfig(null))
   }
-  getUsersID(id: Number) {
-    return request.get(`/api/web/v1/users/${id}/`, requestConfig(null))
+  async getUsersID(id: number): Promise<AxiosResponse<UserSchema | ErrorDetailSchema>> {
+    return request.get(`${constants.apiUsers}/${id}/`, requestConfig(null))
   }
 
   // POST
-  postUsers(data: UserCreateSchema) {
-    return request.post('/api/web/v1/users/', requestConfig(null), data)
+  async postUsers(data: UserCreateSchema): Promise<AxiosResponse<UserSchema | ErrorDetailSchema | ErrorValidationSchema>> {
+    return request.post(constants.apiUsers, requestConfig(null), data)
   }
 
   // PUT
-  putUsers(id: Number, data: UserUpdateSchema) {
-    return request.put(`/api/web/v1/users/${id}/`, requestConfig(null), data)
+  async putUsers(id: number, data: UserUpdateSchema): Promise<AxiosResponse<UserSchema | ErrorDetailSchema | ErrorValidationSchema>> {
+    return request.put(`${constants.apiUsers}/${id}/`, requestConfig(null), data)
   }
-  putUsersMe(data: UserUpdateSchema) {
-    return request.put(`/api/web/v1/users/me/`, requestConfig(null), data)
+  async putUsersMe(data: UserUpdateSchema): Promise<AxiosResponse<UserSchema | ErrorDetailSchema | ErrorValidationSchema>> {
+    return request.put(`${constants.apiUsers}/me/`, requestConfig(null), data)
   }
-  putUsersMePAT() {
-    return request.put(
-      `/api/web/v1/users/me/personal-access-token`,
-      requestConfig({ expires_in_minutes: config.patExpireMinutes }),
-      null,
-    )
+  async putUsersMePAT(): Promise<AxiosResponse<string | ErrorDetailSchema>> {
+    const params = new URLSearchParams()
+    params.append('expires_in_minutes', config.patExpireMinutes.toString())
+    return request.put(`${constants.apiUsers}/me/personal-access-token`, requestConfig(params), null)
   }
-  putUsersMeLanguage(language: string) {
-    return request.put(`/api/web/v1/users/me/language`, requestConfig({ language: language }), null)
+  async putUsersMeLanguage(language: string): Promise<AxiosResponse<UserSchema | ErrorDetailSchema>> {
+    const params = new URLSearchParams()
+    params.append('language', language)
+    return request.put(`${constants.apiUsers}/me/language`, requestConfig(params), null)
   }
-  putUsersMeTheme(theme: string) {
-    return request.put(`/api/web/v1/users/me/theme`, requestConfig({ theme: theme }), null)
+  async putUsersMeTheme(theme: string): Promise<AxiosResponse<UserSchema | ErrorDetailSchema>> {
+    const params = new URLSearchParams()
+    params.append('theme', theme)
+    return request.put(`${constants.apiUsers}/me/theme`, requestConfig(params), null)
   }
 }
 

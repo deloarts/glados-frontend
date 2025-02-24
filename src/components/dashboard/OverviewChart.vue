@@ -27,7 +27,7 @@ const chartData = computed(() => {
     datasets: [
       {
         borderColor: [
-          'rgba(37, 204, 247, 1)',
+          'rgba(54, 162, 235, 0.8)',
           'rgba(240, 150, 70, 1)',
           'rgba(206, 192, 0, 1)',
           'rgba(250, 100, 80, 1)',
@@ -37,7 +37,7 @@ const chartData = computed(() => {
           'rgba(255, 55, 55, 1)',
         ],
         backgroundColor: [
-          'rgba(37, 204, 247, 1)',
+          'rgba(54, 162, 235, 0.8)',
           'rgba(240, 150, 70, 1)',
           'rgba(206, 192, 0, 1)',
           'rgba(250, 100, 80, 1)',
@@ -73,8 +73,8 @@ const chartOptions = ref({
 
 function updateChart() {
   if (props.dataset != null) {
-    var data = []
-    var labels = []
+    const data = []
+    const labels = []
     for (const key in props.dataset) {
       labels.push(key)
       data.push(props.dataset[key])

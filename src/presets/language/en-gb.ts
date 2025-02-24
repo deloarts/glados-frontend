@@ -1,21 +1,80 @@
 import type { Language } from '@/models/language'
 
 export const enGB: Language = {
+  common: {
+    days: {
+      monday: 'Monday',
+      tuesday: 'Tuesday',
+      wednesday: 'Wednesday',
+      thursday: 'Thursday',
+      friday: 'Friday',
+      saturday: 'Saturday',
+      sunday: 'Sunday',
+    },
+    shortDays: {
+      monday: 'MON',
+      tuesday: 'TUE',
+      wednesday: 'WED',
+      thursday: 'THU',
+      friday: 'FRI',
+      saturday: 'SAT',
+      sunday: 'SUN',
+    },
+    months: {
+      january: 'January',
+      february: 'February',
+      march: 'March',
+      april: 'April',
+      may: 'May',
+      june: 'June',
+      july: 'July',
+      august: 'August',
+      september: 'September',
+      october: 'October',
+      november: 'November',
+      december: 'December',
+    },
+    shortMonths: {
+      january: 'JAN',
+      february: 'FEB',
+      march: 'MAR',
+      april: 'APR',
+      may: 'MAY',
+      june: 'JUN',
+      july: 'JUL',
+      august: 'AUG',
+      september: 'SEP',
+      october: 'OCT',
+      november: 'NOV',
+      december: 'DEC',
+    },
+  },
   notification: {
     info: {
       reconnectedToServer: 'Reconnected to the server',
       welcomeMessage: (name: '') => {
         return `Welcome ${name}`
       },
+      loggedInNow: 'Logged you in now',
+      loggedOutNow: 'Logged you out now',
       savedNewFilter: 'Saved new filter',
       createdNewPAT: 'Created new token',
       createdUser: 'Created new user',
+      createdEntry: 'Created new entry',
       updatedUserData: 'Updated user data',
+      onlyAdminCanChangeUsername: 'The username can only be changed by an admin user',
+      updatedEntry: 'Updated entry',
       cannotUpdateSystemUser: 'Systemuser cannot be updated',
+      selectEntryFirst: 'Select an entry first',
       selectProjectFirst: 'Select a project first',
+      onlyEditOneEntry: 'You can only edit one entry',
       onlyEditOneProject: 'You can only edit one project',
       onlyExportOneProject: 'You can only export one project',
+      onlyDeleteOneEntry: 'You can only delete one entry',
       onlyDeleteOneProject: 'You can only delete one project',
+      deletedEntry: (id: number) => {
+        return `Deleted entry #${id}`
+      },
       deletedProject: (id: number) => {
         return `Deleted project #${id}`
       },
@@ -48,6 +107,8 @@ export const enGB: Language = {
       copiedUrlToClipboard: 'Copied URL to clipboard',
       createdApiKey: 'Created API key',
       deletedApiKey: 'Deleted API key',
+      sentTestMail: 'Test mail is on its way',
+      removeCardToLogout: 'Remove your RFID chip to logout',
     },
     warn: {
       lostServerConnection: 'Lost server connection',
@@ -72,6 +133,10 @@ export const enGB: Language = {
       noLogForThisDay: 'There is no log file for this day',
       failedToFetchLog: 'Failed to fetch the log file',
       apiKeyDataIncomplete: 'Data incomplete',
+      mailingDisabled: 'Mailing is disabled',
+      receiverNotGiven: "I don't know where to send the test mail",
+      rfidDeviceDisconnected: 'RFID reader has been disconnected',
+      rfidHostDisconnected: 'RFID-Host has been disconnected',
     },
   },
   main: {
@@ -98,6 +163,7 @@ export const enGB: Language = {
       projects: 'Projects',
       boughtItems: 'Bought Items',
       account: 'Account',
+      userTime: 'Time Logger',
       tools: 'Tools',
       settings: 'Settings',
     },
@@ -124,20 +190,6 @@ export const enGB: Language = {
       canceled: 'Canceled',
       lost: 'Lost',
     },
-    months: {
-      january: 'JAN',
-      february: 'FEB',
-      march: 'MAR',
-      april: 'APR',
-      may: 'MAY',
-      june: 'JUN',
-      july: 'JUL',
-      august: 'AUG',
-      september: 'SEP',
-      october: 'OCT',
-      november: 'NOV',
-      december: 'DEC',
-    },
     banner: {
       showingItems: 'Showing all items that have been edited within the last 30 days.',
     },
@@ -145,21 +197,32 @@ export const enGB: Language = {
   account: {
     banner: {
       myAccount: 'My Account',
+      security: 'Security',
       pat: 'Personal Access Token',
       patCreationWarning: 'Creating a new token renders the current token invalid.',
+      patInfo: 'Token expiration date: ',
       rfidInfo: 'There is a RFID tag linked to this account',
     },
     button: {
       myAccount: 'My Account',
+      security: 'Security',
       pat: 'Access Key',
       save: 'Save',
       newToken: 'New Token',
+    },
+    option: {
+      logMeOut: 'Automatically log me out',
+      keepMeLoggedIn: 'Keep me logged in',
     },
     input: {
       usernamePlaceholder: 'Username',
       fullNamePlaceholder: 'Full Name',
       emailPlaceholder: 'Mail',
       passwordPlaceholder: 'Password',
+      workHoursPerWeekPlaceholder: 'Work hours per week',
+      autoBreakFromPlaceholder: 'Automatic break from (UTC)',
+      autoBreakToPlaceholder: 'Automatic break to (UTC)',
+      autoLogoutPlaceholder: 'When over midnight',
       languagePlaceholder: 'Language',
       patPlaceholder: 'Secret Token',
     },
@@ -370,6 +433,61 @@ export const enGB: Language = {
       notAllowedEditItemPlanned: 'You are not allowed to edit an item that is already planned.',
     },
   },
+  userTime: {
+    common: {
+      totalHoursThisWeek: 'Total hours this week',
+      sumForThisWeek: 'Sum for this week',
+      entriesForThisWeek: 'Entries for this week',
+    },
+    warnings: {
+      cannotCreateWhileLoggedIn: 'You cannot create an entry while you are logged in',
+      loginMustBeProvided: 'Login time must be provided',
+      loginMustBeToday: 'Login date must be today when no logout time is provided',
+      loginAfterLogout: 'Login time cannot be after logout time',
+    },
+    table: {
+      number: '#',
+      id: 'ID',
+      week: 'Week',
+      day: 'Day',
+      date: 'Date',
+      login: 'Login',
+      logout: 'Logout',
+      duration: 'Duration',
+      note: 'Note',
+    },
+    input: {
+      filterPlaceholder: 'Filter',
+      datePlaceholder: 'Date',
+      loginPlaceholder: 'Login Time',
+      logoutPlaceholder: 'Logout Time',
+      notePlaceholder: 'Note',
+    },
+    button: {
+      login: 'Login',
+      logout: 'Logout',
+      newEntry: 'New Entry',
+      editEntry: 'Edit Entry',
+      deleteEntry: 'Delete Entry',
+      unselect: 'Unselect',
+      sync: 'Sync',
+      views: 'Views',
+      columns: 'Columns',
+      clearFilter: 'Clear Filter',
+      create: 'Create',
+      update: 'Update',
+      cancel: 'Cancel',
+    },
+    options: {
+      showAll: 'Show All',
+      views: {
+        fixedHeight: 'Fixed Height',
+      },
+    },
+    prompt: {
+      deleteEntry: 'Delete Entry?',
+    },
+  },
   tools: {
     banner: {
       stockCut1D: '1D Stock Cut Solver',
@@ -431,6 +549,8 @@ export const enGB: Language = {
     },
     config: {
       selectorButton: 'Config',
+      warning:
+        "A limit with the value 'null' means all entries will be loaded from the server! This can cause the browser to freeze.",
       banner: 'Configuration Files',
       create: 'Create Config',
       update: 'Update Config',
@@ -490,6 +610,21 @@ export const enGB: Language = {
         guestUser: 'Guest',
         rfid: 'RFID',
         createdDate: 'Created',
+      },
+    },
+    mailing: {
+      selectorButton: 'Mailing',
+      banner: 'Mail Configuration',
+      setupInfo:
+        'Mail config must be set in the servers config file. Check the installation documentation for more info.',
+      button: {
+        sendTestMail: 'Send Test',
+      },
+      input: {
+        serverPlaceholder: 'Server',
+        portPlaceholder: 'Port',
+        accountPlaceholder: 'Account',
+        receiverPlaceholder: 'Test Receiver',
       },
     },
     apiKeys: {

@@ -1,4 +1,5 @@
 import { ref, watch, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
@@ -10,6 +11,7 @@ import type { PageSchema } from '@/schemas/page'
 import type { ProjectSchema } from '@/schemas/project'
 
 export const useProjectsStore = defineStore('projects', () => {
+  const _route = useRoute()
   const _filterStore = useProjectFilterStore()
 
   const loading = ref<boolean>(false)
@@ -18,12 +20,12 @@ export const useProjectsStore = defineStore('projects', () => {
   const all = ref<ProjectSchema[]>([])
   const active = ref<ProjectSchema[]>([])
   const inactive = ref<ProjectSchema[]>([])
-  const page = ref<PageSchema>({ total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
+  const page = ref<PageSchema<ProjectSchema>>({ items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
     selectedIDs.value = []
   }
 
@@ -38,7 +40,7 @@ export const useProjectsStore = defineStore('projects', () => {
 
   function clearItems() {
     items.value = []
-    page.value = { total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
+    page.value = { items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 }
   }
 
   function getSelection(): Array<number> {
@@ -60,13 +62,7 @@ export const useProjectsStore = defineStore('projects', () => {
       loading.value = false
       if (response.status === 200) {
         items.value = response.data.items
-        page.value = {
-          total: response.data.total,
-          limit: response.data.limit,
-          skip: response.data.skip,
-          pages: response.data.pages,
-          current: response.data.current,
-        }
+        page.value = response.data
         console.log('Projects store got data from server.')
       }
       return response
@@ -125,6 +121,12 @@ export const useProjectsStore = defineStore('projects', () => {
     return null
   }
 
+  onBeforeMount(() => {
+    clear()
+    getAll()
+    fetchItems()
+  })
+
   watch(
     () => _filterStore.state.limit,
     async () => {
@@ -146,11 +148,10 @@ export const useProjectsStore = defineStore('projects', () => {
     { deep: true },
   )
 
-  onBeforeMount(() => {
-    clear()
-    getAll()
-    fetchItems()
+  watch(_route, () => {
+    paused.value = !(_route.path.includes('projects'))
   })
+
 
   return {
     loading,

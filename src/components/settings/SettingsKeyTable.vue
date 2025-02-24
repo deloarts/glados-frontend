@@ -3,7 +3,6 @@ import { onMounted } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
 import { useApiKeysStore } from '@/stores/apiKeys'
-import moment from 'moment'
 
 // Props & Emits
 const props = defineProps<{
@@ -24,7 +23,7 @@ function onSelect(id: number) {
   emit('update:selectedKeyID', id)
 }
 
-function shortKey(value: String) {
+function shortKey(value: string) {
   return `${value.slice(0, 10)} ... ${value.slice(-10)}`
 }
 

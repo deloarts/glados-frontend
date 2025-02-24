@@ -16,3 +16,13 @@ export function calcDiffInWeeksFromToday(toDate: Date | null) {
   const to = moment(toDate)
   return to.diff(moment(), 'week')
 }
+
+export function getCurrentWeekDates(): Array<string> {
+  const currentDate = moment()
+  const weekStart = currentDate.clone().startOf('isoWeek')
+  const days: Array<string> = []
+  for (let i = 0; i <= 6; i++) {
+    days.push(moment(weekStart).add(i, 'days').format('YYYY-MM-DD'))
+  }
+  return days
+}

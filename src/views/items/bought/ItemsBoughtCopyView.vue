@@ -8,7 +8,7 @@ import { boughtItemsRequest } from '@/requests/items'
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 
-import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
+import type { BoughtItemSchema, BoughtItemCreateSchema } from '@/schemas/boughtItem'
 
 import ControlsNew from '@/components/items/bought/ControlsNew.vue'
 import UpdateItemForm from '@/components/items/bought/UpdateItemForm.vue'
@@ -37,17 +37,15 @@ const formData = ref<BoughtItemCreateSchema>({
 
 onMounted(() => {
   const itemID = route.params.id
-
   boughtItemsRequest
     .getItemsID(Number(itemID))
     .then((response) => {
       if (response.status === 200) {
-        formData.value = response.data
+        const data = response.data as BoughtItemSchema
+        formData.value = data
       } else {
         notificationStore.addWarn(languageStore.l.notification.warn.failedFetchItem(itemID))
-        setTimeout(function () {
-          router.push({ name: 'BoughtItems' })
-        }, 4000)
+        setTimeout(function () { router.push({ name: 'BoughtItems' }) }, 4000)
       }
     })
     .catch(() => {})

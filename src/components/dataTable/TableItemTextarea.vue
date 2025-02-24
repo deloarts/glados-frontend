@@ -1,3 +1,5 @@
+<!-- eslint-disable @typescript-eslint/no-unsafe-function-type -->
+
 <script setup lang="ts">
 import { ref, watch, computed, onMounted } from 'vue'
 
@@ -58,10 +60,8 @@ const cssWidth = computed<string>(() => {
 })
 
 function resizeTextarea(event: Event) {
-  var textarea = event.target
-  //@ts-ignore
+  const textarea = event.target as HTMLTextAreaElement
   textarea.style.height = '18px'
-  //@ts-ignore
   textarea.style.height = textarea.scrollHeight + 'px'
 }
 
@@ -69,11 +69,10 @@ function onEscape() {
   blur()
 }
 
-function onEnter(event: Event) {
+function onEnter(event: KeyboardEvent) {
   if (!props.updateMethod || !props.itemStore) {
     return
   }
-  //@ts-ignore
   if (event.keyCode == 13 && !event.shiftKey) {
     blur()
     updateSelectedTableElement(
@@ -100,6 +99,21 @@ function onContextMenu() {
   blur()
   computedFilterStore.value.state[props.filterStoreKey] = String(inputModel.value)
   props.itemStore.getItems()
+}
+
+function onFocusIn(event: Event) {
+  if (props.itemStore) {
+    props.itemStore.pause(true)
+  }
+  hasFocus.value = true
+  resizeTextarea(event)
+}
+
+function onFocusOut() {
+  if (props.itemStore) {
+    props.itemStore.pause(false)
+  }
+  hasFocus.value = false
 }
 
 onMounted(() => {
@@ -142,8 +156,8 @@ watch(
         v-on:keyup.escape="onEscape()"
         v-on:keyup.enter="onEnter($event)"
         @input="resizeTextarea($event)"
-        @focusin="itemStore.pause(true), (hasFocus = true), resizeTextarea($event)"
-        @focusout="itemStore.pause(false), (hasFocus = false)"
+        @focusin="onFocusIn($event)"
+        @focusout="onFocusOut()"
         v-bind:class="{ editing: props.value != inputModel }"
       ></textarea>
     </div>

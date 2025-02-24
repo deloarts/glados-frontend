@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-// @ts-ignore
 import moment from 'moment'
 
 import Datepicker from '@vuepic/vue-datepicker'
@@ -51,7 +50,7 @@ const formatPickedDate = (pickedDate: Date) => {
             :clearable="false"
             :placeholder="languageStore.l.settings.logs.input.datePlaceholder"
             :dark="userStore.user.theme == 'dark'"
-            :max-date="moment()"
+            :max-date="moment().toDate()"
           />
         </div>
       </div>

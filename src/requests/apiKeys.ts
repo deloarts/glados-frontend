@@ -1,23 +1,27 @@
 import { request, requestConfig } from './index'
-import type { ApiKeysCreateSchema } from '@/schemas/apiKeys'
+import constants from '@/constants'
+
+import type { AxiosResponse } from 'axios'
+import type { ApiKeysSchema, ApiKeysCreateSchema } from '@/schemas/apiKeys'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 export class ApiKeysRequest {
   // GET
-  getApiKeys() {
-    return request.get('/api/web/v1/api-keys/', requestConfig(null))
+  getApiKeys(): Promise<AxiosResponse<ApiKeysSchema[]>> {
+    return request.get(constants.apiApiKeys, requestConfig(null))
   }
-  getApiKeysID(id: Number) {
-    return request.get(`/api/web/v1/api-keys/${id}/`, requestConfig(null))
+  getApiKeysID(id: number): Promise<AxiosResponse<ApiKeysSchema>> {
+    return request.get(`${constants.apiApiKeys}/${id}/`, requestConfig(null))
   }
 
   // POST
-  postApiKeys(data: ApiKeysCreateSchema) {
-    return request.post('/api/web/v1/api-keys/', requestConfig(null), data)
+  postApiKeys(data: ApiKeysCreateSchema): Promise<AxiosResponse<ApiKeysSchema | ErrorDetailSchema>> {
+    return request.post(constants.apiApiKeys, requestConfig(null), data)
   }
 
   // DELETE
-  deleteApiKeys(id: Number) {
-    return request.delete(`/api/web/v1/api-keys/${id}/`, requestConfig(null))
+  deleteApiKeys(id: number): Promise<AxiosResponse<ApiKeysSchema>> {
+    return request.delete(`${constants.apiApiKeys}/${id}/`, requestConfig(null))
   }
 }
 

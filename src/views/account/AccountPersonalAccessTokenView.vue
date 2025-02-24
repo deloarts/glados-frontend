@@ -1,11 +1,20 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import moment from 'moment'
+import config from '@/config'
+
 import AccountControls from '@/components/account/AccountControls.vue'
 import AccountPersonalAccessToken from '@/components/account/AccountPersonalAccessToken.vue'
 import WarningForForm from '@/components/common/WarningForForm.vue'
+import InfoForForm from '@/components/common/InfoForForm.vue'
 
 import { useLanguageStore } from '@/stores/language'
 
 const languageStore = useLanguageStore()
+const expiration = computed<string>(() => {
+  const exTime = moment().add(config.patExpireMinutes, 'minutes').format('DD.MM.YYYY')
+  return `${languageStore.l.account.banner.patInfo}${exTime}`
+})
 </script>
 
 <template>
@@ -17,6 +26,9 @@ const languageStore = useLanguageStore()
         </div>
         <div class="grid-area-display">
           <AccountPersonalAccessToken />
+        </div>
+        <div class="grid-area-info">
+          <InfoForForm :text="expiration" />
         </div>
         <div class="grid-area-warning">
           <WarningForForm :text="languageStore.l.account.banner.patCreationWarning" />
@@ -32,10 +44,11 @@ const languageStore = useLanguageStore()
 
 .grid {
   grid-template-columns: 100%;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   grid-template-areas:
     'grid-area-controls'
     'grid-area-display'
+    'grid-area-info'
     'grid-area-warning';
 }
 
@@ -45,6 +58,10 @@ const languageStore = useLanguageStore()
 
 .grid-area-warning {
   grid-area: grid-area-warning;
+}
+
+.grid-area-info {
+  grid-area: grid-area-info;
 }
 
 .grid-area-display {

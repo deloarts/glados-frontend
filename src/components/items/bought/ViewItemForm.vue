@@ -34,7 +34,7 @@ function openLink() {
 
 <template>
   <div class="form-base-scope">
-    <div class="form-base-container">
+    <div class="form-base-container form-base-container-bottom-space">
       <div class="grid">
         <div id="status" class="grid-item-center">
           <LabeledInput
@@ -105,14 +105,9 @@ function openLink() {
             :placeholder="languageStore.l.boughtItem.input.weblinkPlaceholder"
             :disabled="true"
           />
-          <ButtonOpenLink
-            text=""
-            @click="openLink"
-            class="button-open-link"
-          />
+          <ButtonOpenLink text="" @click="openLink" class="button-open-link" />
         </div>
-        <div id="weblink-button" class="grid-item-center">
-        </div>
+        <div id="weblink-button" class="grid-item-center"></div>
         <div id="created" class="grid-item-center">
           <LabeledInput
             :value="props.itemData.created"
@@ -215,8 +210,6 @@ function openLink() {
     'ordered orderer note-supplier'
     'delivered receiver note-supplier'
     'storage storage note-supplier';
-
-  padding-bottom: 10px;
 }
 
 @media screen and (max-width: $max-width-desktop) {
@@ -253,7 +246,7 @@ function openLink() {
 
   margin-top: 18px;
   margin-right: 6px;
-  
+
   border-color: var(--input-border-color);
 }
 

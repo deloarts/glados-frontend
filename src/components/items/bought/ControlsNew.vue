@@ -7,7 +7,8 @@ import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useBoughtItemsStore } from '@/stores/boughtItems'
 
-import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
+import type { BoughtItemCreateSchema, BoughtItemSchema } from '@/schemas/boughtItem'
+import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
@@ -30,27 +31,21 @@ function onCreate() {
   boughtItemsRequest
     .postItems(props.formData)
     .then((response) => {
-      setTimeout(() => {
-        loadingCreate.value = false
-      }, 400)
-
+      setTimeout(() => { loadingCreate.value = false }, 400)
       if (response.status === 200) {
+        const data = response.data as BoughtItemSchema
         notificationStore.addInfo(languageStore.l.notification.info.createdItem)
+        console.log(data.created)
         boughtItemsStore.getItems()
         router.push({ name: 'BoughtItems' })
       }
-      // else if (response.status === 403) {
-      //   notificationStore.addWarn("Not enough permission"
-      // }
       else if (response.status === 422) {
+        const data = response.data as ErrorValidationSchema
         notificationStore.addWarn(
-          languageStore.l.notification.warn.createUpdateErrorInField(
-            response.data.detail[0].loc[1],
-            response.data.detail[0].msg,
-          ),
-        )
+          languageStore.l.notification.warn.createUpdateErrorInField(data.detail[0].loc[1], data.detail[0].msg))
       } else {
-        notificationStore.addWarn(response.data.detail)
+        const data = response.data as ErrorDetailSchema
+        notificationStore.addWarn(data.detail)
       }
     })
     .catch((error) => {

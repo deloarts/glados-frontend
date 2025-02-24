@@ -1,60 +1,81 @@
-import { request, requestConfig } from "./index";
+import { request, requestConfig } from './index'
+import constants from '@/constants'
+
+import type { AxiosResponse } from 'axios'
+import type {
+  HostConfigInfoSchema,
+  HostConfigBoughtItemsUnitsSchema,
+  HostConfigBoughtItemsStatusSchema,
+  HostConfigBoughtItemsFilterSchema,
+  HostConfigBoughtItemsFilterPresetsSchema,
+  HostConfigMailSchema,
+} from '@/schemas/host'
+import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 export class HostRequest {
   // GET
-  getHostInfo() {
-    return request.get("/api/web/v1/host/info", requestConfig(null));
+  getHostInfo(): Promise<AxiosResponse<HostConfigInfoSchema>> {
+    return request.get(`${constants.apiHost}/info`, requestConfig(null))
   }
-  getConfigItemsBoughtStatus() {
-    return request.get(
-      "/api/web/v1/host/config/items/bought/status",
-      requestConfig(null),
-    );
+  getHostConfigMail(): Promise<AxiosResponse<HostConfigMailSchema | ErrorDetailSchema>> {
+    return request.get(`${constants.apiHost}/config/mailing`, requestConfig(null))
   }
-  getConfigItemsBoughtUnits() {
-    return request.get(
-      "/api/web/v1/host/config/items/bought/units",
-      requestConfig(null),
-    );
+  getConfigItemsBoughtStatus(): Promise<AxiosResponse<HostConfigBoughtItemsStatusSchema>> {
+    return request.get(`${constants.apiHost}/config/items/bought/status`, requestConfig(null))
   }
-  getConfigItemsBoughtFilters() {
-    return request.get(
-      "/api/web/v1/host/config/items/bought/filters",
-      requestConfig(null),
-    );
+  getConfigItemsBoughtUnits(): Promise<AxiosResponse<HostConfigBoughtItemsUnitsSchema>> {
+    return request.get(`${constants.apiHost}/config/items/bought/units`, requestConfig(null))
   }
-  getConfigItemsBoughtFiltersDefault() {
+  getConfigItemsBoughtFilters(): Promise<AxiosResponse<HostConfigBoughtItemsFilterPresetsSchema>> {
+    return request.get(`${constants.apiHost}/config/items/bought/filters`, requestConfig(null))
+  }
+  getConfigItemsBoughtFiltersDefault(): Promise<AxiosResponse<HostConfigBoughtItemsFilterSchema>> {
     return request.get(
-      "/api/web/v1/host/config/items/bought/filters/default",
+      `${constants.apiHost}/config/items/bought/filters/default`,
       requestConfig(null),
-    );
+    )
   }
 
   // POST
-  postConfigItemsBoughtFilter(name: string, data: object) {
+  postConfigItemsBoughtFilter(
+    name: string,
+    data: HostConfigBoughtItemsFilterSchema,
+  ): Promise<AxiosResponse<HostConfigBoughtItemsFilterSchema | ErrorDetailSchema>> {
     return request.post(
       `/api/web/v1/host/config/items/bought/filters/${name}`,
       requestConfig(null),
       data,
-    );
+    )
+  }
+  postSendTestMail(
+    receiver: string,
+  ): Promise<AxiosResponse<HostConfigMailSchema | ErrorDetailSchema | ErrorValidationSchema>> {
+    const params = new URLSearchParams()
+    params.append('receiver', receiver)
+    return request.post(`${constants.apiHost}/config/mailing/test`, requestConfig(params), null)
   }
 
   // PUT
-  putConfigItemsBoughtFilter(name: string, data: object) {
+  putConfigItemsBoughtFilter(
+    name: string,
+    data: HostConfigBoughtItemsFilterSchema,
+  ): Promise<AxiosResponse<HostConfigBoughtItemsFilterSchema | ErrorDetailSchema>> {
     return request.put(
       `/api/web/v1/host/config/items/bought/filters/${name}`,
       requestConfig(null),
       data,
-    );
+    )
   }
 
   // DELETE
-  deleteConfigItemsBoughtFilter(name: string) {
+  deleteConfigItemsBoughtFilter(
+    name: string,
+  ): Promise<AxiosResponse<HostConfigBoughtItemsFilterSchema | ErrorDetailSchema>> {
     return request.delete(
       `/api/web/v1/host/config/items/bought/filters/${name}`,
       requestConfig(null),
-    );
+    )
   }
 }
 
-export const hostRequest = new HostRequest();
+export const hostRequest = new HostRequest()

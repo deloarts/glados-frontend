@@ -1,3 +1,31 @@
+export interface HostConfigInfoSpaceSchema {
+  db_total: number
+  db_used: number
+  db_free: number
+  db_path: string
+  backup_total: number
+  backup_used: number
+  backup_free: number
+  backup_path: string
+}
+
+export interface HostConfigInfoSchema {
+  now: Date
+  version: string
+  os: string
+  hostname: string
+  disc_space: HostConfigInfoSpaceSchema
+}
+
+export interface HostConfigMailSchema {
+  enabled: boolean
+  config: {
+    server: string
+    port: number
+    account: string
+  }
+}
+
 export interface HostConfigBoughtItemsUnitsSchema {
   default: string | null
   values: Array<string>
@@ -51,6 +79,10 @@ export interface HostConfigBoughtItemsFilterSchema {
   receiverID: number | null
 }
 
+export interface HostConfigBoughtItemsFilterPresetsSchema {
+  [key: string]: HostConfigBoughtItemsFilterSchema
+}
+
 export interface HostConfigProjectFilterSchema {
   skip: number | null
   limit: number | null
@@ -61,4 +93,14 @@ export interface HostConfigProjectFilterSchema {
   description: string | null
   isActive: boolean | null
   designatedUserID: number | null
+}
+
+export interface HostConfigUserTimeFilterSchema {
+  skip: number | null
+  limit: number | null
+  id: number | null
+  loginFrom: string | Date | null
+  loginTo: string | Date | null
+  logoutFrom: string | Date | null
+  logoutTo: string | Date | null
 }

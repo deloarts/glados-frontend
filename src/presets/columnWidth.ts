@@ -45,3 +45,15 @@ export const boughtItemColumnWidths = {
   totalWeeks: 61,
   storagePlace: 300,
 }
+
+export const userTimeColumnWidth = {
+  number: 45,
+  id: 55,
+  week: 80,
+  day: 100,
+  date: 100,
+  login: 100,
+  logout: 100,
+  duration: 100,
+  note: 350,
+}

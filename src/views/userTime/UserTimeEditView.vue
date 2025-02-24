@@ -3,7 +3,7 @@ import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
 
-import { userTimeRequest } from '@/requests/userTime'
+import { userTimeRequest } from '@/requests/api/userTime'
 
 import type { UserTimeUpdateSchema } from '@/schemas/userTime'
 

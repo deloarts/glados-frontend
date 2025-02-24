@@ -1,4 +1,4 @@
-import { request, requestConfig } from './index'
+import { request, requestConfig } from '@/requests/index'
 import constants from '@/constants'
 
 import type { AxiosResponse } from 'axios'
@@ -22,12 +22,17 @@ export class ProjectsRequest {
   }
 
   // POST
-  postProjects(data: ProjectCreateSchema): Promise<AxiosResponse<ProjectSchema | ErrorDetailSchema | ErrorValidationSchema>> {
+  postProjects(
+    data: ProjectCreateSchema,
+  ): Promise<AxiosResponse<ProjectSchema | ErrorDetailSchema | ErrorValidationSchema>> {
     return request.post(constants.apiProjects, requestConfig(null), data)
   }
 
   // PUT
-  putProjects(id: number, data: ProjectUpdateSchema): Promise<AxiosResponse<ProjectSchema | ErrorDetailSchema | ErrorValidationSchema>> {
+  putProjects(
+    id: number,
+    data: ProjectUpdateSchema,
+  ): Promise<AxiosResponse<ProjectSchema | ErrorDetailSchema | ErrorValidationSchema>> {
     return request.put(`${constants.apiProjects}/${id}/`, requestConfig(null), data)
   }
 

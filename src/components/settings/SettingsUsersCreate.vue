@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useUsersStore, useUserStore } from '@/stores/user'
-import { usersRequest } from '@/requests/users'
+import { usersRequest } from '@/requests/api/users'
 
 import type { UserCreateSchema } from '@/schemas/user'
 import type { ErrorDetailSchema } from '@/schemas/common'

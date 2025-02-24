@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 import router from '@/router/index'
 
-import { boughtItemsRequest } from '@/requests/items'
+import { boughtItemsRequest } from '@/requests/api/items'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'

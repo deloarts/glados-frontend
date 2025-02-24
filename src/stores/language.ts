@@ -1,7 +1,7 @@
 import { ref, watch, onBeforeMount } from 'vue'
 import { defineStore } from 'pinia'
 
-import { usersRequest } from '@/requests/users'
+import { usersRequest } from '@/requests/api/users'
 
 import type { AvailableOption } from '@/models/controls'
 import type { Language } from '@/models/language'

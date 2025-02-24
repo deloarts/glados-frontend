@@ -4,9 +4,9 @@ import { defineStore } from 'pinia'
 
 import constants from '@/constants'
 
-import { userTimeRequest } from '@/requests/userTime'
+import { userTimeRequest } from '@/requests/api/userTime'
 import { useUserTimeFilterStore } from '@/stores/filter'
-import { getUserTimeFilterParams } from '@/requests/params'
+import { getUserTimeFilterParams } from '@/requests/urlSearchParams/userTime'
 
 import type { PageSchema } from '@/schemas/page'
 import type { UserTimeSchema } from '@/schemas/userTime'

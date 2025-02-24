@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
 
-import { projectsRequest } from '@/requests/projects'
+import { projectsRequest } from '@/requests/api/projects'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -37,14 +37,21 @@ function onUpdate() {
   projectsRequest
     .putProjects(projectID, props.formData)
     .then((response) => {
-      setTimeout(() => { loadingUpdate.value = false }, 400)
+      setTimeout(() => {
+        loadingUpdate.value = false
+      }, 400)
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.updatedProject(projectID))
         projectsStore.getItems()
         router.push({ name: 'Projects' })
       } else if (response.status === 422) {
         const data = response.data as ErrorValidationSchema
-        notificationStore.addWarn(languageStore.l.notification.warn.createUpdateErrorInField(data.detail[0].loc[1], data.detail[0].msg))
+        notificationStore.addWarn(
+          languageStore.l.notification.warn.createUpdateErrorInField(
+            data.detail[0].loc[1],
+            data.detail[0].msg,
+          ),
+        )
       } else {
         const data = response.data as ErrorDetailSchema
         notificationStore.addWarn(data.detail)

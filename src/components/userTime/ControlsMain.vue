@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 
 import router from '@/router/index'
-import { userTimeRequest } from '@/requests/userTime'
+import { userTimeRequest } from '@/requests/api/userTime'
 
 import { useLanguageStore } from '@/stores/language'
 import { useUserTimeStore } from '@/stores/userTime'

@@ -1,4 +1,4 @@
-import { request, requestConfig } from './index'
+import { request, requestConfig } from '@/requests/index'
 import constants from '@/constants'
 
 import type { AxiosResponse } from 'axios'
@@ -15,7 +15,9 @@ export class ApiKeysRequest {
   }
 
   // POST
-  postApiKeys(data: ApiKeysCreateSchema): Promise<AxiosResponse<ApiKeysSchema | ErrorDetailSchema>> {
+  postApiKeys(
+    data: ApiKeysCreateSchema,
+  ): Promise<AxiosResponse<ApiKeysSchema | ErrorDetailSchema>> {
     return request.post(constants.apiApiKeys, requestConfig(null), data)
   }
 

@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 import constants from '@/constants'
 import router from '@/router/index'
-import { usersRequest } from '@/requests/users'
+import { usersRequest } from '@/requests/api/users'
 
 import type { AvailableOption } from '@/models/controls'
 import type { UserSchema } from '@/schemas/user'

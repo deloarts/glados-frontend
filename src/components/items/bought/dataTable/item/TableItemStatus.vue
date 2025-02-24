@@ -7,7 +7,7 @@ import TableItemSelect from '@/components/dataTable/TableItemSelect.vue'
 
 import { boughtItemColumnWidths } from '@/presets/columnWidth'
 
-import { boughtItemsRequest } from '@/requests/items'
+import { boughtItemsRequest } from '@/requests/api/items'
 
 import { useLanguageStore } from '@/stores/language'
 import { useBoughtItemsStore } from '@/stores/boughtItems'

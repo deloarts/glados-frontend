@@ -3,8 +3,8 @@ import { useRoute } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
-import { boughtItemsRequest } from '@/requests/items'
-import { getBoughtItemsFilterParams } from '@/requests/params'
+import { boughtItemsRequest } from '@/requests/api/items'
+import { getBoughtItemsFilterParams } from '@/requests/urlSearchParams/items'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'

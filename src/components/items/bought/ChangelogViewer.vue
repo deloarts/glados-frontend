@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
-import { boughtItemsRequest } from '@/requests/items'
+import { boughtItemsRequest } from '@/requests/api/items'
 
 import LabeledTextarea from '@/components/elements/LabeledTextarea.vue'
 

@@ -2,7 +2,7 @@ import { ref, watch, onBeforeMount } from 'vue'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
-import { hostRequest } from '@/requests/host'
+import { hostRequest } from '@/requests/api/host'
 import { boughtItemsFilter } from '@/presets/boughtItemsFilter'
 import { projectsFilter, projectsFilterAll } from '@/presets/projectsFilter'
 import { userTimeFilter, userTimeFilterAll } from '@/presets/userTimeFilter'
@@ -12,13 +12,15 @@ import type {
   HostConfigBoughtItemsFilterSchema,
   HostConfigProjectFilterSchema,
   HostConfigUserTimeFilterSchema,
-  HostConfigBoughtItemsFilterPresetsSchema
+  HostConfigBoughtItemsFilterPresetsSchema,
 } from '@/schemas/host'
 
 export const useBoughtItemFilterStore = defineStore('boughtItemFilter', () => {
   const loading = ref<boolean>(false)
   const presets = ref<HostConfigBoughtItemsFilterPresetsSchema>({})
-  const state = ref<HostConfigBoughtItemsFilterSchema>(JSON.parse(JSON.stringify(boughtItemsFilter)))
+  const state = ref<HostConfigBoughtItemsFilterSchema>(
+    JSON.parse(JSON.stringify(boughtItemsFilter)),
+  )
   const filterApplied = ref<boolean>(false)
 
   function set(key: string, value: boolean | number | string | Date | null | undefined) {
@@ -209,4 +211,3 @@ export const useUserTimeFilterStore = defineStore('userTimeFilter', () => {
 
   return { state, all, filterApplied, set, reset }
 })
-

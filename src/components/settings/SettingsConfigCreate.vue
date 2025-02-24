@@ -2,7 +2,7 @@
 import { ref, watch, computed } from 'vue'
 import JsonEditor from 'vue3-ts-jsoneditor'
 
-import { hostRequest } from '@/requests/host'
+import { hostRequest } from '@/requests/api/host'
 
 import { useLanguageStore } from '@/stores/language'
 import { useUserStore } from '@/stores/user'

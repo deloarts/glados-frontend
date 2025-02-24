@@ -10,8 +10,8 @@ import { useBoughtItemsStore } from '@/stores/boughtItems'
 import { useNotificationStore } from '@/stores/notification'
 import { useUserStore } from '@/stores/user'
 import { useResolutionStore } from '@/stores/resolution'
-import { boughtItemsRequest } from '@/requests/items'
-import { getBoughtItemsFilterParams } from '@/requests/params'
+import { boughtItemsRequest } from '@/requests/api/items'
+import { getBoughtItemsFilterParams } from '@/requests/urlSearchParams/items'
 import { camelToTitle } from '@/helper/string.helper'
 
 import Prompt from '@/components/main/UserPrompt.vue'
@@ -188,8 +188,10 @@ function onButtonDownloadExcel() {
   const params = getBoughtItemsFilterParams(filterStore.state)
 
   boughtItemsRequest.getItemsExcel(params).then((response) => {
-    setTimeout(() => { loadExportExcel.value = false }, 400)
-      
+    setTimeout(() => {
+      loadExportExcel.value = false
+    }, 400)
+
     if (response.status == 200) {
       const data = response.data as BlobPart
       const blob = new Blob([data], {
@@ -301,11 +303,7 @@ onBeforeMount(setupTabletView)
         :text="languageStore.l.boughtItem.button.deleteItem"
         v-on:click="onButtonDelete"
       />
-      <ButtonView
-        class="controls-base-element"
-        :text="buttonViewText"
-        v-on:click="onButtonView"
-      />
+      <ButtonView class="controls-base-element" :text="buttonViewText" v-on:click="onButtonView" />
       <ButtonClear
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.unselect"

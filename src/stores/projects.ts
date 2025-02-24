@@ -3,9 +3,9 @@ import { useRoute } from 'vue-router'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
-import { projectsRequest } from '@/requests/projects'
+import { projectsRequest } from '@/requests/api/projects'
 import { useProjectFilterStore } from '@/stores/filter'
-import { getProjectFilterParams } from '@/requests/params'
+import { getProjectFilterParams } from '@/requests/urlSearchParams/projects'
 
 import type { PageSchema } from '@/schemas/page'
 import type { ProjectSchema } from '@/schemas/project'
@@ -20,7 +20,14 @@ export const useProjectsStore = defineStore('projects', () => {
   const all = ref<ProjectSchema[]>([])
   const active = ref<ProjectSchema[]>([])
   const inactive = ref<ProjectSchema[]>([])
-  const page = ref<PageSchema<ProjectSchema>>({ items: [], total: 0, limit: 0, skip: 0, pages: 1, current: 1 })
+  const page = ref<PageSchema<ProjectSchema>>({
+    items: [],
+    total: 0,
+    limit: 0,
+    skip: 0,
+    pages: 1,
+    current: 1,
+  })
   const selectedIDs = ref<Array<number>>([])
 
   function clear() {
@@ -149,9 +156,8 @@ export const useProjectsStore = defineStore('projects', () => {
   )
 
   watch(_route, () => {
-    paused.value = !(_route.path.includes('projects'))
+    paused.value = !_route.path.includes('projects')
   })
-
 
   return {
     loading,

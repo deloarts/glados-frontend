@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import router from '@/router/index'
-import { projectsRequest } from '@/requests/projects'
+import { projectsRequest } from '@/requests/api/projects'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -41,7 +41,9 @@ onMounted(() => {
         formData.value = data
       } else {
         notificationStore.addWarn(languageStore.l.notification.warn.failedFetchProject(projectID))
-        setTimeout(function () { router.push({ name: 'Projects' }) }, 4000)
+        setTimeout(function () {
+          router.push({ name: 'Projects' })
+        }, 4000)
       }
     })
     .catch(() => {})

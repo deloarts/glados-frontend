@@ -33,4 +33,5 @@ export default {
   apiUserTime: '/api/web/v1/user-time',
   apiProjects: '/api/web/v1/projects',
   apiBoughtItems: '/api/web/v1/items/bought',
+  apiTools: '/api/web/v1/tools',
 }

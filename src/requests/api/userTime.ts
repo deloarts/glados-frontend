@@ -1,4 +1,5 @@
-import { request, requestConfig } from './index'
+import { request } from '@/requests/index'
+import { requestConfig } from '@/requests/config'
 import constants from '@/constants'
 
 import type { AxiosResponse, AxiosError } from 'axios'
@@ -18,7 +19,9 @@ export class UserTimeRequest {
   }
 
   // POST
-  async postUserTime(data: UserTimeCreateSchema): Promise<AxiosResponse<UserTimeSchema> | AxiosError> {
+  async postUserTime(
+    data: UserTimeCreateSchema,
+  ): Promise<AxiosResponse<UserTimeSchema> | AxiosError> {
     return request.post(constants.apiUserTime, requestConfig(null), data)
   }
   async postUserTimeLogin(): Promise<AxiosResponse<UserTimeSchema>> {
@@ -29,8 +32,11 @@ export class UserTimeRequest {
   }
 
   // PUT
-  async putUserTimeByID(id: number, data: UserTimeUpdateSchema): Promise<AxiosResponse<UserTimeSchema>> {
-    return request.put(`${constants.apiUserTime}/${id}/`, requestConfig(null),data)
+  async putUserTimeByID(
+    id: number,
+    data: UserTimeUpdateSchema,
+  ): Promise<AxiosResponse<UserTimeSchema>> {
+    return request.put(`${constants.apiUserTime}/${id}/`, requestConfig(null), data)
   }
   async putUserTimeLogin(id: number, value: string): Promise<AxiosResponse<UserTimeSchema>> {
     const params = new URLSearchParams()
@@ -45,7 +51,11 @@ export class UserTimeRequest {
   async putUserTimeNote(id: number, value: string): Promise<AxiosResponse<UserTimeSchema>> {
     const params = new URLSearchParams()
     params.append('value', value)
-    return request.put(`${constants.apiUserTime}/${id}/field/optional/note/`, requestConfig(params), null)
+    return request.put(
+      `${constants.apiUserTime}/${id}/field/optional/note/`,
+      requestConfig(params),
+      null,
+    )
   }
 
   // DELETE

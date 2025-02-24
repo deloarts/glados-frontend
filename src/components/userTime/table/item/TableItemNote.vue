@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { UserTimeSchema } from "@/schemas/userTime";
+import type { UserTimeSchema } from '@/schemas/userTime'
 
-import TableItemInput from "@/components/dataTable/TableItemInput.vue";
+import TableItemInput from '@/components/dataTable/TableItemInput.vue'
 
-import { userTimeColumnWidth } from "@/presets/columnWidth";
+import { userTimeColumnWidth } from '@/presets/columnWidth'
 
-import { userTimeRequest } from "@/requests/userTime";
+import { userTimeRequest } from '@/requests/api/userTime'
 
-import { useUserTimeStore } from "@/stores/userTime";
+import { useUserTimeStore } from '@/stores/userTime'
 
-const userTimeStore = useUserTimeStore();
+const userTimeStore = useUserTimeStore()
 
 const props = defineProps<{
-  item: UserTimeSchema;
-  width: typeof userTimeColumnWidth;
-}>();
+  item: UserTimeSchema
+  width: typeof userTimeColumnWidth
+}>()
 </script>
 
 <template>
@@ -31,7 +31,3 @@ const props = defineProps<{
 </template>
 
 <style scoped lang="scss"></style>
-
-
-
-

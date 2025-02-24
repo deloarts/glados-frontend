@@ -84,12 +84,14 @@ const { pause, resume } = useIntervalFn(() => {
 }, 1000)
 
 function getCurrent(): Array<number> {
+  const diff =
+    moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() / 60
   const c = [0, 0, 0, 0, 0, 0, 0]
   let day = moment().day() - 1
   if (day < 0) {
     day = 6
   }
-  c[day] = moment.duration(moment().diff(moment.utc(userTimeStore.loggedInSince))).asMinutes() / 60
+  c[day] = diff < 0.1 ? 0.1 : diff
   current.value = c
   return c
 }

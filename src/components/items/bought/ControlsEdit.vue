@@ -36,13 +36,14 @@ function onUpdate() {
   const itemID = Number(route.params.id)
   boughtItemsRequest
     .putItems(itemID, props.formData)
-    .then((response) => {
+    .then(async (response) => {
+      await boughtItemsStore.get()
       setTimeout(() => {
         loadingUpdate.value = false
       }, 400)
+
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.updatedItem(itemID))
-        boughtItemsStore.getItems()
         router.push({ name: 'BoughtItems' })
       } else if (response.status === 422) {
         const data = response.data as ErrorValidationSchema
@@ -58,6 +59,7 @@ function onUpdate() {
       }
     })
     .catch((error) => {
+      loadingUpdate.value = false
       console.log(error)
       notificationStore.addWarn(error)
     })

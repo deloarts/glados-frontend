@@ -30,14 +30,14 @@ function onCreate() {
 
   projectsRequest
     .postProjects(props.formData)
-    .then((response) => {
+    .then(async (response) => {
+      await projectsStore.get()
       setTimeout(() => {
         loadingCreate.value = false
       }, 400)
 
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.createdProject)
-        projectsStore.getItems()
         router.push({ name: 'Projects' })
       } else if (response.status === 422) {
         const data = response.data as ErrorValidationSchema
@@ -53,6 +53,7 @@ function onCreate() {
       }
     })
     .catch((error) => {
+      loadingCreate.value = false
       console.log(error)
       notificationStore.addWarn(error)
     })

@@ -36,13 +36,14 @@ function onUpdate() {
   const projectID = Number(route.params.id)
   projectsRequest
     .putProjects(projectID, props.formData)
-    .then((response) => {
+    .then(async (response) => {
+      await projectsStore.get()
       setTimeout(() => {
         loadingUpdate.value = false
       }, 400)
+
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.updatedProject(projectID))
-        projectsStore.getItems()
         router.push({ name: 'Projects' })
       } else if (response.status === 422) {
         const data = response.data as ErrorValidationSchema
@@ -58,6 +59,7 @@ function onUpdate() {
       }
     })
     .catch((error) => {
+      loadingUpdate.value = false
       console.log(error)
       notificationStore.addWarn(error)
     })

@@ -134,6 +134,7 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     page,
     clear,
     pause,
+    get,
     getItems,
     clearItems,
     getSelection,

@@ -48,6 +48,7 @@ export const useUserStore = defineStore('user', () => {
       is_systemuser: false,
     }
     console.log('Logged out user')
+    router.push({ name: 'Login' })
   }
 
   async function get() {
@@ -62,9 +63,6 @@ export const useUserStore = defineStore('user', () => {
         } else {
           setLight()
         }
-      } else {
-        logout()
-        router.push({ name: 'Login' })
       }
       return response
     })

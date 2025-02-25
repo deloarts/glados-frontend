@@ -79,10 +79,6 @@ function login() {
 
 function logout() {
   userStore.logout()
-  usersStore.clear()
-  projectsStore.clear()
-  localStorage.setItem('gladosTokenValue', '')
-  localStorage.setItem('gladosTokenType', '')
 }
 
 function enterApp() {
@@ -179,7 +175,7 @@ onMounted(() => {
       <Transition name="fade">
         <LoadingBar
           key="loadingBar"
-          v-if="showLoadingBar && !hasRequiredData && !expandFull"
+          v-if="(showLoadingBar && !hasRequiredData && !expandFull) || rfidAuthStore.loading"
           class="loading-bar"
         />
       </Transition>

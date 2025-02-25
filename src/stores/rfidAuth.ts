@@ -2,7 +2,6 @@ import { ref, onMounted } from 'vue'
 import { defineStore } from 'pinia'
 import { v4 as uuid } from 'uuid'
 
-import router from '@/router/index'
 import config from '@/config'
 import { request } from '@/requests'
 import type { RfidAuthSchema } from '@/schemas/rfidAuth'
@@ -26,15 +25,16 @@ export const useRfidAuthStore = defineStore('rfidAuth', () => {
   const readerOK = ref<boolean>(false)
   // Used to track if current user is logged in
   const loggedIn = ref<boolean>(false)
+  // To track the rfid-lookup routine
+  const loading = ref<boolean>(false)
+  const currentRFID = ref<string>('')
 
   function logout() {
     _userStore.logout()
-    _usersStore.clear()
-    localStorage.setItem('gladosTokenValue', '')
-    localStorage.setItem('gladosTokenType', '')
 
+    loading.value = false
     loggedIn.value = false
-    router.push({ name: 'Login' })
+    currentRFID.value = ''
   }
 
   onMounted(() => {
@@ -47,22 +47,41 @@ export const useRfidAuthStore = defineStore('rfidAuth', () => {
       if (loggedIn.value && !readerOK.value) {
         _notificationStore.addWarn(_languageStore.l.notification.warn.rfidDeviceDisconnected)
         logout()
+        return
       }
 
-      if (data.rfid && data.rfid?.length > 0 && data.api_key != null) {
+      if (loggedIn.value && !data.rfid) {
+        logout()
+        return
+      }
+
+      if (loggedIn.value && data.rfid && data.rfid != currentRFID.value) {
+        logout()
+        return
+      }
+
+      if (!loggedIn.value && data.rfid && data.rfid != currentRFID.value && data.api_key) {
+        currentRFID.value = data.rfid as string
+        loading.value = true
+
         request.loginByRFID(data.rfid, data.api_key).then((response) => {
+          loading.value = false
           if (response.status === 200) {
             _userStore.get()
             _usersStore.get()
             loggedIn.value = true
-          } else if (response.status === 422) {
-            _notificationStore.addWarn(_languageStore.l.notification.warn.wrongUserCreds)
+          } else if (response.status === 401) {
+            _notificationStore.addWarn(_languageStore.l.notification.warn.wrongRFIDCreds)
+          } else if (response.status === 403) {
+            _notificationStore.addWarn(_languageStore.l.notification.warn.accountInactive)
+          } else if (response.status === 405) {
+            _notificationStore.addWarn(_languageStore.l.notification.warn.rfidDisabled)
+          } else if (response.status === 406) {
+            _notificationStore.addWarn(_languageStore.l.notification.warn.wrongRFIDCreds)
           } else {
             _notificationStore.addWarn(response.data.detail)
           }
         })
-      } else if (loggedIn.value) {
-        logout()
       }
     }
 
@@ -82,6 +101,7 @@ export const useRfidAuthStore = defineStore('rfidAuth', () => {
   })
 
   return {
+    loading,
     loggedIn,
     connectionOK,
     readerOK,

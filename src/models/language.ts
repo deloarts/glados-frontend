@@ -100,7 +100,9 @@ export interface Language {
     }
     warn: {
       lostServerConnection: string
+      accountInactive: string
       wrongUserCreds: string
+      wrongRFIDCreds: string
       createUpdateErrorInField: Function
       userDataIncomplete: string
       failedFetchItem: Function
@@ -121,6 +123,7 @@ export interface Language {
       passwordsDontMatch: string
       rfidDeviceDisconnected: string
       rfidHostDisconnected: string
+      rfidDisabled: string
     }
   }
   main: {

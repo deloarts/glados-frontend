@@ -113,7 +113,9 @@ export const deAT: Language = {
     },
     warn: {
       lostServerConnection: 'Keine Verbindung zum Server',
+      accountInactive: 'Dein Konto ist deaktiviert',
       wrongUserCreds: 'Zugangsdaten nicht korrket',
+      wrongRFIDCreds: 'RFID-Chip nicht hinterlegt',
       createUpdateErrorInField: (loc: string, msg: string) => {
         return `Fehler im Feld '${loc}': ${msg}`
       },
@@ -140,6 +142,7 @@ export const deAT: Language = {
       passwordsDontMatch: 'Die Passwörter stimmen nicht überein',
       rfidDeviceDisconnected: 'RFID-Lesegrät wurde entfernt',
       rfidHostDisconnected: 'RFID-Host wurde getrennt',
+      rfidDisabled: 'RFID-Login ist deaktiviert',
     },
   },
   main: {

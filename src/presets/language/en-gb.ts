@@ -112,7 +112,9 @@ export const enGB: Language = {
     },
     warn: {
       lostServerConnection: 'Lost server connection',
+      accountInactive: 'Your account is deactivated',
       wrongUserCreds: 'Wrong login credentials',
+      wrongRFIDCreds: 'RFID tag not registered',
       createUpdateErrorInField: (loc: '', msg: '') => {
         return `Error in field '${loc}': ${msg}`
       },
@@ -139,6 +141,7 @@ export const enGB: Language = {
       passwordsDontMatch: "Passwords don't match",
       rfidDeviceDisconnected: 'RFID reader has been disconnected',
       rfidHostDisconnected: 'RFID-Host has been disconnected',
+      rfidDisabled: 'RFID login is deactivated',
     },
   },
   main: {

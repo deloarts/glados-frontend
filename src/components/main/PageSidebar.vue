@@ -82,11 +82,6 @@ function logout() {
     return
   }
   userStore.logout()
-  usersStore.clear()
-  projectsStore.clear()
-  localStorage.setItem('gladosTokenValue', '')
-  localStorage.setItem('gladosTokenType', '')
-  router.push({ name: 'Login' })
 }
 
 function hideLabel() {

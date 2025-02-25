@@ -2,14 +2,13 @@
 import { ref, onBeforeMount, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import config from '@/config'
 import constants from '@/constants'
-import router from '@/router/index'
 import { request } from '@/requests/index'
 import { requestConfig } from '@/requests/config'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
+import { useUserStore } from '@/stores/user'
 
 import FullScreenWarning from '@/components/main/FullScreenWarning.vue'
 
@@ -19,6 +18,7 @@ const route = useRoute()
 // Store
 const languageStore = useLanguageStore()
 const notificationStore = useNotificationStore()
+const userStore = useUserStore()
 
 const showBox = ref<boolean>(false)
 const text = ref<string>('')
@@ -27,12 +27,7 @@ const sub = ref<string>('')
 function onReconnection() {
   showBox.value = false
   notificationStore.addInfo(languageStore.l.notification.info.reconnectedToServer)
-
-  if (!config.debug) {
-    localStorage.setItem('gladosTokenValue', '')
-    localStorage.setItem('gladosTokenType', '')
-    router.push({ name: 'Login' })
-  }
+  userStore.logout()
 }
 
 function watchServerConnection() {
@@ -52,6 +47,7 @@ function watchServerConnection() {
           text.value = languageStore.l.main.serverVersionNotSupported
           sub.value = languageStore.l.main.serverVersionNotSupportedSub
           showBox.value = true
+          userStore.logout()
         } else if (showBox.value) {
           onReconnection()
         }
@@ -66,6 +62,7 @@ function watchServerConnection() {
         text.value = languageStore.l.main.noServerConnection
         sub.value = languageStore.l.main.noServerConnectionSub
         showBox.value = true
+        userStore.logout()
       }
       setTimeout(watchServerConnection, 1000)
     })
@@ -78,17 +75,13 @@ watch(route, () => {
     localStorage.getItem('gladosTokenValue') == '' ||
     localStorage.getItem('gladosTokenValue') == null
   ) {
-    router.push({ name: 'Login' })
+    userStore.logout()
   }
 })
 </script>
 
 <template>
-  <FullScreenWarning
-    v-model:show="showBox"
-    v-model:text="text"
-    v-model:sub="sub"
-  ></FullScreenWarning>
+  <FullScreenWarning v-model:show="showBox" v-model:text="text" v-model:sub="sub" />
 </template>
 
 <style scoped lang="scss"></style>

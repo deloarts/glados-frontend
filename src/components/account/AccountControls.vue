@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import ButtonUserEdit from '@/components/elements/ButtonUserEdit.vue'
@@ -6,10 +7,14 @@ import ButtonCloudKey from '@/components/elements/ButtonCloudKey.vue'
 import ButtonLock from '@/components/elements/ButtonLock.vue'
 
 import { useLanguageStore } from '@/stores/language'
+import { useResolutionStore } from '@/stores/resolution'
 
 const route = useRoute()
 
 const languageStore = useLanguageStore()
+const resolutionStore = useResolutionStore()
+
+const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
 
 function routeIsActive(currentLink: string) {
   const activeRoute = route.path
@@ -39,7 +44,7 @@ function routeIsActive(currentLink: string) {
           :class="{ active: routeIsActive('/account/security') }"
           :text="languageStore.l.account.button.security"
       /></router-link>
-      <router-link :to="'/account/pat'"
+      <router-link :to="'/account/pat'" v-if="gtMinWidthTablet"
         ><ButtonCloudKey
           class="controls-base-element"
           :class="{ active: routeIsActive('/account/pat') }"

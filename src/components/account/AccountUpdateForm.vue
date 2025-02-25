@@ -14,6 +14,8 @@ import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 import LabeledInput from '@/components/elements/LabeledInput.vue'
 import LabeledSelect from '@/components/elements/LabeledSelect.vue'
 import ButtonUserUpdate from '@/components/elements/ButtonUserUpdate.vue'
+import ButtonUndo from '@/components/elements/ButtonUndo.vue'
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
 
 const languageStore = useLanguageStore()
 const userStore = useUserStore()
@@ -27,6 +29,8 @@ const errorsByElement = ref({
   breakFrom: false,
   breakTo: false,
 })
+const loading = ref<boolean>(false)
+const loadingUndo = ref<boolean>(false)
 
 // Options
 let availableOptionsLanguage: Array<AvailableOption> = []
@@ -53,6 +57,8 @@ function setOptionsLanguage() {
 }
 
 function updateUser() {
+  loading.value = true
+
   errorsByElement.value = {
     fullName: false,
     mail: false,
@@ -72,6 +78,10 @@ function updateUser() {
   }
 
   usersRequest.putUsersMe(formUserUpdate.value).then((response) => {
+    setTimeout(() => {
+      loading.value = false
+    }, 400)
+
     if (response.status == 200) {
       const data = response.data as UserSchema
       userStore.user = data
@@ -110,6 +120,14 @@ async function loadUserData() {
   formUserUpdate.value = JSON.parse(JSON.stringify(userStore.user))
 }
 
+async function onUndo() {
+  loadingUndo.value = true
+  await loadUserData()
+  setTimeout(() => {
+    loadingUndo.value = false
+  }, 400)
+}
+
 onBeforeMount(() => {
   setOptionsLanguage()
   loadUserData()
@@ -118,7 +136,32 @@ onBeforeMount(() => {
 
 <template>
   <div class="form-base-scope">
-    <div class="form-base-container">
+    <div class="controls-base-container">
+      <ButtonLoading
+        v-if="loading"
+        class="controls-base-element"
+        :text="languageStore.l.account.button.save"
+      />
+      <ButtonUserUpdate
+        v-else
+        class="controls-base-element"
+        v-on:click="updateUser"
+        :text="languageStore.l.account.button.save"
+      />
+      <ButtonLoading
+        v-if="loadingUndo"
+        class="controls-base-element"
+        :text="languageStore.l.userTime.button.undo"
+      />
+      <ButtonUndo
+        v-else
+        class="controls-base-element"
+        :text="languageStore.l.userTime.button.undo"
+        v-on:click="onUndo"
+      />
+    </div>
+
+    <div class="form-base-container form-base-container-bottom-space">
       <div id="grid">
         <div
           id="username"
@@ -183,9 +226,6 @@ onBeforeMount(() => {
             :placeholder="languageStore.l.account.input.autoLogoutPlaceholder"
           />
         </div>
-        <div id="btn">
-          <ButtonUserUpdate v-on:click="updateUser" :text="languageStore.l.account.button.save" />
-        </div>
       </div>
     </div>
   </div>
@@ -194,9 +234,15 @@ onBeforeMount(() => {
 <style scoped lang="scss">
 @use '@/scss/form/formBase.scss';
 @use '@/scss/grid/gridBase.scss';
+@use '@/scss/controls/controlsBase.scss';
+
+.form-base-container {
+  padding-top: 10px;
+  margin-top: 15px;
+}
 
 #grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px auto;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px;
   grid-template-columns: 50% calc(50% - 10px);
   grid-template-areas:
     'username username'
@@ -205,13 +251,7 @@ onBeforeMount(() => {
     'work-hours work-hours'
     'auto-break-from auto-break-to'
     'auto-logout auto-logout'
-    'language language'
-    'btn btn';
-}
-
-#btn {
-  padding-top: 20px;
-  grid-area: btn;
+    'language language';
 }
 
 #language {

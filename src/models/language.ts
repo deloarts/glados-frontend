@@ -117,6 +117,8 @@ export interface Language {
       apiKeyDataIncomplete: string
       mailingDisabled: string
       receiverNotGiven: string
+      passwordCannotBeEmpty: string
+      passwordsDontMatch: string
       rfidDeviceDisconnected: string
       rfidHostDisconnected: string
     }
@@ -190,6 +192,7 @@ export interface Language {
       security: string
       pat: string
       save: string
+      undo: string
       newToken: string
     }
     option: {
@@ -200,12 +203,13 @@ export interface Language {
       usernamePlaceholder: string
       fullNamePlaceholder: string
       emailPlaceholder: string
-      passwordPlaceholder: string
       workHoursPerWeekPlaceholder: string
       autoBreakFromPlaceholder: string
       autoBreakToPlaceholder: string
       autoLogoutPlaceholder: string
       languagePlaceholder: string
+      passwordPlaceholder: string
+      passwordRetypePlaceholder: string
       patPlaceholder: string
     }
   }

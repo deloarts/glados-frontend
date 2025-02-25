@@ -8,6 +8,7 @@ import { useNotificationStore } from '@/stores/notification'
 import { useUserTimeStore } from '@/stores/userTime'
 
 import type { UserTimeCreateSchema } from '@/schemas/userTime'
+import type { ErrorValidationSchema, ErrorDetailSchema } from '@/schemas/common'
 
 import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonUserTimeAdd from '@/components/elements/ButtonUserTimeAdd.vue'
@@ -39,14 +40,16 @@ function onCreate() {
         userTimeStore.getItems()
         router.push({ name: 'UserTime' })
       } else if (response.status === 422) {
+        const data = response.data as ErrorValidationSchema
         notificationStore.addWarn(
           languageStore.l.notification.warn.createUpdateErrorInField(
-            response.data.detail[0].loc[1],
-            response.data.detail[0].msg,
+            data.detail[0].loc[1],
+            data.detail[0].msg,
           ),
         )
       } else {
-        notificationStore.addWarn(response.data.detail)
+        const data = response.data as ErrorDetailSchema
+        notificationStore.addWarn(data.detail)
       }
     })
     .catch((error) => {

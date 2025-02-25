@@ -265,6 +265,7 @@ export const deAT: Language = {
       create: 'Erstellen',
       update: 'Aktualisieren',
       cancel: 'Abbrechen',
+      undo: 'Neu Laden',
     },
     options: {
       showAll: 'Alle',
@@ -373,6 +374,7 @@ export const deAT: Language = {
       validateAll: 'Validieren',
       update: 'Aktualisieren',
       cancel: 'Abbrechen',
+      undo: 'Neu Laden',
       template: 'Vorlage',
       batchCreate: 'Multi-Import',
       newRow: 'Neue Reihe',
@@ -479,6 +481,7 @@ export const deAT: Language = {
       create: 'Erstellen',
       update: 'Aktualisieren',
       cancel: 'Abbrechen',
+      undo: 'Neu Laden',
     },
     options: {
       showAll: 'Zeige alle',

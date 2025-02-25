@@ -245,6 +245,7 @@ export interface Language {
       create: string
       update: string
       cancel: string
+      undo: string
     }
     options: {
       showAll: string
@@ -352,6 +353,7 @@ export interface Language {
       validateAll: string
       update: string
       cancel: string
+      undo: string
       template: string
       batchCreate: string
       newRow: string
@@ -457,6 +459,7 @@ export interface Language {
       create: string
       update: string
       cancel: string
+      undo: string
     }
     options: {
       showAll: string

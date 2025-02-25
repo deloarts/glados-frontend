@@ -263,6 +263,7 @@ export const enGB: Language = {
       create: 'Create',
       update: 'Update',
       cancel: 'Cancel',
+      undo: 'Reload',
     },
     options: {
       showAll: 'All',
@@ -371,6 +372,7 @@ export const enGB: Language = {
       validateAll: 'Validate',
       update: 'Update',
       cancel: 'Cancel',
+      undo: 'Reload',
       template: 'Template',
       batchCreate: 'Batch Create',
       newRow: 'New Row',
@@ -477,6 +479,7 @@ export const enGB: Language = {
       create: 'Create',
       update: 'Update',
       cancel: 'Cancel',
+      undo: 'Reload',
     },
     options: {
       showAll: 'Show All',

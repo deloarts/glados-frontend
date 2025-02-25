@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import router from '@/router/index'
@@ -9,16 +9,31 @@ import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useBoughtItemsStore } from '@/stores/boughtItems'
 
-import type { BoughtItemUpdateSchema } from '@/schemas/boughtItem'
+import type { BoughtItemSchema, BoughtItemUpdateSchema } from '@/schemas/boughtItem'
 import type { ErrorValidationSchema, ErrorDetailSchema } from '@/schemas/common'
 
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
 import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonAbort from '@/components/elements/ButtonAbort.vue'
+import ButtonUndo from '@/components/elements/ButtonUndo.vue'
 
 const props = defineProps<{
   formData: BoughtItemUpdateSchema
 }>()
+const emit = defineEmits<{
+  (e: 'update:formData', v: BoughtItemUpdateSchema): void
+}>()
+
+const computedFormData = computed<BoughtItemUpdateSchema>({
+  get() {
+    return props.formData
+  },
+  set(newValue) {
+    emit('update:formData', newValue)
+    return newValue
+  },
+})
 
 // Router
 const route = useRoute()
@@ -29,13 +44,14 @@ const notificationStore = useNotificationStore()
 const boughtItemsStore = useBoughtItemsStore()
 
 const loadingUpdate = ref<boolean>(false)
+const loadingUndo = ref<boolean>(false)
 
 function onUpdate() {
   loadingUpdate.value = true
 
   const itemID = Number(route.params.id)
   boughtItemsRequest
-    .putItems(itemID, props.formData)
+    .putItems(itemID, computedFormData.value)
     .then(async (response) => {
       await boughtItemsStore.get()
       setTimeout(() => {
@@ -68,6 +84,21 @@ function onUpdate() {
 function onAbort() {
   router.push({ name: 'BoughtItems' })
 }
+
+function onUndo() {
+  loadingUndo.value = true
+
+  boughtItemsRequest.getItemsID(Number(route.params.id)).then((response) => {
+    setTimeout(() => {
+      loadingUndo.value = false
+    }, 400)
+
+    if (response.status === 200) {
+      const data = response.data as BoughtItemSchema
+      computedFormData.value = data
+    }
+  })
+}
 </script>
 
 <template>
@@ -76,19 +107,30 @@ function onAbort() {
       <ButtonLoadingGreen
         v-if="loadingUpdate"
         class="controls-base-element"
-        :text="languageStore.l.project.button.update"
+        :text="languageStore.l.boughtItem.button.update"
       />
       <ButtonItemCreate
         v-else
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.update"
         v-on:click="onUpdate"
-      ></ButtonItemCreate>
+      />
       <ButtonAbort
         class="controls-base-element"
         :text="languageStore.l.boughtItem.button.cancel"
         v-on:click="onAbort"
-      ></ButtonAbort>
+      />
+      <ButtonLoading
+        v-if="loadingUndo"
+        class="controls-base-element"
+        :text="languageStore.l.boughtItem.button.undo"
+      />
+      <ButtonUndo
+        v-else
+        class="controls-base-element"
+        :text="languageStore.l.boughtItem.button.undo"
+        v-on:click="onUndo"
+      />
     </div>
   </div>
 </template>

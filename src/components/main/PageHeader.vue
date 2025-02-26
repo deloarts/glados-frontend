@@ -1,27 +1,31 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import config from '@/config'
 
 import QuickTheme from '@/components/common/QuickTheme.vue'
 import QuickLanguage from '@/components/common/QuickLanguage.vue'
 
+import { useResolutionStore } from '@/stores/resolution'
+
+const resolutionStore = useResolutionStore()
+
 interface Props {
   showQuickMenu?: boolean
 }
-
 const props = withDefaults(defineProps<Props>(), {
   showQuickMenu: true,
 })
+
+const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTablet)
 </script>
 
 <template>
   <div class="header">
     <div class="row">
-      <div class="cell">Glados</div>
+      <div class="cell">{{ gtMinWidthTablet ? 'Glados' : '' }}</div>
+      <div class="cell">{{ gtMinWidthTablet ? '' : 'Glados' }}</div>
       <div class="cell">
-        <span class="dev" v-if="config.debug">DEBUG MODE</span>
-      </div>
-      <div class="cell">
-        <QuickLanguage v-if="props.showQuickMenu" />
+        <QuickLanguage v-if="props.showQuickMenu && gtMinWidthTablet" />
         <QuickTheme v-if="props.showQuickMenu" />
       </div>
     </div>
@@ -62,16 +66,12 @@ const props = withDefaults(defineProps<Props>(), {
   padding-right: 5px;
 }
 
-.cell:nth-child(1) {
+.cell:nth-child(1), .cell:nth-child(2) {
   text-align: left;
 
   font-family: var(--main-font-glados);
   font-size: var(--main-font-glados-size);
   font-weight: thin;
-}
-
-.cell:nth-child(2) {
-  text-align: center;
 }
 
 .cell:nth-child(3) {

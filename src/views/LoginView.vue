@@ -266,7 +266,7 @@ onMounted(() => {
   bottom: 0;
   width: min-content;
   height: min-content;
-  // transform: translateX(-50%);
+  transform: translateX(-50%);
 
   padding: 4px;
 

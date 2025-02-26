@@ -1,5 +1,5 @@
 import { request } from '@/requests/index'
-import { requestConfig } from '@/requests/config'
+import { requestConfig } from '@/requests/configuration'
 import config from '@/config'
 import constants from '@/constants'
 

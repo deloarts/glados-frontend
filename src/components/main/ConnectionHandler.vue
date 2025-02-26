@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 
 import constants from '@/constants'
 import { request } from '@/requests/index'
-import { requestConfig } from '@/requests/config'
+import { requestConfig } from '@/requests/configuration'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'

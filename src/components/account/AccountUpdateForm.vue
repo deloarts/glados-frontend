@@ -232,6 +232,7 @@ onBeforeMount(() => {
 </template>
 
 <style scoped lang="scss">
+@use '@/scss/variables.scss' as *;
 @use '@/scss/form/formBase.scss';
 @use '@/scss/grid/gridBase.scss';
 @use '@/scss/controls/controlsBase.scss';
@@ -252,6 +253,22 @@ onBeforeMount(() => {
     'auto-break-from auto-break-to'
     'auto-logout auto-logout'
     'language language';
+}
+
+@media screen and (max-width: $max-width-tablet) {
+  #grid {
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px;
+  grid-template-columns: auto;
+  grid-template-areas:
+    'username'
+    'full-name'
+    'email'
+    'work-hours'
+    'auto-break-from'
+    'auto-break-to'
+    'auto-logout'
+    'language';
+}
 }
 
 #language {

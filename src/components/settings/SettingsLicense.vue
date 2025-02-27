@@ -1,70 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import constants from '@/constants'
 import WarningForForm from '@/components/common/WarningForForm.vue'
-import { hostRequest } from '@/requests/api/host'
-import type { DiscSpace } from '@/models/host'
 import { useLanguageStore } from '@/stores/language'
 
 const languageStore = useLanguageStore()
-
-const discSpaceDatabaseDataset = ref<DiscSpace>({
-  used: 1,
-  free: 0,
-})
-
-const discSpaceBackupDataset = ref<DiscSpace>({
-  used: 1,
-  free: 0,
-})
-
-const os = ref<string>('-')
-const version = ref<string>('-')
-const hostname = ref<string>('-')
-const databaseSpace = ref<string>('-')
-const backupSpace = ref<string>('-')
-const backupNotMounted = ref<boolean>(false)
-
-function getHostInformation() {
-  hostRequest.getHostInfo().then((response) => {
-    console.log(JSON.stringify(response.data))
-    if (response.status === 200) {
-      version.value = `App v${constants.version}  //  Server v${response.data.version}`
-      hostname.value = response.data.hostname
-      os.value = response.data.os
-      databaseSpace.value =
-        response.data.disc_space.db_free +
-        ' GiB' +
-        languageStore.l.settings.host.freeOf +
-        response.data.disc_space.db_total +
-        ' GiB'
-
-      if (response.data.disc_space.backup_total) {
-        backupSpace.value =
-          response.data.disc_space.backup_free +
-          ' GiB' +
-          languageStore.l.settings.host.freeOf +
-          response.data.disc_space.backup_total +
-          ' GiB'
-        backupNotMounted.value = false
-      } else {
-        backupNotMounted.value = true
-        backupSpace.value = languageStore.l.settings.host.notMounted
-      }
-
-      discSpaceDatabaseDataset.value = {
-        used: response.data.disc_space.db_used,
-        free: response.data.disc_space.db_free,
-      }
-      discSpaceBackupDataset.value = {
-        used: response.data.disc_space.backup_used,
-        free: response.data.disc_space.backup_free,
-      }
-    }
-  })
-}
-
-onMounted(getHostInformation)
 </script>
 
 <template>

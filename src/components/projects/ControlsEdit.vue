@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
 
@@ -9,16 +9,31 @@ import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useProjectsStore } from '@/stores/projects'
 
-import type { ProjectCreateSchema } from '@/schemas/project'
+import type { ProjectSchema, ProjectUpdateSchema } from '@/schemas/project'
 import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
 import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
 import ButtonItemCreate from '@/components/elements/ButtonItemCreate.vue'
 import ButtonAbort from '@/components/elements/ButtonAbort.vue'
+import ButtonUndo from '@/components/elements/ButtonUndo.vue'
 
 const props = defineProps<{
-  formData: ProjectCreateSchema
+  formData: ProjectUpdateSchema
 }>()
+const emit = defineEmits<{
+  (e: 'update:formData', v: ProjectUpdateSchema): void
+}>()
+
+const computedFormData = computed<ProjectUpdateSchema>({
+  get() {
+    return props.formData
+  },
+  set(newValue) {
+    emit('update:formData', newValue)
+    return newValue
+  },
+})
 
 // Stores
 const languageStore = useLanguageStore()
@@ -26,6 +41,7 @@ const notificationStore = useNotificationStore()
 const projectsStore = useProjectsStore()
 
 const loadingUpdate = ref<boolean>(false)
+const loadingUndo = ref<boolean>(false)
 
 // Router
 const route = useRoute()
@@ -35,14 +51,15 @@ function onUpdate() {
 
   const projectID = Number(route.params.id)
   projectsRequest
-    .putProjects(projectID, props.formData)
-    .then((response) => {
+    .putProjects(projectID, computedFormData.value)
+    .then(async (response) => {
+      await projectsStore.get()
       setTimeout(() => {
         loadingUpdate.value = false
       }, 400)
+
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.updatedProject(projectID))
-        projectsStore.getItems()
         router.push({ name: 'Projects' })
       } else if (response.status === 422) {
         const data = response.data as ErrorValidationSchema
@@ -58,6 +75,7 @@ function onUpdate() {
       }
     })
     .catch((error) => {
+      loadingUpdate.value = false
       console.log(error)
       notificationStore.addWarn(error)
     })
@@ -65,6 +83,21 @@ function onUpdate() {
 
 function onAbort() {
   router.push({ name: 'Projects' })
+}
+
+function onUndo() {
+  loadingUndo.value = true
+
+  projectsRequest.getProjectsID(Number(route.params.id)).then((response) => {
+    setTimeout(() => {
+      loadingUndo.value = false
+    }, 400)
+
+    if (response.status === 200) {
+      const data = response.data as ProjectSchema
+      computedFormData.value = data
+    }
+  })
 }
 </script>
 
@@ -81,12 +114,23 @@ function onAbort() {
         class="controls-base-element"
         :text="languageStore.l.project.button.update"
         v-on:click="onUpdate"
-      ></ButtonItemCreate>
+      />
       <ButtonAbort
         class="controls-base-element"
         :text="languageStore.l.project.button.cancel"
         v-on:click="onAbort"
-      ></ButtonAbort>
+      />
+      <ButtonLoading
+        v-if="loadingUndo"
+        class="controls-base-element"
+        :text="languageStore.l.project.button.undo"
+      />
+      <ButtonUndo
+        v-else
+        class="controls-base-element"
+        :text="languageStore.l.project.button.undo"
+        v-on:click="onUndo"
+      />
     </div>
   </div>
 </template>

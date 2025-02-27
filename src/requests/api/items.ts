@@ -3,7 +3,7 @@ import {
   requestConfig,
   requestConfigXlsxDownload,
   requestConfigFileUpload,
-} from '@/requests/config'
+} from '@/requests/configuration'
 import constants from '@/constants'
 
 import type { AxiosResponse } from 'axios'

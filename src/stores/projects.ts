@@ -169,6 +169,7 @@ export const useProjectsStore = defineStore('projects', () => {
     page,
     clear,
     pause,
+    get,
     getItems,
     getAll,
     clearItems,

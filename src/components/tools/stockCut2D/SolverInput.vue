@@ -66,42 +66,34 @@ function removeAllItems() {
 </script>
 
 <template>
-  <div class="controls-base-scope">
+  <div class="form-base-scope">
     <div class="controls-base-container">
-      <div id="btn-add-panel">
-        <ButtonPlus
-          v-on:click="props.onAddPanel()"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.addPanel"
-        />
-      </div>
-      <div id="btn-add-item">
-        <ButtonPlus
-          v-on:click="props.onAddItem()"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.addItem"
-        />
-      </div>
-      <div id="btn-solve">
-        <ButtonLoading
-          v-if="props.solving"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.solving"
-        />
-        <ButtonSolve
-          v-else
-          v-on:click="props.onSolve()"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.solve"
-        />
-      </div>
-      <div id="btn-export-pdf">
-        <ButtonDownload
-          v-on:click="props.onExportPdf()"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.exportPDF"
-        />
-      </div>
+      <ButtonPlus
+        v-on:click="props.onAddPanel()"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.addPanel"
+      />
+      <ButtonPlus
+        v-on:click="props.onAddItem()"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.addItem"
+      />
+      <ButtonLoading
+        v-if="props.solving"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.solving"
+      />
+      <ButtonSolve
+        v-else
+        v-on:click="props.onSolve()"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.solve"
+      />
+      <ButtonDownload
+        v-on:click="props.onExportPdf()"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.exportPDF"
+      />
     </div>
 
     <div class="form-base-container">

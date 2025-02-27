@@ -106,17 +106,17 @@ svg:hover {
   z-index: 900;
   position: absolute;
 
-  bottom: 25px;
-  left: 5px;
+  top: 7px;
+  left: 7px;
 
-  width: calc(var(--sidebar-width) - 10px);
-  height: calc(var(--sidebar-width) - 10px);
+  width: calc(var(--sidebar-width) - 15px);
+  height: calc(var(--sidebar-width) - 15px);
 
   color: white;
   background-color: var(--main-color);
 
-  border-style: none;
-  border-radius: calc((var(--sidebar-width) - 10px) / 2);
+  border: var(--main-border-width) var(--main-border-style) rgba(255, 255, 255, 0.1);
+  border-radius: calc((var(--sidebar-width) - 15px) / 2);
 
   transition: background-color 0.2s ease;
   transition: transform 0.3s;

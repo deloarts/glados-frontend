@@ -12,6 +12,7 @@ import type { ErrorDetailSchema } from '@/schemas/common'
 import Toggle from '@vueform/toggle'
 import LabeledInput from '@/components/elements/LabeledInput.vue'
 import ButtonUserCreate from '@/components/elements/ButtonUserCreate.vue'
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
 
 // Stores
 const languageStore = useLanguageStore()
@@ -30,11 +31,14 @@ const formData = ref<UserCreateSchema>({
   password: '',
   rfid: null,
 })
+const loading = ref<boolean>(false)
 
 function createUser() {
-  usersRequest.postUsers(formData.value).then((response) => {
-    userStore.get()
-    usersStore.get()
+  loading.value = true
+  usersRequest.postUsers(formData.value).then(async (response) => {
+    await userStore.get()
+    await usersStore.get()
+    loading.value = false
 
     if (response.status == 200) {
       notificationStore.addInfo(languageStore.l.notification.info.createdUser)
@@ -122,7 +126,9 @@ function createUser() {
           />
         </div>
         <div id="btn">
+          <ButtonLoading v-if="loading" :text="languageStore.l.settings.users.button.create" />
           <ButtonUserCreate
+            v-else
             v-on:click="createUser"
             :text="languageStore.l.settings.users.button.create"
           />

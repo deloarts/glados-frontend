@@ -13,7 +13,7 @@ import Footer from '@/components/main/PageFooter.vue'
 import Sidebar from '@/components/main/PageSidebar.vue'
 import RouterDisplay from '@/components/main/RouterDisplay.vue'
 
-import { useResolutionStore } from './stores/resolution'
+import { useResolutionStore } from '@/stores/resolution'
 import { useProjectsStore } from '@/stores/projects'
 import { useUsersStore, useUserStore } from '@/stores/user'
 

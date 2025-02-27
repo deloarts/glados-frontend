@@ -215,6 +215,7 @@ export const useUserTimeStore = defineStore('userTime', () => {
     page,
     clear,
     pause,
+    get,
     getItems,
     fetchCurrentWeek,
     fetchCurrentLogin,

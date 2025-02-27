@@ -185,14 +185,17 @@ export interface Language {
     banner: {
       myAccount: string
       security: string
+      permissions: string
       pat: string
       patCreationWarning: string
       patInfo: string
       rfidInfo: string
+      userTimeInfo: string
     }
     button: {
       myAccount: string
       security: string
+      permissions: string
       pat: string
       save: string
       undo: string
@@ -214,6 +217,45 @@ export interface Language {
       passwordPlaceholder: string
       passwordRetypePlaceholder: string
       patPlaceholder: string
+    }
+    permissions: {
+      normalUser: string
+      superUser: string
+      adminUser: string
+      guestUser: string
+      yourPermissionLevel: string
+      yourPermissionProjects: string
+      yourPermissionItems: string
+      yourPermissionUsers: string
+      yourPermissionUserTime: string
+      yourPermissionSettings: string
+      readOwnProjects: string
+      readOtherProjects: string
+      createProjects: string
+      editOwnProjects: string
+      editOtherProjects: string
+      assignOtherUserToProject: string
+      deleteProjects: string
+      readOwnItems: string
+      readOtherItems: string
+      createItems: string
+      editOwnItems: string
+      editOtherItems: string
+      editPlannedItems: string
+      deleteOwnItems: string
+      deleteOtherItems: string
+      createUsers: string
+      editUsers: string
+      deleteUsers: string
+      readOwnUserTime: string
+      readOtherUserTime: string
+      createUserTime: string
+      editOwnUserTime: string
+      editOtherUserTime: string
+      deleteOwnUserTime: string
+      deleteOtherUserTime: string
+      readSettings: string
+      editSettings: string
     }
   }
   project: {

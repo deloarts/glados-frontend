@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 
 import ButtonUserEdit from '@/components/elements/ButtonUserEdit.vue'
 import ButtonCloudKey from '@/components/elements/ButtonCloudKey.vue'
+import ButtonAccountKey from '@/components/elements/ButtonAccountKey.vue'
 import ButtonLock from '@/components/elements/ButtonLock.vue'
 
 import { useLanguageStore } from '@/stores/language'
@@ -43,6 +44,12 @@ function routeIsActive(currentLink: string) {
           class="controls-base-element"
           :class="{ active: routeIsActive('/account/security') }"
           :text="languageStore.l.account.button.security"
+      /></router-link>
+      <router-link :to="'/account/permissions'" v-if="gtMinWidthTablet"
+        ><ButtonAccountKey
+          class="controls-base-element"
+          :class="{ active: routeIsActive('/account/permissions') }"
+          :text="languageStore.l.account.button.permissions"
       /></router-link>
       <router-link :to="'/account/pat'" v-if="gtMinWidthTablet"
         ><ButtonCloudKey

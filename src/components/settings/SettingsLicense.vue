@@ -67,6 +67,7 @@ a {
 }
 
 h2 {
+  padding-top: 15px;
   font-size: 16px;
   font-family: var(--main-font-head);
 }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import config from '@/config'
 
 import QuickTheme from '@/components/common/QuickTheme.vue'
 import QuickLanguage from '@/components/common/QuickLanguage.vue'

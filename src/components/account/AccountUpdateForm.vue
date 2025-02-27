@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 
+import { setTheme } from '@/helper/theme.helper'
 import { usersRequest } from '@/requests/api/users'
 
 import { useLanguageStore } from '@/stores/language'
@@ -34,6 +35,10 @@ const loadingUndo = ref<boolean>(false)
 
 // Options
 let availableOptionsLanguage: Array<AvailableOption> = []
+const availableOptionsTheme: Array<AvailableOption> = [
+  { text: 'Light', value: 'light' },
+  { text: 'Dark', value: 'dark' }
+]
 const availableOptionsAutoLogout: Array<AvailableOption> = [
   {
     text: languageStore.l.account.option.logMeOut,
@@ -87,7 +92,10 @@ function updateUser() {
       userStore.user = data
       formUserUpdate.value = JSON.parse(JSON.stringify(userStore.user))
       languageStore.apply(userStore.user.language)
+      setTheme(data.theme || 'dark')
+
       notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
+
     } else if (response.status == 422) {
       const data = response.data as ErrorValidationSchema
       for (let i = 0; i < data.detail.length; i++) {
@@ -197,6 +205,13 @@ onBeforeMount(() => {
             :placeholder="languageStore.l.account.input.languagePlaceholder"
           />
         </div>
+        <div id="theme" class="grid-item-center">
+          <LabeledSelect
+            v-model:value="formUserUpdate.theme"
+            v-bind:options="availableOptionsTheme"
+            :placeholder="languageStore.l.account.input.themePlaceholder"
+          />
+        </div>
         <div id="work-hours" class="grid-item-center">
           <LabeledInput
             v-model:value="formUserUpdate.work_hours_per_week"
@@ -243,7 +258,7 @@ onBeforeMount(() => {
 }
 
 #grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px;
   grid-template-columns: 50% calc(50% - 10px);
   grid-template-areas:
     'username username'
@@ -252,12 +267,13 @@ onBeforeMount(() => {
     'work-hours work-hours'
     'auto-break-from auto-break-to'
     'auto-logout auto-logout'
-    'language language';
+    'language language'
+    'theme theme';
 }
 
 @media screen and (max-width: $max-width-tablet) {
   #grid {
-  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px;
+  grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 50px;
   grid-template-columns: auto;
   grid-template-areas:
     'username'
@@ -267,12 +283,17 @@ onBeforeMount(() => {
     'auto-break-from'
     'auto-break-to'
     'auto-logout'
-    'language';
+    'language'
+    'theme';
 }
 }
 
 #language {
   grid-area: language;
+}
+
+#theme {
+  grid-area: theme;
 }
 
 #username {

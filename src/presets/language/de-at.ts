@@ -234,6 +234,7 @@ export const deAT: Language = {
       autoBreakToPlaceholder: 'Automatische Pause bis (UTC)',
       autoLogoutPlaceholder: 'Wenn über Mitternacht',
       languagePlaceholder: 'Sprache',
+      themePlaceholder: 'Darstellung',
       passwordPlaceholder: 'Passwort',
       passwordRetypePlaceholder: 'Passwort erneut eingeben',
       patPlaceholder: 'Geheimer Schlüssel',

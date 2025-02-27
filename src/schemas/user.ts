@@ -47,6 +47,7 @@ export interface UserUpdateSchema {
   email: string
 
   language: 'enGB' | 'deAT'
+  theme: 'dark' | 'light'
 
   work_hours_per_week?: number | null
   auto_break_from?: string | null

@@ -214,6 +214,7 @@ export interface Language {
       autoBreakToPlaceholder: string
       autoLogoutPlaceholder: string
       languagePlaceholder: string
+      themePlaceholder: string
       passwordPlaceholder: string
       passwordRetypePlaceholder: string
       patPlaceholder: string

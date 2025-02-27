@@ -233,6 +233,7 @@ export const enGB: Language = {
       autoBreakToPlaceholder: 'Automatic break to (UTC)',
       autoLogoutPlaceholder: 'When over midnight',
       languagePlaceholder: 'Language',
+      themePlaceholder: 'Theme',
       passwordPlaceholder: 'Password',
       passwordRetypePlaceholder: 'Retype Password',
       patPlaceholder: 'Secret Token',

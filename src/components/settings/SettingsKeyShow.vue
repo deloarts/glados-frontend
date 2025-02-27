@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useApiKeysStore } from '@/stores/apiKeys'
-import { apiKeysRequest } from '@/requests/apiKeys'
+import { apiKeysRequest } from '@/requests/api/apiKeys'
 
 import ButtonDelete from '@/components/elements/ButtonDelete.vue'
 import Prompt from '@/components/main/UserPrompt.vue'

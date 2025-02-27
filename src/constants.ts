@@ -1,5 +1,5 @@
 export default {
-  version: '0.14.0',
+  version: '0.14.1',
   serverVersion: '0.14.0',
 
   // Media
@@ -33,4 +33,5 @@ export default {
   apiUserTime: '/api/web/v1/user-time',
   apiProjects: '/api/web/v1/projects',
   apiBoughtItems: '/api/web/v1/items/bought',
+  apiTools: '/api/web/v1/tools',
 }

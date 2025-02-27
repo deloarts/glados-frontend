@@ -3,10 +3,10 @@ import { ref, computed } from 'vue'
 import Toggle from '@vueform/toggle'
 
 import router from '@/router/index'
-import { projectsRequest } from '@/requests/projects'
+import { projectsRequest } from '@/requests/api/projects'
 import { projectsFilterAll } from '@/presets/projectsFilter'
-import { boughtItemsRequest } from '@/requests/items'
-import { getBoughtItemsFilterParams } from '@/requests/params'
+import { boughtItemsRequest } from '@/requests/api/items'
+import { getBoughtItemsFilterParams } from '@/requests/urlSearchParams/items'
 import { camelToTitle } from '@/helper/string.helper'
 
 import { useLanguageStore } from '@/stores/language'
@@ -50,7 +50,7 @@ const gtMinWidthTablet = computed<boolean>(() => resolutionStore.gtMinWidthTable
 
 // Shows
 const showDeletePrompt = ref<boolean>(false)
-  const loadExportExcel = ref<boolean>(false)
+const loadExportExcel = ref<boolean>(false)
 
 // Buttons
 const buttonCreateText = computed<string>(() => {
@@ -149,7 +149,9 @@ function onButtonDownloadExcel() {
     const params = getBoughtItemsFilterParams(filter)
 
     boughtItemsRequest.getItemsExcel(params).then((response) => {
-      setTimeout(() => { loadExportExcel.value = false }, 400)
+      setTimeout(() => {
+        loadExportExcel.value = false
+      }, 400)
 
       if (response.status == 200) {
         const data = response.data as BlobPart
@@ -165,7 +167,6 @@ function onButtonDownloadExcel() {
     })
   }
 }
-
 </script>
 
 <template>
@@ -187,11 +188,7 @@ function onButtonDownloadExcel() {
         :text="languageStore.l.boughtItem.button.exportExcel"
         v-on:click="onButtonDownloadExcel"
       />
-      <ButtonEdit
-        class="controls-base-element"
-        :text="buttonEditText"
-        v-on:click="onButtonEdit"
-      />
+      <ButtonEdit class="controls-base-element" :text="buttonEditText" v-on:click="onButtonEdit" />
       <ButtonDelete
         v-if="gtMinWidthTablet"
         class="controls-base-element"

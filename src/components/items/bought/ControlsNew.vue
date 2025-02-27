@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import router from '@/router/index'
-import { boughtItemsRequest } from '@/requests/items'
+import { boughtItemsRequest } from '@/requests/api/items'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useBoughtItemsStore } from '@/stores/boughtItems'
 
-import type { BoughtItemCreateSchema, BoughtItemSchema } from '@/schemas/boughtItem'
+import type { BoughtItemCreateSchema } from '@/schemas/boughtItem'
 import type { ErrorDetailSchema, ErrorValidationSchema } from '@/schemas/common'
 
 import ButtonLoadingGreen from '@/components/elements/ButtonLoadingGreen.vue'
@@ -30,25 +30,30 @@ function onCreate() {
 
   boughtItemsRequest
     .postItems(props.formData)
-    .then((response) => {
-      setTimeout(() => { loadingCreate.value = false }, 400)
+    .then(async (response) => {
+      await boughtItemsStore.get()
+      setTimeout(() => {
+        loadingCreate.value = false
+      }, 400)
+
       if (response.status === 200) {
-        const data = response.data as BoughtItemSchema
         notificationStore.addInfo(languageStore.l.notification.info.createdItem)
-        console.log(data.created)
-        boughtItemsStore.getItems()
         router.push({ name: 'BoughtItems' })
-      }
-      else if (response.status === 422) {
+      } else if (response.status === 422) {
         const data = response.data as ErrorValidationSchema
         notificationStore.addWarn(
-          languageStore.l.notification.warn.createUpdateErrorInField(data.detail[0].loc[1], data.detail[0].msg))
+          languageStore.l.notification.warn.createUpdateErrorInField(
+            data.detail[0].loc[1],
+            data.detail[0].msg,
+          ),
+        )
       } else {
         const data = response.data as ErrorDetailSchema
         notificationStore.addWarn(data.detail)
       }
     })
     .catch((error) => {
+      loadingCreate.value = false
       console.log(error)
       notificationStore.addWarn(error)
     })

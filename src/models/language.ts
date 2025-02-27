@@ -100,7 +100,9 @@ export interface Language {
     }
     warn: {
       lostServerConnection: string
+      accountInactive: string
       wrongUserCreds: string
+      wrongRFIDCreds: string
       createUpdateErrorInField: Function
       userDataIncomplete: string
       failedFetchItem: Function
@@ -117,8 +119,11 @@ export interface Language {
       apiKeyDataIncomplete: string
       mailingDisabled: string
       receiverNotGiven: string
+      passwordCannotBeEmpty: string
+      passwordsDontMatch: string
       rfidDeviceDisconnected: string
       rfidHostDisconnected: string
+      rfidDisabled: string
     }
   }
   main: {
@@ -180,16 +185,20 @@ export interface Language {
     banner: {
       myAccount: string
       security: string
+      permissions: string
       pat: string
       patCreationWarning: string
       patInfo: string
       rfidInfo: string
+      userTimeInfo: string
     }
     button: {
       myAccount: string
       security: string
+      permissions: string
       pat: string
       save: string
+      undo: string
       newToken: string
     }
     option: {
@@ -200,13 +209,54 @@ export interface Language {
       usernamePlaceholder: string
       fullNamePlaceholder: string
       emailPlaceholder: string
-      passwordPlaceholder: string
       workHoursPerWeekPlaceholder: string
       autoBreakFromPlaceholder: string
       autoBreakToPlaceholder: string
       autoLogoutPlaceholder: string
       languagePlaceholder: string
+      themePlaceholder: string
+      passwordPlaceholder: string
+      passwordRetypePlaceholder: string
       patPlaceholder: string
+    }
+    permissions: {
+      normalUser: string
+      superUser: string
+      adminUser: string
+      guestUser: string
+      yourPermissionLevel: string
+      yourPermissionProjects: string
+      yourPermissionItems: string
+      yourPermissionUsers: string
+      yourPermissionUserTime: string
+      yourPermissionSettings: string
+      readOwnProjects: string
+      readOtherProjects: string
+      createProjects: string
+      editOwnProjects: string
+      editOtherProjects: string
+      assignOtherUserToProject: string
+      deleteProjects: string
+      readOwnItems: string
+      readOtherItems: string
+      createItems: string
+      editOwnItems: string
+      editOtherItems: string
+      editPlannedItems: string
+      deleteOwnItems: string
+      deleteOtherItems: string
+      createUsers: string
+      editUsers: string
+      deleteUsers: string
+      readOwnUserTime: string
+      readOtherUserTime: string
+      createUserTime: string
+      editOwnUserTime: string
+      editOtherUserTime: string
+      deleteOwnUserTime: string
+      deleteOtherUserTime: string
+      readSettings: string
+      editSettings: string
     }
   }
   project: {
@@ -245,6 +295,7 @@ export interface Language {
       create: string
       update: string
       cancel: string
+      undo: string
     }
     options: {
       showAll: string
@@ -352,6 +403,7 @@ export interface Language {
       validateAll: string
       update: string
       cancel: string
+      undo: string
       template: string
       batchCreate: string
       newRow: string
@@ -457,6 +509,7 @@ export interface Language {
       create: string
       update: string
       cancel: string
+      undo: string
     }
     options: {
       showAll: string

@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { apiKeysRequest } from '@/requests/apiKeys'
+import { apiKeysRequest } from '@/requests/api/apiKeys'
 import type { ApiKeysSchema } from '@/schemas/apiKeys'
 
 export const useApiKeysStore = defineStore('apiKeys', () => {

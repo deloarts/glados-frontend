@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { stockCut2DRequest } from '@/requests/tools'
+import { stockCut2DRequest } from '@/requests/api/tools'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'

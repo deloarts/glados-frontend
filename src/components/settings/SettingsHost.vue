@@ -1,81 +1,81 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import constants from "@/constants";
+import { ref, onMounted } from 'vue'
+import constants from '@/constants'
 
-import HostInformationItem from "@/components/settings/HostInformationItem.vue";
-import DiscSpaceChart from "@/components/settings/DiscSpaceChart.vue";
-import LoadingSpinner from "@/components/spinner/LoadingSpinner.vue";
+import HostInformationItem from '@/components/settings/HostInformationItem.vue'
+import DiscSpaceChart from '@/components/settings/DiscSpaceChart.vue'
+import LoadingSpinner from '@/components/spinner/LoadingSpinner.vue'
 
-import { hostRequest } from "@/requests/host";
+import { hostRequest } from '@/requests/api/host'
 
-import type { DiscSpace } from "@/models/host";
+import type { DiscSpace } from '@/models/host'
 
-import IconTagText from "@/components/icons/IconTagText.vue";
-import IconServer from "@/components/icons/IconServer.vue";
-import IconComputer from "@/components/icons/IconComputer.vue";
-import IconWarning from "@/components/icons/IconWarning.vue";
+import IconTagText from '@/components/icons/IconTagText.vue'
+import IconServer from '@/components/icons/IconServer.vue'
+import IconComputer from '@/components/icons/IconComputer.vue'
+import IconWarning from '@/components/icons/IconWarning.vue'
 
-import { useLanguageStore } from "@/stores/language";
+import { useLanguageStore } from '@/stores/language'
 
-const languageStore = useLanguageStore();
+const languageStore = useLanguageStore()
 
 const discSpaceDatabaseDataset = ref<DiscSpace>({
   used: 1,
   free: 0,
-});
+})
 
 const discSpaceBackupDataset = ref<DiscSpace>({
   used: 1,
   free: 0,
-});
+})
 
-const os = ref<string>("-");
-const version = ref<string>("-");
-const hostname = ref<string>("-");
-const databaseSpace = ref<string>("-");
-const backupSpace = ref<string>("-");
-const backupNotMounted = ref<boolean>(false);
+const os = ref<string>('-')
+const version = ref<string>('-')
+const hostname = ref<string>('-')
+const databaseSpace = ref<string>('-')
+const backupSpace = ref<string>('-')
+const backupNotMounted = ref<boolean>(false)
 
 function getHostInformation() {
   hostRequest.getHostInfo().then((response) => {
-    console.log(JSON.stringify(response.data));
+    console.log(JSON.stringify(response.data))
     if (response.status === 200) {
-      version.value = `App v${constants.version}  //  Server v${response.data.version}`;
-      hostname.value = response.data.hostname;
-      os.value = response.data.os;
+      version.value = `App v${constants.version}  //  Server v${response.data.version}`
+      hostname.value = response.data.hostname
+      os.value = response.data.os
       databaseSpace.value =
         response.data.disc_space.db_free +
-        " GiB" +
+        ' GiB' +
         languageStore.l.settings.host.freeOf +
         response.data.disc_space.db_total +
-        " GiB";
+        ' GiB'
 
       if (response.data.disc_space.backup_total) {
         backupSpace.value =
           response.data.disc_space.backup_free +
-          " GiB" +
+          ' GiB' +
           languageStore.l.settings.host.freeOf +
           response.data.disc_space.backup_total +
-          " GiB";
-        backupNotMounted.value = false;
+          ' GiB'
+        backupNotMounted.value = false
       } else {
-        backupNotMounted.value = true;
-        backupSpace.value = languageStore.l.settings.host.notMounted;
+        backupNotMounted.value = true
+        backupSpace.value = languageStore.l.settings.host.notMounted
       }
 
       discSpaceDatabaseDataset.value = {
         used: response.data.disc_space.db_used,
         free: response.data.disc_space.db_free,
-      };
+      }
       discSpaceBackupDataset.value = {
         used: response.data.disc_space.backup_used,
         free: response.data.disc_space.backup_free,
-      };
+      }
     }
-  });
+  })
 }
 
-onMounted(getHostInformation);
+onMounted(getHostInformation)
 </script>
 
 <template>
@@ -83,10 +83,7 @@ onMounted(getHostInformation);
     <div class="content">
       <h1>{{ languageStore.l.settings.host.banner }}</h1>
       <div class="wrapper">
-        <HostInformationItem
-          :title="languageStore.l.settings.host.version"
-          v-model:text="version"
-        >
+        <HostInformationItem :title="languageStore.l.settings.host.version" v-model:text="version">
           <IconTagText v-if="version != '-'" />
           <LoadingSpinner v-else />
         </HostInformationItem>
@@ -101,10 +98,7 @@ onMounted(getHostInformation);
         </HostInformationItem>
       </div>
       <div class="wrapper">
-        <HostInformationItem
-          :title="languageStore.l.settings.host.os"
-          v-model:text="os"
-        >
+        <HostInformationItem :title="languageStore.l.settings.host.os" v-model:text="os">
           <IconServer v-if="os != '-'" />
           <LoadingSpinner v-else />
         </HostInformationItem>
@@ -114,10 +108,7 @@ onMounted(getHostInformation);
           :title="languageStore.l.settings.host.dbDiscSpace"
           v-model:text="databaseSpace"
         >
-          <DiscSpaceChart
-            v-if="databaseSpace != '-'"
-            v-model:dataset="discSpaceDatabaseDataset"
-          >
+          <DiscSpaceChart v-if="databaseSpace != '-'" v-model:dataset="discSpaceDatabaseDataset">
           </DiscSpaceChart>
           <LoadingSpinner v-else />
         </HostInformationItem>

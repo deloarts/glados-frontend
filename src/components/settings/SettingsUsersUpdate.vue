@@ -4,7 +4,7 @@ import { ref, watch, onMounted } from 'vue'
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
 import { useUsersStore, useUserStore } from '@/stores/user'
-import { usersRequest } from '@/requests/users'
+import { usersRequest } from '@/requests/api/users'
 
 import type { UserSchema, UserUpdateSchema } from '@/schemas/user'
 import type { ErrorDetailSchema } from '@/schemas/common'
@@ -12,6 +12,7 @@ import type { ErrorDetailSchema } from '@/schemas/common'
 import Toggle from '@vueform/toggle'
 import LabeledInput from '@/components/elements/LabeledInput.vue'
 import ButtonUserUpdate from '@/components/elements/ButtonUserUpdate.vue'
+import ButtonLoading from '@/components/elements/ButtonLoading.vue'
 
 // Props & Emits
 const props = defineProps<{
@@ -37,8 +38,9 @@ const formData = ref<UserUpdateSchema>({
   rfid: null,
 })
 const isSystemuser = ref<boolean>(false)
+const loading = ref<boolean>(false)
 
-function getUser() {
+async function getUser() {
   usersRequest.getUsersID(props.selectedUserID).then((response) => {
     const data = response.data as UserSchema
     formData.value = data
@@ -51,10 +53,13 @@ function updateUser() {
     notificationStore.addInfo(languageStore.l.notification.info.cannotUpdateSystemUser)
     return
   }
-  usersRequest.putUsers(props.selectedUserID, formData.value).then((response) => {
-    getUser()
-    userStore.get()
-    usersStore.get()
+  loading.value = true
+  usersRequest.putUsers(props.selectedUserID, formData.value).then(async (response) => {
+    await getUser()
+    await userStore.get()
+    await usersStore.get()
+    loading.value = false
+
     if (response.status == 200) {
       notificationStore.addInfo(languageStore.l.notification.info.updatedUserData)
     } else if (response.status == 422) {
@@ -154,7 +159,9 @@ onMounted(() => getUser())
           />
         </div>
         <div id="btn">
+          <ButtonLoading v-if="loading" :text="languageStore.l.settings.users.button.update" />
           <ButtonUserUpdate
+            v-else
             v-on:click="updateUser"
             :text="languageStore.l.settings.users.button.update"
           />

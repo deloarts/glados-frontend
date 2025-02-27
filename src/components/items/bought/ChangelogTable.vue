@@ -3,7 +3,7 @@ import { ref, watch, onMounted } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
 import { useBoughtItemsStore } from '@/stores/boughtItems'
-import { boughtItemsRequest } from '@/requests/items'
+import { boughtItemsRequest } from '@/requests/api/items'
 
 const languageStore = useLanguageStore()
 const boughtItemsStore = useBoughtItemsStore()

@@ -1,4 +1,5 @@
-import { request, requestConfig } from './index'
+import { request } from '@/requests/index'
+import { requestConfig } from '@/requests/configuration'
 import constants from '@/constants'
 
 import type { AxiosResponse } from 'axios'

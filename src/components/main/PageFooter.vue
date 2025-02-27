@@ -3,13 +3,15 @@ import { ref } from 'vue'
 import constants from '@/constants'
 import config from '@/config'
 
-const hover = ref<boolean>(false)
+const text = ref<string>(config.company)
 </script>
 
 <template>
-  <div class="footer" @mouseover="hover = true" @mouseleave="hover = false">
-    <span v-if="hover">{{ `v${constants.version}` }}</span>
-    <span v-else>{{ config.company }}</span>
+  <div class="footer" 
+    @mouseover="text = `v${constants.version}`"
+    @mouseleave="text = config.company"
+    @click="text = 'The cake is a lie!'">
+    <span>{{ text }}</span>
   </div>
 </template>
 

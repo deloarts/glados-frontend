@@ -2,7 +2,7 @@
 import { ref, watch, computed, onMounted } from 'vue'
 import moment from 'moment'
 
-import { logsRequest } from '@/requests/logs'
+import { logsRequest } from '@/requests/api/logs'
 
 import SettingsLogsControls from './SettingsLogsControls.vue'
 import SettingsLogsTable from './SettingsLogsTable.vue'

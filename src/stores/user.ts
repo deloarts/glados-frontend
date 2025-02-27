@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 import constants from '@/constants'
 import router from '@/router/index'
-import { usersRequest } from '@/requests/users'
+import { usersRequest } from '@/requests/api/users'
 
 import type { AvailableOption } from '@/models/controls'
 import type { UserSchema } from '@/schemas/user'
@@ -48,6 +48,7 @@ export const useUserStore = defineStore('user', () => {
       is_systemuser: false,
     }
     console.log('Logged out user')
+    router.push({ name: 'Login' })
   }
 
   async function get() {
@@ -62,9 +63,6 @@ export const useUserStore = defineStore('user', () => {
         } else {
           setLight()
         }
-      } else {
-        logout()
-        router.push({ name: 'Login' })
       }
       return response
     })

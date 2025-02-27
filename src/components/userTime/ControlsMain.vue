@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 
 import router from '@/router/index'
-import { userTimeRequest } from '@/requests/userTime'
+import { userTimeRequest } from '@/requests/api/userTime'
 
 import { useLanguageStore } from '@/stores/language'
 import { useUserTimeStore } from '@/stores/userTime'
@@ -25,6 +25,7 @@ import ButtonClear from '@/components/elements/ButtonClear.vue'
 import SelectPreText from '@/components/elements/SelectPreText.vue'
 
 import type { AvailableOption } from '@/models/controls'
+import type { ErrorDetailSchema } from '@/schemas/common'
 
 // Stores
 const languageStore = useLanguageStore()
@@ -82,7 +83,8 @@ function onButtonLogin() {
       notificationStore.addInfo(languageStore.l.notification.info.loggedInNow)
       userTimeStore.getItems()
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
     userTimeStore.getItems()
   })
@@ -94,7 +96,8 @@ function onButtonLogout() {
       notificationStore.addInfo(languageStore.l.notification.info.loggedInNow)
       userTimeStore.getItems()
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
     userTimeStore.getItems()
     userTimeStore.fetchCurrentWeek()
@@ -132,7 +135,8 @@ function deleteEntry() {
       notificationStore.addInfo(languageStore.l.notification.info.deletedEntry(entryID))
       userTimeStore.getItems()
     } else {
-      notificationStore.addWarn(response.data.detail)
+      const data = response.data as ErrorDetailSchema
+      notificationStore.addWarn(data.detail)
     }
   })
   showDeletePrompt.value = false

@@ -3,9 +3,9 @@ import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router/index'
 
-import { userTimeRequest } from '@/requests/userTime'
+import { userTimeRequest } from '@/requests/api/userTime'
 
-import type { UserTimeUpdateSchema } from '@/schemas/userTime'
+import type { UserTimeSchema, UserTimeUpdateSchema } from '@/schemas/userTime'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -35,10 +35,12 @@ onBeforeMount(() => {
     .getUserTimeByID(Number(entryID))
     .then((response) => {
       if (response.status === 200) {
-        const data: UserTimeUpdateSchema = response.data
-        if (response.data.login) {
-          data.login = moment.utc(response.data.login).local().toDate()
-          data.logout = moment.utc(response.data.logout).local().toDate()
+        const data = response.data as UserTimeSchema
+        if (data.login) {
+          data.login = moment.utc(data.login).local().toDate()
+        }
+        if (data.logout) {
+          data.logout = moment.utc(data.logout).local().toDate()
         }
         formData.value = data
       } else {

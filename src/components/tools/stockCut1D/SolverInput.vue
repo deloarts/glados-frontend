@@ -38,28 +38,24 @@ function removeAll() {
 </script>
 
 <template>
-  <div class="controls-base-scope">
+  <div class="form-base-scope">
     <div class="controls-base-container">
-      <div id="btn-add">
-        <ButtonPlus
-          v-on:click="props.onAdd()"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.add"
-        />
-      </div>
-      <div id="btn-solve">
-        <ButtonLoading
-          v-if="props.solving"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.solving"
-        />
-        <ButtonSolve
-          v-else
-          v-on:click="props.onSolve()"
-          class="controls-base-element"
-          :text="languageStore.l.tools.buttons.solve"
-        />
-      </div>
+      <ButtonPlus
+        v-on:click="props.onAdd()"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.add"
+      />
+      <ButtonLoading
+        v-if="props.solving"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.solving"
+      />
+      <ButtonSolve
+        v-else
+        v-on:click="props.onSolve()"
+        class="controls-base-element"
+        :text="languageStore.l.tools.buttons.solve"
+      />
     </div>
 
     <div class="form-base-container">

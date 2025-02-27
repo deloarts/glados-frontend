@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import type { BoughtItemSchema } from "@/schemas/boughtItem";
+import type { BoughtItemSchema } from '@/schemas/boughtItem'
 
-import TableItemInput from "@/components/dataTable/TableItemInput.vue";
+import TableItemInput from '@/components/dataTable/TableItemInput.vue'
 
-import { boughtItemColumnWidths } from "@/presets/columnWidth";
+import { boughtItemColumnWidths } from '@/presets/columnWidth'
 
-import { boughtItemsRequest } from "@/requests/items";
+import { boughtItemsRequest } from '@/requests/api/items'
 
-import { useBoughtItemsStore } from "@/stores/boughtItems";
-import { useBoughtItemFilterStore } from "@/stores/filter";
-import { useBoughtItemsControlsStore } from "@/stores/controls";
+import { useBoughtItemsStore } from '@/stores/boughtItems'
+import { useBoughtItemFilterStore } from '@/stores/filter'
+import { useBoughtItemsControlsStore } from '@/stores/controls'
 
-const boughtItemsControlsStore = useBoughtItemsControlsStore();
-const boughtItemsStore = useBoughtItemsStore();
-const boughtItemFilterStore = useBoughtItemFilterStore();
+const boughtItemsControlsStore = useBoughtItemsControlsStore()
+const boughtItemsStore = useBoughtItemsStore()
+const boughtItemFilterStore = useBoughtItemFilterStore()
 
 const props = defineProps<{
-  item: BoughtItemSchema;
-  width: typeof boughtItemColumnWidths;
-}>();
+  item: BoughtItemSchema
+  width: typeof boughtItemColumnWidths
+}>()
 </script>
 
 <template>

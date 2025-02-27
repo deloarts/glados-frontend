@@ -7,7 +7,7 @@ import { useLanguageStore } from '@/stores/language'
 import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 import { useApiKeysStore } from '@/stores/apiKeys'
-import { apiKeysRequest } from '@/requests/apiKeys'
+import { apiKeysRequest } from '@/requests/api/apiKeys'
 
 import type { ApiKeysCreateSchema } from '@/schemas/apiKeys'
 import type { ErrorDetailSchema } from '@/schemas/common'

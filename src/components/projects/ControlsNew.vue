@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import router from '@/router/index'
-import { projectsRequest } from '@/requests/projects'
+import { projectsRequest } from '@/requests/api/projects'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -30,24 +30,30 @@ function onCreate() {
 
   projectsRequest
     .postProjects(props.formData)
-    .then((response) => {
+    .then(async (response) => {
+      await projectsStore.get()
       setTimeout(() => {
         loadingCreate.value = false
       }, 400)
 
       if (response.status === 200) {
         notificationStore.addInfo(languageStore.l.notification.info.createdProject)
-        projectsStore.getItems()
         router.push({ name: 'Projects' })
       } else if (response.status === 422) {
         const data = response.data as ErrorValidationSchema
-        notificationStore.addWarn(languageStore.l.notification.warn.createUpdateErrorInField(data.detail[0].loc[1], data.detail[0].msg))
+        notificationStore.addWarn(
+          languageStore.l.notification.warn.createUpdateErrorInField(
+            data.detail[0].loc[1],
+            data.detail[0].msg,
+          ),
+        )
       } else {
         const data = response.data as ErrorDetailSchema
         notificationStore.addWarn(data.detail)
       }
     })
     .catch((error) => {
+      loadingCreate.value = false
       console.log(error)
       notificationStore.addWarn(error)
     })

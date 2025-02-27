@@ -3,7 +3,7 @@ import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 
 import router from '@/router/index'
-import { boughtItemsRequest } from '@/requests/items'
+import { boughtItemsRequest } from '@/requests/api/items'
 
 import { useLanguageStore } from '@/stores/language'
 import { useNotificationStore } from '@/stores/notification'
@@ -39,7 +39,9 @@ onBeforeMount(() => {
         itemData.value = data
       } else {
         notificationStore.addWarn(languageStore.l.notification.warn.failedFetchItem(itemId.value))
-        setTimeout(function () { router.push({ name: 'BoughtItems' }) }, 4000)
+        setTimeout(function () {
+          router.push({ name: 'BoughtItems' })
+        }, 4000)
       }
     })
     .catch((error) => {
@@ -52,7 +54,7 @@ onBeforeMount(() => {
 <template>
   <div class="views-scope">
     <div class="views-content">
-      <div class="grid" >
+      <div class="grid">
         <div class="grid-area-controls">
           <ControlsViewer v-model:item-data="itemData" />
         </div>

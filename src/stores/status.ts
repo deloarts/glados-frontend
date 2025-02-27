@@ -2,7 +2,7 @@ import { ref, watch, onBeforeMount } from 'vue'
 import { defineStore } from 'pinia'
 
 import constants from '@/constants'
-import { hostRequest } from '@/requests/host'
+import { hostRequest } from '@/requests/api/host'
 
 import type { AvailableOption } from '@/models/controls'
 import type { HostConfigBoughtItemsStatusSchema } from '@/schemas/host'

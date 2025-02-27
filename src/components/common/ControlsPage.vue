@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 import { useLanguageStore } from '@/stores/language'
 import { useResolutionStore } from '@/stores/resolution'
@@ -42,12 +42,8 @@ const buttonPreviousPage = computed<string>(() => {
 const buttonNextPage = computed<string>(() => {
   return gtMinWidthTablet.value ? languageStore.l.main.pagination.next : ''
 })
-const buttonPage = computed<string>(() => {
-  return `${props.itemStore.page.current} | ${props.itemStore.page.pages}`
-})
-const buttonItem = computed<string>(() => {
-  return `${props.itemStore.items.length} | ${props.itemStore.page.total}`
-})
+const buttonPage = ref<string>('- | -')
+const buttonItem = ref<string>('- | -')
 
 function onFirstPage() {
   props.filterStore.set('skip', 0)
@@ -102,6 +98,16 @@ function onPreviousPage() {
   props.filterStore.set('skip', newSkip)
   props.itemStore.getItems()
 }
+
+watch(
+  () => props.itemStore.loading,
+  () => {
+    if (!props.itemStore.loading) {
+      buttonPage.value = `${props.itemStore.page.current} | ${props.itemStore.page.pages}`
+      buttonItem.value = `${props.itemStore.items.length} | ${props.itemStore.page.total}`
+    }
+  }, { deep: true}
+)
 </script>
 
 <template>

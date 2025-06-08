@@ -65,6 +65,7 @@ MIT
 
 ## 6 changelog
 
+**v0.15.1**: Add auto-break day selection.  
 **v0.14.1**: Improve UI for a better user experience.  
 **v0.14.0**: Add user-time-logger. Other minor improvements.  
 **v0.13.6**: Fix style.  

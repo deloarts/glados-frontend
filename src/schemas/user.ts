@@ -12,6 +12,13 @@ export interface UserSchema {
   auto_break_from?: string | null
   auto_break_to?: string | null
   auto_logout?: boolean
+  auto_break_mon?: boolean
+  auto_break_tue?: boolean
+  auto_break_wed?: boolean
+  auto_break_thu?: boolean
+  auto_break_fri?: boolean
+  auto_break_sat?: boolean
+  auto_break_sun?: boolean
 
   is_active: boolean
   is_adminuser: boolean
@@ -28,9 +35,9 @@ export interface UserCreateSchema {
   email: string
 
   work_hours_per_week?: number | null
+  auto_logout?: boolean
   auto_break_from?: string | null
   auto_break_to?: string | null
-  auto_logout?: boolean
 
   is_active?: boolean
   is_adminuser?: boolean
@@ -50,9 +57,16 @@ export interface UserUpdateSchema {
   theme: 'dark' | 'light'
 
   work_hours_per_week?: number | null
+  auto_logout?: boolean
   auto_break_from?: string | null
   auto_break_to?: string | null
-  auto_logout?: boolean
+  auto_break_mon?: boolean
+  auto_break_tue?: boolean
+  auto_break_wed?: boolean
+  auto_break_thu?: boolean
+  auto_break_fri?: boolean
+  auto_break_sat?: boolean
+  auto_break_sun?: boolean
 
   is_active?: boolean
   is_adminuser?: boolean

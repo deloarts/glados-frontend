@@ -238,6 +238,14 @@ export const deAT: Language = {
       passwordPlaceholder: 'Passwort',
       passwordRetypePlaceholder: 'Passwort erneut eingeben',
       patPlaceholder: 'Geheimer Schlüssel',
+      autoBreakByDay: 'Automatische Pause pro Tag',
+      autoBreakMon: 'Montag',
+      autoBreakTue: 'Dienstag',
+      autoBreakWed: 'Mittwoch',
+      autoBreakThu: 'Donnerstag',
+      autoBreakFri: 'Freitag',
+      autoBreakSat: 'Samstag',
+      autoBreakSun: 'Sonntag',
     },
     permissions: {
       normalUser: 'Normalers Benutzerkonto',
@@ -277,7 +285,7 @@ export const deAT: Language = {
       deleteOtherUserTime: 'Zeiteintrag eines anderen Benutzers löschen',
       readSettings: 'Einstellungen lesen',
       editSettings: 'Einstellungen bearbeiten',
-    }
+    },
   },
   project: {
     table: {

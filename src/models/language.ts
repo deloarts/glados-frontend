@@ -218,6 +218,14 @@ export interface Language {
       passwordPlaceholder: string
       passwordRetypePlaceholder: string
       patPlaceholder: string
+      autoBreakByDay: string
+      autoBreakMon: string
+      autoBreakTue: string
+      autoBreakWed: string
+      autoBreakThu: string
+      autoBreakFri: string
+      autoBreakSat: string
+      autoBreakSun: string
     }
     permissions: {
       normalUser: string

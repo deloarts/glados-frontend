@@ -83,9 +83,9 @@ function logout() {
 
 function enterApp() {
   showLoadingBar.value = false
-  notificationStore.addInfo(
-    languageStore.l.notification.info.welcomeMessage(userStore.user.full_name),
-  )
+  // notificationStore.addInfo(
+  //   languageStore.l.notification.info.welcomeMessage(userStore.user.full_name),
+  // )
   let previousRoute = localStorage.getItem('gladosActiveRoute')
   if (previousRoute == '/login' || previousRoute == null) {
     previousRoute = '/'

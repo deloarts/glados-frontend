@@ -6,8 +6,6 @@
 ![node](https://img.shields.io/badge/node-v22-blue.svg?style=for-the-badge)
 ![OS](https://img.shields.io/badge/OS-UNIX-blue.svg?style=for-the-badge)
 
-> ✏️ Glados is in use at my company for handling bought items. Its meant to be the interface between the engineering department and the purchase department. Therefore this software must reach certain requirements, which cannot be changed due to company guidelines.
-
 Table of contents:
 
 - [glados frontend](#glados-frontend)
@@ -22,7 +20,7 @@ Table of contents:
 
 ## 1 introduction
 
-Glados is a resource planning software with a web ui: *Create and manage your projects and items with ease, keep your purchase process in perfect order*.
+Glados is a resource planning software with a web ui: _Create and manage your projects and items with ease, keep your purchase process in perfect order_.
 
 Glados is a free open source software, so feel free to use it if it fits your needs. Glados is still in development and has not reached major version 1.0.0 yet, meaning it can change in its appearance and functionality at any time without notice.
 
@@ -67,6 +65,7 @@ MIT
 
 ## 6 changelog
 
+**v0.15.1**: Add auto-break day selection.  
 **v0.14.1**: Improve UI for a better user experience.  
 **v0.14.0**: Add user-time-logger. Other minor improvements.  
 **v0.13.6**: Fix style.  

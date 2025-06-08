@@ -33,12 +33,12 @@ function routeIsActive(currentLink: string) {
           :text="languageStore.l.tools.buttons.stockCut1D"
       /></router-link>
 
-      <router-link :to="'/tools/stock-cut-2d'"
+      <!-- <router-link :to="'/tools/stock-cut-2d'"
         ><ButtonBlade
           class="controls-base-element"
           v-bind:class="{ active: routeIsActive('/tools/stock-cut-2d') }"
           :text="languageStore.l.tools.buttons.stockCut2D"
-      /></router-link>
+      /></router-link> -->
     </div>
   </div>
 </template>

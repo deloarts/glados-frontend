@@ -4,7 +4,7 @@ import type { ItemStoreProtocol } from '@/protocols/itemStoreProtocol'
 
 import { useNotificationStore } from '@/stores/notification'
 
-export function updateSelectedTableElement(
+export async function updateSelectedTableElement(
   elementName: string,
   newValue: string | number | Date | null,
   currentValue: string | number | Date | null,
@@ -12,13 +12,13 @@ export function updateSelectedTableElement(
   store: ItemStoreProtocol,
 ) {
   const notificationStore = useNotificationStore()
-  const ids = store.getSelection()
+  // Copy the selection, it may change while the updates are running
+  const ids = [...store.getSelection()]
 
   if (newValue == null || (ids.length == 1 && newValue == currentValue)) {
     return
   }
 
-  let c = 0
   let confirmation = true
 
   if (ids.length > 1) {
@@ -27,22 +27,18 @@ export function updateSelectedTableElement(
     )
   }
   if (confirmation) {
-    for (let i = 0; i < ids.length; i++) {
-      const id = ids[i]
-      //@ts-expect-error Update method is a function which returns a promise of an AxiosResponse
-      updateMethod(id, newValue).then((response) => {
-        c++
-        if (response.status != 200) {
-          notificationStore.addWarn(response.data.detail)
-        }
-        if (c == ids.length) {
-          store.getItems()
-        }
-      })
+    // Update the items one after another: Sending all requests at once exhausts the
+    // backend's db connections, which makes the requests fail without a response.
+    for (const id of ids) {
+      const response = await updateMethod(id, newValue).catch(() => undefined)
+      if (response == undefined) {
+        notificationStore.addWarn(`Failed to change the ${elementName} of item #${id}.`)
+      } else if (response.status != 200) {
+        notificationStore.addWarn(response.data.detail)
+      }
     }
-  } else {
-    store.getItems()
   }
+  store.getItems()
 }
 
 export function getSelection(

@@ -76,7 +76,8 @@ export const useBoughtItemsStore = defineStore('boughtItems', () => {
     const params = getBoughtItemsFilterParams(_filterStore.state)
     return boughtItemsRequest.getItems(params).then((response) => {
       loading.value = false
-      if (response.status === 200) {
+      // The response is undefined if the request failed without a response from the server
+      if (response?.status === 200) {
         const data = response.data as PageSchema<BoughtItemSchema>
         items.value = data.items
         page.value = data
